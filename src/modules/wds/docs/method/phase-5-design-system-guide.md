@@ -17,6 +17,16 @@ Design System builds your component library following atomic design principles. 
 
 Your Design System includes:
 
+- **Visual Design (01-Visual-Design/)** - Early design exploration before scenarios
+  - Mood boards and style direction
+  - NanoBanana design concepts
+  - Color and typography exploration
+  - Visual inspiration and references
+- **Assets (02-Assets/)** - Final production assets
+  - Logos and brand elements
+  - Icon sets
+  - Photography and illustrations
+  - Custom graphics
 - **Design Tokens** - Colors, typography, spacing, shadows
 - **Atomic Components** - Buttons, inputs, labels, icons
 - **Molecular Components** - Form groups, cards, list items
@@ -96,6 +106,124 @@ Notice pattern across pages  →    Extract as reusable component
 3. Extract to Design System
 4. Next page references the system component
 5. Repeat
+
+### Visual Design Exploration (01-Visual-Design/)
+
+**Independent Design Phase - Can Start Anytime:**
+
+**Key Insight:** Brand identity and visual design are NOT tied to the product! You can establish your visual identity at any time - before, during, or after product strategy work.
+
+**Purpose:** Establish the visual language that will tie UX to Brand. This is where you define how your brand's personality will be expressed visually across all touchpoints.
+
+**Timing Options:**
+- **Before product work:** Establish brand identity first, then build products around it
+- **Parallel to strategy:** Develop visual identity while defining product strategy
+- **After strategy:** Use strategic insights to inform visual direction
+
+Before diving into scenario-specific design (Phase 4), establish your visual direction:
+
+**Mood Boards:**
+- Collect visual inspiration
+- Define style direction (modern, playful, professional, etc.)
+- Establish visual tone and personality
+- Reference examples from similar products
+
+**Design Concepts (NanoBanana):**
+- Generate design variations using NanoBanana
+- Explore different visual approaches
+- Create custom graphics and illustrations
+- Generate placeholder assets for prototypes
+
+**Color Exploration:**
+- Test color palette options
+- Define primary, secondary, and semantic colors
+- Ensure accessibility (contrast ratios)
+- Document color psychology and usage
+
+**Typography Tests:**
+- Experiment with font pairings
+- Define hierarchy (headings, body, labels)
+- Test readability at different sizes
+- Document font usage guidelines
+
+**When to Use:**
+- **AFTER Phase 1 & 2** (Product Brief and Trigger Map must be complete first!)
+- When establishing brand identity (with strategic context)
+- When exploring multiple visual directions (informed by user psychology)
+- Before committing to design tokens
+- Before Phase 4 scenarios (but after strategic foundation)
+
+**Output Location:** `D-Design-System/01-Visual-Design/`
+
+---
+
+### Production Assets (02-Assets/)
+
+**Later in Design Process - As Design Solidifies:**
+
+Once your visual direction is established and scenarios are designed:
+
+**Logos:**
+- Final logo files (SVG, PNG)
+- Logo variations (light/dark, horizontal/vertical)
+- Brand mark and wordmark
+- Usage guidelines
+
+**Icons:**
+- Icon sets for UI elements
+- Custom icons for product features
+- Consistent style and sizing
+- Multiple formats (SVG, PNG)
+
+**Images:**
+- Photography for product pages
+- Illustrations for empty states
+- Hero images and backgrounds
+- Optimized for web
+
+**Graphics:**
+- Custom graphics and elements
+- Decorative elements
+- Patterns and textures
+- Exported from NanoBanana or Figma
+
+**When to Add:**
+- After visual direction is established
+- When design is near completion
+- Before development handoff
+- As final assets are created
+
+**Output Location:** `D-Design-System/02-Assets/`
+
+---
+
+### Figma Integration (Optional)
+
+**Automated Visual Refinement:**
+
+WDS supports automated Figma integration via MCP server for visual design refinement:
+
+**Workflow:**
+1. Create functional prototype in Phase 4D
+2. Freya identifies components needing visual polish
+3. Freya injects components to Figma automatically (via MCP server)
+4. Designer refines visual design in Figma
+5. Freya reads refined components back automatically
+6. Design system updated with new tokens/components
+7. Prototype re-rendered with polished design
+
+**Benefits:**
+- Build design system organically (no upfront investment)
+- Component-level precision (not full-page extraction)
+- Automated Object ID traceability
+- Bidirectional sync (Prototype ↔ Figma ↔ Design System)
+
+**Tools:**
+- **Figma MCP** (recommended): Automated integration via MCP server
+- **Figma**: Visual design tool for refinement
+- See: [Figma Integration Guide](../../workflows/5-design-system/figma-integration/prototype-to-figma-workflow.md)
+
+---
 
 ### Component Extraction
 

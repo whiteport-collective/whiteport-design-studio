@@ -572,7 +572,7 @@ At the end of the podcast, The Strategic Professional should mention these resou
 
 ---
 
-## Instructions for NotebookLM
+## NotebookLM Audio Generation Guidelines
 
 **Tone:**
 

@@ -293,7 +293,7 @@ At the end of the podcast, The Advocate should mention these resources:
 
 ---
 
-## Instructions for NotebookLM
+## NotebookLM Audio Generation Guidelines
 
 **Tone:**
 
