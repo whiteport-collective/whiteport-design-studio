@@ -1,9 +1,9 @@
 ---
-title: "BMAD Glossary"
+title: "BMad Glossary"
 ---
 
 
-Comprehensive terminology reference for the BMAD Method.
+Comprehensive terminology reference for the BMad Method.
 
 ---
 
@@ -23,7 +23,7 @@ Comprehensive terminology reference for the BMAD Method.
 
 ## Core Concepts
 
-### BMAD (Build More, Architect Dreams)
+### BMad (Breakthrough Method of Agile AI Driven Development)
 
 AI-driven agile development framework with specialized agents, guided workflows, and scale-adaptive intelligence.
 
@@ -362,6 +362,10 @@ Implementation technique for brownfield projects that allows gradual rollout of 
 ### Integration Points
 
 Specific locations where new code connects with existing systems. Must be documented explicitly in brownfield tech-specs and architectures.
+
+### Context Engineering
+
+Loading domain-specific standards and patterns into AI context automatically, rather than relying on prompts alone. In TEA, this means the `tea-index.csv` manifest loads relevant knowledge fragments so the AI doesn't relearn testing patterns each session. This approach ensures consistent, production-ready outputs regardless of prompt variation.
 
 ### Convention Detection
 
