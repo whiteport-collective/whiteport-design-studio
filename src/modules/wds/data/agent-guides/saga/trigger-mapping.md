@@ -28,17 +28,37 @@ Discover not just WHO your users are, but WHY they act and WHAT triggers their d
 
 ## The Trigger Map Structure
 
+**Visual Flow (Left to Right):**
+
 ```
-Business Goals (SMART + Vision)
-    ↓
-Target Groups (connected to specific goals)
-    ↓
-Detailed Personas (psychological depth)
-    ↓
-Usage Goals / Driving Forces
-    ├── Positive (wishes, desires, aspirations)
-    └── Negative (fears, frustrations, anxieties)
+Business Goals → Product/Solution → Target Groups → Usage Goals
+(Vision +          (What you're      (Who uses it)    (Positive Drivers)
+ SMART              building)                          (Negative Drivers)
+ Objectives)
 ```
+
+**Four-Layer Architecture:**
+
+1. **Business Goals** (Left)
+   - Vision statement(s) - inspirational direction
+   - SMART objectives - measurable targets
+   - Multiple goals can feed into the product
+
+2. **Product/Solution** (Center)
+   - Product name and description
+   - What the product does
+   - Central hub connecting goals to users
+
+3. **Target Groups** (Middle-Right)
+   - Prioritized personas (Primary 👥, Secondary 👤, etc.)
+   - Connected to the product
+   - Detailed psychological profiles
+
+4. **Usage Goals** (Right)
+   - **Positive Drivers** (✅ green) - What they want to achieve
+   - **Negative Drivers** (❌ red) - What they want to avoid
+   - Separated into distinct groups per target group
+   - Both types are equally important for design decisions
 
 ---
 

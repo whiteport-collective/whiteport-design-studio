@@ -1,6 +1,6 @@
 Module 04 - Product Brief - Your Strategic Foundation Through Guided Conversation
 
-[YouTube link to be added]
+<https://youtu.be/yhKxkuLq1kQ>
 
 Teams waste weeks building the wrong thing beautifully. The Product Brief prevents this - a 2-3 page strategic document that answers the 5 questions every project needs before design starts. Create it through AI-guided conversation with Saga, your thinking partner.
 
@@ -15,7 +15,12 @@ Teams waste weeks building the wrong thing beautifully. The Product Brief preven
 
 ⏱️ Timestamps
 
-_To be added after video production_
+00:00 The AI Prompting Trap
+01:00 The Paradigm Shift - Brief as Ultimate Prompt
+02:00 The 30 Questions Process
+03:00 One Environment Workflow
+04:00 Ending AI Hallucinations
+05:00 The Value Proposition
 
 🎯 The 5 Strategic Questions
 
@@ -51,8 +56,8 @@ Data & Privacy - Collection, storage, compliance
 📖 *Project Brief Template:*
 <https://github.com/whiteport-collective/whiteport-design-studio/blob/main/src/modules/wds/workflows/1-project-brief/project-brief/complete/project-brief.template.md>
 
-💬 *Discord Community:*
-[Discord invite link]
+💬 *UX-Design channel in the BMad Discord Community:*
+<https://discord.gg/Pn63gAuX>
 
 📖 *GitHub Discussions:*
 <https://github.com/whiteport-collective/whiteport-design-studio/discussions>
@@ -60,7 +65,8 @@ Data & Privacy - Collection, storage, compliance
 ◀️ *Previous Module:* Module 03 - Alignment & Signoff
 <https://www.youtube.com/watch?v=TKjOLlU8UCE>
 
-▶️ *Next Module:* Module 05 - Trigger Mapping (Coming Soon)
+▶️ *Next Module:* Module 05 - Trigger Mapping
+<https://youtu.be/xs_cRk-NoJk>
 
 📚 *Full Course:*
 <https://github.com/whiteport-collective/whiteport-design-studio/blob/main/src/modules/wds/docs/learn-wds/00-course-overview.md>

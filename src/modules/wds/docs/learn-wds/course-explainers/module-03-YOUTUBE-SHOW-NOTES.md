@@ -34,27 +34,28 @@ Struggling with the business side of design? Feel uncomfortable talking about mo
 🌊 *WDS Presentation:*
 <https://whiteport.com/whiteport-design-studio/>
 
-📖 *Project Pitch Guide:*
+Project Pitch Guide:
 <https://github.com/whiteport-collective/whiteport-design-studio/blob/main/src/modules/wds/docs/deliverables/project-pitch.md>
 
-📖 *Service Agreement Templates:*
+Service Agreement Templates:
 <https://github.com/whiteport-collective/whiteport-design-studio/blob/main/src/modules/wds/docs/deliverables/service-agreement.md>
 
-� *Discord Community:*
-[Discord invite link]
+UX-Design channel in the BMad Discord Community:
+<https://discord.gg/Pn63gAuX>
 
-📖 *GitHub Discussions:*
+GitHub Discussions:
 <https://github.com/whiteport-collective/whiteport-design-studio/discussions>
 
-◀️ *Previous Module:* Module 02 - Installation & Setup
+Previous Module: Module 02 - Installation & Setup
 <https://www.youtube.com/watch?v=tYifpxFVVks>
 
-▶️ *Next Module:* Module 04 - Product Brief (Coming Soon)
+Next Module: Module 04 - Product Brief
+<https://youtu.be/yhKxkuLq1kQ>
 
-📚 *Full Course:*
+Full Course:
 <https://github.com/whiteport-collective/whiteport-design-studio/blob/main/src/modules/wds/docs/learn-wds/00-course-overview.md>
 
-🎯 *When to Use This Module:*
+✅ *When to Use This Module:*
 ✅ Consultant pitching to client
 ✅ Employee seeking stakeholder approval
 ✅ You struggle with business conversations

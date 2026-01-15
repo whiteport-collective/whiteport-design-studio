@@ -76,15 +76,42 @@ These users have their own goals:
 
 **The key:** Make GAIN > PAIN for users, so through their usage, they add value to your system.
 
-### The Three Layers
+### The Four-Layer Structure
 
-The Trigger Map combines three critical layers in one picture:
+The Trigger Map flows horizontally (left to right) in four layers:
 
-1. **Business Goals** - Your WHY (Vision that motivates, and SMART objectives that measure success)
-2. **Target Groups** - The WHO (User types whose success drives your success)
-3. **Usage Goals** - Their WHY (Driving forces both positive - what they wish to achieve, and negative - what they wish to avoid)
+**Visual Flow:**
+```
+Business Goals → Product/Solution → Target Groups → Usage Goals
+                                                     (Positive + Negative)
+```
 
-When all levels are then prioritized, you have perfect guidance for design:
+**The Layers:**
+
+1. **Business Goals** (Left) - YOUR WHY
+   - Vision statement(s) - inspirational direction
+   - SMART objectives - measurable targets
+   - Multiple goals can feed into the product
+
+2. **Product/Solution** (Center) - WHAT YOU'RE BUILDING
+   - Product name and description
+   - Central hub connecting goals to users
+   - What the product does
+
+3. **Target Groups** (Middle-Right) - THE WHO
+   - Prioritized personas (Primary 👥, Secondary 👤)
+   - User types whose success drives your success
+   - Detailed psychological profiles
+
+4. **Usage Goals** (Right) - THEIR WHY
+   - **Positive Drivers** (✅ green) - What they want to achieve
+   - **Negative Drivers** (❌ red) - What they want to avoid
+   - Separated into distinct groups per target group
+   - Both types equally important for design
+
+**Strategic Guidance:**
+
+When all levels are prioritized, you have perfect guidance for design:
 
 - Present features that add value to your most prioritized goal first
 - To the highest prioritized target group

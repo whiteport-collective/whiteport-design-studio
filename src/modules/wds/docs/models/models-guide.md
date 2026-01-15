@@ -62,6 +62,20 @@ Each model includes:
 
 ---
 
+### [SMART Method](./smart-goals-model.md)
+
+**By:** George T. Doran (1981)  
+**Core Idea:** A framework for expressing measurable, achievable objectives using five criteria: Specific, Measurable, Achievable, Relevant, and Time-bound.
+
+**Applied in WDS:**  
+Used in Trigger Mapping Workshop 1 to transform vision (visionary statements) into strategic objectives. Ensures business objectives are measurable and trackable.
+
+**When to use it:** When defining strategic objectives that need to be measurable and actionable.
+
+**Reference:** [SMART Method Reference](smart-goals-model.md)
+
+---
+
 ### [Action Mapping](./action-mapping.md)
 
 **By:** Cathy Moore (2008+)  
@@ -213,6 +227,7 @@ These models represent decades of insight from brilliant thinkers who've shaped 
 - **Mijo Balic & Ingrid Domingues** - Connecting goals to user behavior
 - **Gojko Adzic** - Making strategic planning accessible
 - **Simon Sinek** - Teaching us to start with WHY
+- **George T. Doran** - Creating measurable, achievable objectives
 - **Cathy Moore** - Focusing on action over information
 - **Kathy Sierra** - Championing user capability
 

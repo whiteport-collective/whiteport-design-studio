@@ -5,9 +5,9 @@ Create a 1920x1080px YouTube thumbnail matching the reference image style.
 **What to Change from Reference:**
 
 **Headlines (Left side):**
-- Line 1: "BUILD YOUR STRATEGIC" (Rubrik Light, 91pt, white)
-- Line 2: "FOUNDATION IN" (Rubrik Bold, 91pt, white)
-- Line 3: "30-45 MINUTES!" (Rubrik Bold, 91pt, white)
+- Line 1: "INSTANT CLARITY" (Rubrik Light, 91pt, white)
+- Line 2: "A PRODUCT BRIEF" (Rubrik Bold, 91pt, white)
+- Line 3: "IN 30 QUESTIONS!" (Rubrik Bold, 91pt, white)
 - Line spacing: 79pt
 
 **Module Badge (Bottom-left):**
@@ -15,9 +15,9 @@ Create a 1920x1080px YouTube thumbnail matching the reference image style.
 
 **Character Activity:**
 - Keep the woman's angle and position similar as in the first reference image. Keep the character neutral and stylized as it is
-- Woman is working at her desk with a large strategic document/blueprint spread out in front of her
+- Woman is working at her desk with a large product brief document/blueprint spread out in front of her
 - She's holding a pen/marker and has just finished writing, looking satisfied at the completed document
-- On the desk: sticky notes, coffee cup, the strategic document with visible sections/structure
+- On the desk: sticky notes, coffee cup, the product brief with visible sections/structure
 - Skip the tablet
 
 **Background Pattern:**
@@ -26,7 +26,7 @@ Create a 1920x1080px YouTube thumbnail matching the reference image style.
 - Keep as in reference image
 
 **Workspace Props:**
-- Add: stylized strategic document (visible structure/sections), sticky notes, pen/marker, coffee cup, notebook. No text should be visible or be presented with just scribble or gray markers
+- Add: stylized product brief document (visible structure/sections), sticky notes, pen/marker, coffee cup, notebook. No text should be visible or be presented with just scribble or gray markers
 
 **Keep Everything Else from Reference:**
 - do not put light objects behind her face since we need to keep her silhouette clear

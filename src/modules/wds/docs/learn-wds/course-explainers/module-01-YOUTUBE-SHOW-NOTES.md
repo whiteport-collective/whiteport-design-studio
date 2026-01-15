@@ -40,8 +40,8 @@ This 30-minute deep dive explores why designers are irreplaceable in the AI era 
 📚 *Linchpin Book by Seth Godin:*
 <https://www.amazon.com/Linchpin-Are-You-Indispensable-ebook/dp/B00354Y9ZU>
 
-💬 *Discord Community:*
-[Discord invite link]
+💬 *UX-Design channel in the BMad Discord Community:*
+<https://discord.gg/Pn63gAuX>
 
 📖 *GitHub Discussions:*
 <https://github.com/whiteport-collective/whiteport-design-studio/discussions>

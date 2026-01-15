@@ -38,19 +38,19 @@ Standing at a crossroads? This 15-minute video explores the most important choic
 🌊 *WDS Presentation:*
 <https://whiteport.com/whiteport-design-studio/>
 
-🛠️ *Installation Guide:*
+ Installation Guide:
 <https://github.com/whiteport-collective/whiteport-design-studio/blob/main/src/modules/wds/docs/getting-started/installation.md>
 
-📖 *Quick Start:*
+ Quick Start:
 <https://github.com/whiteport-collective/whiteport-design-studio/blob/main/src/modules/wds/docs/getting-started/quick-start.md>
 
-💬 *Discord Community:*
-[Discord invite link]
+ UX-Design channel in the BMad Discord Community:
+<https://discord.gg/Pn63gAuX>
 
-📖 *GitHub Discussions:*
+ GitHub Discussions:
 <https://github.com/whiteport-collective/whiteport-design-studio/discussions>
 
-▶️ *Next Module:* Module 01 - Why WDS Matters
+ Next Module: Module 01 - Why WDS Matters
 <https://www.youtube.com/watch?v=Xhw5JB7mpxw>
 
 📚 *Full Course:*

@@ -44,14 +44,14 @@ Sound familiar? This 6-minute guided walkthrough takes you from complete beginne
 
 🌊 *WDS Presentation:* [WDS Presentation](https://whiteport.com/whiteport-design-studio/)
 
-💻 *Download Cursor:* [Download Cursor](https://cursor.sh)
+💻 *Download Cursor:* <https://cursor.sh>
 
-📥 *Download VS Code:* [Download VS Code](https://code.visualstudio.com)
+📥 *Download VS Code:* <https://code.visualstudio.com>
 
-📥 *GitHub:* [GitHub](https://github.com)
+📥 *GitHub:* <https://github.com>
 
-💬 *Discord Community:*
-[Discord invite link]
+💬 *UX-Design channel in the BMad Discord Community:*
+<https://discord.gg/Pn63gAuX>
 
 📖 *GitHub Discussions:*
 <https://github.com/whiteport-collective/whiteport-design-studio/discussions>
