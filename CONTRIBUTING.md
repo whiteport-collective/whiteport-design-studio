@@ -130,7 +130,7 @@ Example breakdown:
 If you're new to GitHub or pull requests, here's a quick guide:
 
 1. **Fork the repository** - Click the "Fork" button on GitHub to create your own copy
-2. **Clone your fork** - `git clone https://github.com/YOUR-USERNAME/bmad-method.git`
+2. **Clone your fork** - `git clone https://github.com/YOUR-USERNAME/bmad-module-creative-intelligence-suite.git`
 3. **Create a new branch** - Never work on `main` directly!
    ```bash
    git checkout -b fix/description
@@ -255,9 +255,9 @@ By participating in this project, you agree to abide by our Code of Conduct. We 
   - **#bmad-development** - Technical questions and discussions
   - **#suggestions-feedback** - Feature ideas and suggestions
   - **#report-bugs-and-issues** - Get help with bugs before filing issues
-- 🐛 Report bugs using the [bug report template](https://github.com/bmad-code-org/BMAD-METHOD/issues/new?template=bug_report.md)
-- 💡 Suggest features using the [feature request template](https://github.com/bmad-code-org/BMAD-METHOD/issues/new?template=feature_request.md)
-- 📖 Browse the [GitHub Discussions](https://github.com/bmad-code-org/BMAD-METHOD/discussions)
+- 🐛 Report bugs using the [bug report template](https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite/issues/new?template=bug_report.md)
+- 💡 Suggest features using the [feature request template](https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite/issues/new?template=feature_request.md)
+- 📖 Browse the [GitHub Discussions](https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite/discussions)
 
 ---
 
