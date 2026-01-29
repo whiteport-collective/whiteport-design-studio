@@ -118,9 +118,9 @@ Choose a workflow to start:
 ```
 *Define your product vision and goals*
 
-### 🎨 **Interactive Prototypes**
+### 🎨 **Agentic Development**
 ```
-@wds/workflows/interactive-prototypes
+@wds/workflows/agentic-development
 ```
 *Build clickable prototypes for testing*
 
@@ -158,7 +158,7 @@ Choose a workflow to start:
 |----------|---------|-----------|
 | **Trigger Map** | User pain points | `@wds/workflows/trigger-map` |
 | **Product Brief** | Product vision | `@wds/workflows/product-brief` |
-| **Prototypes** | Interactive demos | `@wds/workflows/interactive-prototypes` |
+| **Prototypes** | Interactive demos | `@wds/workflows/agentic-development` |
 | **Scenario Init** | User journeys | `@wds/workflows/scenario-init` |
 
 ---

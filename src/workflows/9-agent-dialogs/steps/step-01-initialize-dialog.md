@@ -2,7 +2,58 @@
 
 ## CONTEXT
 
-This is the first step of the Agent Dialog Workflow. We create the folder structure and main dialog file.
+This is the first step of the Agent Dialog Workflow. Before creating a new dialog, we first check for any existing pending dialogs.
+
+---
+
+## CHECK FOR EXISTING DIALOGS
+
+⚠️ **IMPORTANT: Always check for pending dialogs before creating a new one.**
+
+<action>
+**Scan for existing dialogs:**
+
+1. Check if `docs/F-Agent-Dialogs/` exists
+2. If it exists, scan all subdirectories for dialog files (*-dialog.md)
+3. Read the Meta section of each dialog file
+4. Identify dialogs where:
+   - Status = "Not Started" OR "In Progress"
+   - Agent matches the current agent (if known)
+</action>
+
+<conditional>
+**If pending dialogs found:**
+
+Present them to the user:
+
+```
+📋 **Found {N} pending dialog(s):**
+
+| # | Date | Agent | Feature | Status |
+|---|------|-------|---------|--------|
+| 1 | {date} | {agent} | {feature} | {status} |
+
+**Options:**
+[A] Continue existing dialog #{N}
+[B] Create a new dialog (existing ones remain pending)
+
+Choice:
+```
+
+If user chooses an existing dialog:
+- Load that dialog file
+- Check the Steps Overview table for next incomplete step
+- Continue from there
+
+If user chooses to create new:
+- Continue to SELECT DIALOG TYPE below
+</conditional>
+
+<conditional>
+**If no pending dialogs found OR docs/F-Agent-Dialogs/ doesn't exist:**
+
+Continue to SELECT DIALOG TYPE below.
+</conditional>
 
 ---
 
@@ -70,11 +121,17 @@ Agent:</ask>
 <action>
 **Create dialog folder:**
 
-Path: `docs/F-Agent-Dialogs/{date}-{feature_slug}/`
+Path: `docs/F-Agent-Dialogs/{date}-{agent_slug}-{feature_slug}/`
 
 Where:
 - `{date}` = Today's date in YYYY-MM-DD format
+- `{agent_slug}` = Agent name, lowercase (e.g., "freya", "saga", "dev")
 - `{feature_slug}` = Feature name, lowercase, hyphenated
+
+**Examples:**
+- `2026-01-23-freya-booking-details-overlay/`
+- `2026-01-23-saga-course-workflow-integration/`
+- `2026-01-23-dev-calendar-scroll-fix/`
 
 **Create subfolders:**
 - `steps/` — For step instruction files
@@ -87,9 +144,9 @@ Where:
 <action>
 **Create main dialog file:**
 
-File: `docs/F-Agent-Dialogs/{date}-{feature_slug}/{date}-{feature_slug}-dialog.md`
+File: `docs/F-Agent-Dialogs/{date}-{agent_slug}-{feature_slug}/{date}-{agent_slug}-{feature_slug}-dialog.md`
 
-**Use template from:** `templates/dialog.template.md`
+**Use template from:** Selected dialog type template (see SELECT DIALOG TYPE step above)
 
 **Fill in:**
 - Date: Today's date
@@ -158,8 +215,8 @@ Patterns:</ask>
 ✅ **Dialog initialized!**
 
 **Created:**
-- Folder: `docs/F-Agent-Dialogs/{date}-{feature_slug}/`
-- Dialog file: `{date}-{feature_slug}-dialog.md`
+- Folder: `docs/F-Agent-Dialogs/{date}-{agent_slug}-{feature_slug}/`
+- Dialog file: `{date}-{agent_slug}-{feature_slug}-dialog.md`
 - Steps folder: `steps/`
 
 **Next:** Proceed to Step 2 to analyze scope and create step breakdown.

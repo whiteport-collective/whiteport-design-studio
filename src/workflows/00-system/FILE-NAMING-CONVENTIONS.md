@@ -28,7 +28,7 @@
 ## ✅ DO Use Specific Names
 
 ### Always Create:
-- ✅ `INTERACTIVE-PROTOTYPES-GUIDE.md` (specific topic)
+- ✅ `AGENTIC-DEVELOPMENT-GUIDE.md` (specific topic)
 - ✅ `FREYA-WORKFLOW-INSTRUCTIONS.md` (specific agent + purpose)
 - ✅ `PROTOTYPE-ROADMAP.md` (specific purpose)
 - ✅ `PROJECT-ANALYSIS-ROUTER.md` (specific function)
@@ -43,7 +43,7 @@
 ### Pattern 1: [TOPIC]-GUIDE.md
 **When**: Overview/introduction to a topic  
 **Examples**:
-- `INTERACTIVE-PROTOTYPES-GUIDE.md`
+- `AGENTIC-DEVELOPMENT-GUIDE.md`
 - `DESIGN-SYSTEM-GUIDE.md`
 - `TESTING-GUIDE.md`
 
@@ -199,7 +199,7 @@ project-analysis/
 - `-ROADMAP.md` - Status/plan tracking
 
 **Examples**:
-- `INTERACTIVE-PROTOTYPES-GUIDE.md`
+- `AGENTIC-DEVELOPMENT-GUIDE.md`
 - `FREYA-WORKFLOW-INSTRUCTIONS.md`
 - `page-template.html`
 - `PROTOTYPE-ANALYSIS.md`
@@ -228,7 +228,7 @@ project-analysis/
 
 | ❌ Generic | ✅ Specific |
 |-----------|------------|
-| `README.md` | `INTERACTIVE-PROTOTYPES-GUIDE.md` |
+| `README.md` | `AGENTIC-DEVELOPMENT-GUIDE.md` |
 | `INSTRUCTIONS.md` | `FREYA-WORKFLOW-INSTRUCTIONS.md` |
 | `GUIDE.md` | `DESIGN-SYSTEM-GUIDE.md` |
 | `template.yaml` | `work-file-template.yaml` |

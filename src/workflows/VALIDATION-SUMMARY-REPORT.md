@@ -141,8 +141,8 @@ warningsFixed: 6
 
 ---
 
-### 10. interactive-prototypes ⚠️ EMPTY/INCOMPLETE
-**Location:** `4-ux-design/interactive-prototypes`
+### 10. agentic-development ⚠️ EMPTY/INCOMPLETE
+**Location:** `4-ux-design/agentic-development`
 **Structure:** Directory exists but appears empty or undeveloped
 **Issue:** No files found
 **Recommendation:** Remove or develop workflow
@@ -269,7 +269,7 @@ Individual validation reports created:
 
 ### Immediate Actions Required
 1. **Create workflow.md files** for remaining workflows with step structures
-2. **Investigate empty workflows** (interactive-prototypes, modular-architecture, object-types) - remove or develop
+2. **Investigate empty workflows** (agentic-development, modular-architecture, object-types) - remove or develop
 3. **Clarify guide vs workflow** distinction for excalidraw-integration and scenario-init
 4. **Complete vtc-workshop** workflow.md creation
 

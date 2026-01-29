@@ -104,6 +104,33 @@ This dialog **bridges the gap** between the page specification and the developme
 
 ---
 
+## Implementation Workflow
+
+### Step-by-Step Process
+
+1. **Build step** — Implement the code
+2. **Test step** — Verify against spec
+3. **User approval** — Confirm it's correct
+4. **CW status check** — Verify context window has room for next step
+5. **Next step** — Move forward
+
+### Context Window (CW) Status Check
+
+At the end of each completed step, perform a CW status check to ensure the AI session can handle the next step without losing important context.
+
+| Check | Action |
+|-------|--------|
+| **Session length** | If conversation is very long, consider starting fresh for next step |
+| **Context clarity** | Can the agent still reference earlier decisions accurately? |
+| **Handoff summary** | If starting new session, document: completed steps, key decisions, current file states |
+
+**Recommendation thresholds:**
+- **Continue** — Session is manageable, context is clear
+- **Consider fresh start** — Session is long but context is still intact
+- **Fresh start recommended** — Context overflow risk, or major architectural shift in next step
+
+---
+
 ## Steps Overview
 
 | # | Step | Status | Notes |

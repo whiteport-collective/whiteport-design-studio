@@ -4,11 +4,24 @@ Choose the template that matches your work type.
 
 ---
 
+## Naming Convention
+
+```
+docs/F-Agent-Dialogs/
+└── {YYYY-MM-DD}-{agent}-{feature-name}/
+    └── {YYYY-MM-DD}-{agent}-{feature-name}-dialog.md
+```
+
+**Example:** `2026-01-23-freya-booking-details-overlay-dialog.md`
+
+---
+
 ## Available Types
 
 | Type | Icon | Template | Use When |
 |------|------|----------|----------|
 | **Prototype Implementation** | 🔧 | [prototype-implementation.template.md](prototype-implementation.template.md) | Building UI from specifications |
+| **Stitch UI Generation** | 🪡 | [stitch-generation.template.md](stitch-generation.template.md) | AI-assisted UI design with Google Stitch |
 | **Bug Fix** | 🐛 | [bug-fix.template.md](bug-fix.template.md) | Fixing issues and defects |
 | **Design Exploration** | 🎨 | [design-exploration.template.md](design-exploration.template.md) | Exploring visual/UX directions |
 | **Capture** | 💾 | [../dialog-capture.template.md](../dialog-capture.template.md) | Saving ideas for later |
@@ -29,6 +42,25 @@ Choose the template that matches your work type.
 - Specification summary with Object IDs
 - Section-by-section approval flow
 - Design system component mapping
+
+---
+
+### 🪡 Stitch UI Generation
+
+**Best for:**
+- Generating UI designs from specifications using Google Stitch AI
+- Rapid visual design iteration
+- Creating production-quality screens from sketches
+
+**Key sections:**
+- Input formula: Visual Reference + Sketch + Specification
+- Screen-by-screen generation tracking
+- Export and integration workflow
+
+**Input Formula:**
+```
+Visual Reference + Sketch + Specification (as prompt) = Stitch Generation
+```
 
 ---
 
@@ -92,7 +124,9 @@ Choose the template that matches your work type.
 ```
 Start here:
     │
-    ├── Building from spec? → 🔧 Prototype Implementation
+    ├── Building code from spec? → 🔧 Prototype Implementation
+    │
+    ├── Generating UI designs with AI? → 🪡 Stitch UI Generation
     │
     ├── Fixing something broken? → 🐛 Bug Fix
     │

@@ -141,8 +141,8 @@ topic/
 
 **Example**:
 ```
-interactive-prototypes/
-├── INTERACTIVE-PROTOTYPES-GUIDE.md (complete system overview)
+agentic-development/
+├── AGENTIC-DEVELOPMENT-GUIDE.md (complete system overview)
 ├── CREATION-GUIDE.md (detailed technical reference)
 └── PROTOTYPE-ANALYSIS.md (case study)
 ```

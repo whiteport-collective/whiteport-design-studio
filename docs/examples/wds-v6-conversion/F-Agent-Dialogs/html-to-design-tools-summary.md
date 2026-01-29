@@ -31,7 +31,7 @@ The HTML to Design workflow focuses on:
 ### Key Components Built
 
 #### 1. Dev Mode JavaScript Component
-- **Location**: `src/modules/wds/workflows/4-ux-design/interactive-prototypes/templates/components/dev-mode.js`
+- **Location**: `src/modules/wds/workflows/4-ux-design/agentic-development/templates/components/dev-mode.js`
 - **Purpose**: Interactive tool for extracting Object IDs from live prototypes
 - **Features**:
   - Toggle dev mode with button or Ctrl+E
@@ -42,7 +42,7 @@ The HTML to Design workflow focuses on:
   - Form field protection (Shift disabled when typing)
 
 #### 2. Work File Template
-- **Location**: `src/modules/wds/workflows/4-ux-design/interactive-prototypes/templates/work-file-template.yaml`
+- **Location**: `src/modules/wds/workflows/4-ux-design/agentic-development/templates/work-file-template.yaml`
 - **Purpose**: Complete planning document for section-by-section implementation
 - **Structure**:
   - Metadata and device compatibility

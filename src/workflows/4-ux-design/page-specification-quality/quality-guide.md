@@ -572,7 +572,7 @@ This quality workflow integrates with:
 - [Sketch Analysis](../substeps/4b-sketch-analysis.md) - Identifies page elements
 
 **After:**
-- [Interactive Prototypes](../interactive-prototypes/) - Builds HTML demos from specs
+- [Agentic Development](../agentic-development/) - Builds HTML demos from specs
 - [Design Deliveries](../../../6-design-deliveries/) - Packages specs for handoff
 - [PRD Generation](../../../3-prd-platform/) - Creates developer stories from specs
 

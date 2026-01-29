@@ -13,7 +13,7 @@ This document summarizes the work done on the HTML to Design side of the WDS v6 
   - ESLint rule compliance (`unicorn/prefer-module`, `no-unused-vars`, etc.)
 
 ### 2. Dev Mode JavaScript Component
-- **Location**: `src/modules/wds/workflows/4-ux-design/interactive-prototypes/templates/components/dev-mode.js`
+- **Location**: `src/modules/wds/workflows/4-ux-design/agentic-development/templates/components/dev-mode.js`
 - **Purpose**: Developer/feedback mode for copying Object IDs in prototypes
 - **Features Implemented**:
   - Toggle dev mode with button or Ctrl+E
@@ -24,7 +24,7 @@ This document summarizes the work done on the HTML to Design side of the WDS v6 
   - Form field protection (Shift disabled when typing)
 
 ### 3. Work File Template
-- **Location**: `src/modules/wds/workflows/4-ux-design/interactive-prototypes/templates/work-file-template.yaml`
+- **Location**: `src/modules/wds/workflows/4-ux-design/agentic-development/templates/work-file-template.yaml`
 - **Purpose**: Complete planning document for section-by-section implementation
 - **Structure**:
   - Metadata and device compatibility

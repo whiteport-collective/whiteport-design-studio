@@ -1,7 +1,7 @@
 ---
 validationDate: 2026-01-22
-workflowName: interactive-prototypes
-workflowPath: c:\dev\WDS\bmad-method-wds-expansion\src\workflows\4-ux-design\interactive-prototypes
+workflowName: agentic-development
+workflowPath: c:\dev\WDS\bmad-method-wds-expansion\src\workflows\4-ux-design\agentic-development
 validationStatus: COMPLETE
 overallStatus: PASS - FIXED
 criticalIssues: 2
@@ -10,7 +10,7 @@ warnings: 1
 warningsFixed: 1
 ---
 
-# Validation Report: Interactive Prototypes
+# Validation Report: Agentic Development
 
 **Validation Started:** 2026-01-22
 **Validator:** Wendy - BMAD Workflow Validation System
@@ -30,7 +30,7 @@ warningsFixed: 1
 ### Current Structure
 
 ```
-interactive-prototypes/
+agentic-development/
 ├── phases/                           ← ❌ Should be steps-c/
 │   ├── 1-prototype-setup.md (95 lines) ✅
 │   ├── 2-scenario-analysis.md (174 lines) ✅
@@ -46,7 +46,7 @@ interactive-prototypes/
 ├── templates/ (template files) ✅
 ├── CREATION-GUIDE.md (1,148 lines)
 ├── FILE-INDEX.md (365 lines)
-├── INTERACTIVE-PROTOTYPES-GUIDE.md (380 lines)
+├── AGENTIC-DEVELOPMENT-GUIDE.md (380 lines)
 ├── PROTOTYPE-ANALYSIS.md (832 lines)
 ├── PROTOTYPE-INITIATION-DIALOG.md (409 lines)
 └── PROTOTYPE-WORKFLOW.md (137 lines) ← ❌ Should be workflow.md
@@ -87,7 +87,7 @@ interactive-prototypes/
 
 **Current:** Guide files in root folder
 - CREATION-GUIDE.md
-- INTERACTIVE-PROTOTYPES-GUIDE.md
+- AGENTIC-DEVELOPMENT-GUIDE.md
 - PROTOTYPE-ANALYSIS.md
 - PROTOTYPE-INITIATION-DIALOG.md
 - FILE-INDEX.md
@@ -147,7 +147,7 @@ interactive-prototypes/
 **Action:** Move guide files to `guides/` subfolder
 **Files to move:**
 - CREATION-GUIDE.md
-- INTERACTIVE-PROTOTYPES-GUIDE.md
+- AGENTIC-DEVELOPMENT-GUIDE.md
 - PROTOTYPE-ANALYSIS.md
 - PROTOTYPE-INITIATION-DIALOG.md
 - FILE-INDEX.md
@@ -207,7 +207,7 @@ This is a **well-designed workflow** with **structural compliance issues**. The 
 3. ✅ **Organized guides into guides/ subfolder**
    - Moved 5 guide files:
      - CREATION-GUIDE.md
-     - INTERACTIVE-PROTOTYPES-GUIDE.md
+     - AGENTIC-DEVELOPMENT-GUIDE.md
      - PROTOTYPE-ANALYSIS.md
      - PROTOTYPE-INITIATION-DIALOG.md
      - FILE-INDEX.md
@@ -219,7 +219,7 @@ This is a **well-designed workflow** with **structural compliance issues**. The 
 ### New Structure:
 
 ```
-interactive-prototypes/
+agentic-development/
 ├── workflow.md (entry point) ✅
 ├── steps-c/ (BMAD v6 compliant) ✅
 │   ├── 1-prototype-setup.md
@@ -236,7 +236,7 @@ interactive-prototypes/
 ├── guides/ (organized documentation) ✅
 │   ├── CREATION-GUIDE.md
 │   ├── FILE-INDEX.md
-│   ├── INTERACTIVE-PROTOTYPES-GUIDE.md
+│   ├── AGENTIC-DEVELOPMENT-GUIDE.md
 │   ├── PROTOTYPE-ANALYSIS.md
 │   └── PROTOTYPE-INITIATION-DIALOG.md
 └── templates/ (existing templates) ✅

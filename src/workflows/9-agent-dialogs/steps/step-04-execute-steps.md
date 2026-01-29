@@ -4,6 +4,8 @@
 
 Step files are created. Now we execute each step, either in this dialog or in fresh agent dialogs.
 
+**Note:** For implementation-specific execution details (feedback protocol, dynamic planning), see the **Agentic Development Workflow** in `workflows/4-ux-design/agentic-development/workflow.md`.
+
 ---
 
 ## EXECUTION MODES
@@ -34,9 +36,11 @@ Mode:</ask>
 
 <action>
 1. **Read the step file** completely
-2. **Execute the implementation** following the instructions
-3. **Verify against acceptance criteria**
-4. **Test using the test instructions**
+2. **Document any decisions or issues** in the dialog before implementing
+3. **Execute the implementation** following the instructions
+4. **Add sub-steps** if needed for things discovered during implementation
+5. **Verify against acceptance criteria**
+6. **Test using the test instructions**
 </action>
 
 ### Step Completion Checklist
@@ -73,7 +77,10 @@ Mode:</ask>
 Choice:</ask>
 
 <check if="choice == A">
-  <action>Load and execute next step file</action>
+  <action>
+  1. Review and update remaining steps in dialog file
+  2. Load and execute next step file
+  </action>
 </check>
 
 <check if="choice == B">
@@ -81,6 +88,7 @@ Choice:</ask>
   Update dialog file:
   - Status: "In Progress"
   - Progress Log: Note where we stopped
+  - Ensure all decisions documented
 
   Output: "Progress saved. The dialog is ready to resume."
   </action>
@@ -90,6 +98,20 @@ Choice:</ask>
 
 ## MODE B: FRESH DIALOG INSTRUCTIONS
 
+### Handoff Always References Dialog
+
+<warning>
+**Any handoff — to a new session, new agent, or human — MUST reference the dialog document.**
+
+The dialog document is the single source of truth for:
+- What has been done
+- What decisions were made
+- What remains to be done
+- Any issues or blockers
+
+Never hand off by describing the task verbally. Always point to the dialog.
+</warning>
+
 ### For Each Step
 
 <action>
@@ -98,20 +120,24 @@ Choice:</ask>
 ```
 ## Execute Step {N}: {Step Name}
 
-### Context
-This is part of the {feature-name} implementation.
-Dialog: docs/F-Agent-Dialogs/{date}-{feature-name}/
+### Dialog Document (READ FIRST)
+`docs/F-Agent-Dialogs/{date}-{feature-name}/{date}-{feature-name}-dialog.md`
+
+Read the dialog file first to understand:
+- Overall context and scope
+- What steps are complete
+- Current status and any blockers
+
+### Step File
+`docs/F-Agent-Dialogs/{date}-{feature-name}/steps/{N}-{step-name}.md`
 
 ### Instructions
-1. Read the step file: `steps/{N}-{step-name}.md`
-2. Execute the implementation
-3. Verify against acceptance criteria
-4. When complete, update the dialog file:
-   - Change step status to ✅
-   - Add entry to Progress Log
-
-### Step File Location
-`docs/F-Agent-Dialogs/{date}-{feature-name}/steps/{N}-{step-name}.md`
+1. Read the dialog file completely
+2. Read the step file
+3. Execute the implementation
+4. Document decisions in the dialog BEFORE implementing
+5. Verify against acceptance criteria
+6. Update dialog file: step status → ✅, add Progress Log entry
 ```
 </action>
 
@@ -197,7 +223,7 @@ Add to Progress Log:
 
 <check if="all_steps_complete">
   <output>
-  🎉 **All steps complete!**
+  **All steps complete!**
 
   Proceed to Step 5 to finalize the dialog.
 

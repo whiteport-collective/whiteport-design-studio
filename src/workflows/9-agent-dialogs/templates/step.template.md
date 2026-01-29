@@ -94,4 +94,25 @@ For each Object ID:
 
 ---
 
+## CW Status Check
+
+At step completion, assess context window status:
+
+| Indicator | Status |
+|-----------|--------|
+| Session length | {Short / Medium / Long} |
+| Context clarity | {Clear / Degraded} |
+| Recommendation | {Continue / Consider fresh start / Fresh start recommended} |
+
+**If starting fresh session for next step, include handoff summary:**
+
+```
+Completed: Step {#} - {Step Name}
+Key decisions: {list any important decisions made}
+File states: {list modified files and their current state}
+Next: Step {#+1} - {Next Step Name}
+```
+
+---
+
 _Step {#} of {total} — {Feature Name} Implementation_

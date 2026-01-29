@@ -1,4 +1,14 @@
-# {DATE} {Feature Name} — Prototype Implementation
+# {YYYY-MM-DD} {Feature Name} — Prototype Implementation
+
+<!--
+FILE NAMING CONVENTION:
+- Folder: {YYYY-MM-DD}-{agent}-{feature-name}/
+- File:   {YYYY-MM-DD}-{agent}-{feature-name}-dialog.md
+
+Example:
+- Folder: 2026-01-23-freya-booking-details-overlay/
+- File:   2026-01-23-freya-booking-details-overlay-dialog.md
+-->
 
 ## Meta
 
@@ -6,7 +16,7 @@
 |-------|-------|
 | **Date** | {YYYY-MM-DD} |
 | **Type** | 🔧 Prototype Implementation |
-| **Agent** | Freya (UX Designer) |
+| **Agent** | {Agent name} ({Role}) |
 | **Feature** | {Feature name} |
 | **Specification** | [{Spec name}]({path-to-spec}) |
 | **Target** | {Where to implement: app path or prototype folder} |
@@ -126,24 +136,99 @@ Each section is implemented and approved before moving to the next:
 
 ### Approval Criteria
 
-- [ ] Matches specification visually
-- [ ] All Object IDs present
+- [ ] **Matches sketches precisely** — Text sizes, proportions, spacing, layout
+- [ ] All Object IDs present as `data-object-id` attributes
 - [ ] Translations work (SE/EN toggle)
 - [ ] Accessibility requirements met
 - [ ] No TypeScript errors
+
+> **Sketch Fidelity:** Sketches are intentional design decisions. Text sizes, proportions, and spacing are chosen deliberately. Implement as close to the sketch as possible. If constraints prevent exact matching, document the deviation.
+
+---
+
+## Feedback Protocol
+
+How designer feedback is handled during implementation:
+
+| Type | What It Is | When to Address | Documentation |
+|------|------------|-----------------|---------------|
+| **Bug/Issue** | Something broken or not working | Now — iterate until fixed | Part of current step |
+| **Quick Adjustment** | Small tweak to current work | Now — implement immediately | Note in progress log |
+| **Addition** | New requirement in scope | Later step — add to plan | Note in step file |
+| **Change Request** | Outside current scope | Future session — document | Add to Change Requests |
+
+### The 2-Minute Rule (GTD)
+
+**If a fix takes less than 2 minutes, do it immediately.**
+
+Planning overhead should not exceed task complexity. See [GTD Model](../../../../docs/models/gtd-getting-things-done.md).
+
+**Pattern:** Do the fix → Log as sub-step (e.g., 20a-1) → Continue main task
+
+### Agent Response Pattern
+
+**When user reports something:**
+1. **CLASSIFY** — What type of feedback is this?
+2. **TIMING** — When should it be addressed?
+3. **CONFIRM** — For additions and change requests, confirm before proceeding
+4. **EXECUTE** — Implement or document as appropriate
+
+### Change Request Flow
+
+```
+Designer: "The profile button should go to /family"
+Agent:    "This is outside the current dialog scope.
+          It doesn't block {current feature}.
+          I'll add it to Change Requests for a future session. Confirm?"
+Designer: "Yes" → Agent adds to Change Requests
+          OR "Do it now" → Agent treats as quick adjustment, implements
+```
+
+---
+
+## Change Requests
+
+Structural changes identified during implementation. Assessed for timing.
+
+| # | Request | Raised | Assessment | Timing | Status |
+|---|---------|--------|------------|--------|--------|
+| _None yet_ | | | | | |
+
+<!--
+Example:
+| CR-1 | **Infinite Calendar Scroll** — Calendar should scroll continuously | 2026-01-24 | Structural change to calendar. Significant scope. | Future session | 🔲 Pending |
+-->
 
 ---
 
 ## Steps Overview
 
-| # | Section | Status | Approved |
-|---|---------|--------|----------|
-| 1 | [{Section name}](steps/01-{section}.md) | 🔲 | 🔲 |
-| 2 | [{Section name}](steps/02-{section}.md) | 🔲 | 🔲 |
-| 3 | [{Section name}](steps/03-{section}.md) | 🔲 | 🔲 |
+### Done
+
+| # | Section | Notes |
+|---|---------|-------|
+| _None yet_ | | |
+
+### In Progress
+
+| # | Section | Status | Description |
+|---|---------|--------|-------------|
+| 1 | [{Section name}](steps/01-{section}.md) | 🔄 | {Brief description} |
+| 1a | — {Sub-task} | 🔄 | {Sub-step added during execution} |
+
+### To Do
+
+| # | Section | Description |
+|---|---------|-------------|
+| 2 | [{Section name}](steps/02-{section}.md) | {Brief description} |
+| 3 | [{Section name}](steps/03-{section}.md) | {Brief description} |
 
 **Status:** 🔲 Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked
-**Approved:** 🔲 Pending | ✅ Approved | 🔁 Needs Changes
+
+**Sub-Step Numbering:**
+- Main steps: `1`, `2`, `3`...
+- Sub-steps during execution: `1a`, `1b`...
+- Bug fixes (2-min rule): `1a-1`, `1a-2`...
 
 ---
 

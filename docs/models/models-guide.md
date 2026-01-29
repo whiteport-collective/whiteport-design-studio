@@ -93,7 +93,7 @@ Used in Trigger Mapping Workshop 1 to transform vision (visionary statements) in
 
 ### [Kathy Sierra Badass Users](./kathy-sierra-badass-users.md)
 
-**By:** Kathy Sierra (2000s-2015)  
+**By:** Kathy Sierra (2000s-2015)
 **Core Idea:** Don't make a better product. Make users better at what they want to do. Focus on user capability.
 
 **Applied in WDS:**
@@ -103,6 +103,21 @@ Used in Trigger Mapping Workshop 1 to transform vision (visionary statements) in
 - Success/error messaging (celebrating/guiding)
 
 **When to Use:** Any design decision - always ask "Does this make the user feel capable?"
+
+---
+
+### [Getting Things Done (GTD)](./gtd-getting-things-done.md)
+
+**By:** David Allen (2001)
+**Core Idea:** Your mind is for having ideas, not holding them. Capture everything, then process and act systematically.
+
+**Applied in WDS:**
+- **2-Minute Rule:** If it takes < 2 minutes, do it now (don't plan trivial tasks)
+- Agent Dialogs as capture system (externalize all ideas)
+- Change Requests as "Someday/Maybe" list
+- Session Start Protocol as weekly review concept
+
+**When to Use:** Deciding whether to plan or act, managing task complexity, avoiding planning overhead
 
 ---
 
@@ -227,6 +242,7 @@ These models represent decades of insight from brilliant thinkers who've shaped 
 - **Mijo Balic & Ingrid Domingues** - Connecting goals to user behavior
 - **Gojko Adzic** - Making strategic planning accessible
 - **Simon Sinek** - Teaching us to start with WHY
+- **David Allen** - Systematic productivity and the 2-minute rule
 - **George T. Doran** - Creating measurable, achievable objectives
 - **Cathy Moore** - Focusing on action over information
 - **Kathy Sierra** - Championing user capability

@@ -388,11 +388,13 @@ To begin, load and execute [steps/step-01-initialize-dialog.md](steps/step-01-in
 
 Agent Dialogs can be created from:
 
-- **Interactive Prototypes Workflow** — Each section becomes a step
 - **UX Design Workflow** — Specification implementation becomes a dialog
 - **Design System Workflow** — Component creation becomes a dialog
+- **Testing Workflow** — Validation tasks become a dialog
 
 The Agent Dialog structure provides a consistent way to document and execute implementation work from any source.
+
+**Note:** This workflow IS the Agentic Development approach. Interactive Prototypes, Prototype Implementation, Bug Fixes, and Design Exploration are all output types of this workflow.
 
 ---
 
