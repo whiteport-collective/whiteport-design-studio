@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 (2026-01-29)
+
+### Changes
+- **Learning material moved** - Installer now places optional learning & reference material in `_wds-learn/` at the project root (safe to delete without touching `_wds/`).
+- **Docs & messaging** - Updated README and post-install guidance to reference `_wds-learn/`.
+
 ## 0.1.0 (2026-01-29)
 
 Initial public release on npm.
