@@ -81,7 +81,7 @@ class UI {
       {
         type: 'confirm',
         name: 'include_learning',
-        message: 'Include learning & reference material in _wds/?',
+        message: 'Include learning & reference material in _wds-learn/?',
         default: true,
       },
       {
@@ -108,18 +108,19 @@ class UI {
     console.log('');
     console.log(chalk.green.bold('  Installation complete!'));
     console.log('');
-    console.log(chalk.white('  Next steps:'));
+    console.log(chalk.white('  Getting started:'));
     console.log(chalk.dim(`  1. Open your project in your AI IDE`));
-    console.log(chalk.dim(`  2. Ask the AI to activate an agent from ${chalk.cyan(wdsFolder + '/agents/')}:`));
+    console.log(chalk.dim(`  2. Tell the AI:`));
     console.log(chalk.cyan(`     "Read and activate the agent in ${wdsFolder}/agents/mimir-orchestrator.md"`));
+    console.log(chalk.dim(`  3. Mimir will greet you and guide you through project setup`));
     console.log('');
-    console.log(chalk.white(`  Agents installed in ${chalk.cyan(wdsFolder + '/agents/')}:`));
-    console.log(chalk.dim(`  - Mimir (Orchestrator) - Start here if you're new`));
+    console.log(chalk.white(`  Agents in ${chalk.cyan(wdsFolder + '/agents/')}:`));
+    console.log(chalk.dim(`  - Mimir (Orchestrator) - Your guide. Start here.`));
     console.log(chalk.dim(`  - Saga  (Analyst)      - Product Brief & Trigger Mapping`));
     console.log(chalk.dim(`  - Idunn (PM)           - Platform Requirements & Deliveries`));
     console.log(chalk.dim(`  - Freya (Designer)     - UX Design & Testing`));
     console.log('');
-    console.log(chalk.dim('  Learn more: https://github.com/whiteport-collective/whiteport-design-studio'));
+    console.log(chalk.dim('  https://github.com/whiteport-collective/whiteport-design-studio'));
     console.log('');
   }
 }

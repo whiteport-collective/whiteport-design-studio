@@ -130,8 +130,8 @@ class Installer {
     if (config.include_learning) {
       const learnSpinner = ora('Copying learning & reference material...').start();
       try {
-        await this.copyLearningMaterial(wdsDir);
-        learnSpinner.succeed('Learning & reference material added');
+        await this.copyLearningMaterial(projectDir);
+        learnSpinner.succeed('Learning material added to _wds-learn/ (safe to remove when no longer needed)');
       } catch (err) {
         learnSpinner.fail('Failed to copy learning material');
         throw err;
@@ -205,15 +205,17 @@ class Installer {
   }
 
   /**
-   * Copy learning & reference material into the WDS directory
+   * Copy learning & reference material into _wds-learn/ at project root.
+   * Users can safely delete this folder without affecting agents or workflows.
    */
-  async copyLearningMaterial(wdsDir) {
+  async copyLearningMaterial(projectDir) {
+    const learnDir = path.join(projectDir, '_wds-learn');
     const learningDirs = ['getting-started', 'learn-wds', 'method', 'models', 'tools'];
     const excludeDirs = ['course-explainers', 'Webinars'];
 
     for (const dir of learningDirs) {
       const src = path.join(this.docsDir, dir);
-      const dest = path.join(wdsDir, dir);
+      const dest = path.join(learnDir, dir);
       if (await fs.pathExists(src)) {
         await fs.copy(src, dest, {
           filter: (srcPath) => {

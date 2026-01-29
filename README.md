@@ -1,196 +1,183 @@
-# Whiteport Design Studio (WDS) 🎨
+# Whiteport Design Studio (WDS)
 
-**Strategic design methodology for creating products users love**
+**Strategic design methodology for creating products users love, powered by AI agents.**
 
-## What You Can Accomplish with WDS
-
-As a designer using WDS, you'll be able to:
-
-🎯 **Create strategic designs** - Connect every design decision to business goals and user psychology  
-📋 **Produce complete specifications** - Generate developer-ready page specs with all details defined  
-✨ **Explore with AI image generation** - Use NanoBanana/Eira to generate design concepts and establish visual identity  
-🎨 **Design with Figma** - Open your prototype in Figma, refine the design, export it back to update the design system and generate new code  
-🤖 **Leverage AI agents** - Work with Saga, Idunn, and Freya to accelerate your workflow  
-📦 **Deliver with confidence** - Hand off complete, tested prototypes with clear documentation  
-
-### What You Need to Learn
-
-To get the most out of WDS, you'll need to understand:
-
-1. **The WDS workflow** - How phases connect and when to use each one
-2. **Agent collaboration** - Working with Saga, Idunn, and Freya to accomplish tasks
-3. **Tool integration** - Using Figma MCP, NanoBanana, and other design tools
-
-� **Start learning:** [docs/learn-wds/](docs/learn-wds/) - Interactive courses and tutorials
+[![npm version](https://img.shields.io/npm/v/whiteport-design-studio.svg)](https://www.npmjs.com/package/whiteport-design-studio)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
-## Module Structure
+## Installation
 
-```
-wds/
-├── _module-installer/          # Installation configuration
-├── agents/                     # WDS specialized agents (Norse Pantheon)
-│   ├── saga-analyst.agent.yaml # Saga-Analyst - Business & Product Analyst
-│   ├── idunn-pm.agent.yaml     # Idunn-WDS-PM - Product Manager
-│   └── freya-ux.agent.yaml    # Freya-WDS-Designer - UX/UI Designer
-├── workflows/                  # Phase-selectable design workflows
-├── data/                       # Standards, frameworks, presentations
-│   └── presentations/          # Agent introduction presentations
-├── docs/                       # Module documentation
-│   ├── method/                 # Methodology deep-dives
-│   └── images/                 # Diagrams and visuals
-├── examples/                   # Real-world usage examples
-│   └── dog-week-patterns/      # Patterns from Dog Week project
-├── reference/                  # Templates and checklists
-│   ├── templates/              # Document templates
-│   └── checklists/             # Phase completion checklists
-├── teams/                      # Team configurations
-└── README.md                   # This file (only README in module)
+```bash
+npx whiteport-design-studio install
 ```
 
-## 📁 Output Structure
-
-WDS creates a clean, alphabetized folder structure in your project's `docs/` folder:
-
-| Folder             | Phase | Purpose                                      | Timing              |
-| ------------------ | ----- | -------------------------------------------- | ------------------- |
-| `A-Product-Brief/` | 1     | Strategic foundation & vision                | Start here          |
-| `B-Trigger-Map/`   | 2     | User psychology & business goals             | After Phase 1       |
-| `C-Scenarios/`     | 4     | UX specifications (HOW it works)             | After Phase 2       |
-| `D-Design-System/` | 5     | Visual identity & components (HOW it looks)  | **Anytime** 🎨      |
-| `D-PRD/`           | 3     | Technical requirements (optional)            | Before development  |
-| `E-UI-Roadmap/`    | 6     | Development handoff                          | After Phase 4       |
-
-## 🎯 Design Phases
-
-### Core Workflow
-
-**Phase 1: Product Exploration** → `A-Product-Brief/`  
-Define vision, positioning, and success criteria
-
-**Phase 2: User Research** → `B-Trigger-Map/`  
-Connect business goals to user psychology and triggers
-
-**Phase 4: UX Design** → `C-Scenarios/`  
-**HOW it works** - Functionality, interactions, content structure
-
-**Phase 5: Visual Design** → `D-Design-System/`  
-**HOW it looks** - Tie UX to brand, create visual system  
-⚡ **Can start anytime** - Brand identity is independent of product!
-
-### Optional Phases
-
-**Phase 3: Requirements** → `D-PRD/` (for technical products)  
-**Phase 6: Dev Integration** → `E-UI-Roadmap/` (handoff to development)
+The installer will guide you through setup: project type, experience level, and IDE configuration. Everything gets installed into a `_wds/` folder in your project.
 
 ---
 
-## 💡 Key Concepts
+## What is WDS?
+
+WDS is a structured design methodology that uses AI agents to guide you through product design, from initial strategy to developer-ready specifications.
+
+- **Strategic foundation** - Connect every design decision to business goals and user psychology
+- **Complete specifications** - Generate developer-ready page specs with all details defined
+- **AI-powered workflow** - Four specialized agents guide you through each phase
+- **IDE-native** - Works inside your AI coding tool (Claude Code, Cursor, Windsurf, and 14 more)
+
+---
+
+## Agents
+
+WDS uses four specialized AI agents (the Norse Pantheon):
+
+| Agent | Role | What they do |
+|-------|------|-------------|
+| **Mimir** (Orchestrator) | Coach & Guide | Greets you, assesses your level, guides you through the entire process. Start here. |
+| **Saga** (Analyst) | Business & Product Analyst | Product Brief (Phase 1) and Trigger Mapping (Phase 2) |
+| **Idunn** (Product Manager) | Platform Requirements | Platform architecture (Phase 3) and design deliveries (Phase 6) |
+| **Freya** (Designer) | UX/UI Designer | UX Design (Phase 4), Design System (Phase 5), and testing (Phases 7-8) |
+
+### Activating an agent
+
+Tell your AI IDE:
+
+```
+Read and activate the agent in _wds/agents/mimir-orchestrator.md
+```
+
+Mimir will greet you, assess your situation, and guide you to the right specialist.
+
+---
+
+## Design Phases
+
+| Phase | Focus | Output folder |
+|-------|-------|--------------|
+| 1. Product Exploration | Vision, positioning, success criteria | `docs/A-Product-Brief/` |
+| 2. Trigger Mapping | User psychology, business goals | `docs/B-Trigger-Map/` |
+| 3. Platform Architecture | Technical requirements (optional) | `docs/C-Platform-Requirements/` |
+| 4. UX Design | Scenarios, interactions, content structure | `docs/C-Scenarios/` |
+| 5. Visual Design | Brand identity, design system, components | `docs/D-Design-System/` |
+| 6. Design Delivery | Developer handoff, PRD finalization | `docs/E-PRD/Design-Deliveries/` |
+
+Agent dialogs and conversation logs are saved to `docs/F-Agent-Dialogs/`.
+
+---
+
+## Project Structure
+
+After installation, your project will have:
+
+```
+your-project/
+├── _wds/                    # WDS system files
+│   ├── agents/              # Compiled agent files (.md)
+│   ├── workflows/           # Phase workflows
+│   ├── data/                # Standards, frameworks, agent guides
+│   ├── gems/                # Reusable prompt components
+│   ├── templates/           # Document templates
+│   ├── config.yaml          # Your project configuration
+│   └── module.yaml          # Module definition
+├── _wds-learn/              # Learning material (optional, safe to delete)
+│   ├── getting-started/
+│   ├── learn-wds/
+│   ├── method/
+│   ├── models/
+│   └── tools/
+├── docs/                    # Design output (created by agents)
+│   ├── A-Product-Brief/
+│   ├── B-Trigger-Map/
+│   ├── C-Platform-Requirements/
+│   ├── C-Scenarios/
+│   ├── D-Design-System/
+│   ├── E-PRD/Design-Deliveries/
+│   └── F-Agent-Dialogs/
+└── .claude/instructions.md  # IDE configuration (varies by IDE)
+```
+
+---
+
+## Getting Started
+
+1. **Install WDS** in your project directory:
+   ```bash
+   npx whiteport-design-studio install
+   ```
+
+2. **Open your project** in your AI IDE (Claude Code, Cursor, Windsurf, etc.)
+
+3. **Activate Mimir** - tell the AI:
+   ```
+   Read and activate the agent in _wds/agents/mimir-orchestrator.md
+   ```
+
+4. **Follow Mimir's guidance** - Mimir will greet you, assess your experience level, and walk you through project setup. When you're ready for specific work, Mimir connects you to the right specialist agent.
+
+---
+
+## Supported IDEs
+
+WDS works with any AI-powered IDE or coding tool:
+
+Claude Code, Cursor, Windsurf, Cline, GitHub Copilot, Roo Code, Codex, Gemini, Qwen, Trae, Kiro CLI, Rovo Dev, Crush, Auggie, Antigravity, iFlow, OpenCode
+
+The installer configures your selected IDE(s) automatically.
+
+---
+
+## Tools Integration
+
+WDS integrates with design and prototyping tools:
+
+- **Figma MCP** - Bidirectional sync between AI-generated designs and Figma
+- **html.to.design** - Import HTML prototypes into Figma
+- **NanoBanana/Eira** - AI-powered image generation for brand exploration
+- **Excalidraw** - Sketch analysis and wireframing
+
+---
+
+## Key Concepts
 
 ### UX vs Visual Design
 
-```
-Phase 4 (UX Design)
-├─ Defines HOW it works
-├─ Functionality & interactions
-├─ Content structure & hierarchy
-└─ Question: "What does this do?"
+Phase 4 (UX Design) defines **how it works** - functionality, interactions, content structure.
+Phase 5 (Visual Design) defines **how it looks** - brand expression, design tokens, component library.
 
-Phase 5 (Visual Design)
-├─ Defines HOW it looks and feels
-├─ Brand expression & visual language
-├─ Design tokens & system
-└─ Question: "How does this feel like our brand?"
-```
+Visual design can start at any time - brand identity is independent of product strategy.
 
-### Brand Independence
+### Adaptive Teaching
 
-**Visual design is NOT tied to product timing!**
-
-- ✅ Before product work (brand-first approach)
-- ✅ Parallel to strategy (simultaneous development)
-- ✅ After strategy (informed by insights)
-
-**Output location:** `D-Design-System/01-Visual-Design/`
-
-## Agents - The Norse Pantheon 🏔️
-
-| Agent                   | File                      | Role                       | Norse Meaning                       |
-| ----------------------- | ------------------------- | -------------------------- | ----------------------------------- |
-| **Saga the Analyst**    | `saga-analyst.agent.yaml` | Business & Product Analyst | Goddess of stories & wisdom         |
-| **Idunn the PM**        | `idunn-pm.agent.yaml`     | Product Manager            | Goddess of renewal & youth          |
-| **Freya the Designer** | `freya-ux.agent.yaml`    | UX/UI Designer             | Goddess of beauty, magic & strategy |
-
-## 🛠️ Tools & Integration
-
-### Visual Design Tools
-
-- **Figma MCP** - Automated bidirectional sync with Object IDs
-- **NanoBanana/Eira** - AI-powered image generation for brand exploration
-- **html.to.design** - Import HTML prototypes into Figma
-
-### Workflow Tools
-
-- **Excalidraw** - Sketch analysis and wireframing
-- **Git** - Version control and collaboration
-- **Cursor/Windsurf** - AI-powered IDE integration
-
-📖 **Full tools guide:** [docs/tools/wds-tools-guide.md](docs/tools/wds-tools-guide.md)
+Mimir adapts to your experience level:
+- **Beginner** - Detailed guidance, one step at a time
+- **Intermediate** - Balanced approach, builds on existing knowledge
+- **Expert** - Direct and efficient, respects your time
 
 ---
 
-## 📋 Conventions
+## Learning Material
 
-- **One README rule** - Only this README.md; all other docs use `xxx-guide.md` naming
-- **Alphabetized output** - A-B-C-D-E folder prefix for clean organization
-- **Design focus** - No development artifacts (handled by BMM)
-- **Phase-selectable** - Choose phases based on project needs
-- **Tool-agnostic** - Works with any design/development tools
+The installer can optionally include learning and reference material in `_wds-learn/`. This includes:
 
-## 🚀 Getting Started
+- **Getting Started** - Quick onboarding guides
+- **Course modules** - Complete 12-module training course (Module 00-13)
+- **Method guides** - Deep-dive into each design phase
+- **Models** - Strategic frameworks (Golden Circle, Customer Awareness, etc.)
+- **Tool guides** - Integration guides for Figma, Git, and more
 
-### 1. Sideload Agents (Manual Installation)
-
-Since the installer isn't working, manually copy agents:
-
-```bash
-# Copy agent files to your IDE's agent folder
-cp src/modules/wds/agents/*.yaml <your-ide-agent-folder>/
-```
-
-### 2. Activate an Agent
-
-In your IDE, activate one of the WDS agents:
-- **Saga** - Business & Product Analyst
-- **Idunn** - Product Manager  
-- **Freya** - UX/UI Designer
-
-### 3. Initialize Workflow
-
-```
-*workflow-init
-```
-
-The agent will guide you through project setup and phase selection.
-
-📖 **Detailed setup guide:** [docs/how-to/installation/install-bmad.md](../../docs/how-to/installation/install-bmad.md)
-
-## 🔗 Integration with BMM
-
-WDS design artifacts feed directly into BMad Method (BMM) development workflows:
-
-```
-WDS Design System → E-UI-Roadmap/ → BMM Architecture & Stories → Development
-```
-
-**Handoff includes:**
-- Component specifications with Object IDs
-- Design tokens (colors, typography, spacing)
-- Interactive HTML prototypes
-- User flow documentation
-- Acceptance criteria
+You can safely delete `_wds-learn/` at any time without affecting the agents or workflows.
 
 ---
 
-<sub>Part of the BMad ecosystem • Contributed by Whiteport Collective</sub>
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+MIT - see [LICENSE](LICENSE) for details.
+
+---
+
+Built by [Whiteport Collective](https://github.com/whiteport-collective)
