@@ -7,14 +7,7 @@ ignores:
   - CODE_OF_CONDUCT.md
   - _bmad/**
   - _bmad*/**
-  - .agent/**
-  - .claude/**
-  - .roo/**
-  - .codex/**
-  - .agentvibes/**
-  - .kiro/**
-  - sample-project/**
-  - test-project-install/**
+  - .*/**
   - z*/**
 
 # Rule configuration

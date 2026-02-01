@@ -11,7 +11,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const yaml = require('yaml');
-const { validateAgentFile } = require('../tools/schema/agent.js');
+const { validateAgentFile } = require('./schema/agent.js');
 const { glob } = require('glob');
 
 // ANSI color codes

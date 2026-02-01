@@ -1,3 +1,0 @@
-# BMad CLI Tool
-
-Revised CLI tool docs coming....

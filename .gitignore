@@ -6,7 +6,6 @@ deno.lock
 pnpm-workspace.yaml
 package-lock.json
 
-
 test-output/*
 coverage/
 
@@ -28,52 +27,12 @@ Thumbs.db
 # Development tools and configs
 .prettierrc
 
-# IDE and editor configs
-.windsurf/
-.trae/
-_bmad*/.cursor/
-
-# AI assistant files
+# ai temp or local only files
 CLAUDE.md
-.ai/*
-cursor
-.gemini
-.mcp.json
-CLAUDE.local.md
-.serena/
-.claude/settings.local.json
-
-# Project-specific
-_bmad-core
-_bmad-creator-tools
-flattened-codebase.xml
-*.stats.md
-.internal-docs/
-#UAT template testing output files
-tools/template-test-generator/test-scenarios/
-
-# Bundler temporary files and generated bundles
-.bundler-temp/
-
-# Generated web bundles (built by CI, not committed)
-src/modules/bmm/sub-modules/
-src/modules/bmb/sub-modules/
-src/modules/cis/sub-modules/
-src/modules/bmgd/sub-modules/
-shared-modules
-z*/
+.*/**
 
 _bmad
 _bmad-output
-.claude
-.codex
-.github/chatmodes
-.agent
-.agentvibes/
-.kiro/
-.roo
-
-bmad-custom-src/
 
 # Astro / Documentation Build
 website/.astro/

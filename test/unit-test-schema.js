@@ -4,7 +4,7 @@
  * Tests internal functions to achieve 100% branch coverage
  */
 
-const { validateAgentFile } = require('../tools/schema/agent.js');
+const { validateAgentFile } = require('./schema/agent.js');
 
 console.log('Running edge case unit tests...\n');
 
