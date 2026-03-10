@@ -184,4 +184,86 @@ As feedback pairs accumulate, the agent develops taste:
 
 ---
 
+## Visual Annotation Feedback
+
+The designer can give feedback by **drawing directly on selected elements** — combining element selection with freehand annotation. This bridges the gap between verbal feedback and visual intent.
+
+### How It Works
+
+```
+Designer views live page or screenshot
+    ↓
+Click element to select it (Agentation-style — captures CSS selector, component path)
+    ↓
+Draw/sketch on the selected element (freehand strokes, arrows, circles, crosses)
+    ↓
+Agent receives: element identity + annotation image + optional verbal note
+    ↓
+Agent interprets the combined signal (what element + what the drawing means)
+    ↓
+Normal feedback loop continues (capture before → apply → capture after)
+```
+
+### Annotation Signals
+
+Interpret drawings as design intent:
+
+| Drawing | Likely Intent |
+|---------|---------------|
+| Circle around element | "Focus here" — this element needs attention |
+| X / cross-out | "Remove this" or "this doesn't work" |
+| Arrow pointing | "Move this" in the arrow direction |
+| Squiggly line / scribble | "This area feels wrong" — ask for clarification |
+| Sketch of a shape | "Replace with something like this" |
+| Underline | "Emphasize this" or "this text matters" |
+| Lines connecting elements | "These should relate" or "align these" |
+
+When the drawing is ambiguous, confirm: "I see you marked [element] with [description]. Are you saying [interpretation]?"
+
+### Element Selection Data
+
+When an element is selected, capture:
+- **CSS selector** — exact DOM path for programmatic reference
+- **Component name** — if identifiable from source code
+- **Visual context** — surrounding elements and layout position
+- **Annotation image** — the freehand drawing overlaid on the element
+
+### Integration with Agentation
+
+Agentation provides the click-to-select foundation. The drawing layer extends it:
+
+1. **Agentation** selects the element → structured data (selector, file path, component hierarchy)
+2. **Drawing overlay** captures visual intent → annotation image
+3. **Combined** → Freya receives precise element + visual feedback in one signal
+
+### Capture Format for Annotated Feedback
+
+```
+capture_feedback_pair({
+  before_description: "[element] as currently designed: [description]",
+  before_image_base64: "[screenshot of element before change]",
+  after_description: "[element] after applying annotation feedback: [description]",
+  after_image_base64: "[screenshot after change]",
+  reasoning: "Designer drew [annotation type] on [element]. Interpreted as: [intent]. Applied: [change].",
+  annotation_type: "circle|cross|arrow|sketch|scribble|underline|connection",
+  element_selector: "[CSS selector from Agentation]",
+  component: "[component name if identified]",
+  pattern_type_before: "rejected",
+  pattern_type_after: "approved",
+  project: "...",
+  topics: ["visual-annotation", "..."],
+  components: ["..."]
+})
+```
+
+### When Drawing Feedback Is Most Useful
+
+- **Spatial feedback** — "move this here" is faster drawn than described
+- **Proportion feedback** — "make this bigger" with a sketch showing how much
+- **Relationship feedback** — arrows showing what connects to what
+- **Deletion feedback** — crossing out unwanted elements
+- **Layout feedback** — rough sketch of desired arrangement
+
+---
+
 _The feedback loop captures solutions, not complaints. Every "before" is just the setup for a better "after."_
