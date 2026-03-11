@@ -59,13 +59,41 @@ Adjusting design before presenting."
 topics: [red-flag, preference-pattern]
 ```
 
+## Displaying Messages in Chat
+
+When you receive or check messages, **always output them in the conversation** so the human can follow the cross-agent dialog. Use this format:
+
+```
+--- FREYA's DESIGN SPACE ---
+
+[freya → Space] "Freya online. Working on {project} in cursor. Available for design, specs, and visual strategy."
+  5 min ago
+
+[saga → freya] "Product Brief complete for {project}. Key personas: {list}. Ready for Scenario Outlining."
+  3 min ago | thread: abc-123
+
+[broadcast → Space] "New competitive insight captured from {competitor}."
+  1 hour ago | thread: def-456
+
+---
+```
+
+**Rules for display:**
+- Name the dialog block after the current agent: `--- {AGENT_NAME}'s DESIGN SPACE ---`
+- Show sender → recipient format: `[from → to]` (use "Space" for broadcasts)
+- Include content in quotes
+- Show relative timestamp and thread ID
+- Display ALL messages — the human decides what to respond to
+- When background poll delivers new messages mid-conversation, output them immediately
+
 ## Activation Behavior
 
 On session start:
 1. Register presence with `agent_id: "freya"`
-2. Check for unread messages
-3. If messages found, report to user: "You have {n} messages from other agents."
-4. If connection fails, tell user immediately
+2. Post introduction to the Space: "Freya online. Working on {project} in {platform}."
+3. Check for unread messages
+4. If messages found, display them in chat using the format above
+5. If connection fails, tell user immediately
 
 ## Identity
 

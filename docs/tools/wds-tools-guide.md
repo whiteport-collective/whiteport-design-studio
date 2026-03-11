@@ -30,6 +30,11 @@ WDS works best with a curated set of tools that support the concept-first, itera
 
 ### Recommended Tools
 
+**[Agentation](agentation.md)**
+- Visual markup and annotation for live web pages
+- Drawing overlay, structured output for agent feedback loops
+- **Status:** Recommended for Phase 5+ review
+
 **[Excalidraw](excalidraw.md)**
 - Agent + human collaborative wireframing (JSON format)
 - Agent writes elements, user edits visually in VS Code
@@ -67,6 +72,7 @@ WDS works best with a curated set of tools that support the concept-first, itera
 |------|----------|-------------|-----------|--------|
 | **[Cursor/Windsurf](cursor-windsurf.md)** | IDE | Development, agent interaction | All | Required |
 | **[Git](git.md)** | Version Control | Track changes, collaborate | All | Required |
+| **[Agentation](agentation.md)** | Review & Annotation | Visual markup, drawing, agent feedback | 5+ | Recommended |
 | **[Excalidraw](excalidraw.md)** | Wireframing | Agent+human wireframes, JSON format | 4 | Recommended |
 | **[Figma](figma.md)** | Design | Visual refinement, design system | 4-5 | Optional |
 | **[Figma MCP](figma-mcp.md)** | Integration | Automated Figma ↔ WDS sync | 4-5 | Recommended |
@@ -88,19 +94,21 @@ WDS works best with a curated set of tools that support the concept-first, itera
 1. Install [Cursor or Windsurf IDE](cursor-windsurf.md)
 2. Install [Git](git.md)
 3. Install [Excalidraw](excalidraw.md) VS Code extension (wireframing)
-4. Create [Figma](figma.md) account
-5. Install and configure [Figma MCP](figma-mcp.md) server
-6. Set up Figma API access token
+4. Install [Agentation](agentation.md) for design review markup
+5. Create [Figma](figma.md) account
+6. Install and configure [Figma MCP](figma-mcp.md) server
+7. Set up Figma API access token
 
 ### Full Setup (All Features)
 
 1. Install [Cursor or Windsurf IDE](cursor-windsurf.md)
 2. Install [Git](git.md)
 3. Install [Excalidraw](excalidraw.md) VS Code extension (wireframing)
-4. Create [Figma](figma.md) account
-5. Install and configure [Figma MCP](figma-mcp.md) server
-6. Set up Figma API access token
-7. Explore [NanoBanana](nanobanana.md) for asset creation
+4. Install [Agentation](agentation.md) for design review markup
+5. Create [Figma](figma.md) account
+6. Install and configure [Figma MCP](figma-mcp.md) server
+7. Set up Figma API access token
+8. Explore [NanoBanana](nanobanana.md) for asset creation
 
 ### Optional Tools
 

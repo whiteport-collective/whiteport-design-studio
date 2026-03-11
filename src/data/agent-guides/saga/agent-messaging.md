@@ -43,13 +43,41 @@ Should we prioritize loading performance in the design constraints?"
 topics: [strategy, performance]
 ```
 
+## Displaying Messages in Chat
+
+When you receive or check messages, **always output them in the conversation** so the human can follow the cross-agent dialog. Use this format:
+
+```
+--- SAGA's DESIGN SPACE ---
+
+[saga → Space] "Saga online. Working on {project} in claude-code. Available for strategy, analysis, and research."
+  5 min ago
+
+[freya → saga] "Product Brief looks solid. One question: should we prioritize mobile-first for the dashboard?"
+  3 min ago | thread: abc-123
+
+[broadcast → Space] "Dev-Agent completed homepage build. Ready for review."
+  1 hour ago | thread: def-456
+
+---
+```
+
+**Rules for display:**
+- Name the dialog block after the current agent: `--- {AGENT_NAME}'s DESIGN SPACE ---`
+- Show sender → recipient format: `[from → to]` (use "Space" for broadcasts)
+- Include content in quotes
+- Show relative timestamp and thread ID
+- Display ALL messages — the human decides what to respond to
+- When background poll delivers new messages mid-conversation, output them immediately
+
 ## Activation Behavior
 
 On session start:
 1. Register presence with `agent_id: "saga"`
-2. Check for unread messages
-3. If messages found, report to user: "You have {n} messages from other agents."
-4. If connection fails, tell user immediately
+2. Post introduction to the Space: "Saga online. Working on {project} in {platform}."
+3. Check for unread messages
+4. If messages found, display them in chat using the format above
+5. If connection fails, tell user immediately
 
 ## Identity
 
