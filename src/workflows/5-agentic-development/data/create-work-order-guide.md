@@ -1,6 +1,6 @@
 # Create Work Order
 
-**Purpose:** Turn approved output from any WDS phase into a structured brief that any agent can execute — yourself, Codex, Saga, Freya, a BMad agent, or an unassigned job board entry.
+**Purpose:** Turn approved output from any WDS phase into a structured brief that any agent can execute — yourself, Codex, Saga, Freya, a BMad agent, or posted as an unassigned work order in Design Space.
 
 **When to use:** Any phase produces output that needs further work — implementation, design refinement, specification, analysis, or testing. Not limited to code.
 
@@ -23,7 +23,7 @@ Use the template from `./data/work-order-template.md`. Fill every section:
 ### Meta
 - Generate a short task ID from the project and scope
 - Set the type: `implementation`, `design`, `specification`, `analysis`, or `testing`
-- Set the target: `self` if you will do it, `codex` for Codex, `saga` or `freya` for WDS agents, `bmad-agent` for a BMad workflow agent, or `job-board` to post it for any available agent
+- Set the target: `self` if you will do it, `codex` for Codex, `saga` or `freya` for WDS agents, `bmad-agent` for a BMad workflow agent, or `unassigned` to post it for any available agent
 
 ### Why
 - State the business/user outcome in one sentence
@@ -66,7 +66,7 @@ POST /functions/v1/agent-messages
 ### Target: BMad Agent
 Save the work order to the project's `_bmad/tasks/` directory with status `ready`. The BMad agent workflow will pick it up on next run.
 
-### Target: Job Board
+### Target: Unassigned Work Order
 Post to Design Space without an assignee — any available agent can claim it:
 ```
 POST /functions/v1/agent-messages
@@ -80,8 +80,8 @@ POST /functions/v1/agent-messages
 }
 ```
 
-### Checking the Board
-Any agent can list available tasks:
+### Checking Work Orders
+Any agent can list available work orders:
 ```
 POST /functions/v1/agent-messages
 { "action": "list-tasks", "status": "ready" }              — all unclaimed
@@ -98,7 +98,7 @@ POST /functions/v1/agent-messages
 Add to the Current table:
 
 ```
-| Work Order: <title> | <date> | <target agent or "job board"> |
+| Work Order: <title> | <date> | <target agent or "unassigned"> |
 ```
 
 ---

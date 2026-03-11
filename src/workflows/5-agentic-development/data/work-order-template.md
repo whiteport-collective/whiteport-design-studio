@@ -6,7 +6,7 @@
 - **Project:** {{project_name}}
 - **Created by:** {{agent_name}} ({{phase}})
 - **Type:** {{implementation | design | specification | analysis | testing}}
-- **Target:** {{target — self | codex | saga | freya | bmad-agent | job-board}}
+- **Target:** {{target — self | codex | saga | freya | bmad-agent | unassigned}}
 - **Priority:** {{critical | high | normal | low}}
 - **Status:** ready
 
