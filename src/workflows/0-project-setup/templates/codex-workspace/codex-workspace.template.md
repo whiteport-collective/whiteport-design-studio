@@ -22,6 +22,28 @@ For each task, read these in order:
 5. Relevant project specs
 6. Relevant implementation files
 
+## Session Start
+
+On every new session:
+
+1. Post to Design Space: `"Codex online. Project: [project name]. Checking work orders."`
+2. Check for unread messages and pending work orders assigned to you.
+3. Read `project-context.md` and `design-space.md` in this folder.
+
+## The work order Command
+
+`work` is the top-level command. `order` is the subcommand for taking a work order from Design Space.
+
+When given `work order`:
+
+1. Pull the current work order from Design Space.
+2. Read all referenced specs, wireframes, and implementation files.
+3. Challenge every ambiguity — post questions to the commissioner in the Design Space thread.
+4. Wait for answers. Do not implement through unresolved ambiguity.
+5. Implement without interruption once the path is explicit.
+6. Test with all available means.
+7. Post delivery report to Design Space and mark the work order done.
+
 ## Standing Rules
 
 - Treat project specs as the semantic source of truth.
