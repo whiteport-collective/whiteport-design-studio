@@ -2004,6 +2004,32 @@ workflows/5-design-system/
 
 ---
 
+## 17. Future: Research Paper.design as Figma Alternative (Backlog)
+
+**Trigger:** Discovered 2026-03-12. Described as a charming Figma alternative built on code.
+
+**Why it matters for WDS:**
+- WDS currently uses Excalidraw for wireframes and Figma (via MCP) for component design
+- A code-first design tool could align better with WDS's code-native, agent-driven workflow
+- Could simplify the Freya → Codex handoff if design artifacts are closer to code
+
+**Research Questions:**
+1. What is the actual design paradigm — code-as-design-source, or design-that-exports-code?
+2. Does it have an API or MCP integration potential?
+3. How does it handle design systems and component libraries?
+4. Is it collaborative (multi-user)?
+5. Pricing and access model
+6. Can Freya use it as a wireframe/mockup tool within a Claude Code session?
+
+**Outcome if promising:**
+- Evaluate replacing or supplementing Excalidraw in WDS Phase 4 (Conceptual Design)
+- Evaluate as an alternative to Figma MCP for Phase 5 (Design System)
+- Add to Freya's toolset in activation files
+
+**Status:** Backlog — needs research before any WDS integration decision
+
+---
+
 **End of Roadmap Document**
 
 *To continue: Phase 6 (Integration) is the final workflow to create*
