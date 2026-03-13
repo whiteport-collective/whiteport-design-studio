@@ -1,6 +1,6 @@
 ---
 name: 'workflow-suggest'
-description: 'Build a scenario's page flow step by step, with the agent proposing and the user confirming at each stage.'
+description: "Build a scenario's page flow step by step, with the agent proposing and the user confirming at each stage."
 ---
 
 # [S] Suggest — Agent Proposes, User Confirms Each Step
