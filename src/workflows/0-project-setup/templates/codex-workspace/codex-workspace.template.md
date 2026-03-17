@@ -22,27 +22,48 @@ For each task, read these in order:
 5. Relevant project specs
 6. Relevant implementation files
 
+## MCP Prerequisites
+
+- Preferred Design Space path: `design-space-personal` MCP in Codex.
+- Optional database/admin path: `supabase` MCP in Codex.
+- Codex reads MCP servers from `C:/Users/marte/.codex/config.toml`.
+- First-time setup instructions live in `.codex/design-space.md`.
+- If MCP is unavailable in the current session, use the HTTP fallback instead of skipping Design Space.
+
 ## Session Start
 
 On every new session:
 
-1. Post to Design Space: `"Codex online. Project: [project name]. Checking work orders."`
-2. Check for unread messages and pending work orders assigned to you.
-3. Read `project-context.md` and `design-space.md` in this folder.
+1. Access Design Space through the best available path:
+   - Use the `design-space-personal` MCP server if available.
+   - If it is not installed, follow `.codex/design-space.md` first-time setup.
+   - If it is unavailable in the current session, use the HTTP fallback documented in `.claude/commands/u.md` and `_bmad/wds/data/design-space-config.md`.
+2. Register presence (`action: "register", agent_id: "codex"`) — this is your identity in Design Space.
+3. Tell the human: **Codex online · Design Space ID: `codex`**
+4. Check for unread messages and pending work orders assigned to you.
+5. Read `project-context.md` and `design-space.md` in this folder.
 
-## The work order Command
+## The /work Command
 
-`work` is the top-level command. `order` is the subcommand for taking a work order from Design Space.
+`/work` is the command for taking work from Design Space and driving it through delivery.
 
-When given `work order`:
+When given `/work`:
 
-1. Pull the current work order from Design Space.
-2. Read all referenced specs, wireframes, and implementation files.
-3. Challenge every ambiguity — post questions to the commissioner in the Design Space thread.
-4. Wait for answers. Do not implement through unresolved ambiguity.
-5. Implement without interruption once the path is explicit.
-6. Test with all available means.
-7. Post delivery report to Design Space and mark the work order done.
+1. Access Design Space through the best available path:
+   - Use the `design-space-personal` MCP server if available.
+   - If it is not installed, follow `.codex/design-space.md` first-time setup.
+   - If it is unavailable in the current session, use the HTTP fallback documented in `.claude/commands/u.md` and `_bmad/wds/data/design-space-config.md`.
+2. Sign in or register presence if needed.
+3. Read the manifest and current Design Space context.
+4. Check for unread messages addressed to `codex` or to you specifically.
+5. Look for pending work orders relevant to this repo.
+6. Confirm whether you should start work now based on the work order state and latest messages.
+7. Read all referenced specs and implementation files.
+8. Challenge every ambiguity and gap. Post questions to the commissioner in the Design Space thread.
+9. Wait for answers. Do not implement through unresolved ambiguity.
+10. Implement once the path is explicit.
+11. Test with all available means.
+12. Post delivery report to Design Space and mark the work order done.
 
 ## Standing Rules
 
@@ -51,4 +72,6 @@ When given `work order`:
 - If spec and code disagree, call it out explicitly before coding.
 - Reuse existing shared components before creating new ones.
 - Search Design Space before starting major work.
+- If direct Design Space access is unavailable, use the HTTP fallback instead of skipping the Design Space step.
+- Express your intentions, experiences, and plans to Design Space on an ongoing basis during the session so work can be resumed cleanly after interruption.
 - Capture implementation insights, constraints, and handoff learnings into Design Space as you work.
