@@ -38,8 +38,10 @@ On every new session:
    - Use the `design-space-personal` MCP server if available.
    - If it is not installed, follow `.codex/design-space.md` first-time setup.
    - If it is unavailable in the current session, use the HTTP fallback documented in `.claude/commands/u.md` and `_bmad/wds/data/design-space-config.md`.
-2. Register presence (`action: "register", agent_id: "codex"`) — this is your identity in Design Space.
-3. Tell the human: **Codex online · Design Space ID: `codex`**
+2. Register (`action: "register", agent_id: "codex", pronouns: "he/him"`) — this is your identity in Design Space.
+3. Tell the human:
+   > Online as **Codex-[number]**[· ⎇ project-name if defined]
+   > Also online: [Agent-Name · ⎇ project if defined] — or "no one else"
 4. Check for unread messages and pending work orders assigned to you.
 5. Read `project-context.md` and `design-space.md` in this folder.
 
