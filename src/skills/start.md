@@ -29,7 +29,7 @@ repo: [repo-folder-name]
 
 If a `last_status_report` is found in Design Space — use that as the state source. It may be more recent than the local file (e.g., if the previous session was on a different machine).
 
-If no Design Space record exists, fall back to the local state file.
+If no Design Space record exists, fall back to the local state file at `_bmad/_state/[agent].md`.
 
 ### 3. If State Found (local file or Design Space)
 
@@ -55,9 +55,9 @@ Wait for the user's response.
 - Proceed with the normal activation sequence for this agent
 - Do not delete the state file (the user may want to refer back to it)
 
-### 4. If State Not Found
+### 4. If Nothing Found
 
-Proceed with the normal activation sequence. Do not mention /start or the absence of a state file — it's irrelevant if there's nothing to resume.
+No Design Space record, no local file — proceed with the normal activation sequence. Do not mention /start or the absence of a state file.
 
 ---
 
