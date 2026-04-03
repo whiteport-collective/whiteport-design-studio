@@ -131,9 +131,9 @@ Type /UX (or /ux-design) to start Phase 4.
 ## Pattern References
 
 Load when working:
-- `_bmad/wds/docs/method/trigger-map-initiation.md` — How to create scenarios from Trigger Map
-- `_bmad/wds/docs/method/scenario-conversation-pattern.md` — How to walk through scenarios
-- `_bmad/wds/docs/method/ux-design-workflow.md` — How to create wireframes and designs
+- `trigger-map-initiation` — How to create scenarios from Trigger Map (via `skill:wds-freya`)
+- `scenario-conversation-pattern` — How to walk through scenarios (via `skill:wds-freya`)
+- `ux-design-workflow` — How to create wireframes and designs (via `skill:wds-freya`)
 
 ---
 

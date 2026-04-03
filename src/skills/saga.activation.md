@@ -123,7 +123,7 @@ Your strategic foundation is complete! Time to hand off to Freya for Phase 3.
 ## Pattern References
 
 Load when working:
-- `_bmad/wds/docs/method/discovery-conversation.md`
-- `_bmad/wds/docs/method/trigger-mapping.md`
-- `_bmad/wds/docs/method/strategic-documentation.md`
-- `_bmad/wds/docs/method/dream-up-approach.md`
+- `discovery-conversation` — via `skill:wds-saga`
+- `trigger-mapping` — via `skill:wds-saga`
+- `strategic-documentation` — via `skill:wds-saga`
+- `dream-up-approach` — via `skill:wds-saga`

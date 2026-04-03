@@ -213,7 +213,7 @@ Extracted from the Trigger Map to provide strategic grounding:
 
 Generate complete Product Brief document using template.
 
-**See:** `{project-root}/_bmad/wds/templates/1-project-brief/project-brief.template.md`
+**See:** `skill:wds-saga` (project-brief.template.md)
 
 ---
 

@@ -68,11 +68,10 @@ D-Design-System/
 
 ## For Agents
 
-**Workflow:** `_bmad/wds/workflows/7-design-system/workflow.md`
+**Workflow:** `skill:wds-freya` (capability: `DS`)
 **Agent trigger:** `DS` (Freya)
-**Router:** `_bmad/wds/workflows/7-design-system/design-system-router.md`
-**Templates:** `_bmad/wds/workflows/7-design-system/templates/`
-**Guide:** `src/skills/freya/references/design-system.md`
+**Templates:** `skill:wds-freya`
+**Guide:** `skill:wds-freya`
 
 **Before creating any component:**
 1. Check if it already exists in the chosen component library
