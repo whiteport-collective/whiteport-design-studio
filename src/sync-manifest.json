@@ -232,7 +232,28 @@
       "changelog": "Phase 7: Component library and design tokens (optional)"
     },
     {
-      "agent": "idunn",
+      "agent": "idun",
+      "type": "activation",
+      "file": "src/skills/idun.activation.md",
+      "channel": "stable",
+      "changelog": "Idun activation: setup and governance agent — interviews org, configures Agent Space"
+    },
+    {
+      "agent": "*",
+      "type": "skill",
+      "file": "src/skills/start.md",
+      "channel": "stable",
+      "changelog": "Session resume: local-first state with optional Agent Space enhancement"
+    },
+    {
+      "agent": "*",
+      "type": "skill",
+      "file": "src/skills/wrap.md",
+      "channel": "stable",
+      "changelog": "Session wrap: save state locally, optionally sync to Agent Space"
+    },
+    {
+      "agent": "idun",
       "type": "workflow",
       "file": "src/workflows/8-product-evolution/workflow.md",
       "channel": "stable",
