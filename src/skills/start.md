@@ -17,21 +17,33 @@ Detects whether a previous session was saved for the active agent and offers to 
 
 Identify which agent is currently active. Look for `_bmad/_state/[agent].md` in the current project repo.
 
-### 2. Check Design Space (if available)
+### 2. Boot from Agent Space (if available)
 
-If Agent Space is configured for this project, query for the last known status before checking the local file:
+If Agent Space is configured, call the `session-start` endpoint as the primary boot source:
 
+```bash
+curl -X POST "{BASE_URL}/functions/v1/session-start" \
+  -H "Authorization: Bearer {API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_id": "[agent]",
+    "project": "[repo-folder-name]",
+    "model_target": "claude"
+  }'
 ```
-action: get-presence
-agent_id: [agent]
-repo: [repo-folder-name]
-```
 
-If a `last_status_report` is found in Design Space — use that as the state source. It may be more recent than the local file (e.g., if the previous session was on a different machine).
+The response contains:
+- `session_id` — register this as the active session ID
+- `instructions` — skill chain (wds_default → org → client → project → repo → user levels). Load any levels present.
+- `files` — cached design-process folder from last `/wrap`. Display file count.
+- `messages` — unread messages for this agent. Show them if any.
+- `presence` — saved state including `working_on` and `last_status_report`
 
-If no Design Space record exists, fall back to the local state file at `_bmad/_state/[agent].md`.
+Use `presence.last_status_report` as the state source if present — it may be more recent than the local file (e.g., previous session was on a different machine).
 
-### 3. If State Found (local file or Design Space)
+**Fallback chain:** Agent Space → local `_bmad/_state/[agent].md` → fresh start.
+
+### 3. If State Found (Agent Space or local file)
 
 Display the previous session summary clearly:
 

@@ -71,9 +71,31 @@ Use this exact format:
 [Answer from Question 4 — key decisions, constraints, anything needed to not re-discover the obvious]
 ```
 
-### 4. Update Design Space (if available)
+### 4. Push to Agent Space (if available)
 
-If Agent Space is configured for this project, update the agent's presence record with the session summary:
+If Agent Space is configured, do two things in this order:
+
+**4a. Push design-process folder**
+
+Scan the project for a `design-process/` folder (or equivalent WDS artifact folder). Push all `.md` files to Agent Space via `repo-files`:
+
+```bash
+curl -X POST "{BASE_URL}/functions/v1/repo-files" \
+  -H "Authorization: Bearer {API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "put-batch",
+    "project": "[repo-folder-name]",
+    "files": [
+      { "path": "design-process/A-Product-Brief/product-brief.md", "content": "..." },
+      ...
+    ]
+  }'
+```
+
+This enables the next session to load the full design context from Agent Space with no local files needed.
+
+**4b. Update presence with session state**
 
 ```
 action: update-status
@@ -84,9 +106,7 @@ working_on: [Next Action — one line]
 status: offline
 ```
 
-This persists the wrap state in Design Space so any agent in any session can read the last known status for this agent in this repo — without needing the local state file.
-
-If Agent Space is not configured, skip silently.
+If Agent Space is not configured, skip both steps silently.
 
 ### 5. Confirm
 
