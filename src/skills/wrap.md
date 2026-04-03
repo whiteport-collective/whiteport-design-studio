@@ -1,7 +1,7 @@
 # /wrap — Session Wrap Skill
 
 **Invocation:** `/wrap`
-**Works for:** any agent (saga, freya, mimir, idunn)
+**Works for:** any agent (saga, freya, mimir, idun)
 
 ---
 
