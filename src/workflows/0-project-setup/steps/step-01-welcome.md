@@ -128,7 +128,7 @@ Understanding your starting point ensures you follow the right workflow.
 Based on user responses:
 
 **If alignment = [B] Need to pitch:**
-1. Route to: `{project-root}/_bmad/wds/workflows/0-alignment-signoff/workflow.md`
+1. Route to: `skill:wds-saga` (capability: `AS`)
 2. After alignment complete -> Return here for project configuration
 
 **If alignment = [A] Ready to start:**

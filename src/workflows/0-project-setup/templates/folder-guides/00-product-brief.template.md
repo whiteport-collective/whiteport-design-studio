@@ -28,9 +28,9 @@ Everything downstream — trigger maps, scenarios, page specs, design system —
 
 ## For Agents
 
-**Workflow:** `_bmad/wds/workflows/1-project-brief/workflow.md`
+**Workflow:** `skill:wds-saga` (capability: `PB`)
 **Agent trigger:** `PB` (Saga)
-**Templates:** `_bmad/wds/workflows/1-project-brief/templates/`
+**Templates:** `skill:wds-saga`
 
 **Before writing anything in this folder:**
 1. Load the workflow and follow its steps

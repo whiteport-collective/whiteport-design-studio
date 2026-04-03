@@ -77,8 +77,7 @@ Finalize the contract document, review it with the user, present it for signing,
 - Legal protection in place
 - Ready to proceed to Project Brief
 
-**Next**: Full Project Brief workflow
-`{project-root}/_bmad/wds/workflows/1-project-brief/workflow.md`
+**Next**: Full Project Brief workflow — `skill:wds-saga` (capability: `PB`)
 
 ### 3. Update State
 

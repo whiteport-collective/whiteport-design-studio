@@ -652,7 +652,7 @@ For full validation including visual verification:
 Add to Freya's menu:
 ```yaml
 - trigger: audit-spec
-  exec: "{project-root}/_bmad/wds/workflows/4-ux-design/specification-audit-workflow.md"
+  exec: "skill:wds-freya"
   description: "[AS] Audit page or scenario specifications for completeness and quality"
 ```
 
@@ -674,7 +674,7 @@ Add to Freya's menu:
 - **Accessibility Audit:** `./templates/instructions/accessibility-audit.workflow.md`
 
 ### Guides
-- **Specification Quality Guide:** `../../data/agent-guides/freya/specification-quality.md`
+- **Specification Quality Guide:** `../../skills/freya/references/specification-quality.md`
 - **Accessibility Guidelines:** WCAG 2.1 Level AA
 
 ---

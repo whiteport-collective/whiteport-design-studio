@@ -43,19 +43,19 @@ C-UX-Scenarios/
 ## For Agents
 
 ### Scenario Outline (Saga)
-**Workflow:** `_bmad/wds/workflows/3-scenarios/workflow.md`
+**Workflow:** `skill:wds-saga` (capability: `SC`)
 **Agent trigger:** `SC` (Saga)
 
 ### Page Specifications (Freya)
-**Workflow:** `_bmad/wds/workflows/4-ux-design/workflow.md`
+**Workflow:** `skill:wds-freya` (capability: `UX`)
 **Agent trigger:** `UX` (Freya)
-**Page template:** `_bmad/wds/workflows/4-ux-design/templates/page-specification.template.md`
-**Scenario template:** `_bmad/wds/workflows/4-ux-design/templates/scenario-overview.template.md`
-**Quality guide:** `_bmad/wds/data/agent-guides/freya/specification-quality.md`
-**Object types:** `_bmad/wds/workflows/4-ux-design/object-types/`
+**Page template:** `skill:wds-freya` (page-specification.template.md)
+**Scenario template:** `skill:wds-freya` (scenario-overview.template.md)
+**Quality guide:** `skill:wds-freya`
+**Object types:** `skill:wds-freya`
 
 ### Specification Audit (Freya)
-**Workflow:** `_bmad/wds/workflows/4-ux-design/specification-audit-workflow.md`
+**Workflow:** `skill:wds-freya` (capability: `SA`)
 **Agent trigger:** `SA` (Freya)
 
 **Before writing any page specification:**
