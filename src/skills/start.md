@@ -17,9 +17,15 @@ Detects whether a previous session was saved for the active agent and offers to 
 
 Identify which agent is currently active. Look for `_bmad/_state/[agent].md` in the current project repo.
 
-### 2. Boot from Agent Space (if available)
+### 2. Load State
 
-If Agent Space is configured, call the `session-start` endpoint as the primary boot source:
+**Primary: local file**
+
+Check for `_bmad/_state/[agent].md` in the project root. This is the authoritative source.
+
+**Optional: Agent Space enhancement**
+
+If Agent Space is configured, also call `session-start` — but only as an enhancement, never a requirement:
 
 ```bash
 curl -X POST "{BASE_URL}/functions/v1/session-start" \
@@ -32,18 +38,17 @@ curl -X POST "{BASE_URL}/functions/v1/session-start" \
   }'
 ```
 
-The response contains:
-- `session_id` — register this as the active session ID
-- `instructions` — skill chain (wds_default → org → client → project → repo → user levels). Load any levels present.
-- `files` — cached design-process folder from last `/wrap`. Display file count.
-- `messages` — unread messages for this agent. Show them if any.
-- `presence` — saved state including `working_on` and `last_status_report`
+If the call succeeds and `presence.last_status_report` is present, use it as the state source only if it is more recent than the local file (e.g., previous session was on a different machine). If the call fails for any reason, continue silently with the local file.
 
-Use `presence.last_status_report` as the state source if present — it may be more recent than the local file (e.g., previous session was on a different machine).
+The response may also contain:
+- `session_id` — register as active session ID if present
+- `instructions` — skill chain overrides. Load any levels present.
+- `files` — cached design-process folder. Display file count if any.
+- `messages` — unread messages. Show if any.
 
-**Fallback chain:** Agent Space → local `_bmad/_state/[agent].md` → fresh start.
+**Fallback chain:** local `_bmad/_state/[agent].md` → Agent Space presence → fresh start
 
-### 3. If State Found (Agent Space or local file)
+### 3. If State Found
 
 Display the previous session summary clearly:
 
@@ -69,7 +74,7 @@ Wait for the user's response.
 
 ### 4. If Nothing Found
 
-No Design Space record, no local file — proceed with the normal activation sequence. Do not mention /start or the absence of a state file.
+No local file, no Agent Space record — proceed with the normal activation sequence. Do not mention /start or the absence of a state file.
 
 ---
 
@@ -77,4 +82,5 @@ No Design Space record, no local file — proceed with the normal activation seq
 
 - The state file is written by `/wrap`. If no `/wrap` was run at the end of the previous session, there will be no file to find.
 - The state file lives at `_bmad/_state/[agent].md` relative to the project root.
+- Agent Space is optional — local file works without it.
 - On resume, prioritize getting back to work quickly. The user already knows the context — they don't need a recap beyond what's shown in the summary.

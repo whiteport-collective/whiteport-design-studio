@@ -47,7 +47,7 @@ Any context I'd lose if we started fresh?
 ```
 (Prompt if needed: key decisions made, constraints discovered, things the user explained that aren't written down anywhere, approaches ruled out and why)
 
-### 3. Write State File
+### 3. Write State File (Primary)
 
 Write `_bmad/_state/[agent].md` in the current project repo. Overwrite if it already exists.
 
@@ -73,7 +73,7 @@ Use this exact format:
 
 ### 4. Push to Agent Space (if available)
 
-If Agent Space is configured, do two things in this order:
+If Agent Space is configured, do two things in this order. If any step fails, log the error and continue — local state file is already saved.
 
 **4a. Push design-process folder**
 
@@ -93,8 +93,6 @@ curl -X POST "{BASE_URL}/functions/v1/repo-files" \
   }'
 ```
 
-This enables the next session to load the full design context from Agent Space with no local files needed.
-
 **4b. Update presence with session state**
 
 ```
@@ -105,8 +103,6 @@ last_status_report: [full state file content]
 working_on: [Next Action — one line]
 status: offline
 ```
-
-If Agent Space is not configured, skip both steps silently.
 
 ### 5. Confirm
 
@@ -122,5 +118,6 @@ To preserve across sessions: git add -f _bmad/_state/[agent].md && git push
 ## Notes
 
 - The `_bmad/_state/` folder is gitignored by default. The user must explicitly opt in with `git add -f` to share state across machines or with collaborators.
+- Local state file is always written first — Agent Space sync is optional and non-blocking.
 - If the agent can't determine the current project repo, ask the user to confirm which project they're in before writing.
 - Do not add a summary or closing remarks after the confirmation — the wrap is complete.
