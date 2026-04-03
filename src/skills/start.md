@@ -17,7 +17,21 @@ Detects whether a previous session was saved for the active agent and offers to 
 
 Identify which agent is currently active. Look for `_bmad/_state/[agent].md` in the current project repo.
 
-### 2. If State File Found
+### 2. Check Design Space (if available)
+
+If Agent Space is configured for this project, query for the last known status before checking the local file:
+
+```
+action: get-presence
+agent_id: [agent]
+repo: [repo-folder-name]
+```
+
+If a `last_status_report` is found in Design Space — use that as the state source. It may be more recent than the local file (e.g., if the previous session was on a different machine).
+
+If no Design Space record exists, fall back to the local state file.
+
+### 3. If State Found (local file or Design Space)
 
 Display the previous session summary clearly:
 
@@ -41,7 +55,7 @@ Wait for the user's response.
 - Proceed with the normal activation sequence for this agent
 - Do not delete the state file (the user may want to refer back to it)
 
-### 3. If State File Not Found
+### 4. If State Not Found
 
 Proceed with the normal activation sequence. Do not mention /start or the absence of a state file — it's irrelevant if there's nothing to resume.
 

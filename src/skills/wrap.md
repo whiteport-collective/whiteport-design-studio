@@ -71,7 +71,24 @@ Use this exact format:
 [Answer from Question 4 — key decisions, constraints, anything needed to not re-discover the obvious]
 ```
 
-### 4. Confirm
+### 4. Update Design Space (if available)
+
+If Agent Space is configured for this project, update the agent's presence record with the session summary:
+
+```
+action: update-status
+agent_id: [agent]
+repo: [repo-folder-name]
+last_status_report: [full state file content]
+working_on: [Next Action — one line]
+status: offline
+```
+
+This persists the wrap state in Design Space so any agent in any session can read the last known status for this agent in this repo — without needing the local state file.
+
+If Agent Space is not configured, skip silently.
+
+### 5. Confirm
 
 Print:
 ```
