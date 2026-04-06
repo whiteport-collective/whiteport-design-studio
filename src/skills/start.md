@@ -78,9 +78,48 @@ No local file, no Agent Space record — proceed with the normal activation sequ
 
 ---
 
+### 5. Sync Check
+
+After loading state, check whether the WDS skill files are in sync with Design Space.
+
+**Check 1 — Sync needed marker:**
+Look for `src/.sync-needed` in the WDS repo (`whiteport-design-studio`).
+If found, read it — it contains which files changed and when.
+
+**Check 2 — Stale state:**
+Look for `src/.sync-state.json` in the WDS repo.
+If found, compare its `synced_at` timestamp against the modification time of key skill files:
+- `src/skills/[agent]/SKILL.md`
+- `src/skills/[agent]/workflows/`
+- `src/skills/shared/`
+
+If any skill file is newer than `synced_at`, the skills are stale.
+
+**If stale or sync-needed:**
+
+Surface this BEFORE doing anything else — before state resume, before activation:
+
+```
+⚠️  WDS skills have changed since last sync.
+
+Updated since last sync:
+  [list changed files]
+
+Agents are running on outdated instructions until synced.
+Run: node tools/sync-from-manifest.js
+  or: /sync
+```
+
+Then continue with normal activation. Do not block — just inform once, clearly.
+
+**If in sync or no sync state found:** proceed silently.
+
+---
+
 ## Notes
 
 - The state file is written by `/wrap`. If no `/wrap` was run at the end of the previous session, there will be no file to find.
 - The state file lives at `_bmad/_state/[agent].md` relative to the project root.
 - Agent Space is optional — local file works without it.
 - On resume, prioritize getting back to work quickly. The user already knows the context — they don't need a recap beyond what's shown in the summary.
+- Sync check only applies when working in the WDS repo itself or when the WDS repo is in the workspace.

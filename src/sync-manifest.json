@@ -1,8 +1,8 @@
 {
   "$schema": "./sync-manifest.schema.json",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Controls which agent instructions are synced to Design Space",
-  "updated": "2026-03-24",
+  "updated": "2026-04-07",
 
   "channels": {
     "stable": "Production-ready instructions. Synced to all organizations.",
@@ -209,6 +209,174 @@
       "file": "src/workflows/4-ux-design/workflow.md",
       "channel": "stable",
       "changelog": "Phase 4: Design Loop — 9 steps from discussion to token extraction"
+    },
+    {
+      "agent": "mimir",
+      "type": "skill",
+      "file": "src/skills/mimir/SKILL.md",
+      "channel": "stable",
+      "changelog": "Mimir capabilities: tech-audit, PRD ownership, build loop with browser verification"
+    },
+    {
+      "agent": "mimir",
+      "type": "workflow",
+      "file": "src/skills/mimir/workflows/tech-audit.md",
+      "channel": "stable",
+      "changelog": "Tech audit workflow: structural codebase scan, produces 000-tech-audit.md"
+    },
+    {
+      "agent": "mimir",
+      "type": "workflow",
+      "file": "src/skills/mimir/workflows/build.md",
+      "channel": "stable",
+      "changelog": "Build workflow: implement one requirement at a time, commit, browser-verify"
+    },
+    {
+      "agent": "mimir",
+      "type": "agent",
+      "file": "src/skills/mimir/agents/tech-auditor.md",
+      "channel": "stable",
+      "changelog": "Tech auditor sub-agent: scans repo structure, returns structured findings"
+    },
+    {
+      "agent": "mimir",
+      "type": "agent",
+      "file": "src/skills/mimir/agents/browser-verifier.md",
+      "channel": "stable",
+      "changelog": "Browser verifier sub-agent: opens live page, returns PASS/FAIL per criterion"
+    },
+    {
+      "agent": "freya",
+      "type": "workflow",
+      "file": "src/skills/freya/workflows/ux-scenarios.md",
+      "channel": "stable",
+      "changelog": "UX Scenarios workflow: scenario discovery and generation"
+    },
+    {
+      "agent": "freya",
+      "type": "workflow",
+      "file": "src/skills/freya/workflows/ux-design.md",
+      "channel": "stable",
+      "changelog": "UX Design workflow: Design Loop — discuss, spec, wireframe, approve, iterate"
+    },
+    {
+      "agent": "freya",
+      "type": "workflow",
+      "file": "src/skills/freya/workflows/feedback.md",
+      "channel": "stable",
+      "changelog": "Feedback workflow: triage feedback to spec changes, write Mimir work order"
+    },
+    {
+      "agent": "freya",
+      "type": "agent",
+      "file": "src/skills/freya/agents/scenario-analyzer.md",
+      "channel": "stable",
+      "changelog": "Scenario analyzer: reads Trigger Map, determines scenario scope and mode"
+    },
+    {
+      "agent": "freya",
+      "type": "agent",
+      "file": "src/skills/freya/agents/scenario-writer.md",
+      "channel": "stable",
+      "changelog": "Scenario writer: generates scenario files and index"
+    },
+    {
+      "agent": "freya",
+      "type": "agent",
+      "file": "src/skills/freya/agents/spec-writer.md",
+      "channel": "stable",
+      "changelog": "Spec writer: generates page spec from discussion data"
+    },
+    {
+      "agent": "freya",
+      "type": "agent",
+      "file": "src/skills/freya/agents/wireframe.md",
+      "channel": "stable",
+      "changelog": "Wireframe agent: creates Excalidraw wireframe from page spec"
+    },
+    {
+      "agent": "freya",
+      "type": "agent",
+      "file": "src/skills/freya/agents/design-reviewer.md",
+      "channel": "stable",
+      "changelog": "Design reviewer: reviews built page against spec and wireframe"
+    },
+    {
+      "agent": "freya",
+      "type": "agent",
+      "file": "src/skills/freya/agents/token-extractor.md",
+      "channel": "stable",
+      "changelog": "Token extractor: extracts design tokens from completed pages"
+    },
+    {
+      "agent": "freya",
+      "type": "agent",
+      "file": "src/skills/freya/agents/mimir-brief.md",
+      "channel": "stable",
+      "changelog": "Mimir brief agent: writes Work Order for Mimir from approved specs or feedback"
+    },
+    {
+      "agent": "saga",
+      "type": "workflow",
+      "file": "src/skills/saga/workflows/product-brief.md",
+      "channel": "stable",
+      "changelog": "Product Brief workflow: discovery conversation, suite generation"
+    },
+    {
+      "agent": "saga",
+      "type": "workflow",
+      "file": "src/skills/saga/workflows/trigger-map.md",
+      "channel": "stable",
+      "changelog": "Trigger Map workflow: target groups, driving forces, personas, Mermaid diagram"
+    },
+    {
+      "agent": "saga",
+      "type": "agent",
+      "file": "src/skills/saga/agents/material-analyzer.md",
+      "channel": "stable",
+      "changelog": "Material analyzer: reads existing docs, extracts data, identifies gaps"
+    },
+    {
+      "agent": "saga",
+      "type": "agent",
+      "file": "src/skills/saga/agents/brief-writer.md",
+      "channel": "stable",
+      "changelog": "Brief writer: generates Product Brief suite from collected discovery data"
+    },
+    {
+      "agent": "saga",
+      "type": "agent",
+      "file": "src/skills/saga/agents/trigger-writer.md",
+      "channel": "stable",
+      "changelog": "Trigger writer: generates Trigger Map from archetype data"
+    },
+    {
+      "agent": "*",
+      "type": "agent",
+      "file": "src/skills/shared/agents/persona-page.md",
+      "channel": "stable",
+      "changelog": "Persona page agent: generates visual persona page per archetype"
+    },
+    {
+      "agent": "*",
+      "type": "agent",
+      "file": "src/skills/shared/agents/prd-writer.md",
+      "channel": "stable",
+      "changelog": "PRD writer agent: writes formal PRD documents from Work Orders"
+    },
+    {
+      "agent": "*",
+      "type": "workflow",
+      "file": "src/skills/shared/workflows/prd.md",
+      "channel": "stable",
+      "changelog": "PRD workflow: master PRD, feature PRDs, feedback change orders"
+    },
+    {
+      "agent": "*",
+      "type": "skill",
+      "file": "src/skills/feedback/SKILL.md",
+      "channel": "stable",
+      "changelog": "Feedback skill: anti-vibe-coding gate — feedback maps to spec before code"
     },
     {
       "agent": "mimir",

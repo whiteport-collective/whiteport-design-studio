@@ -15,7 +15,7 @@
  *   WDS_ROOT               Path to WDS repo (default: auto-detect)
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
@@ -168,4 +168,25 @@ for (const instr of filtered) {
 
 console.log();
 console.log(`Done: ${uploaded} uploaded, ${skipped} unchanged, ${failed} failed`);
+
+// Write sync state so agents can detect stale skills
+if (!DRY_RUN && failed === 0) {
+  const state = {
+    synced_at: new Date().toISOString(),
+    manifest_version: manifest.version,
+    channel: CHANNEL,
+    files: {},
+  };
+  for (const instr of filtered) {
+    const filePath = join(REPO_ROOT, instr.file);
+    if (existsSync(filePath)) {
+      const content = readFileSync(filePath, 'utf8');
+      state.files[instr.file] = createHash('sha256').update(content).digest('hex').substring(0, 12);
+    }
+  }
+  const statePath = join(REPO_ROOT, 'src/.sync-state.json');
+  writeFileSync(statePath, JSON.stringify(state, null, 2));
+  console.log(`Sync state written to src/.sync-state.json`);
+}
+
 if (failed > 0) process.exit(1);

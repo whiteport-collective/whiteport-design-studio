@@ -1,0 +1,30 @@
+#!/bin/sh
+# WDS post-push hook — auto-syncs agent skills to Design Space after every push.
+# Install: node tools/scripts/install-hooks.js
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+SYNC_SCRIPT="$REPO_ROOT/tools/sync-from-manifest.js"
+
+# Only run if skill files were part of this push
+CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null | grep "^src/skills/" || true)
+
+if [ -z "$CHANGED" ]; then
+  exit 0
+fi
+
+echo ""
+echo "WDS: Skills changed — syncing to Design Space..."
+echo "$CHANGED" | sed 's/^/  /'
+echo ""
+
+if ! node "$SYNC_SCRIPT" 2>&1; then
+  echo ""
+  echo "WDS: Sync failed. Run manually: node tools/sync-from-manifest.js"
+  echo "     Agents will warn users until sync is complete."
+  # Write a marker so agents can detect the stale state
+  echo "{\"stale_since\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"changed_files\":$(git diff --name-only HEAD~1 HEAD | grep "^src/skills/" | python3 -c "import sys,json; print(json.dumps(sys.stdin.read().strip().split('\n')))" 2>/dev/null || echo '[]')}" > "$REPO_ROOT/src/.sync-needed"
+  exit 0  # Don't block the push
+fi
+
+# Clean up stale marker if sync succeeded
+rm -f "$REPO_ROOT/src/.sync-needed"
