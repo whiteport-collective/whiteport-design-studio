@@ -148,12 +148,12 @@ To preserve across sessions: git add -f _bmad/_state/[agent].md && git push
 
 ### 5. Output the handoff token
 
-Parse the handoff ID from the `Handoff posted: {id}` line printed by the script. Output this code block so the user can copy it for the next session:
+Parse the handoff ID from the `Handoff posted: {id}` line printed by the script. Take only the **first 8 characters** (before the first `-`). Output this code block so the user can copy it for the next session:
 
 ```
-/[agent] [id]
+/[agent] [first-8-chars]
 ```
 
-Replace `[agent]` with the base agent name (saga/freya/idun/mimir) and `[id]` with the exact ID from the script.
+Replace `[agent]` with the base agent name (saga/freya/idun/mimir) and `[first-8-chars]` with just the first segment of the UUID (e.g. `319e3c56` from `319e3c56-5adf-4864-80a2-3113feb32041`).
 
 The user copies this and pastes as their first message in the next session. The agent detects the ID and loads the handover directly — no message triage, no scanning.
