@@ -97,6 +97,58 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
       Continue to prerequisites.
   </step>
 
+  <step id="4-brownfield-detect">
+    Check if the project has a codebase (src/, backend/, storefront/, app/, or similar code folders at repo root).
+
+    IF codebase found → this is a brownfield project. Skip steps 4-prerequisites and 5-status.
+    Go to step 4b-brownfield-assessment.
+
+    IF no codebase → greenfield. Continue to step 4-prerequisites.
+  </step>
+
+  <step id="4b-brownfield-assessment">
+    Build a gap map across three dimensions:
+
+    **Design inventory** — scan `{output_folder}/C-UX-Scenarios/`:
+    - For each scenario folder: does a spec file exist? (full spec / sketch only / folder only)
+    - Note which screens are fully specced vs. partial vs. missing
+
+    **Build inventory** — scan the codebase structure:
+    - Identify routes, pages, and major features that are live
+    - Do not deep-read source files — directory structure and file names are enough
+
+    **E-Development inventory** — scan `{output_folder}/E-Development/`:
+    - List any existing WOs or PRDs
+    - Note their status (Ready / In-progress / Blocked / No PRD yet)
+
+    Cross-reference design vs. build into three buckets:
+    | Bucket | Meaning | Next action |
+    |---|---|---|
+    | Designed + Built | Spec and code exist | Verify it matches |
+    | Designed + Not built | Spec exists, no code | Ready for E-Development planning |
+    | Built + Not designed | Code exists, no spec | Retroactive spec or accept as-is |
+
+    Print the gap map:
+
+    ✨ [Project Name] — Brownfield Assessment
+
+    Scenarios:
+      [✓ / ⏳ / ○]  [scenario-name]  — [N screens specced] · [built / not built]
+      ...
+
+    E-Development:
+      [WO/PRD name]  [status]  [(no PRD yet) if applicable]
+      ...
+
+    Then offer concrete next moves based on what's actually missing:
+    - If built screens have no verification: offer to review against spec
+    - If specced screens have no PRD: offer to write PRDs before Mimir builds
+    - If partial specs exist: offer to complete them
+    - If built-but-not-designed exists: offer to spec retroactively
+
+    Wait for the user to choose. Do not proceed automatically.
+  </step>
+
   <step id="4-prerequisites">
     Check for:
     - `{output_folder}/A-Product-Brief/product-brief.md`

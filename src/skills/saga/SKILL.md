@@ -87,6 +87,41 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
       Continue to status.
   </step>
 
+  <step id="4-brownfield-detect">
+    Check if the project has a codebase (src/, backend/, storefront/, app/, or similar code folders at repo root).
+
+    IF codebase found AND Product Brief is missing → brownfield without strategy.
+    Go to step 4b-brownfield-brief.
+
+    IF codebase found AND Product Brief exists → brownfield with strategy. Continue to step 4-status.
+
+    IF no codebase → greenfield. Continue to step 4-status.
+  </step>
+
+  <step id="4b-brownfield-brief">
+    The project has a codebase but no strategic foundation. Saga can help extract one.
+
+    Scan what exists:
+    - `{output_folder}/A-Product-Brief/` — any partial briefs, reference data, or notes
+    - `{output_folder}/C-UX-Scenarios/` — any existing scenarios (reveals product scope)
+    - `{output_folder}/E-Development/` — any WOs or PRDs (reveals what's been built)
+    - README or docs at repo root — for product description and tech context
+
+    Print:
+
+    📚 [Project Name] — Brownfield Entry
+
+    No Product Brief found. I can work backwards from what exists:
+      [list what was found — scenarios, WOs, README content]
+
+    I can:
+      A) Run a condensed discovery — extract the brief from what's already been built
+      B) Start fresh — full discovery conversation
+      C) Skip the brief — go straight to Trigger Map (if you know your users well)
+
+    Wait for the user to choose.
+  </step>
+
   <step id="4-status">
     Print:
 
