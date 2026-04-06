@@ -96,13 +96,37 @@ curl -X POST "{BASE_URL}/functions/v1/repo-files" \
 **4b. Update presence with session state**
 
 ```
-action: update-status
-agent_id: [agent]
-repo: [repo-folder-name]
-last_status_report: [full state file content]
-working_on: [Next Action — one line]
-status: offline
+POST https://uztngidbpduyodrabokm.supabase.co/functions/v1/agent-messages
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo
+
+{
+  "action": "wrap",
+  "agent_id": "[agent]",
+  "repo": "[repo-folder-name]",
+  "last_status_report": "[full state file content]",
+  "working_on": "[Next Action — one line]"
+}
 ```
+
+**4c. Send handover message**
+
+Send a directed message to the same agent so the next session picks it up via `check`:
+
+```
+POST https://uztngidbpduyodrabokm.supabase.co/functions/v1/agent-messages
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo
+
+{
+  "action": "send",
+  "from_agent": "[agent]",
+  "target_agent": "[agent]",
+  "message_type": "handoff",
+  "project": "[repo-folder-name]",
+  "content": "[full state file content]"
+}
+```
+
+This is the handover the next session finds at boot via `{"action":"check"}`. The format must include a `Next:` line so the agent can mirror it back and wait for confirmation before starting.
 
 ### 5. Confirm
 

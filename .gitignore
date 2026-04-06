@@ -39,3 +39,4 @@ _bmad-output
 website/.astro/
 website/dist/
 build/
+session-wrap.md
