@@ -62,10 +62,16 @@
     Parse the UUID from "Handoff posted: {uuid}" in the script output.
     Take the first 6 characters.
 
+    Check the Next line from step 2: does it hand off to a different agent?
+    - "Wake Mimir" / "Hand to Mimir" / "/mimir" → target agent is mimir
+    - "Wake Freya" / "Hand to Freya" / "/freya" → target agent is freya
+    - "Wake Saga" / "Hand to Saga" / "/saga" → target agent is saga
+    - No handoff detected → target agent is current agent
+
     Print EXACTLY this — nothing before, nothing after:
 
     ```
-    /[agent] [6chars]
+    /[target-agent] [6chars]
     ```
 
     Session complete. Stop.
