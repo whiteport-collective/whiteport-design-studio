@@ -100,58 +100,61 @@ for (const instr of filtered) {
   }
 
   try {
-    // Check if this exact version exists (by source_file + hash in metadata)
-    const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/design_space?select=id,metadata&category=eq.agent_instruction&source_file=eq.${instr.file.replace(/\//g, '%2F')}&limit=1`, {
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'apikey': SUPABASE_KEY,
-      },
+    const row = {
+      agent_id: instr.agent,
+      model_target: 'claude-sonnet-4-6',
+      skill_level: 'wds_default',
+      org_id: 'whiteport',
+      content,
+      version: manifest.version,
+    };
+
+    // Check for existing row (null scope columns must be matched with .is.null)
+    const checkUrl = `${SUPABASE_URL}/rest/v1/agent_instructions` +
+      `?agent_id=eq.${encodeURIComponent(instr.agent)}` +
+      `&model_target=eq.claude-sonnet-4-6` +
+      `&skill_level=eq.wds_default` +
+      `&org_id=eq.whiteport` +
+      `&client_id=is.null` +
+      `&project=is.null` +
+      `&repo=is.null` +
+      `&select=id&limit=1`;
+
+    const checkRes = await fetch(checkUrl, {
+      headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY },
     });
     const existing = await checkRes.json();
+    const existingId = existing?.[0]?.id;
 
-    if (existing?.[0]?.metadata?.hash === hash) {
-      skipped++;
-      continue;
-    }
-
-    // Delete old version if exists
-    if (existing?.[0]?.id) {
-      await fetch(`${SUPABASE_URL}/rest/v1/design_space?id=eq.${existing[0].id}`, {
-        method: 'DELETE',
+    let res;
+    if (existingId) {
+      // PATCH to update
+      res = await fetch(
+        `${SUPABASE_URL}/rest/v1/agent_instructions?id=eq.${existingId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'apikey': SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({ content, version: manifest.version }),
+        },
+      );
+    } else {
+      // INSERT new row
+      res = await fetch(`${SUPABASE_URL}/rest/v1/agent_instructions`, {
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${SUPABASE_KEY}`,
           'apikey': SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal',
         },
+        body: JSON.stringify(row),
       });
     }
-
-    // Upload new version
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/capture-design-space`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        content,
-        category: 'agent_instruction',
-        project: 'wds',
-        designer: instr.agent,
-        topics: [instr.type, instr.agent, `channel:${instr.channel}`],
-        components: [name],
-        source: 'sync-manifest',
-        source_file: instr.file,
-        metadata: {
-          agent: instr.agent,
-          type: instr.type,
-          name,
-          layer: 'framework',
-          channel: instr.channel,
-          hash,
-          manifest_version: manifest.version,
-        },
-      }),
-    });
 
     if (res.ok) {
       uploaded++;
