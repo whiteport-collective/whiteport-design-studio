@@ -145,3 +145,15 @@ To preserve across sessions: git add -f _bmad/_state/[agent].md && git push
 - Local state file is always written first — Agent Space sync is optional and non-blocking.
 - If the agent can't determine the current project repo, ask the user to confirm which project they're in before writing.
 - Do not add a summary or closing remarks after the confirmation — the wrap is complete.
+
+### 5. Output the handoff token
+
+Parse the handoff ID from the `Handoff posted: {id}` line printed by the script. Output this code block so the user can copy it for the next session:
+
+```
+/[agent] [id]
+```
+
+Replace `[agent]` with the base agent name (saga/freya/idun/mimir) and `[id]` with the exact ID from the script.
+
+The user copies this and pastes as their first message in the next session. The agent detects the ID and loads the handover directly — no message triage, no scanning.
