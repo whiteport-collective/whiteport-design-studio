@@ -1,7 +1,7 @@
 # /start — Session Resume Skill
 
 **Invocation:** `/start` (also called automatically from agent activation files)
-**Works for:** any agent (saga, freya, mimir, idun)
+**Works for:** any agent (saga, freya, mimir)
 
 ---
 

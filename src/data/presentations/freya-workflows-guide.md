@@ -36,14 +36,14 @@ Figma for refinement and component integration.
 **When to use:** After development, to validate implementation matches design.
 **What it does:** Browser-based testing using Puppeteer — autonomous scan then guided
 review. Compares live product against specs and sketches, reports deviations.
-**Output:** `docs/F-Testing/` with test results, screenshots, and issues
+**Output:** `docs/E-Development/` with test results, screenshots, and issues
 **Best for:** Quality validation before launch or after development iterations.
 
 ### 6. Design Delivery
 **When to use:** Design is complete and needs to be packaged for development handoff.
 **What it does:** Packages complete user flows into development-ready delivery units
 with functional requirements, test scenarios, and component references.
-**Output:** `docs/E-PRD/` with PRD and delivery packages
+**Output:** `docs/E-Development/` with PRD and delivery packages
 **Best for:** Clean handoff to development teams.
 
 ---

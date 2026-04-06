@@ -1,7 +1,7 @@
 # /wrap — Session Wrap Skill
 
 **Invocation:** `/wrap`
-**Works for:** any agent (saga, freya, mimir, idun)
+**Works for:** any agent (saga, freya, mimir)
 
 ---
 
@@ -9,7 +9,7 @@
 
   <constraints>
     - Derive everything from the conversation. Do NOT ask the user any questions.
-    - Your agent_id is your WDS base name: saga, freya, idun, or mimir. Never a project name.
+    - Your agent_id is your WDS base name: saga, freya, or mimir. Never a project name.
     - No output between steps — only what the steps explicitly say to print.
   </constraints>
 
@@ -52,7 +52,7 @@
     python c:/dev/WDS/design-space/tools/wrap-publish.py \
       --input session-wrap.md \
       --repo [repo-folder-name] \
-      --agent [saga|freya|idun|mimir] \
+      --agent [saga|freya|mimir] \
       --user "[git config user.name]"
 
     No additional output. Let the script print what it prints.

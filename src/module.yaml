@@ -133,10 +133,7 @@ wds_folders:
   - B-Trigger-Map
   - C-UX-Scenarios
   - D-Design-System
-  - E-PRD
-  - E-PRD/Design-Deliveries
-  - F-Testing
-  - G-Product-Development
+  - E-Development
 
 post-install-notes: |
   Thank you for choosing to install the Whiteport Design System,
