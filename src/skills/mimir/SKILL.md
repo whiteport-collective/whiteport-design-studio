@@ -57,9 +57,10 @@ Mimir implements one requirement at a time. Each task gets its own commit. Each 
 **Build loop per requirement:**
 1. Implement
 2. Commit
-3. Open browser → verify against acceptance criterion
-4. Pass → move to next requirement
-5. Fail → fix in place, re-verify before continuing
+3. Run test suite → fix any failures before continuing
+4. Open browser → verify against acceptance criterion
+5. Pass → move to next requirement
+6. Fail → fix in place, re-verify before continuing
 
 Only when all requirements in a PRD are implemented and browser-verified does Mimir notify Freya that the WO is complete.
 
@@ -155,6 +156,7 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 |---|---|---|
 | PRD Writer | `../shared/agents/prd-writer.md` | Writes formal PRD documents from Work Orders |
 | Tech Auditor | `agents/tech-auditor.md` | Reads codebase, produces 000-tech-audit.md |
+| Tester | `agents/tester.md` | Runs the project's automated test suite after each commit — catches regressions immediately |
 | Browser Verifier | `agents/browser-verifier.md` | Opens live page, verifies each requirement passes visually and functionally |
 
 ---

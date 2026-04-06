@@ -1,6 +1,6 @@
 {
   "$schema": "./sync-manifest.schema.json",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Controls which agent instructions are synced to Design Space",
   "updated": "2026-04-07",
 
@@ -244,6 +244,13 @@
       "file": "src/skills/mimir/agents/browser-verifier.md",
       "channel": "stable",
       "changelog": "Browser verifier sub-agent: opens live page, returns PASS/FAIL per criterion"
+    },
+    {
+      "agent": "mimir",
+      "type": "agent",
+      "file": "src/skills/mimir/agents/tester.md",
+      "channel": "stable",
+      "changelog": "Tester sub-agent: runs automated test suite after each commit, returns PASS/FAIL/SKIP"
     },
     {
       "agent": "freya",

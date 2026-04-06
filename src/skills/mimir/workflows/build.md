@@ -61,7 +61,21 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
       Commit with message: `[NNN-REQ-NNN] [requirement title]`
     </sub-step>
 
-    <sub-step id="3c-verify">
+    <sub-step id="3c-test">
+      Invoke `agents/tester.md` with:
+      - The project root path
+      - The requirement ID and title
+
+      The tester runs the automated test suite and returns PASS, FAIL, or SKIP.
+
+      IF FAIL:
+        Fix the failing tests. Re-commit with message: `[NNN-REQ-NNN] fix tests`
+        Re-invoke tester. IF FAIL again: flag as blocked, surface to user.
+      IF SKIP:
+        Note it in state file. Continue — no test runner configured.
+    </sub-step>
+
+    <sub-step id="3d-verify">
       Invoke `agents/browser-verifier.md` with:
       - The acceptance criteria from the PRD requirement
       - The URL/path to verify
@@ -70,7 +84,7 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
       The verifier opens the browser, tests the criterion, returns: PASS or FAIL with details.
     </sub-step>
 
-    <sub-step id="3d-route">
+    <sub-step id="3e-route">
       IF PASS:
         Mark requirement done in state file.
         Report: "✓ [REQ-NNN] [title] — verified"
