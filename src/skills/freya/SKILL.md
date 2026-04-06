@@ -49,14 +49,14 @@ The Design Loop runs once per page: discuss → spec → wireframe → approve �
 
 ---
 
-### `prd` — Feature PRD
+### `work-order` — Mimir Work Order
 
-**Trigger:** `/PRD`, after a screen or flow is designed and approved
-**Workflow:** `../shared/workflows/prd.md`
+**Trigger:** After a scenario or screen is specced and approved, or at end of brownfield assessment
+**Agent:** `agents/mimir-brief.md`
 
-Freya writes feature PRDs when screens are ready for implementation. The PRD captures cross-screen behavior, transitions, shared state — everything a page-by-page spec misses. Mimir builds from the PRD, not from the spec alone.
+When design is ready to build, Freya writes a Work Order for Mimir — not a PRD. The WO is a narrative handoff: what to build, why it matters, which specs and scenarios it covers, and what depends on what. Mimir takes the WO and writes the PRD.
 
-Also invoked after feedback triage to write `NNN-NN-feedback.xml` change orders.
+**Deliverable:** `{output_folder}/E-Development/WO-NNN-[slug].md`
 
 ---
 
@@ -141,10 +141,16 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
       ...
 
     Then offer concrete next moves based on what's actually missing:
-    - If built screens have no verification: offer to review against spec
-    - If specced screens have no PRD: offer to write PRDs before Mimir builds
-    - If partial specs exist: offer to complete them
+    - If specced screens have no WO yet: offer to write WOs so Mimir can plan the build
+    - If WOs exist but no PRDs: note that Mimir should be woken to write them
+    - If partial specs exist: offer to complete them first before handing to Mimir
     - If built-but-not-designed exists: offer to spec retroactively
+
+    Default offer for "designed + not built": write the Work Order(s) now.
+    Invoke `agents/mimir-brief.md` for each scenario/feature that is ready.
+
+    After WOs are written:
+    "Work orders ready in E-Development/. Wake Mimir with /mimir to run the tech audit and plan the build."
 
     Wait for the user to choose. Do not proceed automatically.
   </step>
@@ -197,7 +203,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
 | Spec Writer | `agents/spec-writer.md` | Generates page spec from discussion data |
 | Design Reviewer | `agents/design-reviewer.md` | Reviews built page against spec and wireframe |
 | Token Extractor | `agents/token-extractor.md` | Extracts design tokens from completed pages |
-| Mimir Brief | `agents/mimir-brief.md` | Writes Mimir work order from approved spec changes |
+| Mimir Brief | `agents/mimir-brief.md` | Writes Mimir Work Order from approved specs or feedback triage |
 | Persona Page | `../shared/agents/persona-page.md` | Generates visual persona page from archetype data |
 
 ---
