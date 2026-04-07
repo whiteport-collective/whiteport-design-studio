@@ -79,11 +79,25 @@ A human can ask any agent to use any tool by name.
 
 ---
 
+### tool_calendar — Google Calendar
+- **Status:** active
+- **Version:** 1
+- **Category:** tool
+- **Endpoint:** `/functions/v1/tool-calendar`
+- **Actions:** list, get, create, update, free-busy
+- **Auth:** OAuth2 via tool_oauth (service: google)
+- **Scopes:** `calendar`
+- **Migration:** 020_toolbox_calendar.sql
+- **Edge function:** `database/supabase/functions/tool-calendar/index.ts`
+- **Org:** whiteport (active)
+- **Note:** Shares same Google OAuth app as tool_gmail. Calendar API must be enabled in Google Cloud Console.
+
+---
+
 ## Planned Tools
 
 | Tool | Service | Auth | Scopes | Status |
 |---|---|---|---|---|
-| tool_calendar | google | oauth2 | `calendar` | Scope already granted — needs edge function |
 | tool_fireflies | fireflies.ai | api_key | transcripts | Webhook exists, search tool pending |
 | tool_github | github | oauth2 | repos, issues | Planned |
 
