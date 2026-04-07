@@ -445,6 +445,41 @@
     {
       "agent": "idun",
       "type": "workflow",
+      "file": "src/skills/idun/workflows/audit.md",
+      "channel": "stable",
+      "changelog": "Skill audit: 5-criterion review with scoring and report generation"
+    },
+    {
+      "agent": "idun",
+      "type": "workflow",
+      "file": "src/skills/idun/workflows/create-skill.md",
+      "channel": "stable",
+      "changelog": "Create skill: dialog-driven skill creation with WML, templates, sub-agents"
+    },
+    {
+      "agent": "idun",
+      "type": "workflow",
+      "file": "src/skills/idun/workflows/create-agent.md",
+      "channel": "stable",
+      "changelog": "Create agent: full agent creation across WDS and W-A-S repos"
+    },
+    {
+      "agent": "idun",
+      "type": "workflow",
+      "file": "src/skills/idun/workflows/register.md",
+      "channel": "stable",
+      "changelog": "Register: classify, validate, place, add to manifest, sync"
+    },
+    {
+      "agent": "idun",
+      "type": "workflow",
+      "file": "src/skills/idun/workflows/catalog.md",
+      "channel": "stable",
+      "changelog": "Catalog: full library inventory with sync status and quality checks"
+    },
+    {
+      "agent": "idun",
+      "type": "workflow",
       "file": "src/skills/idun/workflows/tool-onboarding.md",
       "channel": "stable",
       "changelog": "Tool onboarding: full lifecycle from plugin catalog to verified deployment"
@@ -455,6 +490,20 @@
       "file": "src/skills/idun/workflows/user-onboarding.md",
       "channel": "stable",
       "changelog": "User onboarding: identity, membership, OAuth consent, tool connection"
+    },
+    {
+      "agent": "idun",
+      "type": "agent",
+      "file": "src/skills/idun/agents/skill-validator.md",
+      "channel": "stable",
+      "changelog": "Skill validator sub-agent: 8-criterion convention compliance check"
+    },
+    {
+      "agent": "idun",
+      "type": "agent",
+      "file": "src/skills/idun/agents/tool-mapper.md",
+      "channel": "stable",
+      "changelog": "Tool mapper sub-agent: identifies hardcoded tools, suggests abstractions"
     },
     {
       "agent": "*",
