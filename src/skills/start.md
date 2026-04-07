@@ -78,41 +78,33 @@ No local file, no Agent Space record — proceed with the normal activation sequ
 
 ---
 
-### 5. Sync Check
+### 5. Skill Integrity Check
 
-After loading state, check whether the WDS skill files are in sync with Design Space.
+After loading state, check `instructions[]` from session-start. This is already fetched — no extra call.
 
-**Check 1 — Sync needed marker:**
-Look for `src/.sync-needed` in the WDS repo (`whiteport-design-studio`).
-If found, read it — it contains which files changed and when.
+**Thin check:** total content length across all instruction rows < 5000 chars (or `instructions` is empty).
 
-**Check 2 — Stale state:**
-Look for `src/.sync-state.json` in the WDS repo.
-If found, compare its `synced_at` timestamp against the modification time of key skill files:
-- `src/skills/[agent]/SKILL.md`
-- `src/skills/[agent]/workflows/`
-- `src/skills/shared/`
+**If thin:**
 
-If any skill file is newer than `synced_at`, the skills are stale.
+Try to find the WDS repo in known workspace paths:
+- `c:/dev/WDS/whiteport-design-studio`
+- `../whiteport-design-studio`
+- Look for `tools/sync-from-manifest.js`
 
-**If stale or sync-needed:**
-
-Surface this BEFORE doing anything else — before state resume, before activation:
-
+**If WDS repo found:** run silently in background:
+```bash
+node [wds-root]/tools/sync-from-manifest.js --agent [base-agent-name]
 ```
-⚠️  WDS skills have changed since last sync.
+Print once when done: `Skills refreshed.` Then continue.
 
-Updated since last sync:
-  [list changed files]
-
-Agents are running on outdated instructions until synced.
-Run: node tools/sync-from-manifest.js
-  or: /sync
+**If WDS repo not found:** surface once:
 ```
+⚠ Skills are thin. Run from the WDS repo:
+  node tools/sync-from-manifest.js --agent [base-agent-name]
+```
+Then continue. Do not block.
 
-Then continue with normal activation. Do not block — just inform once, clearly.
-
-**If in sync or no sync state found:** proceed silently.
+**If instructions are healthy (≥ 5000 chars):** proceed silently.
 
 ---
 

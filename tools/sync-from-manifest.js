@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Sync agent instructions from WDS repo to Design Space.
- * Reads sync-manifest.json to determine what to sync.
+ * Reads sync-manifest.json, groups files by agent, concatenates them into
+ * one compiled instruction document per agent, then upserts to agent_instructions.
  *
  * Usage:
  *   node sync-from-manifest.js                     # sync all stable
@@ -67,58 +68,69 @@ console.log(`Channel: ${CHANNEL}`);
 if (AGENT_FILTER) console.log(`Agent filter: ${AGENT_FILTER}`);
 console.log();
 
-// --- Filter and collect ---
+// --- Filter ---
 const filtered = manifest.instructions.filter(i => {
   if (i.channel !== CHANNEL) return false;
   if (AGENT_FILTER && i.agent !== AGENT_FILTER && i.agent !== '*') return false;
   return true;
 });
 
-console.log(`${filtered.length} instructions to sync`);
+// --- Group by agent (preserving manifest order within each group) ---
+const byAgent = new Map();
+for (const instr of filtered) {
+  if (!byAgent.has(instr.agent)) byAgent.set(instr.agent, []);
+  byAgent.get(instr.agent).push(instr);
+}
+
+console.log(`${byAgent.size} agent(s) to compile`);
 console.log();
 
-// --- Process ---
+// --- Compile and upsert ---
 let uploaded = 0;
 let skipped = 0;
 let failed = 0;
+const hashMap = {};
 
-for (const instr of filtered) {
-  const filePath = join(REPO_ROOT, instr.file);
-  if (!existsSync(filePath)) {
-    console.warn(`  SKIP (not found): ${instr.file}`);
-    skipped++;
-    continue;
+for (const [agentId, instrs] of byAgent) {
+  // Collect all readable files for this agent
+  const parts = [];
+  const names = [];
+  for (const instr of instrs) {
+    const filePath = join(REPO_ROOT, instr.file);
+    if (!existsSync(filePath)) {
+      console.warn(`  SKIP (not found): ${instr.file}`);
+      skipped++;
+      continue;
+    }
+    const content = readFileSync(filePath, 'utf8');
+    parts.push(content);
+    names.push(basename(instr.file));
+    hashMap[instr.file] = createHash('sha256').update(content).digest('hex').substring(0, 12);
   }
 
-  const content = readFileSync(filePath, 'utf8');
-  const hash = createHash('sha256').update(content).digest('hex').substring(0, 12);
-  const name = basename(instr.file);
+  if (parts.length === 0) continue;
+
+  // Compile into one document
+  const compiled = parts.join('\n\n---\n\n');
+  const compiledHash = createHash('sha256').update(compiled).digest('hex').substring(0, 12);
 
   if (DRY_RUN) {
-    console.log(`  [${instr.agent}] ${instr.type}/${name} (${content.length} chars, hash: ${hash})`);
+    console.log(`  [${agentId}] ${parts.length} files → ${compiled.length} chars (hash: ${compiledHash})`);
+    for (const n of names) console.log(`    · ${n}`);
     continue;
   }
 
   try {
-    const row = {
-      agent_id: instr.agent,
-      model_target: 'claude-sonnet-4-6',
-      skill_level: 'wds_default',
-      org_id: 'whiteport',
-      content,
-      version: manifest.version,
-    };
-
-    // Check for existing row (null scope columns must be matched with .is.null)
+    // Check for existing row
     const checkUrl = `${SUPABASE_URL}/rest/v1/agent_instructions` +
-      `?agent_id=eq.${encodeURIComponent(instr.agent)}` +
+      `?agent_id=eq.${encodeURIComponent(agentId)}` +
       `&model_target=eq.claude-sonnet-4-6` +
       `&skill_level=eq.wds_default` +
       `&org_id=eq.whiteport` +
       `&client_id=is.null` +
       `&project=is.null` +
       `&repo=is.null` +
-      `&select=id&limit=1`;
+      `&select=id,version&limit=1`;
 
     const checkRes = await fetch(checkUrl, {
       headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY },
@@ -128,7 +140,6 @@ for (const instr of filtered) {
 
     let res;
     if (existingId) {
-      // PATCH to update
       res = await fetch(
         `${SUPABASE_URL}/rest/v1/agent_instructions?id=eq.${existingId}`,
         {
@@ -139,11 +150,10 @@ for (const instr of filtered) {
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal',
           },
-          body: JSON.stringify({ content, version: manifest.version }),
+          body: JSON.stringify({ content: compiled, version: manifest.version }),
         },
       );
     } else {
-      // INSERT new row
       res = await fetch(`${SUPABASE_URL}/rest/v1/agent_instructions`, {
         method: 'POST',
         headers: {
@@ -152,41 +162,41 @@ for (const instr of filtered) {
           'Content-Type': 'application/json',
           'Prefer': 'return=minimal',
         },
-        body: JSON.stringify(row),
+        body: JSON.stringify({
+          agent_id: agentId,
+          model_target: 'claude-sonnet-4-6',
+          skill_level: 'wds_default',
+          org_id: 'whiteport',
+          content: compiled,
+          version: manifest.version,
+        }),
       });
     }
 
     if (res.ok) {
       uploaded++;
-      console.log(`  OK [${instr.agent}] ${instr.type}/${name}`);
+      console.log(`  OK [${agentId}] ${parts.length} files compiled (${compiled.length} chars)`);
     } else {
       failed++;
-      console.error(`  FAIL [${instr.agent}] ${name}: ${await res.text()}`);
+      console.error(`  FAIL [${agentId}]: ${await res.text()}`);
     }
   } catch (err) {
     failed++;
-    console.error(`  FAIL [${instr.agent}] ${name}: ${err.message}`);
+    console.error(`  FAIL [${agentId}]: ${err.message}`);
   }
 }
 
 console.log();
-console.log(`Done: ${uploaded} uploaded, ${skipped} unchanged, ${failed} failed`);
+console.log(`Done: ${uploaded} compiled+uploaded, ${skipped} files skipped, ${failed} failed`);
 
-// Write sync state so agents can detect stale skills
+// Write sync state
 if (!DRY_RUN && failed === 0) {
   const state = {
     synced_at: new Date().toISOString(),
     manifest_version: manifest.version,
     channel: CHANNEL,
-    files: {},
+    files: hashMap,
   };
-  for (const instr of filtered) {
-    const filePath = join(REPO_ROOT, instr.file);
-    if (existsSync(filePath)) {
-      const content = readFileSync(filePath, 'utf8');
-      state.files[instr.file] = createHash('sha256').update(content).digest('hex').substring(0, 12);
-    }
-  }
   const statePath = join(REPO_ROOT, 'src/.sync-state.json');
   writeFileSync(statePath, JSON.stringify(state, null, 2));
   console.log(`Sync state written to src/.sync-state.json`);
