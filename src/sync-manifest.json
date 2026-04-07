@@ -433,6 +433,35 @@
       "file": "src/workflows/8-product-evolution/workflow.md",
       "channel": "stable",
       "changelog": "Phase 8: Post-launch iteration, monitoring, and continuous improvement"
+    },
+
+    {
+      "agent": "idun",
+      "type": "skill",
+      "file": "src/skills/idun/SKILL.md",
+      "channel": "stable",
+      "changelog": "Idun capabilities: audit, create-skill, create-agent, register, catalog, tool-onboarding, user-onboarding"
+    },
+    {
+      "agent": "idun",
+      "type": "workflow",
+      "file": "src/skills/idun/workflows/tool-onboarding.md",
+      "channel": "stable",
+      "changelog": "Tool onboarding: full lifecycle from plugin catalog to verified deployment"
+    },
+    {
+      "agent": "idun",
+      "type": "workflow",
+      "file": "src/skills/idun/workflows/user-onboarding.md",
+      "channel": "stable",
+      "changelog": "User onboarding: identity, membership, OAuth consent, tool connection"
+    },
+    {
+      "agent": "*",
+      "type": "reference",
+      "file": "src/skills/idun/references/toolbox-status.md",
+      "channel": "stable",
+      "changelog": "Toolbox status: registered tools, connected users, onboarding checklist"
     }
   ]
 }
