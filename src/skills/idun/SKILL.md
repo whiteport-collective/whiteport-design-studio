@@ -108,6 +108,25 @@ Takes an existing skill file (from `~/.claude/commands/`, a project repo, or any
 
 ---
 
+### `org-setup` — Set Up a New Organization
+
+**Trigger:** `/idun org-setup` or when onboarding an external client
+**Workflow:** `workflows/org-setup.md`
+
+Master onboarding workflow for new organizations. Five phases in strict order:
+
+1. **Understand the business** — profile the org, people, revenue, workflows, automation goals
+2. **Create org and repo** — `{org}-agent-space` repo, register as client in Whiteport
+3. **Governance framework** — lean (4 docs) to enterprise (12 docs), scaled to org size
+4. **Install agents and skills** — roster, people, skills, templates, onboarding guide
+5. **Implement Agent Space** — database, edge functions, tool connections, end-to-end test
+
+Each phase gates the next. Do not skip ahead.
+
+**Deliverable:** Fully operational Agent Space with governance, registered agents, and verified end-to-end.
+
+---
+
 ### `tool-onboarding` — Register a Tool
 
 **Trigger:** `/idun tool-onboarding` or when a new server-side tool is built
@@ -153,6 +172,7 @@ Output as a readable table. Optionally filtered by agent.
 
   <step id="1-detect">
     Determine what the user wants:
+    - Argument is "org-setup" → go to org-setup workflow
     - Argument is "audit" → go to audit workflow
     - Argument is "create-skill" → go to create-skill workflow
     - Argument is "create-agent" → go to create-agent workflow
