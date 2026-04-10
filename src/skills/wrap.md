@@ -13,6 +13,21 @@
     - No output between steps — only what the steps explicitly say to print.
   </constraints>
 
+  <step id="0-milestone-check">
+    Before writing anything: assess whether this is a natural milestone boundary.
+
+    A milestone boundary is when a discrete unit of work is complete — a feature shipped,
+    a spec finalized, a phase closed. NOT mid-task, mid-investigation, or mid-dialog.
+
+    **If NOT at a milestone:** note this as "mid-session" in Context. The Next task should
+    be the immediate continuation of interrupted work.
+
+    **If at a milestone:** proceed normally.
+
+    **Call threshold:** If this session has had 15+ tool calls, surface once as part of step 2:
+    `Note: session at [N] calls — good time to wrap for fresh context.`
+  </step>
+
   <step id="1-write">
     Write session-wrap.md to the repo root. Silent — no output.
 
@@ -22,13 +37,26 @@
     Skip only if nothing was learned this session.]
 
     ## Context
-    [What was done. State of artifacts. Open threads. Be specific.]
+    [What was done. State of artifacts. Open threads. Be specific.
+    If mid-session (not at milestone): flag it clearly — "Wrapped mid-task: [what was in progress]"]
 
     ## Plan
-    [The plan we are in the middle of and the end goal. Where we are, what remains.]
+    [The overarching plan and end goal. Where we are. What remains.
+    If more than one session of work remains: list numbered milestones with status:
+      - [DONE] Milestone 1 — description
+      - [CURRENT] Milestone 2 — description (~1 session)
+      - [ ] Milestone 3 — description (~2 sessions)
+    Omit milestone list if this is single-session work.]
 
     ## Next
-    [Single immediately-actionable next task. Not "continue X" — "do Y in file Z".]
+    [Single immediately-actionable next task.
+    Prefix with model: MODEL:[Haiku|Sonnet|Opus] — task description.
+    Model selection = task type × complexity × stakes:
+      - Haiku: simple, low-stakes, short — lookups, message checks, summaries
+      - Sonnet: moderate complexity — strategy, spec, dialog, UX, config, analysis
+      - Opus: any code; OR high-stakes/production work; OR long or complex tasks where reasoning quality matters
+    Default to the lightest model that can handle the task. Escalate only when stakes or complexity genuinely justify it — not as a precaution.
+    Format: "MODEL:Sonnet — [task]" or "MODEL:Opus — [task]"]
 
     ## Spec Sync
     [Did anything change that diverges from a written spec/brief/doc? Update it NOW.
@@ -40,11 +68,13 @@
     Print EXACTLY this block — nothing before, nothing after:
 
     ── Handover ──────────────────────────────────
-    Next:    [Next — one line]
-    Plan:    [Plan — one line]
+    Next:    [Next line — including MODEL prefix]
+    Plan:    [Plan — one line summary or current milestone]
     Open:    [blocking issues or "None"]
     Learned: [one line or "None"]
     ──────────────────────────────────────────────
+
+    [If call threshold reached: print "Note: session at [N] calls — good time to wrap."]
   </step>
 
   <step id="3-publish">
