@@ -1,8 +1,8 @@
 {
   "$schema": "./sync-manifest.schema.json",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Controls which agent instructions are synced to Design Space",
-  "updated": "2026-04-07",
+  "updated": "2026-04-11",
 
   "channels": {
     "stable": "Production-ready instructions. Synced to all organizations.",
@@ -418,7 +418,7 @@
       "type": "skill",
       "file": "src/skills/wrap.md",
       "channel": "stable",
-      "changelog": "Session wrap: save state locally, optionally sync to Agent Space"
+      "changelog": "Session wrap v2: subagent executor pattern — main agent compiles + shows substance, subagent handles mechanical publish and snippet"
     },
     {
       "agent": "*",
@@ -511,6 +511,15 @@
       "file": "src/skills/idun/references/toolbox-status.md",
       "channel": "stable",
       "changelog": "Toolbox status: registered tools, connected users, onboarding checklist"
+    },
+
+    {
+      "agent": "idun",
+      "type": "skill",
+      "file": "src/skills/idun/workflows/sysadmin.md",
+      "channel": "internal",
+      "org": "whiteport",
+      "changelog": "Sysadmin: skill operations — sync, manifest management, version bumping. Whiteport-only."
     }
   ]
 }

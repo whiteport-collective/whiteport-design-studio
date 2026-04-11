@@ -10,7 +10,8 @@
   <constraints>
     - Derive everything from the conversation. Do NOT ask the user any questions.
     - Your agent_id is your WDS base name: saga, freya, or mimir. Never a project name.
-    - No output between steps — only what the steps explicitly say to print.
+    - Show substance to user BEFORE spawning subagent — user must see what is being saved.
+    - The subagent handles all mechanical execution. You only compile and show.
   </constraints>
 
   <step id="0-milestone-check">
@@ -28,83 +29,115 @@
     `Note: session at [N] calls — good time to wrap for fresh context.`
   </step>
 
-  <step id="1-write">
-    Write session-wrap.md to the repo root. Silent — no output.
+  <step id="1-compile">
+    Compile the session substance internally. Do NOT write to disk. Do NOT output anything.
 
-    ```markdown
-    ## Learned
-    [What will benefit future sessions: decisions with reasons, patterns, non-obvious constraints.
-    Skip only if nothing was learned this session.]
+    Compose these four fields:
 
-    ## Context
-    [What was done. State of artifacts. Open threads. Be specific.
-    If mid-session (not at milestone): flag it clearly — "Wrapped mid-task: [what was in progress]"]
+    **learned:** What will benefit future sessions: decisions with reasons, patterns,
+    non-obvious constraints. "None" if nothing was learned.
 
-    ## Plan
-    [The overarching plan and end goal. Where we are. What remains.
-    If more than one session of work remains: list numbered milestones with status:
+    **context:** What was done. State of artifacts. Open threads. Be specific.
+    If mid-session: "Wrapped mid-task: [what was in progress]"
+
+    **plan:** The overarching plan and end goal. Where we are. What remains.
+    If multi-session: list numbered milestones with status:
       - [DONE] Milestone 1 — description
       - [CURRENT] Milestone 2 — description (~1 session)
       - [ ] Milestone 3 — description (~2 sessions)
-    Omit milestone list if this is single-session work.]
+    Omit milestone list if single-session work.
 
-    ## Next
-    [Single immediately-actionable next task.
+    **next:** Single immediately-actionable next task.
     Prefix with model: MODEL:[Haiku|Sonnet|Opus] — task description.
     Model selection = task type × complexity × stakes:
       - Haiku: simple, low-stakes, short — lookups, message checks, summaries
       - Sonnet: moderate complexity — strategy, spec, dialog, UX, config, analysis
-      - Opus: any code; OR high-stakes/production work; OR long or complex tasks where reasoning quality matters
-    Default to the lightest model that can handle the task. Escalate only when stakes or complexity genuinely justify it — not as a precaution.
-    Format: "MODEL:Sonnet — [task]" or "MODEL:Opus — [task]"]
+      - Opus: any code; OR high-stakes/production work; OR long or complex tasks
+    Default to lightest model that can handle the task.
 
-    ## Spec Sync
-    [Did anything change that diverges from a written spec/brief/doc? Update it NOW.
-    If nothing changed: write "None".]
-    ```
+    **spec_sync:** Did anything change that diverges from a written spec/brief/doc?
+    "None" if nothing changed.
   </step>
 
   <step id="2-show">
-    Print EXACTLY this block — nothing before, nothing after:
+    Print EXACTLY this block to the user — nothing before, nothing after:
 
     ── Handover ──────────────────────────────────
-    Next:    [Next line — including MODEL prefix]
-    Plan:    [Plan — one line summary or current milestone]
+    Next:    [next — including MODEL prefix]
+    Plan:    [plan — one line summary or current milestone]
     Open:    [blocking issues or "None"]
-    Learned: [one line or "None"]
+    Learned: [learned — one line or "None"]
     ──────────────────────────────────────────────
 
     [If call threshold reached: print "Note: session at [N] calls — good time to wrap."]
+
+    Wait for no input. Proceed immediately to step 3.
   </step>
 
-  <step id="3-publish">
+  <step id="3-subagent">
+    Spawn a subagent using the Agent tool with this exact prompt —
+    substitute the bracketed values from step 1:
+
+    ---
+    You are a wrap executor. Your only job is to save a session wrap and return the resume snippet.
+    Follow these steps exactly. No interpretation. No additions.
+
+    **Session data:**
+    - agent_id: [saga|freya|mimir]
+    - repo: [repo-folder-name]
+    - learned: [learned]
+    - context: [context]
+    - plan: [plan]
+    - next: [next]
+    - spec_sync: [spec_sync]
+
+    **Step A — Write file:**
+    Write `session-wrap.md` to the repo root with this exact content:
+
+    ```
+    ## Learned
+    [learned]
+
+    ## Context
+    [context]
+
+    ## Plan
+    [plan]
+
+    ## Next
+    [next]
+
+    ## Spec Sync
+    [spec_sync]
+    ```
+
+    **Step B — Publish:**
     Run:
     python c:/dev/WDS/design-space/tools/wrap-publish.py \
       --input session-wrap.md \
       --repo [repo-folder-name] \
-      --agent [saga|freya|mimir] \
+      --agent [agent_id] \
       --user "[git config user.name]"
 
-    No additional output. Let the script print what it prints.
-  </step>
+    Let the script print what it prints.
 
-  <step id="4-token">
+    **Step C — Return snippet:**
     Parse the UUID from "Handoff posted: {uuid}" in the script output.
     Take the first 6 characters.
 
-    Check the Next line from step 2: does it hand off to a different agent?
-    - "Wake Mimir" / "Hand to Mimir" / "/mimir" → target agent is mimir
-    - "Wake Freya" / "Hand to Freya" / "/freya" → target agent is freya
-    - "Wake Saga" / "Hand to Saga" / "/saga" → target agent is saga
-    - No handoff detected → target agent is current agent
+    Check the Next line: does it hand off to a different agent?
+    - "Wake Mimir" / "Hand to Mimir" / "/mimir" → target is mimir
+    - "Wake Freya" / "Hand to Freya" / "/freya" → target is freya
+    - "Wake Saga" / "Hand to Saga" / "/saga" → target is saga
+    - No handoff → target is [agent_id]
 
-    Print EXACTLY this — nothing before, nothing after:
-
+    Return ONLY this — nothing else:
     ```
     /[target-agent] [6chars]
     ```
+    ---
 
-    Session complete. Stop.
+    Print whatever the subagent returns. Session complete. Stop.
   </step>
 
 </wrap-steps>
