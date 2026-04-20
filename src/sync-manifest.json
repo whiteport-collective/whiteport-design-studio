@@ -54,14 +54,6 @@
       "changelog": "Freya capabilities: UX Scenarios, Design Loop (9 steps), Asset Generation, Design System"
     },
     {
-      "agent": "*",
-      "type": "skill",
-      "file": "src/skills/design-space/SKILL.md",
-      "channel": "stable",
-      "changelog": "Design Space integration: search, capture, messaging, work orders, agent presence"
-    },
-
-    {
       "agent": "saga",
       "type": "reference",
       "file": "src/skills/saga/references/discovery-conversation.md",
@@ -411,14 +403,14 @@
       "type": "skill",
       "file": "src/skills/start.md",
       "channel": "stable",
-      "changelog": "Session resume: local-first state with optional Agent Space enhancement"
+      "changelog": "Session resume: file-based state via progress/[agent].md, no Agent Space dependency"
     },
     {
       "agent": "*",
       "type": "skill",
       "file": "src/skills/wrap.md",
       "channel": "stable",
-      "changelog": "Session wrap v2: subagent executor pattern — main agent compiles + shows substance, subagent handles mechanical publish and snippet"
+      "changelog": "Session wrap v2: subagent executor pattern — compiles + shows substance, writes to progress/[agent_id].md"
     },
     {
       "agent": "*",
@@ -436,90 +428,11 @@
     },
 
     {
-      "agent": "idun",
-      "type": "skill",
-      "file": "src/skills/idun/SKILL.md",
-      "channel": "stable",
-      "changelog": "Idun capabilities: audit, create-skill, create-agent, register, catalog, tool-onboarding, user-onboarding"
-    },
-    {
-      "agent": "idun",
-      "type": "workflow",
-      "file": "src/skills/idun/workflows/audit.md",
-      "channel": "stable",
-      "changelog": "Skill audit: 5-criterion review with scoring and report generation"
-    },
-    {
-      "agent": "idun",
-      "type": "workflow",
-      "file": "src/skills/idun/workflows/create-skill.md",
-      "channel": "stable",
-      "changelog": "Create skill: dialog-driven skill creation with WML, templates, sub-agents"
-    },
-    {
-      "agent": "idun",
-      "type": "workflow",
-      "file": "src/skills/idun/workflows/create-agent.md",
-      "channel": "stable",
-      "changelog": "Create agent: full agent creation across WDS and W-A-S repos"
-    },
-    {
-      "agent": "idun",
-      "type": "workflow",
-      "file": "src/skills/idun/workflows/register.md",
-      "channel": "stable",
-      "changelog": "Register: classify, validate, place, add to manifest, sync"
-    },
-    {
-      "agent": "idun",
-      "type": "workflow",
-      "file": "src/skills/idun/workflows/catalog.md",
-      "channel": "stable",
-      "changelog": "Catalog: full library inventory with sync status and quality checks"
-    },
-    {
-      "agent": "idun",
-      "type": "workflow",
-      "file": "src/skills/idun/workflows/tool-onboarding.md",
-      "channel": "stable",
-      "changelog": "Tool onboarding: full lifecycle from plugin catalog to verified deployment"
-    },
-    {
-      "agent": "idun",
-      "type": "workflow",
-      "file": "src/skills/idun/workflows/user-onboarding.md",
-      "channel": "stable",
-      "changelog": "User onboarding: identity, membership, OAuth consent, tool connection"
-    },
-    {
-      "agent": "idun",
-      "type": "agent",
-      "file": "src/skills/idun/agents/skill-validator.md",
-      "channel": "stable",
-      "changelog": "Skill validator sub-agent: 8-criterion convention compliance check"
-    },
-    {
-      "agent": "idun",
-      "type": "agent",
-      "file": "src/skills/idun/agents/tool-mapper.md",
-      "channel": "stable",
-      "changelog": "Tool mapper sub-agent: identifies hardcoded tools, suggests abstractions"
-    },
-    {
       "agent": "*",
-      "type": "reference",
-      "file": "src/skills/idun/references/toolbox-status.md",
-      "channel": "stable",
-      "changelog": "Toolbox status: registered tools, connected users, onboarding checklist"
-    },
-
-    {
-      "agent": "idun",
       "type": "skill",
-      "file": "src/skills/idun/workflows/sysadmin.md",
-      "channel": "internal",
-      "org": "whiteport",
-      "changelog": "Sysadmin: skill operations — sync, manifest management, version bumping. Whiteport-only."
+      "file": "src/skills/shared/git.md",
+      "channel": "stable",
+      "changelog": "Git standard: conventional commits, branch naming, AI attribution, frequency rules"
     }
   ]
 }
