@@ -50,7 +50,7 @@
     **next:** Single immediately-actionable next task.
     Prefix with model: MODEL:[Haiku|Sonnet|Opus] — task description.
     Model selection = task type × complexity × stakes:
-      - Haiku: simple, low-stakes, short — lookups, message checks, summaries
+      - Haiku: simple, low-stakes, short — lookups, summaries
       - Sonnet: moderate complexity — strategy, spec, dialog, UX, config, analysis
       - Opus: any code; OR high-stakes/production work; OR long or complex tasks
     Default to lightest model that can handle the task.
@@ -79,24 +79,26 @@
     substitute the bracketed values from step 1:
 
     ---
-    You are a wrap executor. Your only job is to save a session wrap and return the resume snippet.
+    You are a wrap executor. Your only job is to save a session wrap file.
     Follow these steps exactly. No interpretation. No additions.
 
     **Session data:**
     - agent_id: [saga|freya|mimir]
-    - repo: [repo-folder-name]
     - learned: [learned]
     - context: [context]
     - plan: [plan]
     - next: [next]
     - spec_sync: [spec_sync]
 
-    **Step A — Write file:**
-    Write `session-wrap.md` to the repo root with this exact content:
+    **Step A — Ensure progress folder exists:**
+    Create `progress/` in the project root if it doesn't exist.
+
+    **Step B — Write state file:**
+    Write `progress/[agent_id].md` with this exact content:
 
     ```
-    ## Learned
-    [learned]
+    ## Wrapped
+    [current date and time]
 
     ## Context
     [context]
@@ -107,34 +109,15 @@
     ## Next
     [next]
 
+    ## Learned
+    [learned]
+
     ## Spec Sync
     [spec_sync]
     ```
 
-    **Step B — Publish:**
-    Run:
-    python c:/dev/WDS/design-space/tools/wrap-publish.py \
-      --input session-wrap.md \
-      --repo [repo-folder-name] \
-      --agent [agent_id] \
-      --user "[git config user.name]"
-
-    Let the script print what it prints.
-
-    **Step C — Return snippet:**
-    Parse the UUID from "Handoff posted: {uuid}" in the script output.
-    Take the first 6 characters.
-
-    Check the Next line: does it hand off to a different agent?
-    - "Wake Mimir" / "Hand to Mimir" / "/mimir" → target is mimir
-    - "Wake Freya" / "Hand to Freya" / "/freya" → target is freya
-    - "Wake Saga" / "Hand to Saga" / "/saga" → target is saga
-    - No handoff → target is [agent_id]
-
-    Return ONLY this — nothing else:
-    ```
-    /[target-agent] [6chars]
-    ```
+    **Step C — Confirm:**
+    Return ONLY: `Saved to progress/[agent_id].md`
     ---
 
     Print whatever the subagent returns. Session complete. Stop.
