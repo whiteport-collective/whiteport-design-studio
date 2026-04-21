@@ -183,10 +183,10 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     ---
 
     Wait for the sub-agent to return. Then print EXACTLY this — nothing before, nothing after:
+    → Open a new chat and run:
     ```
     /[target_agent] progress/[target_agent].md
     ```
-    Then print: `→ Open a new chat and run the command above.`
 
     Session complete. Do not respond to further input.
   </step>
