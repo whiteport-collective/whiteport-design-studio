@@ -186,8 +186,9 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     ```
     /[target_agent] progress/[target_agent].md
     ```
+    Then print: `→ Open a new chat and run the command above.`
 
-    Session complete. Stop.
+    Session complete. Do not respond to further input.
   </step>
 
 </wrap-steps>
