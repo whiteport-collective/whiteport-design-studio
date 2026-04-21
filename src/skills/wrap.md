@@ -120,8 +120,30 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     [spec_sync]
     ```
 
-    **Step C — Confirm:**
-    Return ONLY: `Saved to progress/[agent_id].md`
+    **Step C — Update project index:**
+    1. Run `git rev-parse HEAD` → `current_head`
+    2. Read `progress/project-index.md` if it exists → extract HEAD hash from `## Updated` line as `last_head`
+    3. Get changed files:
+       - If `last_head` exists: `git diff --name-only [last_head] [current_head]`
+       - If first time (no index): `git ls-files -- '*.md'` excluding `progress/`, `node_modules/`, `.git/`
+    4. For each changed file that exists: read its first H1 heading and first non-heading paragraph → one-line description. If deleted: mark for removal.
+    5. Read current `progress/project-index.md` (if exists), update changed entries, add new ones, remove deleted ones.
+    6. Write `progress/project-index.md`:
+
+    ```
+    ## Project Index
+    Updated: [agent_id] [current date] [current_head]
+
+    ## Phase Status
+    [preserve existing phase lines, update if plan indicates phase change]
+
+    ## Artifacts
+    [absolute path] — [type: brief|scenario|spec|design|code|config] — [one-line description]
+    [one entry per relevant file, sorted by path]
+    ```
+
+    **Step D — Confirm:**
+    Return ONLY: `Saved to progress/[agent_id].md — index updated ([N] files)`
     ---
 
     Print whatever the subagent returns.

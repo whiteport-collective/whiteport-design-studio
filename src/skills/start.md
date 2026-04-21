@@ -7,37 +7,41 @@
 
 ## Purpose
 
-Detects whether a previous session was saved for the active agent and offers to resume it. If no state file exists, proceeds silently with the normal activation sequence.
+Loads project state and session context. Always reads the project index first — this gives the agent a complete picture of what exists before doing anything else.
 
 ---
 
 ## Behavior When Invoked
 
-### 1. Detect Active Agent
+### 1. Load Project Index
 
-Identify which agent is currently active. Look for `progress/[agent].md` in the current project repo.
+**Always read `progress/project-index.md` first**, regardless of whether a session state exists.
 
-### 2. Load State
+If found: parse Phase Status and Artifacts sections. Hold this as project context — it informs everything below.
+If not found: proceed silently. The index will be built on first wrap.
 
-Check for `progress/[agent].md` in the project root. This is the authoritative source.
+### 2. Detect Session State
+
+Check for `progress/[agent].md` in the project root.
 
 **Fallback chain:** `progress/[agent].md` → fresh start
 
 ### 3. If State Found
 
 Parse the state file for:
-- "Where I Left Off" / Context section
-- "Next Action" / Next section — extract MODEL prefix if present (MODEL:Sonnet or MODEL:Opus)
-- "Plan" / Milestones section — extract milestone list if present
+- Context section
+- Next section — extract MODEL prefix if present
+- Plan / Milestones section
 
 **Display:**
 
 ```
 ⏸ Previous session found ([date from Wrapped field])
 
-Where I left off: [content from Context/Where I Left Off section]
-Next action:      [Next — strip MODEL prefix, show as plain task]
-Model needed:     [Sonnet | Opus — from MODEL prefix, or inferred from task type]
+Project:  [N artifacts — current phase from project index, or "no index yet"]
+Left off: [content from Context section]
+Next:     [Next — strip MODEL prefix, show as plain task]
+Model:    [Sonnet | Opus — from MODEL prefix, or inferred]
 
 [If milestones present:]
 ── Session Plan ──────────────────────────────
@@ -52,49 +56,37 @@ Resume where we left off, or start fresh?
 Wait for the user's response.
 
 **Model inference (if no MODEL prefix in Next):**
-Model selection = task type × complexity × stakes:
 - Any code, build, deploy, implement → Opus
-- High-stakes work (production systems, financial data, billing, compliance) → Opus regardless of task type
-- Long or complex multi-step tasks where a mistake is costly → Opus
+- High-stakes work (production, financial, compliance) → Opus
+- Long or complex multi-step tasks → Opus
 - Moderate complexity: strategy, spec, dialog, UX, config, analysis → Sonnet
 - Simple, low-stakes, short → Haiku
-- Default to the lightest model that fits. Escalate only when stakes or complexity genuinely justify it — not as a precaution
+- Default to lightest model that fits.
 
 **If resume:**
-- Read the full state file, including the Context and Open Questions sections
-- Jump straight to the Next Action — no scanning, no re-introduction, no status report
-- Treat the context as already established — don't re-explain what was already known
+- Read the full state file
+- Jump straight to the Next Action — no scanning, no re-introduction
+- Treat context as already established
 
 **If fresh:**
-- Proceed with the normal activation sequence for this agent
-- Do not delete the state file (the user may want to refer back to it)
+- Proceed with the normal activation sequence
+- Do not delete the state file
 
-### 4. If Nothing Found
+### 4. If No State Found
 
 Proceed with the normal activation sequence.
 
-**If the user describes a multi-session task at the start of a fresh session:**
-
-Offer to break it into milestones before diving in:
+If the user describes a multi-session task at the start of a fresh session, offer to map milestones:
 
 ```
 This looks like multi-session work. Want me to map it into milestones first?
 (Adds ~2 min upfront, saves context thrashing later.)
 ```
 
-If yes: produce a milestone plan before starting work:
-```
-── Session Plan ──────────────────────────────
-[ ] Milestone 1 — description (~1 session) — MODEL:Sonnet
-[ ] Milestone 2 — description (~1 session) — MODEL:Opus
-[ ] Milestone 3 — description (~2 sessions) — MODEL:Opus
-──────────────────────────────────────────────
-Starting with Milestone 1.
-```
+If yes: produce milestone plan before starting work.
+If no: proceed directly.
 
-If no: proceed directly. Do not mention milestones again unless the user brings it up.
-
-If the work appears to be a single session (clear, bounded task): do not ask. Proceed directly.
+If work appears single-session: proceed directly without asking.
 
 Do not mention /start or the absence of a state file.
 
@@ -102,7 +94,6 @@ Do not mention /start or the absence of a state file.
 
 ## Notes
 
-- The state file is written by `/wrap`. If no `/wrap` was run at the end of the previous session, there will be no file to find.
+- Always read `progress/project-index.md` — never skip it. It is the project's memory.
 - The state file lives at `progress/[agent].md` relative to the project root.
-- On resume, prioritize getting back to work quickly. The user already knows the context — they don't need a recap beyond what's shown in the summary.
-- MODEL prefix in Next is set by `/wrap`. Selection = task type × complexity × stakes. Haiku = simple/low-stakes. Sonnet = strategy/dialog/spec/UX. Opus = all code, high-stakes work, or complex long-running tasks. Never guess wrong — surface the recommendation and let the user confirm.
+- On resume, get back to work quickly. The user knows the context.
