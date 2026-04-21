@@ -5,9 +5,6 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap �
 **Usage:** `/handoff [target-agent]`
 **Example:** `/handoff mimir`
 
-> **Handoffs go through Agent Space — never as files on disk.**
-> Writing handoff content to arbitrary files is not a handoff. It is untracked state other agents cannot reliably find. Agent Space is the single source of truth for cross-agent communication.
-
 ---
 
 <handoff-steps>
@@ -16,13 +13,13 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap �
     - Derive everything from the conversation. Do NOT ask questions.
     - Do NOT summarize this session. That is a wrap, not a handoff.
     - Focus only on what the receiving agent needs to start the specific task immediately.
-    - The sub-agent handles all Agent Space delivery. You only compile and show.
+    - Handoff is written to `progress/[target_agent].md` — the receiving agent picks it up via `/start`.
   </constraints>
 
   <step id="1-compile">
     Determine:
-    - `target_agent` — from the argument. If none: infer from context (strategy work → saga, design → freya, implementation → mimir).
-    - `from_agent` — your current agent base name (e.g. freya, saga).
+    - `target_agent` — from the argument. If none: infer from context (strategy → saga, design → freya, implementation → mimir).
+    - `from_agent` — your current agent base name.
     - `project` — current project repo name.
 
     Compose the handoff content — what the receiving agent needs to start immediately:
@@ -32,13 +29,13 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap �
     [Single specific task being handed off. What it is, what state it's in, what remains.]
 
     ## Files
-    [Relevant file paths and what's in them. Be exact.]
+    [Full absolute paths to every relevant file. The receiving agent should never have to search for them.]
 
     ## Next
     [Single immediately-actionable next step for the receiving agent.]
     ```
 
-    This is task context, not session history. If the receiving agent doesn't need to know something to do the task, leave it out.
+    This is task context, not session history. Always include full absolute file paths — never just filenames. If the receiving agent doesn't need something to do the task, leave it out.
   </step>
 
   <step id="2-show">
@@ -52,51 +49,40 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap �
     Then proceed immediately to step 3.
   </step>
 
-  <step id="3-subagent">
+  <step id="3-write">
     Spawn a sub-agent with this exact prompt — substitute the bracketed values:
 
     ---
-    You are a delivery agent. Your only job is to post a handoff to Agent Space and return the token.
+    You are a file writer. Your only job is to write a handoff file.
 
-    Send this request:
+    **Step A — Ensure progress folder exists:**
+    Create `progress/` in the project root if it doesn't exist.
 
-    ```bash
-    curl -s -X POST "https://uztngidbpduyodrabokm.supabase.co/functions/v1/agent-messages" \
-      -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "action": "send",
-        "from_agent": "[from_agent]",
-        "to_agent": "[target_agent]",
-        "project": "[project]",
-        "message_type": "handoff",
-        "title": "[one-line task description]",
-        "content": "[full handoff content — escaped for JSON]"
-      }'
+    **Step B — Write handoff file:**
+    Write `progress/[target_agent].md` with this exact content:
+
+    ```
+    ## Wrapped
+    [current date and time]
+
+    ## Context
+    [task content from step 1]
+
+    ## Next
+    [next line from step 1]
+
+    ## Learned
+    None
+
+    ## Spec Sync
+    None
     ```
 
-    If the call succeeds: extract the `id` field. Return ONLY the first 6 characters. Nothing else.
-
-    If the call fails or returns an error: return ONLY this text:
-    FAILED: [error message or HTTP status]
+    **Step C — Confirm:**
+    Return ONLY: `Saved to progress/[target_agent].md`
     ---
 
-    Wait for the sub-agent response.
-
-    **If sub-agent returns 6 characters:** print EXACTLY this — nothing before, nothing after:
-    ```
-    /[target_agent] [6chars]
-    ```
-
-    **If sub-agent returns FAILED:** stop and warn the user:
-    ```
-    ⚠️ Agent Space unreachable — handoff not sent.
-    Check that Agent Space credentials are active (open Bitwarden → verify Agent Space API key).
-
-    Handoff content (copy if needed):
-    [full handoff content]
-    ```
-    Do NOT write the handoff to a file on disk.
+    Print whatever the sub-agent returns. Session continues.
   </step>
 
 </handoff-steps>
