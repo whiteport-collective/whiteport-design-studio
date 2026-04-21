@@ -1,7 +1,10 @@
 # /wrap — Session Wrap Skill
 
-**Invocation:** `/wrap`
+**Invocation:** `/wrap` or `/wrap [target-agent]`
 **Works for:** any agent (saga, freya, mimir)
+
+With no argument: wraps own session and saves state.
+With `[target-agent]`: wraps own session AND sends a handoff to the target agent via Agent Space. Use when the work is complete and changes character — e.g. strategy is done, mimir should build.
 
 ---
 
@@ -12,6 +15,7 @@
     - Your agent_id is your WDS base name: saga, freya, or mimir. Never a project name.
     - Show substance to user BEFORE spawning subagent — user must see what is being saved.
     - The subagent handles all mechanical execution. You only compile and show.
+    - If `[target-agent]` was given: after saving state, also send a handoff to that agent via Agent Space (step 4). Never write handoff to a file on disk.
   </constraints>
 
   <step id="0-milestone-check">
@@ -120,7 +124,48 @@
     Return ONLY: `Saved to progress/[agent_id].md`
     ---
 
-    Print whatever the subagent returns. Session complete. Stop.
+    Print whatever the subagent returns.
+  </step>
+
+  <step id="4-handoff" condition="only if target-agent argument was given">
+    Spawn a second sub-agent with this exact prompt — substitute the bracketed values:
+
+    ---
+    You are a delivery agent. Your only job is to post a handoff to Agent Space and return the token.
+
+    Send this request:
+
+    ```bash
+    curl -s -X POST "https://uztngidbpduyodrabokm.supabase.co/functions/v1/agent-messages" \
+      -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "action": "send",
+        "from_agent": "[agent_id]",
+        "to_agent": "[target_agent]",
+        "project": "[project]",
+        "message_type": "handoff",
+        "title": "[next — stripped of MODEL prefix]",
+        "content": "[context]\n\n## Next\n[next]"
+      }'
+    ```
+
+    If the call succeeds: extract the `id` field. Return ONLY the first 6 characters. Nothing else.
+    If the call fails: return ONLY: FAILED: [error]
+    ---
+
+    **If sub-agent returns 6 characters:** print EXACTLY this — nothing before, nothing after:
+    ```
+    /[target_agent] [6chars]
+    ```
+
+    **If sub-agent returns FAILED:** warn the user:
+    ```
+    ⚠️ Agent Space unreachable — handoff to [target_agent] not sent.
+    Check Bitwarden for Agent Space credentials.
+    ```
+
+    Session complete. Stop.
   </step>
 
 </wrap-steps>

@@ -1,12 +1,12 @@
 # /handoff — Cross-Agent Handoff
 
-Send a structured handoff to another WDS agent. Does NOT wrap the session — use when passing a specific piece of work to a different agent while the current session continues (or as an explicit cross-agent wrap).
+Pass a specific piece of work to another WDS agent. This is NOT a session wrap — it is a targeted transfer of one task or artifact to a different agent.
 
 **Usage:** `/handoff [target-agent]`
 **Example:** `/handoff mimir`
 
 > **Handoffs go through Agent Space — never as files on disk.**
-> Writing handoff content to arbitrary files on the hard drive is not a handoff. It is untracked state that other agents cannot reliably find, and it creates noise in the repo. Agent Space is the single source of truth for cross-agent communication.
+> Writing handoff content to arbitrary files is not a handoff. It is untracked state other agents cannot reliably find. Agent Space is the single source of truth for cross-agent communication.
 
 ---
 
@@ -14,34 +14,51 @@ Send a structured handoff to another WDS agent. Does NOT wrap the session — us
 
   <constraints>
     - Derive everything from the conversation. Do NOT ask questions.
-    - No output between steps — only what the steps explicitly say to print.
-    - This is NOT a session wrap. Do not update presence, do not write session-wrap.md.
-    - Handoff MUST be sent to Agent Space. If the curl call fails, warn the user — do not fall back to writing a file.
+    - Do NOT summarize this session. That is a wrap, not a handoff.
+    - Focus only on what the receiving agent needs to start the specific task immediately.
+    - The sub-agent handles all Agent Space delivery. You only compile and show.
   </constraints>
 
-  <step id="1-resolve">
+  <step id="1-compile">
     Determine:
-    - `from_agent` — your current agent_id (e.g. freya-d660de). If not known, use base name (freya).
-    - `target_agent` — from the argument (e.g. mimir). If no argument: infer from conversation context.
-      - Working on a brief being handed to design → freya
-      - Handing a Work Order to implementation → mimir
-      - Handing strategy/brief work → saga
-    - `project` — current project repo name (e.g. sharif-webshop).
+    - `target_agent` — from the argument. If none: infer from context (strategy work → saga, design → freya, implementation → mimir).
+    - `from_agent` — your current agent base name (e.g. freya, saga).
+    - `project` — current project repo name.
 
-    Compose the handoff content — what the receiving agent needs to know to start immediately:
+    Compose the handoff content — what the receiving agent needs to start immediately:
+
     ```
-    ## Context
-    [What was done. What exists and where. Be specific about file paths and state.]
+    ## Task
+    [Single specific task being handed off. What it is, what state it's in, what remains.]
 
-    ## Next:
-    [Single immediately-actionable next task for the receiving agent. Concrete — file, action, criterion.]
+    ## Files
+    [Relevant file paths and what's in them. Be exact.]
+
+    ## Next
+    [Single immediately-actionable next step for the receiving agent.]
     ```
 
-    The `## Next:` line is what the receiving agent's boot flow will surface. Make it precise.
+    This is task context, not session history. If the receiving agent doesn't need to know something to do the task, leave it out.
   </step>
 
-  <step id="2-send">
-    Run this curl command (silent output, capture response):
+  <step id="2-show">
+    Print EXACTLY this block:
+
+    ── Handoff to [target_agent] ─────────────────
+    Task:    [one-line task description]
+    Next:    [the Next line you composed]
+    ──────────────────────────────────────────────
+
+    Then proceed immediately to step 3.
+  </step>
+
+  <step id="3-subagent">
+    Spawn a sub-agent with this exact prompt — substitute the bracketed values:
+
+    ---
+    You are a delivery agent. Your only job is to post a handoff to Agent Space and return the token.
+
+    Send this request:
 
     ```bash
     curl -s -X POST "https://uztngidbpduyodrabokm.supabase.co/functions/v1/agent-messages" \
@@ -52,40 +69,34 @@ Send a structured handoff to another WDS agent. Does NOT wrap the session — us
         "from_agent": "[from_agent]",
         "to_agent": "[target_agent]",
         "project": "[project]",
-        "subject": "Handoff from [from_agent]",
-        "content": "[handoff content — escaped for JSON]",
-        "message_type": "handoff"
+        "message_type": "handoff",
+        "title": "[one-line task description]",
+        "content": "[full handoff content — escaped for JSON]"
       }'
     ```
 
-    Parse the `id` field from the JSON response.
-    Take the first 6 characters of the UUID — this is the handoff token.
+    If the call succeeds: extract the `id` field. Return ONLY the first 6 characters. Nothing else.
 
-    **If the curl call fails or returns an error:**
-    Stop and warn the user:
+    If the call fails or returns an error: return ONLY this text:
+    FAILED: [error message or HTTP status]
+    ---
+
+    Wait for the sub-agent response.
+
+    **If sub-agent returns 6 characters:** print EXACTLY this — nothing before, nothing after:
+    ```
+    /[target_agent] [6chars]
+    ```
+
+    **If sub-agent returns FAILED:** stop and warn the user:
     ```
     ⚠️ Agent Space unreachable — handoff not sent.
-    The handoff content is ready but could not be delivered.
-
-    To fix: check that Agent Space credentials are active.
-    Tip: open Bitwarden and verify the Agent Space API key is present and not expired.
+    Check that Agent Space credentials are active (open Bitwarden → verify Agent Space API key).
 
     Handoff content (copy if needed):
-    [handoff content]
+    [full handoff content]
     ```
-    Do NOT write the handoff to a file on disk. Wait for the user to resolve connectivity.
-  </step>
-
-  <step id="3-show">
-    Print EXACTLY this block — nothing before, nothing after:
-
-    ── Handoff ───────────────────────────────────
-    To:      [target_agent]
-    Next:    [the ## Next: line you composed]
-    Token:   /[target_agent] [6chars]
-    ──────────────────────────────────────────────
-
-    Session continues. The receiving agent boots with `/[target_agent] [6chars]`.
+    Do NOT write the handoff to a file on disk.
   </step>
 
 </handoff-steps>
