@@ -79,10 +79,15 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap �
     ```
 
     **Step C — Confirm:**
-    Return ONLY: `Saved to progress/[target_agent].md`
+    Return ONLY: `done`
     ---
 
-    Print whatever the sub-agent returns. Session continues.
+    Wait for the sub-agent to return. Then print EXACTLY this — nothing before, nothing after:
+    ```
+    /[target_agent]
+    ```
+
+    Session continues.
   </step>
 
 </handoff-steps>

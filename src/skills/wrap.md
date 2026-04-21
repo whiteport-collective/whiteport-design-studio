@@ -157,10 +157,15 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     ```
 
     **Step C — Confirm:**
-    Return ONLY: `Handed off to progress/[target_agent].md`
+    Return ONLY: `done`
     ---
 
-    Print whatever the sub-agent returns. Session complete. Stop.
+    Wait for the sub-agent to return. Then print EXACTLY this — nothing before, nothing after:
+    ```
+    /[target_agent]
+    ```
+
+    Session complete. Stop.
   </step>
 
 </wrap-steps>
