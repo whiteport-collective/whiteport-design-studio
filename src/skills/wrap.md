@@ -162,7 +162,7 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
 
     Wait for the sub-agent to return. Then print EXACTLY this — nothing before, nothing after:
     ```
-    /[target_agent]
+    /[target_agent] progress/[target_agent].md
     ```
 
     Session complete. Stop.

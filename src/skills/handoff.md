@@ -84,7 +84,7 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap â
 
     Wait for the sub-agent to return. Then print EXACTLY this â€” nothing before, nothing after:
     ```
-    /[target_agent]
+    /[target_agent] progress/[target_agent].md
     ```
 
     Session continues.
