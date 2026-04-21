@@ -60,6 +60,7 @@ Based on `brief_level`:
 | Step | Name | Purpose |
 |------|------|---------|
 | 01 | Init | Load context, confirm readiness |
+| 01a | Client Profile | Who the client is — organisation, people, decision culture, internal driver |
 | 02 | Vision | Explore and document project vision |
 | 03 | Positioning | Define market positioning |
 | 05 | Business Model | Define revenue/business model |

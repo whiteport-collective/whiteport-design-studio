@@ -3,7 +3,7 @@ name: 'step-01-init'
 description: 'Welcome user and set expectations for the Product Brief workflow'
 
 # File References
-nextStepFile: './step-02-vision.md'
+nextStepFile: './step-01a-client-profile.md'
 workflowFile: '../workflow.md'
 ---
 
@@ -88,7 +88,7 @@ Fill in:
 Mark Phase 0 / Step 1 complete in `dialog/progress-tracker.md` progress tracker.
 
 ### 3. Present MENU OPTIONS
-Display: "**Select an Option:** [C] Continue to Vision"
+Display: "**Select an Option:** [C] Continue to Client Profile"
 
 #### Menu Handling Logic:
 - IF C: Load, read entire file, then execute {nextStepFile}
