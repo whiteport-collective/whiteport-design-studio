@@ -182,7 +182,7 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     Return ONLY: `done`
     ---
 
-    Wait for the sub-agent to return. Then print EXACTLY this — nothing before, nothing after:
+    Wait for the sub-agent to return. Then print EXACTLY these two lines — the label, then the command in a code block:
     → Open a new chat and run:
     ```
     /[target_agent] progress/[target_agent].md
