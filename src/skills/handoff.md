@@ -5,6 +5,9 @@ Send a structured handoff to another WDS agent. Does NOT wrap the session — us
 **Usage:** `/handoff [target-agent]`
 **Example:** `/handoff mimir`
 
+> **Handoffs go through Agent Space — never as files on disk.**
+> Writing handoff content to arbitrary files on the hard drive is not a handoff. It is untracked state that other agents cannot reliably find, and it creates noise in the repo. Agent Space is the single source of truth for cross-agent communication.
+
 ---
 
 <handoff-steps>
@@ -13,6 +16,7 @@ Send a structured handoff to another WDS agent. Does NOT wrap the session — us
     - Derive everything from the conversation. Do NOT ask questions.
     - No output between steps — only what the steps explicitly say to print.
     - This is NOT a session wrap. Do not update presence, do not write session-wrap.md.
+    - Handoff MUST be sent to Agent Space. If the curl call fails, warn the user — do not fall back to writing a file.
   </constraints>
 
   <step id="1-resolve">
@@ -56,6 +60,20 @@ Send a structured handoff to another WDS agent. Does NOT wrap the session — us
 
     Parse the `id` field from the JSON response.
     Take the first 6 characters of the UUID — this is the handoff token.
+
+    **If the curl call fails or returns an error:**
+    Stop and warn the user:
+    ```
+    ⚠️ Agent Space unreachable — handoff not sent.
+    The handoff content is ready but could not be delivered.
+
+    To fix: check that Agent Space credentials are active.
+    Tip: open Bitwarden and verify the Agent Space API key is present and not expired.
+
+    Handoff content (copy if needed):
+    [handoff content]
+    ```
+    Do NOT write the handoff to a file on disk. Wait for the user to resolve connectivity.
   </step>
 
   <step id="3-show">
