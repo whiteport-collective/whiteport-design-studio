@@ -107,7 +107,6 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
     Spec refs: [list]
     Ready for your review."
 
-    Post work order update to Design Space if applicable.
   </step>
 
 </workflow>

@@ -98,8 +98,6 @@ The PRD folder is the machine's memory of what was agreed. Users never need to o
 
     Invoke `agents/prd-writer.md` Mode C.
 
-    Post work order to Design Space pointing to the feedback file.
-
     "[NNN]-[NN]-[slug].xml written. [N] items. Mimir brief ready."
   </step>
 

@@ -120,6 +120,14 @@ Each module contains:
 | 17 | [Usability Testing](../module-17-usability-testing/module-17-usability-testing-overview.md) | Freya | 45 min |
 | 18 | [Product Evolution](../module-18-product-evolution/module-18-product-evolution-overview.md) | Freya | 30 min |
 
+### Advanced — Optional
+
+| Module | Title | Agent | Time |
+|--------|-------|-------|------|
+| 19 | [Agent Coordination](../module-19-agent-coordination/module-19-overview.md) | All | 45 min |
+
+*Module 19 goes deeper on multi-agent handoffs — how `_progress/` files work, what good handoffs contain, and how to recover when a chain breaks. Skip if you're comfortable with single-phase projects.*
+
 ---
 
 ## Learning Paths

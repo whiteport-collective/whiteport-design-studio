@@ -86,7 +86,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
   <step id="2-scan">
     Scan workspace for WDS projects:
     - Find repos with `_progress/wds-project-outline.yaml` or `_progress/00-design-log.md`
-    - Skip system repos (bmad-method-wds-expansion, whiteport-design-studio, design-space)
+    - Skip system repos (bmad-method-wds-expansion, whiteport-design-studio)
     - For each project: read design log, note phase status and in-progress work
   </step>
 

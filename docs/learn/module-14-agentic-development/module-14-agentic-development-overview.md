@@ -229,6 +229,9 @@ Understanding what the agent produces and which technology fits your needs
 ### [Lesson 5: Git Discipline](lesson-05-git-discipline.md)
 Keeping your work safe, organized, and shareable
 
+### [Lesson 6: Multi-Agent Sessions](lesson-06-multi-agent-sessions.md)
+How Saga, Freya, and Mimir hand off work to each other through `_progress/` files
+
 ---
 
 ## Tutorial

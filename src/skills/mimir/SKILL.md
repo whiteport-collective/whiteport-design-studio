@@ -80,7 +80,7 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
   <step id="2-scan">
     Scan workspace for WDS projects:
     - Find repos with `_progress/wds-project-outline.yaml` or `design-process/`
-    - Skip system repos (bmad-method-wds-expansion, whiteport-design-studio, design-space)
+    - Skip system repos (bmad-method-wds-expansion, whiteport-design-studio)
   </step>
 
   <step id="3-select">

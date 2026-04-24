@@ -1,7 +1,7 @@
 {
   "$schema": "./sync-manifest.schema.json",
   "version": "1.4.0",
-  "description": "Controls which agent instructions are synced to Design Space",
+  "description": "Controls which agent instructions are distributed with WDS releases",
   "updated": "2026-04-11",
 
   "channels": {

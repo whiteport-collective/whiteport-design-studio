@@ -301,43 +301,42 @@ E-PRD/Design-Deliveries/
 
 ---
 
-## Step 6: Handoff to Development (2 min)
+## Step 6: BMAD Handover (3 min)
 
-### Prepare handoff message:
+### Inject specs into PRD:
 
-**Freya generates:**
-```markdown
-# Design Handoff: DD01-User-Registration
+Run `/design-delivery` to link your page specs directly into the BMAD PRD — so coding agents find them automatically when they build.
 
-## For: Development
-## From: Freya (Design)
-## Date: [Today]
+**You say:**
+> `/design-delivery owner-signup`
 
-## Delivery Package
-Location: E-PRD/Design-Deliveries/DD01-User-Registration/
-
-## What's Included
-- Complete specifications for 3 pages
-- Visual prototypes (HTML)
-- Component documentation
-- Acceptance criteria (47 items)
-
-## Dependencies Needed
-- Supabase Auth configured
-- User table in database
-- Email service (optional)
-
-## Priority
-This is the primary user acquisition flow.
-Recommend implementing before other scenarios.
-
-## Questions?
-Specifications should be complete. If anything is unclear,
-the specification needs updating rather than verbal clarification.
-
----
-Design phase complete. Ready for implementation.
+**Freya reports:**
 ```
+── Design Delivery ───────────────────────────
+PRD: _bmad-output/docs/prd.md
+
+Delivered:
+  ✓  owner-signup → 3.1 User Registration
+
+PRD updated. Coding agents will now find design specs automatically.
+─────────────────────────────────────────────
+```
+
+Freya also writes `_progress/mimir.md` — the handoff file for the coding agent.
+
+### Wake the coding agent:
+
+Open a new session and run:
+
+```
+/mimir
+```
+
+Mimir reads the handoff file, opens the PRD, follows the design reference, and starts building from your spec.
+
+> **Why this matters:** Without this step, the coding agent builds from the PRD outline alone — missing all the detail in your page specs. `/design-delivery` makes the specs part of the PRD so nothing is lost in translation.
+
+See [Lesson 2: BMAD Handover](lesson-02-bmad-handover.md) for the full picture.
 
 ---
 

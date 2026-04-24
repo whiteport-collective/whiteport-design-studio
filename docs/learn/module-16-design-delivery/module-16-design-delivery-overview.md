@@ -118,6 +118,10 @@ You design the next flow while development builds the current one. Testing valid
 
 The validation checklist, the Freya audit, creating the DD file and test scenario, the handoff dialog, and what makes a delivery ready.
 
+### Lesson 2: BMAD Handover
+
+How `/design-delivery` connects your page specs to the BMAD PRD so coding agents find them automatically — and how the agent handoff file bridges design sessions to build sessions.
+
 ---
 
 ## Common Mistakes
@@ -157,6 +161,9 @@ For one completed flow:
 
 ### [Lesson 1: Validation and Packaging](lesson-01-validation-packaging.md)
 Ensuring everything is complete and packaging for handoff
+
+### [Lesson 2: BMAD Handover](lesson-02-bmad-handover.md)
+Connecting design specs to the PRD so coding agents build from your spec, not from guesswork
 
 ---
 
