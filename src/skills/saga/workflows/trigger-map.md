@@ -138,7 +138,7 @@ Transforms the Product Brief's target users into psychological profiles — driv
         - Product Brief context (business goals, value proposition)
       </input>
       <output>
-        `{output_folder}/B-Trigger-Map/trigger-map.md`
+        `{output_folder}/B-Trigger-Map/00-trigger-map.md`
       </output>
     </subagent>
 
@@ -164,7 +164,8 @@ Transforms the Product Brief's target users into psychological profiles — driv
 
     IF yes:
       Invoke `../shared/agents/persona-page.md` for each archetype.
-      "Persona pages written to A-Product-Brief/personas/."
+      Output to `{output_folder}/B-Trigger-Map/` with naming: `NN-persona-[firstname]-the-[archetype].md` (numbered by priority, starting at 02).
+      "Persona pages written to B-Trigger-Map/."
 
     Print:
     "Trigger Map complete. Freya can now build scenarios from this — run /freya when ready."

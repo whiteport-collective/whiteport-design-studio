@@ -45,7 +45,12 @@ The Product Brief is a suite of documents. The core document is always produced.
 **Workflow:** `workflows/trigger-map.md`
 **Prerequisite:** `product-brief.md` must exist
 
-**Deliverable:** `{output_folder}/B-Trigger-Map/trigger-map.md`
+**Deliverables** (in `{output_folder}/B-Trigger-Map/`):
+
+| File | What |
+|---|---|
+| `00-trigger-map.md` | Business goals, target groups, driving forces, Feature Impact Analysis, Mermaid diagram |
+| `NN-persona-[firstname]-the-[archetype].md` | Full persona profile per target group, numbered by priority (02, 03, 04…) |
 
 Maps the brief's target users into psychological profiles: driving forces, trigger points, behavioral patterns, and user archetypes with alliterative names (e.g., Harriet the Hairdresser).
 

@@ -41,7 +41,6 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
       <input>Product Brief + Trigger Map</input>
       <output>
         - Site/app type classification
-        - Recommended scenario mode (Dialog / Suggest / Dream)
         - Suggested scenario list with archetype mapping
         - Estimated page count
       </output>
@@ -52,7 +51,7 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
 
   <!-- ═══════════════════════════════════════════
        SCOPE
-       Determine how many scenarios, which mode
+       Determine how many scenarios
   ═══════════════════════════════════════════ -->
 
   <step id="scope">
@@ -64,15 +63,14 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
     [N] scenarios, one for each archetype:
     [list archetypes and proposed scenario titles]
 
-    Mode: [Dialog/Suggest/Dream] — [one-line reason]"
+    I'll walk through these with you one at a time. Does this feel right? Anything to add or adjust before I start?"
 
     <mode-logic>
-      Dialog  → large products (100+ pages), present one scenario at a time, discuss scope before each
-      Suggest → medium products (20-100 pages), present full list, confirm, then walk through each
-      Dream   → simple products (<20 pages), generate all outlines, present for review
+      Dialog  → DEFAULT — walk through each scenario conversationally, one at a time
+      Suggest → medium products (20-100 pages), present full list then walk through each — only switch if user asks
+      Dream   → simple products (<20 pages), generate all outlines up front — only switch if user asks
+      Never announce or recommend Suggest or Dream. Only explain them if the user asks to change mode.
     </mode-logic>
-
-    Ask: "Does this feel right? Anything to add or adjust before I start outlining?"
 
     Wait for confirmation. Adjust if needed.
     → go to <step id="scenario-loop">
