@@ -88,7 +88,7 @@ Hand off completed WDS page specs to the BMAD PRD so coding agents find them aut
   </step>
 
   <step id="5-handoff">
-    Write a handoff file for Mimir at `_progress/mimir.md` so Mimir knows design is ready.
+    Write a handoff file for Mimir at `_progress/mimir-state.md` so Mimir knows design is ready.
 
     Content:
     ```

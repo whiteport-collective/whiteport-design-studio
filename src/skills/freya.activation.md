@@ -11,7 +11,7 @@
 
 ### 0. Check for Session State
 
-Look for `_bmad/_state/freya.md` in the current project repo.
+Look for `_progress/freya-state.md` in the current project repo.
 - If found: show previous session summary and ask to resume or start fresh
 - If not found: continue to Introduction
 
