@@ -47,12 +47,14 @@ The Product Brief is a suite of documents. The core document is always produced.
 
 **Deliverables** (in `{output_folder}/B-Trigger-Map/`):
 
-| File | What |
-|---|---|
-| `00-trigger-map.md` | Business goals, target groups, driving forces, Feature Impact Analysis, Mermaid diagram |
-| `NN-persona-[firstname]-the-[archetype].md` | Full persona profile per target group, numbered by priority (02, 03, 04…) |
+| File | What | When |
+|---|---|---|
+| `01-business-goals.md` | Vision + 3 goals × 3 SMART objectives | After Workshop 1 |
+| `NN-persona-[firstname]-the-[archetype].md` | Persona profile + driving forces (positive/negative, FIA scored), numbered by priority (02, 03, 04…) | After each persona workshop |
+| `00-trigger-map.md` | Four-layer poster: Business Goals → Product → Target Groups → Driving Forces | After all personas confirmed |
+| `feature-impact.md` | Features scored by strategic impact, derived from driving forces | Generated autonomously by Saga |
 
-Maps the brief's target users into psychological profiles: driving forces, trigger points, behavioral patterns, and user archetypes with alliterative names (e.g., Harriet the Hairdresser).
+Five workshops build the map: (1) Business Goals, (2–4) one persona per target group with driving forces, (5) Feature Impact derived autonomously. Each workshop produces its document before the next begins.
 
 ---
 
@@ -155,8 +157,10 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
 |---|---|---|
 | Material Analyzer | `agents/material-analyzer.md` | Reads existing docs, extracts data, identifies gaps before discovery |
 | Brief Writer | `agents/brief-writer.md` | Generates the Product Brief suite from collected discovery data |
-| Trigger Writer | `agents/trigger-writer.md` | Generates the Trigger Map from archetype data |
-| Persona Page | `../shared/agents/persona-page.md` | Generates a visual persona page per archetype |
+| Goals Writer | `agents/goals-writer.md` | Writes the Business Goals document after Workshop 1 |
+| Persona Writer | `agents/persona-writer.md` | Writes one persona document with driving forces — called per persona, immediately after that workshop |
+| Trigger Map Writer | `agents/trigger-writer.md` | Writes the four-layer poster after all personas are confirmed |
+| Feature Impact Writer | `agents/feature-impact-writer.md` | Generates Feature Impact Analysis autonomously from driving force data |
 
 ---
 
