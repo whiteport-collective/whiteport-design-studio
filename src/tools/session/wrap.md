@@ -147,6 +147,9 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     ---
 
     Print whatever the subagent returns.
+
+    **If the subagent fails at any step:** complete the remaining steps manually.
+    Failure does not excuse skipping the final output.
   </step>
 
   <step id="4-handoff" condition="only if target-agent argument was given">
@@ -188,7 +191,12 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     /[target_agent] progress/[target_agent].md
     ```
 
+    **If the sub-agent fails:** write the handoff file manually, then still output the command block above.
+
     Session complete. Do not respond to further input.
+
+    **The command block above is always the last thing output. Nothing is printed after it —
+    no summary, no explanation, no confirmation. The block is the signal that the wrap is complete.**
   </step>
 
 </wrap-steps>
