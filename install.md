@@ -10,13 +10,19 @@ skills:
   freya: "1.0.0"
   mimir: "1.0.0"
   feedback: "1.0.0"
-  wireframe: "0.3.0"
 
-shared:
+tools:
+  wireframe: "1.0.0"
   sync: "1.0.0"
+  git: "1.0.0"
   persona-page: "1.0.0"
   prd-writer: "1.0.0"
   prd-workflow: "1.0.0"
+
+rendering:
+  excalidraw: "0.3.0"
+  pencil: "0.1.0"
+  nanobanana: "0.1.0"
 ---
 
 # Install Whiteport Design Studio
@@ -37,24 +43,45 @@ Store the result as `{home}`. All WDS files install under `{home}/.claude/`.
 
 ---
 
-## Step 2 — Prepare directories
+## Step 2 — Check for existing installation
+
+Check if `{home}/.claude/wds/` exists.
+
+**If it exists — check version:**
+
+Read `{home}/.claude/wds/install.md` (if it exists).
+
+IF `install.md` is missing OR has no `wds-version` in frontmatter:
+> ⚠️ Found an older WDS installation at `{home}/.claude/wds/` that is not version-managed.
+> It must be removed before installing the new version.
+> Remove it and continue? (yes / no)
+- If yes: delete `{home}/.claude/wds/` and any old WDS command files from `{home}/.claude/commands/`, then continue
+- If no: stop. "Remove `{home}/.claude/wds/` manually, then run the installer again."
+
+IF `install.md` exists and has `wds-version`:
+> Found WDS v[installed-version]. This installer is v[this-version].
+> Updating to latest — continuing.
+Skip to Step 4.
+
+**If it does not exist:** continue to Step 3.
+
+---
+
+## Step 3 — Prepare and install
 
 Create these directories if they do not exist:
 - `{home}/.claude/`
 - `{home}/.claude/commands/`
 
----
-
-## Step 3 — Install or update WDS
-
-Check if `{home}/.claude/wds/` exists and is a git repository.
-
-**Fresh install:**
+Clone the WDS repo:
 ```bash
 git clone https://github.com/whiteport-collective/whiteport-design-studio.git {home}/.claude/wds/
 ```
 
-**Already installed — update:**
+---
+
+## Step 4 — Pull latest
+
 ```bash
 git -C {home}/.claude/wds/ pull
 ```
@@ -63,7 +90,20 @@ Read `{home}/.claude/wds/install.md` frontmatter and note the installed version.
 
 ---
 
-## Step 4 — Write command files
+## Step 5 — Write wds-config.yaml
+
+Write `{home}/.claude/wds-config.yaml` if it does not already exist:
+
+```yaml
+sync-source: https://github.com/whiteport-collective/whiteport-design-studio
+branch: main
+```
+
+If it already exists: leave it unchanged. The user may have customised the sync source.
+
+---
+
+## Step 6 — Write command files
 
 Write one file per agent to `{home}/.claude/commands/`. Replace `{home}` with the actual expanded path from Step 1.
 
@@ -92,15 +132,16 @@ Read the file at {home}/.claude/wds/src/skills/mimir/SKILL.md and follow the ins
 ```
 # WDS Sync
 WDS base: {home}/.claude/wds
-Read the file at {home}/.claude/wds/src/skills/shared/sync.md and follow the instructions exactly.
+Read the file at {home}/.claude/wds/src/tools/sync/SKILL.md and follow the instructions exactly.
 ```
 
 ---
 
-## Step 5 — Verify
+## Step 7 — Verify
 
 Confirm:
 - `{home}/.claude/wds/` exists and contains the repo
+- `{home}/.claude/wds-config.yaml` exists
 - `{home}/.claude/commands/` contains: `saga.md`, `freya.md`, `mimir.md`, `sync.md`
 
 Print:
@@ -109,12 +150,13 @@ Print:
 ✓ Whiteport Design Studio installed
   Version: [wds-version from install.md frontmatter]
   Location: {home}/.claude/wds/
+  Sync source: [from wds-config.yaml]
   Commands: /saga  /freya  /mimir  /sync
 ```
 
 ---
 
-## Step 6 — Project setup
+## Step 8 — Project setup
 
 Ask:
 

@@ -61,7 +61,7 @@ Five workshops build the map: (1) Business Goals, (2–4) one persona per target
 ### `prd` — Product Requirements
 
 **Trigger:** `/PRD`, after Platform Requirements are complete, or when a feature is ready to build
-**Workflow:** `../shared/workflows/prd.md`
+**Workflow:** `../../tools/prd-workflow/SKILL.md`
 
 Two outputs:
 - `E-Development/000-PRD.md` — master technical document, written once after Product Brief
@@ -77,7 +77,7 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
 
   <step id="0-sync">
     Silently sync WDS skills before doing anything else.
-    Read `~/.claude/wds/src/skills/shared/sync.md` and run it in startup mode.
+    Read `~/.claude/wds/src/tools/sync/SKILL.md` and run it in startup mode.
     If WDS is not installed: print install instructions and stop.
     If updates were pulled: note them — report at end of activation.
     Continue regardless of sync outcome.

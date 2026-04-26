@@ -74,7 +74,7 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
   <step id="0-sync">
     Silently sync WDS skills before doing anything else.
-    Read `~/.claude/wds/src/skills/shared/sync.md` and run it in startup mode.
+    Read `~/.claude/wds/src/tools/sync/SKILL.md` and run it in startup mode.
     If WDS is not installed: print install instructions and stop.
     If updates were pulled: note them — report at end of activation.
     Continue regardless of sync outcome.
@@ -163,7 +163,7 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
 | Agent | File | Purpose |
 |---|---|---|
-| PRD Writer | `../shared/agents/prd-writer.md` | Writes formal PRD documents from Work Orders |
+| PRD Writer | `../../tools/prd-writer/SKILL.md` | Writes formal PRD documents from Work Orders |
 | Tech Auditor | `agents/tech-auditor.md` | Reads codebase, produces 000-tech-audit.md |
 | Tester | `agents/tester.md` | Runs the project's automated test suite after each commit — catches regressions immediately |
 | Browser Verifier | `agents/browser-verifier.md` | Opens live page, verifies each requirement passes visually and functionally |

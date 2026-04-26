@@ -1,13 +1,13 @@
 ---
 name: wds-sync
 version: "1.0.0"
-description: Syncs all WDS skills from GitHub. Called automatically by agents on startup, or directly by the user at any time.
+description: Syncs all WDS skills from the configured source. Called automatically by agents on startup, or directly by the user at any time.
 agents: [saga, freya, mimir]
 ---
 
 # WDS Sync
 
-Keeps WDS skills current against the GitHub repository.
+Keeps WDS skills current against the configured source repository.
 
 ---
 
@@ -35,16 +35,25 @@ IF not found:
 
 Stop.
 
-### 2 — Read local version
+### 2 — Read config
 
-Read the frontmatter of `{home}/.claude/wds/install.md`.
-Note current installed `wds-version` and per-skill versions.
+Read `{home}/.claude/wds-config.yaml`.
+
+```yaml
+sync-source: https://github.com/whiteport-collective/whiteport-design-studio
+branch: main
+```
+
+If the file does not exist: use defaults above.
+Store `sync-source` and `branch` for use in step 3.
+
+Read frontmatter of `{home}/.claude/wds/install.md` — note current `wds-version`.
 
 ### 3 — Check for updates
 
 ```bash
 git -C {home}/.claude/wds/ fetch origin
-git -C {home}/.claude/wds/ log HEAD..origin/main --oneline
+git -C {home}/.claude/wds/ log HEAD..origin/{branch} --oneline
 ```
 
 IF no changes:
@@ -59,12 +68,12 @@ IF changes found: continue to step 4.
 git -C {home}/.claude/wds/ pull
 ```
 
-Read updated `wds-manifest.yaml`. Note new version.
+Read updated `install.md` frontmatter. Note new `wds-version`.
 
 ### 5 — Verify command files
 
 Check that `{home}/.claude/commands/` has: `saga.md`, `freya.md`, `mimir.md`, `sync.md`.
-If any are missing: recreate them following install.md Step 4.
+If any are missing: recreate them following install.md Step 6.
 
 ### 6 — Report
 
@@ -73,6 +82,7 @@ If any are missing: recreate them following install.md Step 4.
 
 **Direct call:**
 > WDS synced.
+> Source: [sync-source]
 > [list of commit messages pulled]  —or—  Already up to date.
 > Version: [version]
 > Commands: /saga ✓  /freya ✓  /mimir ✓  /sync ✓

@@ -80,7 +80,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
 
   <step id="0-sync">
     Silently sync WDS skills before doing anything else.
-    Read `~/.claude/wds/src/skills/shared/sync.md` and run it in startup mode.
+    Read `~/.claude/wds/src/tools/sync/SKILL.md` and run it in startup mode.
     If WDS is not installed: print install instructions and stop.
     If updates were pulled: note them — report at end of activation.
     Continue regardless of sync outcome.
@@ -213,7 +213,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
 | Design Reviewer | `agents/design-reviewer.md` | Reviews built page against spec and wireframe |
 | Token Extractor | `agents/token-extractor.md` | Extracts design tokens from completed pages |
 | Mimir Brief | `agents/mimir-brief.md` | Writes Mimir Work Order from approved specs or feedback triage |
-| Persona Page | `../shared/agents/persona-page.md` | Generates visual persona page from archetype data |
+| Persona Page | `../../tools/persona-page/SKILL.md` | Generates visual persona page from archetype data |
 
 ---
 
