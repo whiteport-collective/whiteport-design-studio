@@ -20,6 +20,10 @@ This module goes deeper on that system: what good handoffs contain, how to troub
 
 How WDS agents hand off work through files. The wrap, handoff, and start workflow. What good handoffs contain and why they work.
 
+### Lesson 2: Agent Space & Session Tokens
+
+How agents resume across conversation windows using 6-character tokens. What `wds-config.yaml` controls. Org-level Agent Space setup. Troubleshooting tokens that don't resolve.
+
 ---
 
 ## When You Need This
@@ -35,6 +39,9 @@ How WDS agents hand off work through files. The wrap, handoff, and start workflo
 
 ### [Lesson 1: The `_progress/` System](lesson-01-progress-system.md)
 Built-in handoffs — no extra setup required
+
+### [Lesson 2: Agent Space & Session Tokens](lesson-02-agent-space.md)
+Resume across conversation windows · org config · troubleshooting
 
 ---
 

@@ -1,6 +1,6 @@
 # Module 02: Installation & Setup
 
-## Lesson 4: WDS Project Initialization
+## Lesson 4: WDS Initialization
 
 **Install WDS and activate your first agent**
 
@@ -8,101 +8,129 @@
 
 ## What You'll Do
 
-- Install WDS via the CLI installer
+- Install WDS via a single prompt to Claude
 - Understand the folder structure
 - Activate an agent and start working
 
-**Time:** 10-15 minutes
+**Time:** 5-10 minutes
 
 ---
 
 ## Step 1: Install WDS
 
-Navigate to your project folder in the terminal:
+Open a new Claude session (Claude Code, Claude.ai, or any Claude IDE integration) and type exactly:
 
-```bash
-cd ~/Projects/your-project-name  # Mac/Linux
-cd C:\Projects\your-project-name # Windows
+```
+Install whiteport-design-studio from GitHub for me
 ```
 
-Run the installer:
+Claude will:
+1. Fetch `install.md` from the WDS GitHub repo
+2. Clone WDS to `~/.claude/wds/`
+3. Write your config to `~/.claude/wds-config.yaml`
+4. Create slash command files in `~/.claude/commands/`
 
-```bash
-npx whiteport-design-studio install
+When done you'll see:
+
+```
+✓ Whiteport Design Studio installed
+  Version: 1.0.0
+  Location: ~/.claude/wds/
+  Commands: /saga  /freya  /mimir  /sync
 ```
 
-The installer will guide you through:
-- **Project type** — What kind of product you're designing
-- **Experience level** — Beginner, Intermediate, or Expert
-- **IDE configuration** — Sets up your AI IDE automatically
-
-**✅ Checkpoint:** Installer completes, `_bmad/wds/` folder appears in your project
+**✅ Checkpoint:** You see the confirmation above with four commands listed.
 
 ---
 
 ## Step 2: Understand the Structure
 
-After installation, your project has:
+WDS installs to your home directory, not your project:
 
 ```
-your-project/
-├── _bmad/wds/               ← WDS system files
-│   ├── agents/              ← Agent files (.md)
-│   │   ├── saga-analyst.md
-│   │   ├── freya-ux.md
-│   ├── workflows/           ← Phase workflows
-│   ├── data/                ← Standards, frameworks
-│   ├── gems/                ← Reusable prompt components
-│   ├── templates/           ← Document templates
-│   └── config.yaml          ← Your project configuration
-├── _wds-learn/              ← Learning material (optional)
-├── docs/                    ← Design output (created by agents)
-│   ├── A-Product-Brief/
-│   ├── B-Trigger-Map/
-│   ├── C-UX-Scenarios/
-│   ├── D-Design-System/
-│   ├── E-PRD/
-│   └── _progress/
-└── .claude/instructions.md  ← IDE configuration
+~/.claude/
+├── wds/                    ← WDS repo (git clone)
+│   ├── src/skills/         ← Agent skill files
+│   ├── src/tools/          ← Tool skill files
+│   └── install.md          ← Version registry
+├── wds-config.yaml         ← Your config (sync source, Agent Space)
+└── commands/
+    ├── saga.md             ← /saga command
+    ├── freya.md            ← /freya command
+    ├── mimir.md            ← /mimir command
+    └── sync.md             ← /sync command
 ```
 
-**Key insight:** `_bmad/wds/` contains the methodology. `docs/` is where your design work lives.
+Your **project folder** gets a `_progress/` folder created automatically the first time an agent wraps a session.
+
+**Key insight:** WDS lives in `~/.claude/` — one installation, available in every project.
 
 ---
 
 ## Step 3: Activate an Agent
 
-WDS has three specialized agents:
+WDS has three specialized agents activated by slash commands:
 
-| Agent | What they do | When to use |
-|-------|-------------|-------------|
-| **Saga** | Business & Product Analyst | Product Brief, Trigger Mapping |
-| **Freya** | UX/UI Designer | Scenarios, UX Design, Visual Design |
+| Agent | Command | Role |
+|-------|---------|------|
+| **Saga** | `/saga` | Business & Product Analyst — Product Brief, Trigger Map |
+| **Freya** | `/freya` | UX Designer — Scenarios, Design Loop |
+| **Mimir** | `/mimir` | Builder — Implements from specs |
 
 ### Start with Saga
 
-For a new project, start with Saga to create your Product Brief:
-
-Tell your AI IDE:
+For a new project, open a Claude session in your project folder and run:
 
 ```
-Read and activate the agent in _bmad/wds/agents/saga-analyst.md
+/saga
 ```
 
-Saga will:
-- Introduce herself
-- Scan your project for existing WDS work
-- Guide you to the right starting point
+Saga will scan your project for existing WDS work and guide you to the right starting point.
 
-**✅ Checkpoint:** Saga responds and welcomes you!
+**✅ Checkpoint:** Saga responds and greets you!
+
+---
+
+## Step 4: Configuration (Optional)
+
+WDS stores settings at `~/.claude/wds-config.yaml`. You can edit this at any time:
+
+```yaml
+sync-source: https://github.com/whiteport-collective/whiteport-design-studio
+branch: main
+
+agent-space:
+  url: https://...
+  anon-key: ...
+  agents:
+    saga: saga
+    freya: freya
+    mimir: mimir
+```
+
+**`sync-source`** — where updates are pulled from. Change if your org forks WDS.
+
+**`agent-space`** — the session handoff backend. Agents use this to pass context between conversations via tokens. See [Module 19](../module-19-agent-coordination/module-19-overview.md) for details.
+
+### Org Install
+
+If your team has a shared WDS configuration, your admin will give you a one-line install command:
+
+```
+Install whiteport-design-studio from GitHub, use org config from https://your-org.com/wds-config.yaml
+```
+
+This replaces the default config with your org's Agent Space and sync source.
 
 ---
 
 ## Troubleshooting
 
-**Issue:** `npx` command not found → Install Node.js from <https://nodejs.org>
-**Issue:** Installer fails → Make sure you're in your project folder
-**Issue:** Agent file not found → Check `_bmad/wds/agents/` folder exists
+**Slash commands not working** — Check `~/.claude/commands/` contains `saga.md`, `freya.md`, `mimir.md`, `sync.md`. If missing, re-run the install prompt.
+
+**Old WDS installation found** — The installer will ask if you want to remove it. Say yes to proceed with the fresh install.
+
+**Agent says "WDS not installed"** — Run `/sync` to trigger a check, or re-run the install prompt.
 
 ---
 
@@ -124,7 +152,6 @@ You've completed Module 02: Installation & Setup!
 ## What's Next?
 
 - **[Module 03: Alignment & Signoff](../module-03-alignment-signoff/module-03-overview.md)**
-- **[WDS Training Course](../00-course-overview/00-course-overview.md)**
 - **Ask Saga:** "What should I do next?"
 
 ---
