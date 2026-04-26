@@ -72,6 +72,14 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
 <activation>
 
+  <step id="0-sync">
+    Silently sync WDS skills before doing anything else.
+    Read `~/.claude/wds/src/skills/shared/sync.md` and run it in startup mode.
+    If WDS is not installed: print install instructions and stop.
+    If updates were pulled: note them — report at end of activation.
+    Continue regardless of sync outcome.
+  </step>
+
   <step id="1-state">
     Check for `_progress/mimir-state.md` in the current project repo.
     If found: show summary, offer resume or fresh start.
@@ -81,6 +89,7 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
     Scan workspace for WDS projects:
     - Find repos with `_progress/wds-project-outline.yaml` or `_progress/00-design-log.md`
     - Skip system repos (bmad-method-wds-expansion, whiteport-design-studio)
+    - Also check current directory for design process folders (A-Product-Brief/ through E-Development/) and any context documents at repo root (.md files, briefs, meeting notes)
   </step>
 
   <step id="3-select">

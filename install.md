@@ -1,0 +1,138 @@
+---
+name: wds-install
+description: Whiteport Design Studio installer. Fetch this file and follow it to install WDS globally.
+---
+
+# Install Whiteport Design Studio
+
+You are installing Whiteport Design Studio (WDS) — a multi-agent UX and product design methodology.
+
+Follow these steps in order. Do not skip any step.
+
+---
+
+## Step 1 — Detect home directory
+
+Determine the platform and home directory:
+- Mac/Linux: run `echo $HOME`
+- Windows: run `echo %USERPROFILE%`
+
+Store the result as `{home}`. All WDS files install under `{home}/.claude/`.
+
+---
+
+## Step 2 — Prepare directories
+
+Create these directories if they do not exist:
+- `{home}/.claude/`
+- `{home}/.claude/commands/`
+
+---
+
+## Step 3 — Install or update WDS
+
+Check if `{home}/.claude/wds/` exists and is a git repository.
+
+**Fresh install:**
+```bash
+git clone https://github.com/whiteport-collective/whiteport-design-studio.git {home}/.claude/wds/
+```
+
+**Already installed — update:**
+```bash
+git -C {home}/.claude/wds/ pull
+```
+
+Read `{home}/.claude/wds/wds-manifest.yaml` and note the installed version.
+
+---
+
+## Step 4 — Write command files
+
+Write one file per agent to `{home}/.claude/commands/`. Replace `{home}` with the actual expanded path from Step 1.
+
+**`saga.md`**
+```
+# Saga — WDS Strategic Analyst
+WDS base: {home}/.claude/wds/src/skills/saga
+Read the file at {home}/.claude/wds/src/skills/saga/SKILL.md and follow the instructions exactly. Resolve all relative file references (workflows/, agents/, references/) against the WDS base path above.
+```
+
+**`freya.md`**
+```
+# Freya — WDS UX Designer
+WDS base: {home}/.claude/wds/src/skills/freya
+Read the file at {home}/.claude/wds/src/skills/freya/SKILL.md and follow the instructions exactly. Resolve all relative file references (workflows/, agents/, references/) against the WDS base path above.
+```
+
+**`mimir.md`**
+```
+# Mimir — WDS Implementation Agent
+WDS base: {home}/.claude/wds/src/skills/mimir
+Read the file at {home}/.claude/wds/src/skills/mimir/SKILL.md and follow the instructions exactly. Resolve all relative file references (workflows/, agents/, references/) against the WDS base path above.
+```
+
+**`sync.md`**
+```
+# WDS Sync
+WDS base: {home}/.claude/wds
+Read the file at {home}/.claude/wds/src/skills/shared/sync.md and follow the instructions exactly.
+```
+
+---
+
+## Step 5 — Verify
+
+Confirm:
+- `{home}/.claude/wds/` exists and contains the repo
+- `{home}/.claude/commands/` contains: `saga.md`, `freya.md`, `mimir.md`, `sync.md`
+
+Print:
+
+```
+✓ Whiteport Design Studio installed
+  Version: [wds-version from manifest]
+  Location: {home}/.claude/wds/
+  Commands: /saga  /freya  /mimir  /sync
+```
+
+---
+
+## Step 6 — Project setup
+
+Ask:
+
+> Which project repo should I set up the design process folder in?
+> Give me the path, or say "skip" to do it later.
+
+**If a path is given:**
+- Check if `_progress/` exists in that path
+- If not: create `_progress/wds-project-outline.yaml` with the starter template below
+- Print: "✓ Design process folder ready. Run /saga to start."
+
+**If skipped:**
+- Print: "✓ WDS ready. Navigate to a project repo and run /saga."
+
+---
+
+## Starter `wds-project-outline.yaml`
+
+```yaml
+wds-version: "1.0.0"
+project: ""
+created: "{today}"
+rendering-tool: excalidraw
+
+phases:
+  product-brief: not-started
+  trigger-map: not-started
+  ux-scenarios: not-started
+  ux-design: not-started
+  development: not-started
+
+output-folder: docs
+```
+
+---
+
+*Whiteport Design Studio — https://github.com/whiteport-collective/whiteport-design-studio*

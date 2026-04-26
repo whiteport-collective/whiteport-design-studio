@@ -1,0 +1,20 @@
+wds-version: "1.0.0"
+released: "2026-04-26"
+repo: "https://github.com/whiteport-collective/whiteport-design-studio"
+
+# Version registry for all WDS skills.
+# Agents read this on startup to check if their skills are current.
+# Sync compares local version against GitHub version and pulls only what changed.
+
+skills:
+  saga: "1.0.0"
+  freya: "1.0.0"
+  mimir: "1.0.0"
+  feedback: "1.0.0"
+  wireframe: "0.3.0"
+
+shared:
+  sync: "1.0.0"
+  persona-page: "1.0.0"
+  prd-writer: "1.0.0"
+  prd-workflow: "1.0.0"
