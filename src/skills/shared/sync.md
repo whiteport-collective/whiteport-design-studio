@@ -35,10 +35,10 @@ IF not found:
 
 Stop.
 
-### 2 — Read local manifest
+### 2 — Read local version
 
-Read `{home}/.claude/wds/wds-manifest.yaml`.
-Note current installed version.
+Read the frontmatter of `{home}/.claude/wds/install.md`.
+Note current installed `wds-version` and per-skill versions.
 
 ### 3 — Check for updates
 

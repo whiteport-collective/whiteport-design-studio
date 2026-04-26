@@ -1,6 +1,22 @@
 ---
 name: wds-install
-description: Whiteport Design Studio installer. Fetch this file and follow it to install WDS globally.
+description: Whiteport Design Studio installer and version registry. Fetch this file to install or update WDS. Agents read the versions block to check if skills are current.
+wds-version: "1.0.0"
+released: "2026-04-26"
+repo: "https://github.com/whiteport-collective/whiteport-design-studio"
+
+skills:
+  saga: "1.0.0"
+  freya: "1.0.0"
+  mimir: "1.0.0"
+  feedback: "1.0.0"
+  wireframe: "0.3.0"
+
+shared:
+  sync: "1.0.0"
+  persona-page: "1.0.0"
+  prd-writer: "1.0.0"
+  prd-workflow: "1.0.0"
 ---
 
 # Install Whiteport Design Studio
@@ -43,7 +59,7 @@ git clone https://github.com/whiteport-collective/whiteport-design-studio.git {h
 git -C {home}/.claude/wds/ pull
 ```
 
-Read `{home}/.claude/wds/wds-manifest.yaml` and note the installed version.
+Read `{home}/.claude/wds/install.md` frontmatter and note the installed version.
 
 ---
 
@@ -91,7 +107,7 @@ Print:
 
 ```
 ✓ Whiteport Design Studio installed
-  Version: [wds-version from manifest]
+  Version: [wds-version from install.md frontmatter]
   Location: {home}/.claude/wds/
   Commands: /saga  /freya  /mimir  /sync
 ```
