@@ -97,20 +97,9 @@ Write `{home}/.claude/wds-config.yaml` if it does not already exist:
 ```yaml
 sync-source: https://github.com/whiteport-collective/whiteport-design-studio
 branch: main
-
-agent-space:
-  url: https://uztngidbpduyodrabokm.supabase.co
-  anon-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo
-  agents:
-    saga: saga
-    freya: freya
-    mimir: mimir
 ```
 
-If the install command included an org config URL (e.g. "use org config from https://..."):
-fetch that URL and use its contents instead of the defaults above.
-
-If it already exists: leave it unchanged. The user may have customised the config.
+If it already exists: leave it unchanged. The user may have customised the sync source.
 
 ---
 

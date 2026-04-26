@@ -88,36 +88,14 @@ src/
 
 ## Configuration
 
-WDS stores settings in `~/.claude/wds-config.yaml` — outside the git clone, survives updates, user-editable.
+WDS stores one config file at `~/.claude/wds-config.yaml` — outside the git clone, survives updates:
 
 ```yaml
 sync-source: https://github.com/whiteport-collective/whiteport-design-studio
 branch: main
-
-agent-space:
-  url: https://uztngidbpduyodrabokm.supabase.co
-  anon-key: <shared-wds-anon-key>
-  agents:
-    saga: saga
-    freya: freya
-    mimir: mimir
 ```
 
-**Agent Space** is the session handoff system — agents wrap a session, publish a token, and the next agent resumes from exactly where it left off.
-
----
-
-## Org Install
-
-Distribute WDS across a team with a single command. Host your own `wds-config.yaml` and pass the URL at install time:
-
-```
-Install whiteport-design-studio from GitHub, use org config from https://your-org.com/wds-config.yaml
-```
-
-Every employee gets your org's Agent Space and sync source automatically. The anon key is read-only — safe to host publicly.
-
-See [docs/getting-started/installation.md](docs/getting-started/installation.md) for the full config schema.
+Change `sync-source` if your org forks WDS.
 
 ---
 

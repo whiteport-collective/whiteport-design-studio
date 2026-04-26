@@ -93,34 +93,18 @@ Saga will scan your project for existing WDS work and guide you to the right sta
 
 ## Step 4: Configuration (Optional)
 
-WDS stores settings at `~/.claude/wds-config.yaml`. You can edit this at any time:
+WDS stores one setting at `~/.claude/wds-config.yaml`:
 
 ```yaml
 sync-source: https://github.com/whiteport-collective/whiteport-design-studio
 branch: main
-
-agent-space:
-  url: https://...
-  anon-key: ...
-  agents:
-    saga: saga
-    freya: freya
-    mimir: mimir
 ```
 
-**`sync-source`** — where updates are pulled from. Change if your org forks WDS.
-
-**`agent-space`** — the session handoff backend. Agents use this to pass context between conversations via tokens. See [Module 19](../module-19-agent-coordination/module-19-overview.md) for details.
-
-### Org Install
-
-If your team has a shared WDS configuration, your admin will give you a one-line install command:
+You only need to edit this if your org forks WDS and wants everyone pulling from the fork instead. In that case your admin will give you a one-line install command that sets this automatically:
 
 ```
 Install whiteport-design-studio from GitHub, use org config from https://your-org.com/wds-config.yaml
 ```
-
-This replaces the default config with your org's Agent Space and sync source.
 
 ---
 

@@ -37,53 +37,33 @@ Claude fetches `install.md` from the WDS GitHub repo and follows the steps autom
 
 WDS stores its configuration at `~/.claude/wds-config.yaml`. You can edit this file at any time — it survives updates because it lives outside the git clone.
 
-**Default config (personal install):**
+**Default config:**
 
 ```yaml
 sync-source: https://github.com/whiteport-collective/whiteport-design-studio
 branch: main
-
-agent-space:
-  url: https://uztngidbpduyodrabokm.supabase.co
-  anon-key: <shared-wds-anon-key>
-  agents:
-    saga: saga
-    freya: freya
-    mimir: mimir
 ```
 
 **`sync-source`** — where WDS updates are pulled from. Change this if your org forks WDS.
-
-**`agent-space`** — the Supabase backend that agents use to pass session handoffs between conversations. The anon key is read-only and safe to share.
 
 ---
 
 ## Org Install
 
-If you're distributing WDS across a team, host your own `wds-config.yaml` and pass the URL during install:
+If you're distributing WDS across a team with a custom fork, host your own `wds-config.yaml` and pass the URL during install:
 
 ```
 Install whiteport-design-studio from GitHub, use org config from https://your-org.com/wds-config.yaml
 ```
 
-Claude fetches your config file and writes it as `~/.claude/wds-config.yaml` instead of the defaults. Every employee runs one command and gets your org's Agent Space and sync source automatically.
+Claude fetches your config file and writes it as `~/.claude/wds-config.yaml` instead of the defaults. Every employee points to your fork automatically.
 
 **Example org config:**
 
 ```yaml
 sync-source: https://github.com/your-org/wds-fork
 branch: main
-
-agent-space:
-  url: https://your-org.supabase.co
-  anon-key: your-org-anon-key
-  agents:
-    saga: saga
-    freya: freya
-    mimir: mimir
 ```
-
-The anon key is safe to serve publicly — Supabase anon keys are read-only by design.
 
 ---
 
