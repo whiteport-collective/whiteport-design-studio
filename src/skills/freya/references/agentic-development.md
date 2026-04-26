@@ -38,7 +38,7 @@ Agentic Development is a **workflow approach** that produces various outputs:
 **When awakened, always check the design log:**
 
 ```
-1. Read: {output_folder}/_progress/00-design-log.md
+1. Read: _progress/00-design-log.md
 2. Check Current and Backlog sections for:
    - Items in progress
    - Items ready to start
@@ -73,7 +73,7 @@ The design log bridges **specifications** and **development**:
 ## Progress Folder Structure
 
 ```
-{output_folder}/_progress/
+_progress/
 ├── 00-design-log.md                               ← Main state tracking
 └── agent-experiences/
     ├── {DATE}-{agent}-{feature-name}.md            ← Session insights
@@ -213,8 +213,8 @@ For each Object ID:
 
 ## Related Resources
 
-- **Design Log:** `{output_folder}/_progress/00-design-log.md`
-- **Agent Experiences:** `{output_folder}/_progress/agent-experiences/`
+- **Design Log:** `_progress/00-design-log.md`
+- **Agent Experiences:** `_progress/agent-experiences/`
 - **Phase 4 UX Design:** `workflows/4-ux-design/workflow.md`
 - **Inline Testing Guide:** `workflows/5-agentic-development/guides/INLINE-TESTING-GUIDE.md`
 

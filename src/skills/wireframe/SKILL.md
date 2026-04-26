@@ -20,7 +20,7 @@ Rules for producing Excalidraw wireframes. The spec file documents intent — th
 ## File location
 
 ```
-{output_folder}/C-UX-Scenarios/{scenario}/{step}/Sketches/{step}.excalidraw
+{output_folder}/D-UX-Design/wireframes/[page-slug].excalidraw
 ```
 
 ---

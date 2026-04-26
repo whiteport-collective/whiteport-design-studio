@@ -110,7 +110,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
     Build a gap map across three dimensions:
 
     **Design inventory** — scan `{output_folder}/C-UX-Scenarios/`:
-    - For each scenario folder: does a spec file exist? (full spec / sketch only / folder only)
+    - For each scenario file: is it complete? (full spec / partial / stub)
     - Note which screens are fully specced vs. partial vs. missing
 
     **Build inventory** — scan the codebase structure:

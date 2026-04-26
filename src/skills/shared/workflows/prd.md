@@ -43,7 +43,6 @@ The PRD folder is the machine's memory of what was agreed. Users never need to o
   <step id="mode-a">
     Read:
     - `A-Product-Brief/` — all documents
-    - `A-Product-Brief/04-platform-requirements.md` (or equivalent)
     - `B-Trigger-Map/` — for user and business context
     - `C-UX-Scenarios/00-ux-scenarios.md` — for feature scope
 

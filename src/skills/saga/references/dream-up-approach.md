@@ -1068,12 +1068,11 @@ Run this gate after autonomous generation completes:
 
 **Mandatory files in `{output_folder}/B-Trigger-Map/`:**
 - [ ] `00-trigger-map.md` — Hub document with Mermaid diagram
-- [ ] `01-Business-Goals.md` — Vision + SMART objectives
+- [ ] `01-business-goals.md` — Vision + SMART objectives
 - [ ] One persona document per target group (`02-XX.md`, `03-XX.md`, etc.)
-- [ ] `05-Key-Insights.md` — Strategic insights summary
 
 **Conditional files:**
-- [ ] `06-Feature-Impact.md` — Only if feature impact workshop was completed
+- [ ] `feature-impact.md` — Only if feature impact workshop was completed
 
 ### Validation Rules:
 - Each file must be non-empty (contains actual content, not just headers)
