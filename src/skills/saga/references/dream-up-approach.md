@@ -1045,7 +1045,7 @@ Type your choice or provide feedback:
 - Mistakes Avoided: 4/4 ✅
 - Best Practices: 4/4 ✅
 
-📄 **Trigger Map created:** {output_folder}/B-Trigger-Map/trigger-map.md
+📄 **Trigger Map created:** {output_folder}/B-Trigger-Map/00-trigger-map.md
 
 Would you like to review the full Trigger Map now?
 
@@ -1105,7 +1105,7 @@ Switch to Suggest mode for the missing artifact:
 **Final Quality Score:** {{X}}/10
 
 ### Generated Artifact
-**Location:** {output_folder}/B-Trigger-Map/trigger-map.md
+**Location:** {output_folder}/B-Trigger-Map/00-trigger-map.md
 
 **Contents:**
 - Business Goals: {{vision}} + {{N}} SMART objectives

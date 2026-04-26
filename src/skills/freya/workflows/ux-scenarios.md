@@ -3,7 +3,7 @@ skill: ux-scenarios
 agent: freya
 prerequisites:
   - "{output_folder}/A-Product-Brief/product-brief.md"
-  - "{output_folder}/B-Trigger-Map/trigger-map.md"
+  - "{output_folder}/B-Trigger-Map/00-trigger-map.md"
 output_folder: "{output_folder}/C-UX-Scenarios"
 ---
 
@@ -30,7 +30,7 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
   <step id="init">
     Load:
     - `{output_folder}/A-Product-Brief/product-brief.md`
-    - `{output_folder}/B-Trigger-Map/trigger-map.md`
+    - `{output_folder}/B-Trigger-Map/00-trigger-map.md`
     - `_progress/00-design-log.md`
     - `references/trigger-map-initiation.md`
 
@@ -91,7 +91,7 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
         "[Archetype name] wants to [goal]. Let me walk through what they experience."
 
         State the entry point:
-        "They start at [entry point]. What brought them here was [trigger from Trigger Map]."
+        "They start at [entry point]. What drew them here: [from persona Usage Context — their discovery path and emotional state on arrival]."
       </phase>
 
       <phase id="walk">
@@ -108,7 +108,7 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
         - "What does [Name] do next — is the path obvious?"
         - "What could go wrong here that we want to design for?"
 
-        Continue until the archetype reaches their success state from the Trigger Map.
+        Continue until the archetype achieves their primary goal — the outcome of their top positive driving force.
       </phase>
 
       <phase id="confirm">
@@ -129,7 +129,7 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
           <input>
             - Scenario title and archetype
             - Confirmed screen list with descriptions
-            - Entry trigger (from Trigger Map)
+            - Entry context (from persona Usage Context — discovery path and emotional state on arrival)
             - Success state
           </input>
           <output>

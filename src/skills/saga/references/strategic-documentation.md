@@ -50,8 +50,8 @@ phases:
     name: "Trigger Mapping"
     status: [not_started|in_progress|complete]
     artifacts:
-      - trigger-map.md
-      - trigger-map-diagram.mermaid
+      - 00-trigger-map.md
+      - 01-business-goals.md
   
   # ... other phases
 
@@ -250,7 +250,7 @@ Generate complete Product Brief document using template.
 
 **For deliverables:**
 - `product-brief.md`
-- `trigger-map.md`
+- `00-trigger-map.md`
 - `platform-prd.md`
 
 **For examples:**
@@ -342,7 +342,7 @@ Good structure:
 ### ✅ Absolute (Explicit)
 ```
 docs/A-Product-Brief/product-brief.md
-docs/B-Trigger-Map/trigger-map.md
+docs/B-Trigger-Map/00-trigger-map.md
 docs/C-UX-Scenarios/landing-page/01-hero-section.md
 ```
 
@@ -353,7 +353,7 @@ docs/C-UX-Scenarios/landing-page/01-hero-section.md
 ### ❌ Relative (Ambiguous)
 ```
 ../product-brief.md
-../../trigger-map.md
+../../00-trigger-map.md
 ```
 
 **Why bad:** Depends on current location, breaks easily

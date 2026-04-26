@@ -31,7 +31,7 @@ Discover not just WHO your users are, but WHY they act and WHAT triggers their d
 **Visual Flow (Left to Right):**
 
 ```
-Business Goals → Product/Solution → Target Groups → Usage Goals
+Business Goals → Product/Solution → Target Groups → Driving Forces
 (Vision +          (What you're      (Who uses it)    (Positive Drivers)
  SMART              building)                          (Negative Drivers)
  Objectives)
@@ -54,7 +54,7 @@ Business Goals → Product/Solution → Target Groups → Usage Goals
    - Connected to the product
    - Detailed psychological profiles
 
-4. **Usage Goals** (Right)
+4. **Driving Forces** (Right)
    - **Positive Drivers** (✅ green) - What they want to achieve
    - **Negative Drivers** (❌ red) - What they want to avoid
    - Separated into distinct groups per target group
@@ -635,16 +635,6 @@ graph TD
 2. Document what changed and why
 3. Review impact on active design work
 4. Keep old version for reference
-
----
-
-## Related Resources
-
-- **Phase 2 Workflow:** `../../workflows/2-trigger-mapping/`
-- **Impact/Effect Mapping Model:** `../../docs/models/impact-effect-mapping.md`
-- **Trigger Mapping Guide:** `../../docs/method/phase-2-trigger-mapping-guide.md`
-- **Customer Awareness Cycle:** `../../docs/models/customer-awareness-cycle.md`
-- **Feature Impact Analysis:** Prioritization method based on Impact Mapping
 
 ---
 

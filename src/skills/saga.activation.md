@@ -53,7 +53,7 @@ I found [N] WDS projects in your workspace:
 Which project would you like to work on?
 ```
 
-**Single project:** check for `A-Product-Brief/product-brief.md`, `B-Trigger-Map/trigger-map.md`, and design log Current table.
+**Single project:** check for `A-Product-Brief/product-brief.md`, `B-Trigger-Map/00-trigger-map.md`, and design log Current table.
 
 ### 3. Status Report
 

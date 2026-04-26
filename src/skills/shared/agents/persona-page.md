@@ -6,13 +6,12 @@ Persona pages are reference documents — used by Freya when designing and by th
 
 ## Input
 
-From the Trigger Map for this archetype:
+From the persona file (`NN-persona-*.md`) for this archetype:
 - Name (alliterative, e.g., Harriet the Hairdresser)
-- Situation
-- Driving forces (toward + away from + underlying need)
-- Trigger points (with emotional states)
-- Objections
-- Success state
+- Profile: background, psychological profile, internal emotional state
+- Driving forces: positive (what they move toward) and negative (what they move away from), WHAT + WHY + WHEN pattern, FIA scores
+- Usage context: discovery path, emotional state on arrival, behavior pattern, decision criteria
+- Business goal connections
 
 From the Product Brief:
 - Product name and concept (for context)
@@ -35,22 +34,26 @@ Concrete and specific — not "busy professional" but "runs a two-person salon,
 answers her own phone, and hasn't taken a full week off in three years."]
 
 ## What Drives Them
-→ **Moving toward:** [aspiration]
-← **Moving away from:** [fear or frustration]
-◎ **Underlying need:** [the deeper human need beneath the surface motivations]
 
-## When They Reach for This
-[The specific trigger moments — written as short scenes, not bullet points]
+**Toward** (positive forces, highest FIA score first):
+→ **[Force name]:** [WHAT + WHY + WHEN — one sentence]
+→ **[Force name]:** [WHAT + WHY + WHEN]
 
-*"[Scene 1 — describe the exact moment and what they're feeling]"*
-*"[Scene 2]"*
-*"[Scene 3]"*
+**Away from** (negative forces, highest FIA score first):
+← **[Force name]:** [WHAT + WHY + WHEN — one sentence]
+← **[Force name]:** [WHAT + WHY + WHEN]
+
+## When They Show Up
+[How they discover and arrive at the product — written as 2–3 vivid scenes from their Usage Context, not bullet points]
+
+*"[Scene 1 — the discovery moment and emotional state on arrival]"*
+*"[Scene 2 — a different context or usage moment]"*
 
 ## What Makes Them Hesitate
-[The real objections — honest, not dismissive]
+[Derived from top negative driving forces — the real barriers, honest and specific, not generic]
 
-## What Success Looks Like
-[Six months later. What has changed. What do they tell a friend.]
+## What Winning Looks Like
+[What achieving their top positive driving force actually looks like. Concrete: what they do, say, feel. Not a generic success state.]
 
 ---
 *Derived from Trigger Map — [date]*
@@ -59,7 +62,9 @@ answers her own phone, and hasn't taken a full week off in three years."]
 ## Instructions
 
 - Write in `{document_output_language}`
-- The "Who They Are" section should read like a person, not a market segment
-- Trigger scenes should be vivid and specific — the reader should recognize this person
+- The "Who They Are" section should read like a person, not a market segment — concrete and specific
+- "When They Show Up" scenes should be vivid: the exact moment, the context, what they feel — derived from Usage Context discovery path and emotional state
+- "What Makes Them Hesitate" must come from negative driving forces — not invented objections
+- "What Winning Looks Like" must come from the top positive driving force — not a generic success state
 - Keep the whole page readable in 90 seconds
 - After writing, report path to the calling agent

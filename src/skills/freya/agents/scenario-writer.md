@@ -9,7 +9,7 @@ Called after each scenario walkthrough is confirmed.
 **Input from Freya:**
 - Scenario title and archetype name
 - Confirmed screen list: name + one-line description per screen, in order
-- Entry trigger (from Trigger Map — what brought the archetype here)
+- Entry context (from persona Usage Context — how they found the product and their emotional state on arrival)
 - Success state (what the archetype achieves at the end)
 
 **Output:** `{output_folder}/C-UX-Scenarios/[scenario-slug].md`
@@ -18,7 +18,7 @@ Called after each scenario walkthrough is confirmed.
 ```
 # [Scenario Title]
 **Archetype:** [Name]
-**Entry:** [What triggered this journey]
+**Entry:** [How and why the archetype arrived here — from their Usage Context]
 **Goal:** [What they are trying to accomplish]
 
 ## Screens

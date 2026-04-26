@@ -16,7 +16,7 @@ Available to: **Freya**, **Saga**, **any WDS agent**
 
 ## On Activation
 
-1. Create a feedback file: `design-process/E-Development/WO-{N}-{NN}-{area}-feedback.md`
+1. Create a feedback file: `{output_folder}/E-Development/WO-{N}-{NN}-{area}-feedback.md`
    - Link it to the nearest relevant WO, or create a standalone one
    - Initialize with a header, date, reporter, and empty summary table
 
