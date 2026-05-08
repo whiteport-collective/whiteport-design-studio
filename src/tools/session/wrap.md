@@ -94,12 +94,10 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     - next: [next]
     - spec_sync: [spec_sync]
 
-    **Step A — Ensure progress folder exists:**
-    Create `progress/` in the project root if it doesn't exist.
-
-    **Step B — Write state file:**
-    Write `progress/[agent_id].md` with this exact content:
-
+    **Step A — Save state via memory tool:**
+    Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `save` operation:
+    - agent_id: [agent_id]
+    - data:
     ```
     ## Wrapped
     [current date and time]
@@ -120,7 +118,7 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     [spec_sync]
     ```
 
-    **Step C — Update project index:**
+    **Step B — Update project index:**
     1. Run `git rev-parse HEAD` → `current_head`
     2. Read `progress/project-index.md` if it exists → extract HEAD hash from `## Updated` line as `last_head`
     3. Get changed files:
@@ -156,14 +154,12 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     Spawn a second sub-agent with this exact prompt — substitute the bracketed values:
 
     ---
-    You are a file writer. Your only job is to write a handoff file.
+    You are a handoff writer. Your only job is to save a handoff file via the memory tool.
 
-    **Step A — Ensure progress folder exists:**
-    Create `progress/` in the project root if it doesn't exist.
-
-    **Step B — Write handoff file:**
-    Write `progress/[target_agent].md` with this exact content:
-
+    **Step A — Save handoff via memory tool:**
+    Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `save` operation:
+    - agent_id: [target_agent]
+    - data:
     ```
     ## Wrapped
     [current date and time]
@@ -181,7 +177,7 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     [spec_sync]
     ```
 
-    **Step C — Confirm:**
+    **Step B — Confirm:**
     Return ONLY: `done`
     ---
 

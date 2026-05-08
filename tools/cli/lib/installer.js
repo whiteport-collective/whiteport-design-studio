@@ -14,9 +14,9 @@ const { compileAgentFile } = require('./compiler');
 class Installer {
   constructor() {
     // Resolve directories relative to this file (tools/cli/lib/ -> up 3 levels)
-    const repoRoot = path.resolve(__dirname, '..', '..', '..');
-    this.srcDir = path.join(repoRoot, 'src');
-    this.docsDir = path.join(repoRoot, 'docs');
+    this.repoRoot = path.resolve(__dirname, '..', '..', '..');
+    this.srcDir = path.join(this.repoRoot, 'src');
+    this.docsDir = path.join(this.repoRoot, 'docs');
   }
 
   /**
@@ -91,7 +91,7 @@ class Installer {
     // Step 1: Copy source files
     const spinner = ora('Copying WDS files...').start();
     try {
-      await this.copySrcFiles(wdsDir);
+      await this.copySrcFiles(wdsDir, wdsFolder);
       spinner.succeed('WDS files copied');
     } catch (error) {
       spinner.fail('Failed to copy WDS files');
@@ -189,18 +189,23 @@ class Installer {
   }
 
   /**
-   * Copy src/ content into the target WDS directory
+   * Copy src/ content into the target WDS directory.
+   * Skills and tools are installed flat (one level) via sync-manifest.
+   * Agents, workflows, data, gems keep their directory structure.
    */
-  async copySrcFiles(wdsDir) {
-    const contentDirs = ['agents', 'data', 'gems', 'skills', 'workflows'];
+  async copySrcFiles(wdsDir, wdsFolderName) {
+    const structuredDirs = ['agents', 'data', 'gems', 'workflows'];
 
-    for (const dir of contentDirs) {
+    for (const dir of structuredDirs) {
       const src = path.join(this.srcDir, dir);
       const dest = path.join(wdsDir, dir);
       if (await fs.pathExists(src)) {
         await fs.copy(src, dest);
       }
     }
+
+    // Skills and tools: flat copy from sync-manifest
+    await this.flatCopySkillsAndTools(wdsDir, wdsFolderName);
 
     // Copy module.yaml and module-help.csv
     const moduleYaml = path.join(this.srcDir, 'module.yaml');
@@ -211,6 +216,113 @@ class Installer {
     if (await fs.pathExists(moduleHelp)) {
       await fs.copy(moduleHelp, path.join(wdsDir, 'module-help.csv'));
     }
+  }
+
+  /**
+   * Derive a flat filename for a skill or tool from its manifest path.
+   * src/skills/start.md          → start.md
+   * src/skills/freya/SKILL.md    → freya.md
+   * src/skills/shared/git.md     → shared-git.md
+   * src/tools/memory/SKILL.md    → tool-memory.md
+   * src/tools/session/start.md   → tool-session-start.md
+   */
+  computeFlatName(filePath, type) {
+    const parts = filePath.replace(/\\/g, '/').split('/');
+
+    if (type === 'tool') {
+      const toolIdx = parts.indexOf('tools');
+      const after = parts.slice(toolIdx + 1);
+      const isSkillFile = after[after.length - 1].toLowerCase() === 'skill.md';
+      if (isSkillFile || after.length === 1) {
+        return `tool-${after[0]}.md`;
+      }
+      const basename = after[after.length - 1].replace(/\.md$/i, '');
+      return `tool-${after[0]}-${basename}.md`;
+    }
+
+    // skill or activation
+    const skillIdx = parts.indexOf('skills');
+    const after = parts.slice(skillIdx + 1);
+    if (after.length === 1) return after[0];
+    if (after[after.length - 1].toLowerCase() === 'skill.md') return `${after[0]}.md`;
+    return after.join('-');
+  }
+
+  /**
+   * Rewrite ~/.claude/wds/src/... paths inside file content to point at
+   * the local flat installation instead.
+   */
+  rewriteSkillPaths(content, pathMap, wdsFolderName) {
+    for (const [srcRelPath, flatName] of pathMap) {
+      const standalonePath = `~/.claude/wds/${srcRelPath}`;
+      content = content.replaceAll(standalonePath, `${wdsFolderName}/${flatName}`);
+    }
+    return content;
+  }
+
+  /**
+   * Read sync-manifest, copy all stable skill/tool entries flat into wdsDir,
+   * rewriting cross-references to match the flat layout.
+   */
+  async flatCopySkillsAndTools(wdsDir, wdsFolderName) {
+    const manifestPath = path.join(this.srcDir, 'sync-manifest.json');
+    if (!(await fs.pathExists(manifestPath))) {
+      // Fallback: plain copy if no manifest
+      const skillsSrc = path.join(this.srcDir, 'skills');
+      if (await fs.pathExists(skillsSrc)) await fs.copy(skillsSrc, path.join(wdsDir, 'skills'));
+      return;
+    }
+
+    const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
+    const copyTypes = new Set(['skill', 'tool', 'activation']);
+
+    // Build path map: "src/skills/start.md" → "start.md"
+    const pathMap = new Map();
+    for (const entry of manifest.instructions) {
+      if (entry.channel !== 'stable') continue;
+      if (!copyTypes.has(entry.type)) continue;
+      pathMap.set(entry.file, this.computeFlatName(entry.file, entry.type));
+    }
+
+    await fs.ensureDir(wdsDir);
+
+    for (const [srcRelPath, flatName] of pathMap) {
+      const srcAbs = path.join(this.repoRoot, srcRelPath);
+      if (!(await fs.pathExists(srcAbs))) continue;
+
+      let content = await fs.readFile(srcAbs, 'utf8');
+      content = this.rewriteSkillPaths(content, pathMap, wdsFolderName);
+      await fs.writeFile(path.join(wdsDir, flatName), content, 'utf8');
+    }
+  }
+
+  /**
+   * Update skills and tools in an existing installation without touching
+   * config, IDE integrations, or folder structure.
+   */
+  async updateSkills(projectDir) {
+    // Find the installed WDS folder via config.yaml
+    const candidates = ['_bmad/wds', '_wds'];
+    let wdsDir = null;
+    let wdsFolderName = null;
+
+    for (const candidate of candidates) {
+      const configPath = path.join(projectDir, candidate, 'config.yaml');
+      if (await fs.pathExists(configPath)) {
+        wdsDir = path.join(projectDir, candidate);
+        wdsFolderName = candidate;
+        break;
+      }
+    }
+
+    if (!wdsDir) {
+      throw new Error('No WDS installation found. Run "install" first.');
+    }
+
+    await this.flatCopySkillsAndTools(wdsDir, wdsFolderName);
+    await this.compileAgents(wdsDir, wdsFolderName);
+
+    return { wdsDir, wdsFolderName };
   }
 
   /**

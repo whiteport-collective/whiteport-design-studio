@@ -22,9 +22,9 @@ If not found: proceed silently. The index will be built on first wrap.
 
 ### 2. Detect Session State
 
-Check for `progress/[agent].md` in the project root.
+Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `load` operation for the current agent_id.
 
-**Fallback chain:** `progress/[agent].md` → fresh start
+**Fallback chain:** state found → show resume prompt → fresh start
 
 ### 3. If State Found
 

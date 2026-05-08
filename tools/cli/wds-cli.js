@@ -19,18 +19,21 @@ if (process.stdin.isTTY) {
 // Load package.json for version info
 const packageJson = require('../../package.json');
 
-// Load install command
+// Load commands
 const installCommand = require('./commands/install');
+const updateSkillsCommand = require('./commands/update-skills');
 
 // Set up program
 program.version(packageJson.version).description('Whiteport Design Studio - Strategic design methodology for AI-powered workflows');
 
-// Register install command
-const cmd = program.command(installCommand.command).description(installCommand.description);
-for (const option of installCommand.options || []) {
-  cmd.option(...option);
+// Register commands
+for (const command of [installCommand, updateSkillsCommand]) {
+  const cmd = program.command(command.command).description(command.description);
+  for (const option of command.options || []) {
+    cmd.option(...option);
+  }
+  cmd.action(command.action);
 }
-cmd.action(installCommand.action);
 
 // Parse arguments
 program.parse(process.argv);

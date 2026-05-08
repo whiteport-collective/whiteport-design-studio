@@ -433,6 +433,34 @@
       "file": "src/skills/shared/git.md",
       "channel": "stable",
       "changelog": "Git standard: conventional commits, branch naming, AI attribution, frequency rules"
+    },
+    {
+      "agent": "*",
+      "type": "tool",
+      "file": "src/tools/memory/SKILL.md",
+      "channel": "stable",
+      "changelog": "Memory backend abstraction: save/load session state to files. WDS-E overrides this file with Agent Space backend — same interface, different storage."
+    },
+    {
+      "agent": "*",
+      "type": "tool",
+      "file": "src/tools/session/start.md",
+      "channel": "stable",
+      "changelog": "Session resume implementation: load state via memory tool, show resume prompt"
+    },
+    {
+      "agent": "*",
+      "type": "tool",
+      "file": "src/tools/session/wrap.md",
+      "channel": "stable",
+      "changelog": "Session wrap implementation: compile state, save via memory tool, update project index"
+    },
+    {
+      "agent": "*",
+      "type": "tool",
+      "file": "src/tools/handoff/SKILL.md",
+      "channel": "stable",
+      "changelog": "Cross-agent handoff implementation: write task context to target agent via memory tool"
     }
   ]
 }

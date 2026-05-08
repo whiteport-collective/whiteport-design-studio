@@ -53,14 +53,12 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap �
     Spawn a sub-agent with this exact prompt — substitute the bracketed values:
 
     ---
-    You are a file writer. Your only job is to write a handoff file.
+    You are a handoff writer. Your only job is to save a handoff file via the memory tool.
 
-    **Step A — Ensure progress folder exists:**
-    Create `progress/` in the project root if it doesn't exist.
-
-    **Step B — Write handoff file:**
-    Write `progress/[target_agent].md` with this exact content:
-
+    **Step A — Save handoff via memory tool:**
+    Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `save` operation:
+    - agent_id: [target_agent]
+    - data:
     ```
     ## Wrapped
     [current date and time]
@@ -78,7 +76,7 @@ Pass a specific piece of work to another WDS agent. This is NOT a session wrap �
     None
     ```
 
-    **Step C — Confirm:**
+    **Step B — Confirm:**
     Return ONLY: `done`
     ---
 
