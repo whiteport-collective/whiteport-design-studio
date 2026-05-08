@@ -1,8 +1,8 @@
 {
   "$schema": "./sync-manifest.schema.json",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Controls which agent instructions are distributed with WDS releases",
-  "updated": "2026-04-11",
+  "updated": "2026-05-08",
 
   "channels": {
     "stable": "Production-ready instructions. Synced to all organizations.",
@@ -433,6 +433,27 @@
       "file": "src/skills/shared/git.md",
       "channel": "stable",
       "changelog": "Git standard: conventional commits, branch naming, AI attribution, frequency rules"
+    },
+    {
+      "agent": "*",
+      "type": "reference",
+      "file": "src/data/wds-glossary.md",
+      "channel": "stable",
+      "changelog": "Locked terminology for all WDS agents — artifact names, phases, folder structure, model selection"
+    },
+    {
+      "agent": "*",
+      "type": "reference",
+      "file": "src/data/agent-contracts.md",
+      "channel": "stable",
+      "changelog": "Domain boundaries, prerequisites, handoff rules, out-of-scope — one place, no duplication"
+    },
+    {
+      "agent": "*",
+      "type": "reference",
+      "file": "src/data/shared-activation.md",
+      "channel": "stable",
+      "changelog": "Shared startup steps (sync, state, scan, select, brownfield-detect) — referenced by all agents"
     },
     {
       "agent": "*",
