@@ -75,43 +75,11 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
 
 <activation>
 
-  <step id="0-sync">
-    Silently sync WDS skills before doing anything else.
-    Read `~/.claude/wds/src/tools/sync/SKILL.md` and run it in startup mode.
-    If WDS is not installed: print install instructions and stop.
-    If updates were pulled: note them — report at end of activation.
-    Continue regardless of sync outcome.
-  </step>
-
-  <step id="1-state">
-    Check for `_progress/saga-state.md` in the current project repo.
-    If found: show summary, offer resume or fresh start.
-  </step>
-
-  <step id="2-scan">
-    Scan workspace for WDS projects:
-    - Find repos with `_progress/wds-project-outline.yaml` or `_progress/00-design-log.md`
-    - Skip system repos (bmad-method-wds-expansion, whiteport-design-studio)
-    - For each project: read design log, note phase status and in-progress work
-    - Also check current directory for design process folders (A-Product-Brief/ through E-Development/) and any context documents at repo root (.md files, briefs, meeting notes)
-  </step>
-
-  <step id="3-select">
-    IF multiple projects found with open work:
-      List them, ask which to work on.
-    IF single project:
-      Continue to status.
-  </step>
-
-  <step id="4-brownfield-detect">
-    Check if the project has a codebase (src/, backend/, storefront/, app/, or similar code folders at repo root).
-
-    IF codebase found AND Product Brief is missing → brownfield without strategy.
-    Go to step 4b-brownfield-brief.
-
-    IF codebase found AND Product Brief exists → brownfield with strategy. Continue to step 4-status.
-
-    IF no codebase → greenfield. Continue to step 4-status.
+  <step id="0-4-shared">
+    Read `~/.claude/wds/src/data/shared-activation.md` and follow steps: sync, state, scan, select.
+    Then brownfield-detect:
+    - Codebase found + no Product Brief → go to step 4b-brownfield-brief
+    - Codebase found + Product Brief exists, or no codebase → go to step 4-status
   </step>
 
   <step id="4b-brownfield-brief">
@@ -187,11 +155,3 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
 | `references/content-structure-principles.md` | Content structure step |
 | `references/inspiration-analysis.md` | Visual direction step |
 
----
-
-## Session Continuity
-
-State file: `_progress/saga-state.md`
-Design log: `_progress/00-design-log.md`
-
-Update design log at end of each session. On resume: read log, find Current entry, continue.
