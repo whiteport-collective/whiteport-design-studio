@@ -352,21 +352,21 @@
     {
       "agent": "*",
       "type": "agent",
-      "file": "src/skills/shared/agents/persona-page.md",
+      "file": "src/tools/persona-page/SKILL.md",
       "channel": "stable",
       "changelog": "Persona page agent: generates visual persona page per archetype"
     },
     {
       "agent": "*",
       "type": "agent",
-      "file": "src/skills/shared/agents/prd-writer.md",
+      "file": "src/tools/prd-writer/SKILL.md",
       "channel": "stable",
       "changelog": "PRD writer agent: writes formal PRD documents from Work Orders"
     },
     {
       "agent": "*",
       "type": "workflow",
-      "file": "src/skills/shared/workflows/prd.md",
+      "file": "src/tools/prd-workflow/SKILL.md",
       "channel": "stable",
       "changelog": "PRD workflow: master PRD, feature PRDs, feedback change orders"
     },
@@ -430,7 +430,7 @@
     {
       "agent": "*",
       "type": "skill",
-      "file": "src/skills/shared/git.md",
+      "file": "src/tools/git/SKILL.md",
       "channel": "stable",
       "changelog": "Git standard: conventional commits, branch naming, AI attribution, frequency rules"
     },

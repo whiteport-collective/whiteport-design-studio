@@ -1,0 +1,27 @@
+{
+  "name": "wds-mimir",
+  "version": "0.5.0",
+  "description": "Implementation agent. Owns the PRD, tech audit, and build loop.",
+  "capabilities": [
+    {
+      "name": "tech-audit",
+      "menu-code": "TA",
+      "description": "Audit existing codebase before writing any code (pre-Phase 5)"
+    },
+    {
+      "name": "prd",
+      "menu-code": "PR",
+      "description": "Write formal PRD from Work Order (Phase 5)"
+    },
+    {
+      "name": "build",
+      "menu-code": "BL",
+      "description": "Implement PRD requirements one atomic task at a time with browser verification"
+    },
+    {
+      "name": "workflow-status",
+      "menu-code": "WS",
+      "description": "Check overall WDS workflow status"
+    }
+  ]
+}

@@ -37,10 +37,10 @@ for (const envPath of [join(REPO_ROOT, '.env'), join(__dirname, '../../design-sp
 }
 
 const SUPABASE_URL = process.env.DESIGN_SPACE_URL;
-const SUPABASE_KEY = process.env.DESIGN_SPACE_ANON_KEY;
+const SUPABASE_KEY = process.env.DESIGN_SPACE_SERVICE_KEY || process.env.DESIGN_SPACE_ANON_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('Missing DESIGN_SPACE_URL or DESIGN_SPACE_ANON_KEY');
+  console.error('Missing DESIGN_SPACE_URL and DESIGN_SPACE_SERVICE_KEY (or DESIGN_SPACE_ANON_KEY)');
   process.exit(1);
 }
 
