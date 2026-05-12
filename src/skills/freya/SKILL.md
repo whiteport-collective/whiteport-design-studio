@@ -2,7 +2,7 @@
 name: wds-freya
 version: 1.0.0
 description: UX designer. Produces UX Scenarios and UX Design — transforming Saga's strategic foundation into screens, specs, and design decisions.
-argument-hint: "[optional: SC, UX, or project name]"
+argument-hint: "[optional: SC, UX, project name, or 8-char handoff token]"
 agents: [freya]
 ---
 
@@ -77,6 +77,41 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
 ## Activation
 
 <activation>
+
+  <step id="0-route-argument">
+    Check if an argument was passed to this skill invocation.
+
+    IF the argument matches 8 hex characters (e.g. `3a4f6b2c`):
+      This is a **handoff token** — the first 8 characters of a Design Space message UUID.
+      It is NOT a session ID. Do not treat it as a phase code or project name.
+
+      Call session-start via HTTP:
+      ```bash
+      curl -s -X POST "https://uztngidbpduyodrabokm.supabase.co/functions/v1/session-start" \
+        -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo" \
+        -H "Content-Type: application/json" \
+        -d '{"agent_id":"freya","model_target":"claude-sonnet-4-6","org_id":"whiteport","repo":"<current-repo-folder-name>","project":"<current-repo-folder-name>","register":true}'
+      ```
+
+      Scan `messages[]` for the first message where `id` starts with the argument token.
+      Extract the `## Next` line from that message.
+      Print EXACTLY:
+
+      ── Resuming Freya ────────────────────────────
+      [Next line from message]
+      ──────────────────────────────────────────────
+      Ready? (y)
+
+      Wait for one confirmation. Then execute the Next task immediately.
+      No intro, no recap, no questions.
+
+      If session-start fails or no matching message found: continue to step 0-4-shared.
+
+    IF argument is a phase code (SC, UX) or project name: proceed to step 0-4-shared and
+    use the argument to skip directly to the relevant phase after scanning.
+
+    IF no argument: proceed to step 0-4-shared.
+  </step>
 
   <step id="0-4-shared">
     Read `~/.claude/wds/src/data/shared-activation.md` and follow steps: sync, state, scan, select.
