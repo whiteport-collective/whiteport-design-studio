@@ -1,8 +1,8 @@
 {
   "$schema": "./sync-manifest.schema.json",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Controls which agent instructions are distributed with WDS releases",
-  "updated": "2026-05-08",
+  "updated": "2026-05-19",
 
   "channels": {
     "stable": "Production-ready instructions. Synced to all organizations.",
@@ -482,6 +482,20 @@
       "file": "src/tools/handoff/SKILL.md",
       "channel": "stable",
       "changelog": "Cross-agent handoff implementation: write task context to target agent via memory tool"
+    },
+    {
+      "agent": "freya",
+      "type": "tool",
+      "file": "src/tools/wireframe/SKILL.md",
+      "channel": "stable",
+      "changelog": "Wireframe tool: Excalidraw layout rules — structure only, no annotations"
+    },
+    {
+      "agent": "*",
+      "type": "tool",
+      "file": "src/tools/design-delivery/SKILL.md",
+      "channel": "stable",
+      "changelog": "Design delivery tool: hands off approved WDS specs to BMAD PRD for coding agents"
     }
   ]
 }

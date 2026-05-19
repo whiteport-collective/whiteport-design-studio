@@ -1,3 +1,11 @@
+---
+name: social-publish
+version: "1.0.0"
+description: Publishes posts to LinkedIn, Facebook, and Instagram via Chrome DevTools MCP. Whiteport internal — requires an active logged-in browser session.
+agents: [freya]
+channel: internal
+---
+
 # /social-publish — Publish Social Media Posts via Browser
 
 Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chrome DevTools MCP. Reads post content from a markdown post file. Use when publishing or scheduling social media content across platforms.

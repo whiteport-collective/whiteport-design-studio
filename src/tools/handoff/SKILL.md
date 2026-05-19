@@ -1,3 +1,10 @@
+---
+name: handoff
+version: "1.0.0"
+description: Passes a specific task to another WDS agent via the memory tool. Use when handing targeted work to mimir, saga, or freya.
+agents: [saga, freya, mimir]
+---
+
 # /handoff — Cross-Agent Handoff
 
 Pass a specific piece of work to another WDS agent. This is NOT a session wrap — it is a targeted transfer of one task or artifact to a different agent.

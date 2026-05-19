@@ -1,3 +1,10 @@
+---
+name: git
+version: "1.0.0"
+description: Whiteport git standard — conventional commits, branch naming, AI attribution, frequency rules. Use when committing, branching, or handing off code.
+agents: [saga, freya, mimir]
+---
+
 # Git — Whiteport Standard
 
 All agents follow this when committing, branching, and handing off.

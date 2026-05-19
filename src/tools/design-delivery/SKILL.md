@@ -1,3 +1,10 @@
+---
+name: design-delivery
+version: "1.0.0"
+description: Delivers completed WDS page specs to the BMAD PRD. Use when handing off approved design output to coding agents.
+agents: [freya, mimir]
+---
+
 # /design-delivery — Deliver WDS Design to BMAD
 
 Hand off completed WDS page specs to the BMAD PRD so coding agents find them automatically.

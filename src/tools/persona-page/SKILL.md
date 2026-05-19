@@ -1,3 +1,10 @@
+---
+name: persona-page
+version: "1.0.0"
+description: Generates a visual persona page for one archetype from the Trigger Map. Use when building persona reference documents per archetype.
+agents: [saga, freya]
+---
+
 # Agent: Persona Page
 
 Generate a visual persona page for one archetype from the Trigger Map.

@@ -1,5 +1,5 @@
 ---
-name: freya-wireframe
+name: wireframe
 version: 0.3.0
 description: Rules for drawing Excalidraw wireframes in WDS projects.
 agents: [freya]

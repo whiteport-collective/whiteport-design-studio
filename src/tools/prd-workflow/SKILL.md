@@ -1,6 +1,8 @@
 ---
-skill: prd
-agents: [saga, freya]
+name: prd-workflow
+version: "1.0.0"
+description: Creates and maintains PRD documents in E-Development/. Use when creating or updating a master PRD or feature PRDs.
+agents: [saga, freya, mimir]
 ---
 
 # PRD Workflow
