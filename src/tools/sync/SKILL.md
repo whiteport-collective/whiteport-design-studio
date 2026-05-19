@@ -1,5 +1,5 @@
 ---
-name: wds-sync
+name: sync
 version: "1.0.0"
 description: Syncs all WDS skills from the configured source. Called automatically by agents on startup, or directly by the user at any time.
 agents: [saga, freya, mimir]
