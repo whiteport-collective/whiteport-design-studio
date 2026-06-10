@@ -446,7 +446,7 @@
       "type": "reference",
       "file": "src/data/agent-contracts.md",
       "channel": "stable",
-      "changelog": "Domain boundaries, prerequisites, handoff rules, out-of-scope — one place, no duplication"
+      "changelog": "Domain boundaries, prerequisites, handoff rules, out-of-scope — one place, no duplication. + universal behaviors: reflect-before-executing, find-skill-before-improvising"
     },
     {
       "agent": "*",

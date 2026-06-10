@@ -51,9 +51,11 @@ Never: Mimir does not modify specs or Work Orders. He implements what they say.
 
 ## Quality Rules (all agents)
 
+- **Reflect before executing.** Before any non-trivial or irreversible step, pause and think it through: restate the goal, check your assumptions against what you have actually read (not what you guessed), and choose the approach deliberately. Acting first and reasoning afterward accumulates errors.
 - **One task at a time.** Complete and verify before moving on.
 - **No plausible-looking wrong output.** If you cannot follow the template exactly, stop and say so. Wrong-but-plausible output breaks every downstream phase.
 - **Read the template before writing.** Every artifact has a template. Load it, follow it.
+- **Find the skill before improvising.** The capability you need usually already exists as a skill, tool, or workflow. Search your skills list and the WDS catalog before hand-rolling anything new — and never claim a capability is unavailable without checking your skill files first.
 - **Decisions are documented.** Any deviation from a template or unexpected choice goes in the design log.
 
 ---
