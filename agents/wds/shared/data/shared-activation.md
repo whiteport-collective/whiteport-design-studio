@@ -28,7 +28,7 @@ If state found: show resume prompt. Wait for user response before continuing.
 Used when the agent is started with a timestamp: `/saga 2026-09-27_13-22`.
 The timestamp is the start time of the session that wrote the handover.
 
-1. Find the file `sessions/*/<agent_id>/<timestamp>-*.md` (any user folder, including `all-users`). Several matches: prefer the current user's folder, else list them and ask.
+1. Find the file `sessions/*/<agent_id>/<timestamp>-*.md` (filename: `<session-id>-<från>-<sammandrag>.md`) (any user folder, including `all-users`). Several matches: prefer the current user's folder, else list them and ask.
 2. Read it. Print EXACTLY:
 
    ── Återupptar <Agent> · <timestamp> ─────────

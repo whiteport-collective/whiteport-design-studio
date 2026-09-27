@@ -19,14 +19,21 @@ Agentoberoende. Skillen beskriver *vad* som ska göras. Hur git används står i
 
 ## 2. Överlämningen
 
-Varje wrap är en överlämning. Mappen är **mottagarens**, filnamnet slutar med **avsändaren**:
+Varje wrap är en överlämning. Mappen är **mottagarens**. Filnamnet är `<session-id>-<från>-<sammandrag>.md`:
+
+- `<session-id>` = `YYYY-MM-DD_HH-MM-<användare>`, alltså tidsstämpel och vem som körde.
+- `<från>` = agenten som skrev.
+- `<sammandrag>` = vad sessionen gjorde, 3–6 ord, små bokstäver, bindestreck, å/ä → a och ö → o. Exempel: `2026-09-27_13-22-martenangner-ivonne-product-brief-en-karriar-tack.md`.
+
+Filnamnet börjar med tidsstämpeln, så `/<agent> YYYY-MM-DD_HH-MM` hittar den.
+
 
 | Mottagare | Sökväg |
 |---|---|
-| Samma person, samma agent (vanlig wrap) | `sessions/<användare>/<från>/YYYY-MM-DD_HH-MM-<från>.md` |
-| Samma person, annan agent | `sessions/<användare>/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
-| Känd annan person | `sessions/<person>/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
-| Vi vet inte vem som kör | `sessions/all-users/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
+| Samma person, samma agent (vanlig wrap) | `sessions/<användare>/<från>/<session-id>-<från>-<sammandrag>.md` |
+| Samma person, annan agent | `sessions/<användare>/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Känd annan person | `sessions/<person>/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Vi vet inte vem som kör | `sessions/all-users/<till>/<session-id>-<från>-<sammandrag>.md` |
 
 ```markdown
 ---
