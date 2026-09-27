@@ -61,10 +61,10 @@ your-project-repo/
 `/wrap` writes what was done, what is left and what comes next — addressed to the agent that should continue. Usually that is the same agent; sometimes it is the next one in line (Saga hands over to Freya). The session ends with a resume command:
 
 ```
-/saga 2026-09-27_13-22
+/saga visita-kommunikation 2026-09-27_13-22
 ```
 
-Anyone on the team can paste it — in any tool — and the agent picks up exactly where the last session stopped.
+Repo first, then the session's start time. Anyone on the team can paste it — in any tool — and the agent picks up exactly where the last session stopped, or tells you which repo to open if you are in the wrong place.
 
 ### One repo, many projects
 

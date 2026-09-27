@@ -25,20 +25,23 @@ If state found: show resume prompt. Wait for user response before continuing.
 
 ## Step: resume (timestamp)
 
-Used when the agent is started with a timestamp: `/saga 2026-09-27_13-22`.
-The timestamp is the start time of the session that wrote the handover.
+Used when the agent is started with a resume command: `/saga visita-kommunikation 2026-09-27_13-22`.
+First the repo, then the start time of the session that wrote the handover. The repo may be left out.
 
-1. Find the file `sessions/*/<agent_id>/<timestamp>-*.md` (filename: `<session-id>-<från>-<sammandrag>.md`) (any user folder, including `all-users`). Several matches: prefer the current user's folder, else list them and ask.
-2. Read it. Print EXACTLY:
+1. **Right repo?** Compare the repo name with the current repo folder.
+   - Same, or no repo given: continue.
+   - Different: look for it under the dev root (`C:/dev/*/<repo>` or `~/dev/*/<repo>`). Found: tell the user in one line to start the session there, and stop. Agent sessions should run in the repo they work in. Not found: say the repo is not cloned on this machine and stop.
+2. Find the file `sessions/*/<agent_id>/<timestamp>-*.md` (filename: `<session-id>-<från>-<sammandrag>.md`, any user folder including `all-users`). Several matches: prefer the current user's folder, else list them and ask.
+3. Read it. Print EXACTLY:
 
-   ── Återupptar <Agent> · <timestamp> ─────────
+   ── Återupptar <Agent> · <repo> · <timestamp> ─
    Från:   <från> (<user>)
    Nästa:  <first line or step of ## Nästa>
    ──────────────────────────────────────────────
    Kör? (j)
 
-3. On confirmation: set `status: tagen` and `tagen_av: <session-id>` in the file, commit, and start on `## Nästa` immediately. No intro, no recap.
-4. No match: say so in one line and continue with the normal activation.
+4. On confirmation: set `status: tagen` and `tagen_av: <session-id>` in the file, commit, and start on `## Nästa` immediately. No intro, no recap.
+5. No match: say so in one line and continue with the normal activation.
 
 ---
 

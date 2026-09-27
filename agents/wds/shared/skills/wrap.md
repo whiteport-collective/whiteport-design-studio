@@ -25,7 +25,7 @@ Varje wrap är en överlämning. Mappen är **mottagarens**. Filnamnet är `<ses
 - `<från>` = agenten som skrev.
 - `<sammandrag>` = vad sessionen gjorde, 3–6 ord, små bokstäver, bindestreck, å/ä → a och ö → o. Exempel: `2026-09-27_13-22-martenangner-ivonne-product-brief-en-karriar-tack.md`.
 
-Filnamnet börjar med tidsstämpeln, så `/<agent> YYYY-MM-DD_HH-MM` hittar den.
+Filnamnet börjar med tidsstämpeln, så `/<agent> <repo> YYYY-MM-DD_HH-MM` hittar den.
 
 
 | Mottagare | Sökväg |
@@ -109,10 +109,10 @@ Visa användaren:
 - vad som lades till i användarfilerna, eller "inget nytt"
 - commit-hash och att push gick igenom
 
-Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent och tidsstämpeln är sessionens start:
+Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent, `<repo>` är repots mappnamn och tidsstämpeln är sessionens start:
 
 ````
 ```
-/<till> YYYY-MM-DD_HH-MM
+/<till> <repo> YYYY-MM-DD_HH-MM
 ```
 ````

@@ -2,7 +2,7 @@
 name: wds-saga
 version: 1.0.0
 description: Strategic analyst. Produces the Product Brief suite and Trigger Map — the foundation every other agent builds on.
-argument-hint: "[optional: PB, TM, project name, timestamp YYYY-MM-DD_HH-MM, or 8-char handoff token]"
+argument-hint: "[optional: PB, TM, project name, [repo] YYYY-MM-DD_HH-MM, or 8-char handoff token]"
 agents: [saga]
 ---
 
@@ -78,7 +78,8 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
   <step id="0-route-argument">
     Check if an argument was passed to this skill invocation.
 
-    IF the argument matches a timestamp `YYYY-MM-DD_HH-MM` (e.g. `2026-09-27_13-22`):
+    IF the argument ends with a timestamp `YYYY-MM-DD_HH-MM`, optionally preceded by a repo name
+    (e.g. `visita-kommunikation 2026-09-27_13-22` or `2026-09-27_13-22`):
       This is a **handover in the repo**. Follow "Step: resume (timestamp)" in
       `agents/wds/shared/data/shared-activation.md`. This is the default way to resume.
 

@@ -2,7 +2,7 @@
 name: wds-mimir
 version: 1.0.0
 description: Implementation agent. Owns the PRD, the tech audit, and the build. Reads Freya's Work Orders and turns them into working code — one verified task at a time.
-argument-hint: "[optional: timestamp YYYY-MM-DD_HH-MM, project name or WO number]"
+argument-hint: "[optional: [repo] YYYY-MM-DD_HH-MM, project name or WO number]"
 agents: [mimir]
 ---
 
@@ -73,7 +73,8 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 <activation>
 
   <step id="0-route-argument">
-    IF the argument matches a timestamp `YYYY-MM-DD_HH-MM` (e.g. `2026-09-27_13-22`):
+    IF the argument ends with a timestamp `YYYY-MM-DD_HH-MM`, optionally preceded by a repo name
+    (e.g. `visita-kommunikation 2026-09-27_13-22`):
     follow "Step: resume (timestamp)" in `agents/wds/shared/data/shared-activation.md`.
     Otherwise continue.
   </step>
