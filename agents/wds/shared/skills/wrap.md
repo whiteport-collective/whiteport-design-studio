@@ -101,3 +101,11 @@ Visa användaren:
 - session-id, mottagare och sökväg till överlämningen
 - vad som lades till i användarfilerna, eller "inget nytt"
 - commit-hash och att push gick igenom
+
+Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent och tidsstämpeln är sessionens start:
+
+````
+```
+/<till> YYYY-MM-DD_HH-MM
+```
+````

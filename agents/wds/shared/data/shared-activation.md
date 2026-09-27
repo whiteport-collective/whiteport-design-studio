@@ -23,6 +23,25 @@ If state found: show resume prompt. Wait for user response before continuing.
 
 ---
 
+## Step: resume (timestamp)
+
+Used when the agent is started with a timestamp: `/saga 2026-09-27_13-22`.
+The timestamp is the start time of the session that wrote the handover.
+
+1. Find the file `sessions/*/<agent_id>/<timestamp>-*.md` (any user folder, including `all-users`). Several matches: prefer the current user's folder, else list them and ask.
+2. Read it. Print EXACTLY:
+
+   ── Återupptar <Agent> · <timestamp> ─────────
+   Från:   <från> (<user>)
+   Nästa:  <first line or step of ## Nästa>
+   ──────────────────────────────────────────────
+   Kör? (j)
+
+3. On confirmation: set `status: tagen` and `tagen_av: <session-id>` in the file, commit, and start on `## Nästa` immediately. No intro, no recap.
+4. No match: say so in one line and continue with the normal activation.
+
+---
+
 ## Step: handovers
 
 Read the latest handover to this agent: `sessions/<user>/<agent_id>/` (newest file by name).
