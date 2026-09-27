@@ -12,7 +12,7 @@ WDS is its own framework, inspired by BMad. It is open to other frameworks: anot
 
 - **All folder and file names in lowercase.**
 - **Skill = what, tool = how, instructions = who.** Commands and API calls belong in a tool, never in a skill or instructions file.
-- **No secrets in any file.** Describe where the key comes from (`.wds/me.md` or an environment variable).
+- **No secrets in any file.** All keys live in Bitwarden and are fetched at runtime with `bw get password "<item>"`. Files may name the Bitwarden item, never the value.
 - **Paths are relative to the repo root** (`agents/wds/shared/...`), so they work unchanged in project repos.
 - **Memory lives in the project repo** (`users/<user>/sessions/`, `design-process/_progress/`). Agent Space is only for realtime and is optional.
 

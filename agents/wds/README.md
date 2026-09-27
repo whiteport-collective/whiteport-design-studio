@@ -30,4 +30,4 @@ Each agent folder:
 
 ## Secrets
 
-No keys in these files. Agent Space is optional — see [shared/tools/agent-space.md](shared/tools/agent-space.md).
+No keys in these files. All keys live in Bitwarden and are fetched at runtime (`bw get password "<item>"`). Agent Space is optional — see [shared/tools/agent-space.md](shared/tools/agent-space.md).
