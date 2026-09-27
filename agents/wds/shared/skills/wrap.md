@@ -23,10 +23,10 @@ Varje wrap är en överlämning. Mappen är **mottagarens**, filnamnet slutar me
 
 | Mottagare | Sökväg |
 |---|---|
-| Samma person, samma agent (vanlig wrap) | `users/<användare>/handovers/<från>/YYYY-MM-DD_HH-MM-<från>.md` |
-| Samma person, annan agent | `users/<användare>/handovers/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
-| Känd annan person | `users/<person>/handovers/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
-| Vi vet inte vem som kör | `users/all-users/handovers/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
+| Samma person, samma agent (vanlig wrap) | `sessions/<användare>/<från>/YYYY-MM-DD_HH-MM-<från>.md` |
+| Samma person, annan agent | `sessions/<användare>/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
+| Känd annan person | `sessions/<person>/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
+| Vi vet inte vem som kör | `sessions/all-users/<till>/YYYY-MM-DD_HH-MM-<från>.md` |
 
 ```markdown
 ---
@@ -54,14 +54,14 @@ tagen_av:
 Konkreta steg i ordning för mottagaren.
 
 ## Filer
-- [relativ/sökväg](../../../../relativ/sökväg)
+- [relativ/sökväg](../../../relativ/sökväg)
 ```
 
 - Håll den kort. Den ska kunna läsas på en minut. `projects: []` om sessionen inte rörde något specifikt projekt.
 - **Till en annan agent:** skriv även en kort wrap till dig själv om du har egna trådar kvar, och länka överlämningen därifrån.
 - **Status:** mottagaren sätter `status: tagen` och `tagen_av: <session-id>` när hen börjar (se AGENTS.md, sessionsstart). Tog den här sessionen en överlämning: sätt `status: klar` i den filen om uppdraget är gjort.
-- **Överlämningar raderas aldrig.** `users/all-users/` är mappen för det som gäller alla i teamet. Den har samma form som en personmapp.
-- **Skriva i någon annans mapp:** det enda som är tillåtet är att lägga en *ny* fil i deras `handovers/`.
+- **Överlämningar raderas aldrig.** `sessions/all-users/` är neutral och har inget användar-id. Vem som körde framgår av sessionen när den tas (`tagen_av: <session-id>`).
+- **Skriva i någon annans mapp:** det enda som är tillåtet är att lägga en *ny* fil i deras `sessions/<person>/<agent>/`.
 
 ## 3. Projektloggen: teamets gemensamma tidslinje
 
@@ -69,7 +69,7 @@ För varje projekt som rördes: lägg en rad **överst** i `projects/<projekt>/d
 
 ```markdown
 ## YYYY-MM-DD_HH-MM-<användare> (<från> → <till>)
-- En till tre punkter om vad som hände i projektet. [Överlämning](../../../../users/<användare>/handovers/<till>/<fil>.md)
+- En till tre punkter om vad som hände i projektet. [Överlämning](../../../../sessions/<användare>/<till>/<fil>.md)
 ```
 
 ## 4. Användarfilerna
@@ -92,7 +92,7 @@ Spara och dela överlämningen, projektloggarna och användarfilerna enligt git-
 
 ## 6. Andra repon och personlig logg
 
-- **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `users/<användare>/handovers/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
+- **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `sessions/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
 - **Privat logg:** om `user.md` har `private:` och repot finns på datorn, lägg en rad där med session-id, repo och länk. Dela där också.
 
 ## 7. Kvittens
