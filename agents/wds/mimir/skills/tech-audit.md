@@ -19,7 +19,7 @@ Produces `E-Development/000-tech-audit.md` — a living document describing what
   </constraints>
 
   <step id="1-invoke-auditor">
-    Invoke `agents/tech-auditor.md` with the project repo path.
+    Invoke `subagents/tech-auditor.md` with the project repo path.
 
     The auditor does the structural scan and returns structured findings.
     Mimir reviews and confirms before writing the document.

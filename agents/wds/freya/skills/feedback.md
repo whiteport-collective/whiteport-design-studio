@@ -100,7 +100,7 @@ Feedback never goes directly to code — it goes to the spec first.
 
     Wait for explicit approval. Do not update the spec until approved.
 
-    Once approved — invoke `agents/spec-writer.md` in update mode:
+    Once approved — invoke `subagents/spec-writer.md` in update mode:
     Update the spec file with the approved changes only. Do not rewrite sections that were not changed.
 
     Confirm: "Spec updated. [N] changes applied to [page-slug].md."
@@ -114,7 +114,7 @@ Feedback never goes directly to code — it goes to the spec first.
   ═══════════════════════════════════════════ -->
 
   <step id="mimir-brief">
-    Invoke `agents/mimir-brief.md` with:
+    Invoke `subagents/mimir-brief.md` with:
     - The original feedback (for context only)
     - The spec changes that were approved and applied
     - The affected pages and their current specs

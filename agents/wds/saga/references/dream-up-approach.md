@@ -92,7 +92,7 @@ Choose: [W] Workshop | [S] Suggest | [D] Dream
 ```
 docs/method/phase-2-trigger-mapping-guide.md
 docs/quick-start/02-trigger-mapping.md
-src/skills/saga/references/trigger-mapping.md
+agents/wds/saga/references/trigger-mapping.md
 docs/models/impact-effect-mapping.md
 docs/method/dream-up-rubric-phase-2.md
 ```

@@ -62,7 +62,7 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
     </sub-step>
 
     <sub-step id="3c-test">
-      Invoke `agents/tester.md` with:
+      Invoke `subagents/tester.md` with:
       - The project root path
       - The requirement ID and title
 
@@ -76,7 +76,7 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
     </sub-step>
 
     <sub-step id="3d-verify">
-      Invoke `agents/browser-verifier.md` with:
+      Invoke `subagents/browser-verifier.md` with:
       - The acceptance criteria from the PRD requirement
       - The URL/path to verify
       - Any specific states to test (empty, error, success, etc.)

@@ -1,62 +1,56 @@
 ---
 name: git
-version: "1.0.0"
-description: Whiteport git standard — conventional commits, branch naming, AI attribution, frequency rules. Use when committing, branching, or handing off code.
-agents: [saga, freya, mimir]
+source: wds
+description: Hur agenter använder git. Identifierar användaren, visar vad som ändrats, gör commit och push.
 ---
 
-# Git — Whiteport Standard
+# Tool: git
 
-All agents follow this when committing, branching, and handing off.
+Används av skills som behöver veta vem som jobbar, vad som ändrats eller som ska spara arbete.
 
----
+## Vem är användaren
 
-## Commits
+Användaren identifieras av sitt **GitHub-användarnamn med små bokstäver**. Det är också mappnamnet i `users/`.
 
-**Format:** Conventional Commits
+0. **Läs `.wds/me.md` i repots rot.** Den är gitignorerad, en per dator, och fältet `user:` är svaret.
+   - Saknas den men `~/.wds/me.md` finns i hemmappen: kopiera den till `.wds/me.md` och kontrollera att `.wds/` står i `.gitignore`.
+   - Saknas båda: gå vidare till steg 1–3 och skapa sedan `~/.wds/me.md` och `.wds/me.md` med `github`, `user`, `name`, `email` och `private` (sökvägen på den här datorn till personens privata soul-filer, eller tom).
+1. Om GitHub CLI finns:
+   ```bash
+   gh api user --jq .login
+   ```
+   Gör om svaret till små bokstäver. `MartenAngner` blir `martenangner`.
+2. Annars:
+   ```bash
+   git config user.email
+   ```
+   Matcha mot `email:` i `users/*/user.md`. Mappnamnet är användaren.
+3. Ingen träff: fråga efter GitHub-användarnamnet och kopiera `users/_template/` till `users/<namn>/`. Be personen kontrollera att `git config user.email` är rätt adress.
 
+## Vad har ändrats i sessionen
+
+```bash
+git status --short                    # osparat
+git log --oneline --since="8 hours"   # sessionens commits
+git diff --stat HEAD                  # omfattning
 ```
-<type>(<scope>): <short description>
 
-[body — optional]
+## Spara och dela
 
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+```bash
+git add <sökvägar>
+git commit -m "<typ>: <session-id> — <en rad>"
+git pull --rebase
+git push
 ```
 
-| Type | When |
-|------|------|
-| `feat` | New feature or capability |
-| `fix` | Bug fix |
-| `bump` | Version number update |
-| `docs` | Documentation only |
-| `chore` | Maintenance, config, tooling |
-| `refactor` | Restructure, no behavior change |
+- `<typ>` är till exempel `wrap`, `brief`, `design` eller `fix`.
+- Lägg till specifika sökvägar, inte `git add -A` i blindo. Kolla `git status` först.
+- **Om `pull --rebase` krockar:** stanna och visa konflikten för användaren. Lös den inte på egen hand i någon annans filer.
+- **Om `push` misslyckas:** säg det rakt ut med felmeddelandet. Påstå aldrig att något är pushat utan att ha sett det gå igenom.
+- Kvittera med commit-hash: `git log --oneline -1`.
 
-- One logical change per commit
-- Imperative mood: "add webhook handler" not "added"
-- Always `Co-Authored-By` when Claude wrote or co-wrote — use actual model name
+## Aldrig
 
----
-
-## Branches
-
-`<agent>/<short-description>` — e.g. `codex/refactor-storefront`, `idun/sysadmin-skill`
-
-- Lowercase, hyphens only
-- Short-lived — merge or delete after work is done
-- Never commit directly to `main` for anything non-trivial
-
----
-
-## Never
-
-- `--no-verify` — fix the hook instead
-- `--force` push to `main`
-- `git add .` or `git add -A` — stage specific files
-- Amend published commits
-
----
-
-## Frequency
-
-Commit after each discrete, complete change — not batched at session end.
+- `git push --force`, `git reset --hard` eller att skriva om historik som redan är pushad
+- Commit av hemligheter som `.env`, nycklar eller lösenord

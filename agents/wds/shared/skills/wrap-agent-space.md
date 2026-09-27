@@ -95,7 +95,7 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     - spec_sync: [spec_sync]
 
     **Step A — Save state via memory tool:**
-    Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `save` operation:
+    Read `agents/wds/shared/tools/memory.md` and follow the `save` operation:
     - agent_id: [agent_id]
     - data:
     ```
@@ -157,7 +157,7 @@ With `[target-agent]`: wraps own session AND writes a handoff to `progress/[targ
     You are a handoff writer. Your only job is to save a handoff file via the memory tool.
 
     **Step A — Save handoff via memory tool:**
-    Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `save` operation:
+    Read `agents/wds/shared/tools/memory.md` and follow the `save` operation:
     - agent_id: [target_agent]
     - data:
     ```

@@ -25,7 +25,7 @@ Mimir owns three things: the **tech audit**, the **PRD**, and the **build**. He 
 ### `tech-audit` — Technology Audit
 
 **Trigger:** First time Mimir enters a project with an existing codebase
-**Workflow:** `workflows/tech-audit.md`
+**Workflow:** `skills/tech-audit.md`
 
 Before Mimir writes a single PRD or line of code, he reads the codebase. The tech audit produces a living document that describes what is already built — architecture, stack, patterns, data models, key integrations. It is the foundation every PRD is written on top of.
 
@@ -36,7 +36,7 @@ Before Mimir writes a single PRD or line of code, he reads the codebase. The tec
 ### `prd` — Product Requirements Document
 
 **Trigger:** `/PRD`, when a Work Order exists with no PRD yet
-**Workflow:** `workflows/prd.md` (shared with Saga)
+**Workflow:** `agents/wds/shared/skills/prd-workflow.md` (shared with Saga)
 
 Mimir takes a Work Order written by Freya and turns it into a formal PRD — platform requirements, interface requirements, acceptance criteria. Written collaboratively with the user. The PRD is the contract Mimir builds from and Codex verifies against.
 
@@ -50,7 +50,7 @@ Mimir takes a Work Order written by Freya and turns it into a formal PRD — pla
 ### `build` — Implementation
 
 **Trigger:** `/build`, when a PRD exists and is ready to implement
-**Workflow:** `workflows/build.md`
+**Workflow:** `skills/build.md`
 
 Mimir implements one requirement at a time. Each task gets its own commit. Each task is verified before moving to the next. Verification always includes a browser test — a sub-agent opens the live page and confirms the requirement passes visually and functionally.
 
@@ -74,7 +74,7 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
   <step id="0-sync">
     Silently sync WDS skills before doing anything else.
-    Read `~/.claude/wds/src/tools/sync/SKILL.md` and run it in startup mode.
+    Read `agents/wds/shared/tools/sync.md` and run it in startup mode.
     If WDS is not installed: print install instructions and stop.
     If updates were pulled: note them — report at end of activation.
     Continue regardless of sync outcome.
@@ -123,7 +123,7 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
     Run the tech audit now? (recommended)
 
-    If yes → invoke `workflows/tech-audit.md`.
+    If yes → invoke `skills/tech-audit.md`.
     If no → continue to step 5-status with a note that audit is pending.
   </step>
 
@@ -150,8 +150,8 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
     | Condition | Action |
     |---|---|
     | In-progress build in state file | Resume — read state, continue from last completed task |
-    | WO exists with no PRD | Offer to write PRD collaboratively — invoke `workflows/prd.md` |
-    | PRD exists, not started | Offer to start build — invoke `workflows/build.md` |
+    | WO exists with no PRD | Offer to write PRD collaboratively — invoke `agents/wds/shared/skills/prd-workflow.md` |
+    | PRD exists, not started | Offer to start build — invoke `skills/build.md` |
     | No WOs found | "No work orders yet. Wake Freya with /freya to design and hand off." |
   </step>
 
@@ -163,10 +163,10 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
 | Agent | File | Purpose |
 |---|---|---|
-| PRD Writer | `../../tools/prd-writer/SKILL.md` | Writes formal PRD documents from Work Orders |
-| Tech Auditor | `agents/tech-auditor.md` | Reads codebase, produces 000-tech-audit.md |
-| Tester | `agents/tester.md` | Runs the project's automated test suite after each commit — catches regressions immediately |
-| Browser Verifier | `agents/browser-verifier.md` | Opens live page, verifies each requirement passes visually and functionally |
+| PRD Writer | `agents/wds/shared/tools/prd-writer.md` | Writes formal PRD documents from Work Orders |
+| Tech Auditor | `subagents/tech-auditor.md` | Reads codebase, produces 000-tech-audit.md |
+| Tester | `subagents/tester.md` | Runs the project's automated test suite after each commit — catches regressions immediately |
+| Browser Verifier | `subagents/browser-verifier.md` | Opens live page, verifies each requirement passes visually and functionally |
 
 ---
 

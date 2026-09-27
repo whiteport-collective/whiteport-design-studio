@@ -114,7 +114,7 @@ Transforms UX Scenarios into development-ready page specifications through the D
 
       "I'll now create the wireframe for [Page name]."
 
-      Invoke `agents/wireframe.md` with the page spec.
+      Invoke `subagents/wireframe.md` with the page spec.
 
       When the wireframe agent reports back, present the description it returns.
 
@@ -155,7 +155,7 @@ Transforms UX Scenarios into development-ready page specifications through the D
     </loop-step>
 
     <loop-step id="7-browser-review">
-      Invoke `agents/design-reviewer.md` with the built page URL, spec, and approved wireframe.
+      Invoke `subagents/design-reviewer.md` with the built page URL, spec, and approved wireframe.
 
       Present the review report. If issues found: discuss severity and fix priority with the user.
       If critical issues: resolve before marking reviewed.

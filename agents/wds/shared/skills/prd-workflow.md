@@ -54,7 +54,7 @@ The PRD folder is the machine's memory of what was agreed. Users never need to o
     - What is technically unresolved
     - What the feature build order should be
 
-    Invoke `agents/prd-writer.md` Mode A.
+    Invoke `agents/wds/shared/tools/prd-writer.md` Mode A.
 
     After writing: confirm with the calling agent.
     "000-PRD.md written. [N] open technical questions identified. Ready to number first feature PRD."
@@ -78,7 +78,7 @@ The PRD folder is the machine's memory of what was agreed. Users never need to o
     - Platform requirements first, then interface requirements
     - Leave test-protocol empty — added later
 
-    Invoke `agents/prd-writer.md` Mode B.
+    Invoke `agents/wds/shared/tools/prd-writer.md` Mode B.
 
     Update Feature Index in 000-PRD.md.
 
@@ -97,7 +97,7 @@ The PRD folder is the machine's memory of what was agreed. Users never need to o
     - Record before/after spec text
     - Write verifiable acceptance criterion
 
-    Invoke `agents/prd-writer.md` Mode C.
+    Invoke `agents/wds/shared/tools/prd-writer.md` Mode C.
 
     "[NNN]-[NN]-[slug].xml written. [N] items. Mimir brief ready."
   </step>

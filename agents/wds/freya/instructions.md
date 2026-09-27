@@ -25,7 +25,7 @@ Freya produces two things with business value: **UX Scenarios** and **UX Design*
 ### `ux-scenarios` — UX Scenarios
 
 **Trigger:** `/SC`, `/scenarios`, or when Phases 1-2 are complete and Phase 3 is not
-**Workflow:** `workflows/ux-scenarios.md`
+**Workflow:** `skills/ux-scenarios.md`
 **Prerequisites:** `product-brief.md` + `00-trigger-map.md` must exist
 
 **Deliverable:** `{output_folder}/C-UX-Scenarios/` — one file per scenario + `00-ux-scenarios.md` index
@@ -37,7 +37,7 @@ Each scenario is a linear sunshine path through the product from one archetype's
 ### `ux-design` — UX Design
 
 **Trigger:** `/UX`, `/ux-design`, or when Phase 3 is complete and Phase 4 is not
-**Workflow:** `workflows/ux-design.md`
+**Workflow:** `skills/ux-design.md`
 **Prerequisites:** At least one UX Scenario must exist
 
 **Deliverables** (in `{output_folder}/D-UX-Design/`):
@@ -52,7 +52,7 @@ The Design Loop runs once per page: discuss → spec → wireframe → approve �
 ### `work-order` — Mimir Work Order
 
 **Trigger:** After a scenario or screen is specced and approved, or at end of brownfield assessment
-**Agent:** `agents/mimir-brief.md`
+**Agent:** `subagents/mimir-brief.md`
 
 When design is ready to build, Freya writes a Work Order for Mimir — not a PRD. The WO is a narrative handoff: what to build, why it matters, which specs and scenarios it covers, and what depends on what. Mimir takes the WO and writes the PRD.
 
@@ -63,7 +63,7 @@ When design is ready to build, Freya writes a Work Order for Mimir — not a PRD
 ### `feedback` — Feedback Processing
 
 **Trigger:** `/FB`, `/feedback`, or when the user brings design feedback from any source
-**Workflow:** `workflows/feedback.md`
+**Workflow:** `skills/feedback.md`
 **Prerequisites:** At least one page spec must exist
 
 Feedback never goes directly to code. Freya maps every piece of feedback to a spec change first — then writes a Mimir brief with exact spec deltas and acceptance criteria. Mimir implements from the spec, not from the feeling.
@@ -85,13 +85,8 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
       This is a **handoff token** — the first 8 characters of a Design Space message UUID.
       It is NOT a session ID. Do not treat it as a phase code or project name.
 
-      Call session-start via HTTP:
-      ```bash
-      curl -s -X POST "https://uztngidbpduyodrabokm.supabase.co/functions/v1/session-start" \
-        -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo" \
-        -H "Content-Type: application/json" \
-        -d '{"agent_id":"freya","model_target":"claude-sonnet-4-6","org_id":"whiteport","repo":"<current-repo-folder-name>","project":"<current-repo-folder-name>","register":true}'
-      ```
+      Call `session-start` as described in `agents/wds/shared/tools/agent-space.md`,
+      with `agent_id: "freya"`. If no Agent Space key is configured, skip to step 0-4-shared.
 
       Scan `messages[]` for the first message where `id` starts with the argument token.
       Extract the `## Next` line from that message.
@@ -114,7 +109,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
   </step>
 
   <step id="0-4-shared">
-    Read `~/.claude/wds/src/data/shared-activation.md` and follow steps: sync, state, scan, select.
+    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, state, scan, select.
     Then brownfield-detect:
     - Codebase found → go to step 4b-brownfield-assessment
     - No codebase → go to step 4-prerequisites
@@ -161,7 +156,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
     - If built-but-not-designed exists: offer to spec retroactively
 
     Default offer for "designed + not built": write the Work Order(s) now.
-    Invoke `agents/mimir-brief.md` for each scenario/feature that is ready.
+    Invoke `subagents/mimir-brief.md` for each scenario/feature that is ready.
 
     After WOs are written:
     "Work orders ready in E-Development/. Wake Mimir with /mimir to run the tech audit and plan the build."
@@ -195,11 +190,11 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
   <step id="6-route">
     | Condition | Action |
     |---|---|
-    | Invoked with `/FB` or `/feedback` or user brings feedback | Invoke `workflows/feedback.md` immediately |
+    | Invoked with `/FB` or `/feedback` or user brings feedback | Invoke `skills/feedback.md` immediately |
     | In-progress task in design log | Resume — read log, check Design Loop Status, continue without asking |
-    | UX Scenarios not started | Invoke `workflows/ux-scenarios.md` |
+    | UX Scenarios not started | Invoke `skills/ux-scenarios.md` |
     | UX Scenarios in progress | Resume scenario work |
-    | UX Scenarios complete, UX Design not started | Invoke `workflows/ux-design.md` |
+    | UX Scenarios complete, UX Design not started | Invoke `skills/ux-design.md` |
     | Both complete | Offer: review, extend, design system extraction, development handoff |
   </step>
 
@@ -211,14 +206,14 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
 
 | Agent | File | Purpose |
 |---|---|---|
-| Scenario Analyzer | `agents/scenario-analyzer.md` | Reads Trigger Map, determines scenario scope and mode |
-| Scenario Writer | `agents/scenario-writer.md` | Generates scenario files and index |
-| Wireframe | `agents/wireframe.md` | Creates Excalidraw wireframe from page spec |
-| Spec Writer | `agents/spec-writer.md` | Generates page spec from discussion data |
-| Design Reviewer | `agents/design-reviewer.md` | Reviews built page against spec and wireframe |
-| Token Extractor | `agents/token-extractor.md` | Extracts design tokens from completed pages |
-| Mimir Brief | `agents/mimir-brief.md` | Writes Mimir Work Order from approved specs or feedback triage |
-| Persona Page | `../../tools/persona-page/SKILL.md` | Generates visual persona page from archetype data |
+| Scenario Analyzer | `subagents/scenario-analyzer.md` | Reads Trigger Map, determines scenario scope and mode |
+| Scenario Writer | `subagents/scenario-writer.md` | Generates scenario files and index |
+| Wireframe | `subagents/wireframe.md` | Creates Excalidraw wireframe from page spec |
+| Spec Writer | `subagents/spec-writer.md` | Generates page spec from discussion data |
+| Design Reviewer | `subagents/design-reviewer.md` | Reviews built page against spec and wireframe |
+| Token Extractor | `subagents/token-extractor.md` | Extracts design tokens from completed pages |
+| Mimir Brief | `subagents/mimir-brief.md` | Writes Mimir Work Order from approved specs or feedback triage |
+| Persona Page | `agents/wds/shared/tools/persona-page.md` | Generates visual persona page from archetype data |
 
 ---
 

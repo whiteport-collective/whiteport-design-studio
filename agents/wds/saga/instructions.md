@@ -25,7 +25,7 @@ Saga produces two things with business value: the **Product Brief suite** and th
 ### `product-brief` — Product Brief Suite
 
 **Trigger:** `/PB`, `/product-brief`, or when Phase 1 is not complete
-**Workflow:** `workflows/product-brief.md`
+**Workflow:** `skills/product-brief.md`
 
 The Product Brief is a suite of documents. The core document is always produced. Extensions activate based on signals during discovery — if brand voice comes up, `content-language.md` gets written; if visual direction comes up, `visual-direction.md` gets written. More documents can be added to the suite as project needs expand.
 
@@ -42,7 +42,7 @@ The Product Brief is a suite of documents. The core document is always produced.
 ### `trigger-map` — Trigger Map
 
 **Trigger:** `/TM`, `/trigger-map`, or when Phase 1 is complete and Phase 2 is not
-**Workflow:** `workflows/trigger-map.md`
+**Workflow:** `skills/trigger-map.md`
 **Prerequisite:** `product-brief.md` must exist
 
 **Deliverables** (in `{output_folder}/B-Trigger-Map/`):
@@ -61,7 +61,7 @@ Five workshops build the map: (1) Business Goals, (2–4) one persona per target
 ### `prd` — Product Requirements
 
 **Trigger:** `/PRD`, after Platform Requirements are complete, or when a feature is ready to build
-**Workflow:** `../../tools/prd-workflow/SKILL.md`
+**Workflow:** `agents/wds/shared/skills/prd-workflow.md`
 
 Two outputs:
 - `E-Development/000-PRD.md` — master technical document, written once after Product Brief
@@ -82,13 +82,8 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
       This is a **handoff token** — the first 8 characters of a Design Space message UUID.
       It is NOT a session ID. Do not treat it as a phase code or project name.
 
-      Call session-start via HTTP:
-      ```bash
-      curl -s -X POST "https://uztngidbpduyodrabokm.supabase.co/functions/v1/session-start" \
-        -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dG5naWRicGR1eW9kcmFib2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTc3ODksImV4cCI6MjA4ODA5Mzc4OX0.FNnTd5p9Qj3WeD0DxQORmNf2jgaVSZ6FU1EGy0W7MRo" \
-        -H "Content-Type: application/json" \
-        -d '{"agent_id":"saga","model_target":"claude-sonnet-4-6","org_id":"whiteport","repo":"<current-repo-folder-name>","project":"<current-repo-folder-name>","register":true}'
-      ```
+      Call `session-start` as described in `agents/wds/shared/tools/agent-space.md`,
+      with `agent_id: "saga"`. If no Agent Space key is configured, skip to step 0-4-shared.
 
       Scan `messages[]` for the first message where `id` starts with the argument token.
       Extract the `## Next` line from that message.
@@ -111,7 +106,7 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
   </step>
 
   <step id="0-4-shared">
-    Read `~/.claude/wds/src/data/shared-activation.md` and follow steps: sync, state, scan, select.
+    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, state, scan, select.
     Then brownfield-detect:
     - Codebase found + no Product Brief → go to step 4b-brownfield-brief
     - Codebase found + Product Brief exists, or no codebase → go to step 4-status
@@ -154,8 +149,8 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
     | Condition | Action |
     |---|---|
     | In-progress task in design log | Resume — read log, continue without asking |
-    | Product Brief not started | Invoke `workflows/product-brief.md` |
-    | Product Brief complete, Trigger Map not started | Invoke `workflows/trigger-map.md` |
+    | Product Brief not started | Invoke `skills/product-brief.md` |
+    | Product Brief complete, Trigger Map not started | Invoke `skills/trigger-map.md` |
     | Both complete | Offer: review, extend suite, or handoff to Freya |
   </step>
 
@@ -167,12 +162,12 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
 
 | Agent | File | Purpose |
 |---|---|---|
-| Material Analyzer | `agents/material-analyzer.md` | Reads existing docs, extracts data, identifies gaps before discovery |
-| Brief Writer | `agents/brief-writer.md` | Generates the Product Brief suite from collected discovery data |
-| Goals Writer | `agents/goals-writer.md` | Writes the Business Goals document after Workshop 1 |
-| Persona Writer | `agents/persona-writer.md` | Writes one persona document with driving forces — called per persona, immediately after that workshop |
-| Trigger Map Writer | `agents/trigger-writer.md` | Writes the four-layer poster after all personas are confirmed |
-| Feature Impact Writer | `agents/feature-impact-writer.md` | Generates Feature Impact Analysis autonomously from driving force data |
+| Material Analyzer | `subagents/material-analyzer.md` | Reads existing docs, extracts data, identifies gaps before discovery |
+| Brief Writer | `subagents/brief-writer.md` | Generates the Product Brief suite from collected discovery data |
+| Goals Writer | `subagents/goals-writer.md` | Writes the Business Goals document after Workshop 1 |
+| Persona Writer | `subagents/persona-writer.md` | Writes one persona document with driving forces — called per persona, immediately after that workshop |
+| Trigger Map Writer | `subagents/trigger-writer.md` | Writes the four-layer poster after all personas are confirmed |
+| Feature Impact Writer | `subagents/feature-impact-writer.md` | Generates Feature Impact Analysis autonomously from driving force data |
 
 ---
 

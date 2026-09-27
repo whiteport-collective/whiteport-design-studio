@@ -8,7 +8,7 @@ Each agent's SKILL.md references this file instead of repeating these steps.
 ## Step: sync
 
 Silently sync WDS skills before doing anything else.
-Read `~/.claude/wds/src/tools/sync/SKILL.md` and run it in startup mode.
+Read `agents/wds/shared/tools/sync.md` and run it in startup mode.
 If WDS is not installed: print install instructions and stop.
 If updates were pulled: note them — report at end of activation.
 Continue regardless of sync outcome.
@@ -18,7 +18,7 @@ Continue regardless of sync outcome.
 ## Step: state
 
 Check for session state via the memory tool.
-Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `load` operation for the current agent_id.
+Read `agents/wds/shared/tools/memory.md` and follow the `load` operation for the current agent_id.
 If state found: show resume prompt. Wait for user response before continuing.
 
 ---

@@ -22,7 +22,7 @@ If not found: proceed silently. The index will be built on first wrap.
 
 ### 2. Detect Session State
 
-Read `~/.claude/wds/src/tools/memory/SKILL.md` and follow the `load` operation for the current agent_id.
+Read `agents/wds/shared/tools/memory.md` and follow the `load` operation for the current agent_id.
 
 **Fallback chain:** state found → show resume prompt → fresh start
 
