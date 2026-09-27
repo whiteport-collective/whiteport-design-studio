@@ -25,10 +25,11 @@ If state found: show resume prompt. Wait for user response before continuing.
 
 ## Step: handovers
 
-Check `users/_handovers/<agent_id>/` in the current repo for files with `status: öppen`.
-IF found: show them (newest first: uppdrag + projekt) and propose taking the newest.
+Read the latest handover to this agent: `users/<user>/handovers/<agent_id>/` (newest file by name).
+Also check `users/all-users/handovers/<agent_id>/` for files with `status: öppen` (handovers to anyone running this agent).
+IF an open handover exists: show it (Nästa + projects) and propose taking it.
 When the user accepts: set `status: tagen` and `tagen_av: <session-id>` in the file, commit.
-When the work is done, wrap sets `status: klar`. Never delete a handover.
+Wrap sets `status: klar` when the work is done. Never delete a handover.
 
 ---
 
