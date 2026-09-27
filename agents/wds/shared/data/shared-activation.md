@@ -23,6 +23,15 @@ If state found: show resume prompt. Wait for user response before continuing.
 
 ---
 
+## Step: handovers
+
+Check `users/_handovers/<agent_id>/` in the current repo for files with `status: öppen`.
+IF found: show them (newest first: uppdrag + projekt) and propose taking the newest.
+When the user accepts: set `status: tagen` and `tagen_av: <session-id>` in the file, commit.
+When the work is done, wrap sets `status: klar`. Never delete a handover.
+
+---
+
 ## Step: scan
 
 Scan workspace for WDS projects:
