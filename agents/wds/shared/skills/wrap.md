@@ -81,6 +81,10 @@ För varje projekt som rördes: lägg en rad **överst** i `projects/<projekt>/d
 
 ## 4. Soul-genomgång: jämför och uppdatera
 
+**Var ligger det privata skåpet?** Platsen står i `private:` i `users/<användare>/user.md`, och en kopia står i `.wds/me.md`. Det kan vara en lokal mapp eller ett repo.
+- **Saknas `private:`, eller finns mappen inte på den här datorn:** fråga personen var de privata soul-filerna ska sparas. Föreslå en mapp i ett repo som personen själv äger, eller en lokal mapp, men aldrig projektrepot. Skriv svaret i `private:` i `user.md` och i `.wds/me.md`, och skapa mappen och de filer som behövs.
+- **Personen avstår:** skriv bara i repots skåp. Visa i kvittensen vad som skulle ha sparats privat, och fråga igen vid nästa wrap.
+
 Agenten läste soul-filerna vid start ("Step: soul" i `shared-activation.md`). Gå nu igenom hela samtalet och jämför det med vad filerna redan säger. Leta efter allt som är nytt eller har ändrats:
 
 - **Fakta om personen:** var hen jobbar, roll, chef och kollegor, kunder, vad som har hänt
@@ -103,13 +107,13 @@ Varje nyhet sorteras till rätt fil:
 | Levererat i projektet | `achievements.md` | repo, överst, med länk till överlämningen |
 | Ekonomi, hälsa, familj, relationer | skrivs aldrig av en arbetsagent | nämns i kvittensen så att personen själv kan föra in det |
 
-Repots filer ligger i `users/<användare>/`. De privata ligger i mappen som `private:` i `.wds/me.md` pekar på.
+Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` pekar.
 
 **Regler**
 - **Uppdatera och optimera, lägg inte bara till nya rader.** Skriv in det nya där det hör hemma, slå ihop dubbletter, ersätt det som inte längre gäller och stryk det inaktuella. Håll varje fil kort och lätt att läsa. Rättelser och händelser får datum.
 - **Agentens metod hör inte hemma i soul.** Rättar personen hur agenten följer sin egen metod, till exempel samtalsguiden eller en mall, är det en brist i agentinstruktionerna. Föreslå en ändring uppströms i stället för att skriva i någons soul.
 - **Repots filer delas med teamet.** Skriv aldrig något privat där, och ändra aldrig i någon annans mapp.
-- **Privata filer skrivs direkt** och delas i personens privata repo enligt git-toolet. Kvittensen visar vad som ändrades.
+- **Privata filer skrivs direkt.** Är skåpet ett repo görs commit och push enligt git-toolet. Är det en lokal mapp sparas filerna bara. Kvittensen visar vad som ändrades.
 - Rör bara de filer där något nytt faktiskt har hänt. `heartbeat.md` skapas första gången det finns något att skriva.
 
 ## 5. Dela
@@ -119,7 +123,7 @@ Spara och dela överlämningen, projektloggarna och repots användarfiler enligt
 ## 6. Andra repon och personlig logg
 
 - **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `sessions/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
-- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad — sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas och dela den i det privata repot.
+- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad — sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
 
 ## 7. Kvittens
 

@@ -20,11 +20,12 @@ Continue regardless of sync outcome.
 Read the user's soul files before any work. This is how the agent knows who it works with.
 Based on Nate B. Jones' two filing cabinets: the **repo cabinet** holds what the person works on here and stays with the project. The **private cabinet** holds who the person is and travels with them.
 
-1. Identify the user per `agents/wds/shared/tools/git.md`. `.wds/me.md` gives `user:` and `private:`.
-2. **Repo cabinet:** read `users/<user>/user.md`, `soul.md`, `objectives.md` and `achievements.md`.
-3. **Private cabinet:** if `private:` points to a folder on this machine, read `user.md`, `soul.md`, `identity.md`, `objectives.md` and `heartbeat.md` there. **Never read the `private/` subfolder.**
-4. Follow both soul files. If they conflict, the repo's soul wins because it is more specific.
-5. Keep what you read as the baseline for the session. Wrap compares the session against it (wrap step 4).
+1. Identify the user per `agents/wds/shared/tools/git.md`.
+2. **New user?** If `users/<user>/` doesn't exist, tell the person in one line that they are new and that their soul files will be built from the sessions. Create the folder from `users/_template/` and go straight on to the work. No interview is needed. Wrap asks where the private cabinet should live.
+3. **Repo cabinet:** read `users/<user>/user.md`, `soul.md`, `objectives.md` and `achievements.md`.
+4. **Private cabinet:** its location is `private:`. Read it from `.wds/me.md` first, then from `users/<user>/user.md`. It can be a local folder or a repo. For a repo, find its folder on this machine. If found, read `user.md`, `soul.md`, `identity.md`, `objectives.md` and `heartbeat.md` there. **Never read the `private/` subfolder.**
+5. Follow both soul files. If they conflict, the repo's soul wins because it is more specific.
+6. Keep what you read as the baseline for the session. Wrap compares the session against it (wrap step 4).
 
 Do not print the files. If a file is missing, continue. Wrap creates it when there is something to write.
 

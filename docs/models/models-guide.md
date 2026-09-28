@@ -120,6 +120,21 @@ Used in Trigger Mapping Workshop 1 to transform vision (visionary statements) in
 
 ---
 
+### [Soul Files: Portable AI Context](./soul-files-portable-context.md)
+
+**By:** Nate B. Jones (2026)
+**Core Idea:** Your AI context is professional capital. Own it as plain files (USER.md, SOUL.md, HEARTBEAT.md) in two filing cabinets: yours (how you work) and the organization's (what you worked on).
+
+**Applied in WDS:**
+- Step: soul: every agent reads both cabinets at session start
+- Wrap soul review: every session is a source. New facts, corrections and insights are routed to the right file, which is updated and optimized
+- New users are detected at start and asked at wrap where their private cabinet should live
+- WDS twist: Nate interviews once. WDS learns from every session
+
+**When to Use:** Always. It runs underneath every WDS session.
+
+---
+
 ## Models vs. Methods
 
 ### Models (This Folder)
@@ -245,6 +260,7 @@ These models represent decades of insight from brilliant thinkers who've shaped 
 - **George T. Doran** - Creating measurable, achievable objectives
 - **Cathy Moore** - Focusing on action over information
 - **Kathy Sierra** - Championing user capability
+- **Nate B. Jones** - Owning your AI context as portable files
 
 **Whiteport stands on the shoulders of giants. We're grateful for their contributions to the field.**
 
