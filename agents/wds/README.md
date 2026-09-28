@@ -24,6 +24,32 @@ Each agent folder:
 
 **Roles:** Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
 
+## Skills and tools
+
+This principle applies to every skill in every project and initiative, not only WDS.
+
+| | Skill | Tool |
+|---|---|---|
+| **Holds** | **What and why:** the purpose, the workflow, the judgment, when and for whom | **How:** the commands, API calls and scripts that do the work in practice |
+| **Links to** | its tools in the frontmatter: `tools: [<source>/<tool>, …]` | the skills that use it: `used_by: [<skill>, …]` |
+| **Changes when** | the strategy or the method changes | the technology changes |
+
+- **One skill can have several tools for the same task.** Posting on a channel can go through an API, a scheduling service or the browser. The skill picks, and the tools do the work.
+- **One tool can serve several skills.** It is written once and referenced everywhere.
+- **Commands never live in a skill.** An API call, a CLI command or a script path always goes in the tool.
+- **No MCP servers in sessions.** A tool uses, in this order: HTTP, a CLI, or a script in the tool's own folder. As a last resort it starts an MCP-only server for a single call and exits.
+- **Every skill and tool has exactly one source repo.** Local copies are never edited.
+- **Applied as you go.** When a session touches a skill or tool, the agent checks that `tools:` and `used_by:` match and fixes them (wrap step 5).
+
+```markdown
+---                                   ---
+name: <skill>                         name: <tool>
+description: One sentence.            description: One sentence.
+tools: [<source>/<tool>]              type: http | cli | script
+---                                   used_by: [<skill>, <skill>]
+                                      ---
+```
+
 ## Installing in a project
 
 `/sync-skills` copies `agents/wds/` into each project repo that has an `agents/wds/` folder. The project's adapters (`.claude/commands/`, `.github/prompts/`, `.github/agents/`, `.agents/skills/`) point at `agents/wds/<agent>/instructions.md`. Edit here, never in the copy.

@@ -123,6 +123,7 @@ Gäller när sessionen skapade, ändrade, flyttade eller tog bort en skill, ett 
 - **Ändringen ska ligga i källan.** Varje skill har exakt ett källrepo. En ändring som gjordes i en lokal kopia, till exempel `~/.claude/commands`, en adaptermapp eller en synkad `agents/wds/`, flyttas till källrepot. Där görs commit och push. Externa källor ändras uppströms.
 - **Katalogen uppdateras.** Har personen en skillskatalog i sitt privata skåp (`skills.md`, och `skills.json` om den finns), lägg in nya skills och källor, och ändra raden för det som flyttats eller tagits bort. Skriv över inget. Uppdatera raden där skillen står.
 - **Sprid versionen.** Kör synken enligt katalogen, så att alla repon och den här datorn får den nya versionen.
+- **Skill och tool hålls isär** enligt `agents/wds/README.md` (Skills and tools). Kontrollera att skillen listar sina tools i `tools:` och att varje tool listar sina skills i `used_by:`. Kommandon som hamnat i en skill flyttas till ett tool.
 
 ## 6. Dela
 
