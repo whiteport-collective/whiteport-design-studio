@@ -1,7 +1,7 @@
 ---
 name: wrap
 source: wds
-description: Avsluta en session. Skriver överlämningen (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, uppdaterar projektloggen och delar arbetet.
+description: Avsluta en session. Skriver överlämningen (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, för skill-ändringar till källrepot och katalogen, uppdaterar projektloggen och delar arbetet.
 tools: [wds/shared/git]
 ---
 
@@ -105,7 +105,7 @@ Varje nyhet sorteras till rätt fil:
 | Roll i det här projektet | `user.md` | repo |
 | Mål, personliga eller i projektet | `objectives.md` | privat eller repo |
 | Levererat i projektet | `achievements.md` | repo, överst, med länk till överlämningen |
-| Ekonomi, hälsa, familj, relationer | skrivs aldrig av en arbetsagent | nämns i kvittensen så att personen själv kan föra in det |
+| Ekonomi, hälsa, familj, relationer | en överlämning till personens privata agent i `sessions/<användare>/<agent>/` i det privata skåpets repo (eller i den lokala mappen) | privat, aldrig i soul-filerna och aldrig i projektrepot |
 
 Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` pekar.
 
@@ -116,21 +116,30 @@ Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` p
 - **Privata filer skrivs direkt.** Är skåpet ett repo görs commit och push enligt git-toolet. Är det en lokal mapp sparas filerna bara. Kvittensen visar vad som ändrades.
 - Rör bara de filer där något nytt faktiskt har hänt. `heartbeat.md` skapas första gången det finns något att skriva.
 
-## 5. Dela
+## 5. Skills: katalogen och källrepona
+
+Gäller när sessionen skapade, ändrade, flyttade eller tog bort en skill, ett tool eller ett skript.
+
+- **Ändringen ska ligga i källan.** Varje skill har exakt ett källrepo. En ändring som gjordes i en lokal kopia, till exempel `~/.claude/commands`, en adaptermapp eller en synkad `agents/wds/`, flyttas till källrepot. Där görs commit och push. Externa källor ändras uppströms.
+- **Katalogen uppdateras.** Har personen en skillskatalog i sitt privata skåp (`skills.md`, och `skills.json` om den finns), lägg in nya skills och källor, och ändra raden för det som flyttats eller tagits bort. Skriv över inget. Uppdatera raden där skillen står.
+- **Sprid versionen.** Kör synken enligt katalogen, så att alla repon och den här datorn får den nya versionen.
+
+## 6. Dela
 
 Spara och dela överlämningen, projektloggarna och repots användarfiler enligt git-toolet. De privata filerna delas i sitt eget repo. Commit-meddelandet ska vara `wrap: <session-id> — <en rad>`.
 
-## 6. Andra repon och personlig logg
+## 7. Andra repon och personlig logg
 
 - **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `sessions/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
-- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad — sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
+- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad · sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
 
-## 7. Kvittens
+## 8. Kvittens
 
 Visa användaren:
 - session-id, mottagare och sökväg till överlämningen
 - vad som ändrades i soul-filerna, per fil och skåp (repo eller privat), eller "inget nytt"
-- sådant som bara personen själv ska föra in (ekonomi, hälsa, familj), om något kom upp
+- den privata överlämningen, om något om ekonomi, hälsa eller familj kom upp
+- skills som ändrades: var de ligger nu och att katalogen är uppdaterad
 - commit-hash och att push gick igenom
 
 Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent, `<repo>` är repots mappnamn och tidsstämpeln är sessionens start:

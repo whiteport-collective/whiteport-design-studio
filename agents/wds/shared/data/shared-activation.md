@@ -26,6 +26,7 @@ Based on Nate B. Jones' two filing cabinets: the **repo cabinet** holds what the
 4. **Private cabinet:** its location is `private:`. Read it from `.wds/me.md` first, then from `users/<user>/user.md`. It can be a local folder or a repo. For a repo, find its folder on this machine. If found, read `user.md`, `soul.md`, `identity.md`, `objectives.md` and `heartbeat.md` there. **Never read the `private/` subfolder.**
 5. Follow both soul files. If they conflict, the repo's soul wins because it is more specific.
 6. Keep what you read as the baseline for the session. Wrap compares the session against it (wrap step 4).
+7. **Skills:** if the private cabinet has a skills catalog (`skills.md`), follow its section on what to run before each session, so the latest versions are installed locally.
 
 Do not print the files. If a file is missing, continue. Wrap creates it when there is something to write.
 

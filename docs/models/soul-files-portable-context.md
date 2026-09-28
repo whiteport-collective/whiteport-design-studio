@@ -81,7 +81,7 @@ A correction ("don't do X, do Y"), a rejected proposal, a fact mentioned in pass
 | Cabinet | Where | Files |
 |---|---|---|
 | **Repo:** what you work on here | `users/<user>/` in the project repo, shared with the team | `user.md` (role in the project), `soul.md` (how agents work with you *in this repo*), `objectives.md`, `achievements.md` |
-| **Private:** who you are | a local folder or a repo you own, pointed to by `private:` in `users/<user>/user.md`, with a copy in `.wds/me.md` | `user.md` (professional profile), `soul.md` (how agents work with you *everywhere*), `identity.md` (values, drivers, ways of thinking), `objectives.md`, `heartbeat.md` (current state: workplace, role, manager, colleagues, what has happened), `log.md` (one line per session) |
+| **Private:** who you are | a local folder or a repo you own, pointed to by `private:` in `users/<user>/user.md`, with a copy in `.wds/me.md` | `user.md` (professional profile), `soul.md` (how agents work with you *everywhere*), `identity.md` (values, drivers, ways of thinking), `objectives.md`, `heartbeat.md` (current state: workplace, role, manager, colleagues, what has happened), `log.md` (one line per session), `skills.md` + `skills.json` (the skills catalog: every source repo, and the sync to run before each session). Private handovers go in `sessions/` in the same repo |
 
 `<user>` is the GitHub username in lowercase. `.wds/me.md` is local to each machine and never committed. The location of the private cabinet can be stored openly in the repo's `user.md`, because a path reveals nothing. The contents stay private.
 
@@ -95,6 +95,7 @@ Every WDS agent (Saga, Freya, Mimir) runs **Step: soul** in `agents/wds/shared/d
 2. Read the repo cabinet and the private cabinet, but never `private/`.
 3. Follow both soul files. If they conflict, the repo's soul wins because it is more specific.
 4. Keep what was read as **the baseline** for the session.
+5. If the private cabinet has a skills catalog, run its sync so the latest skills are installed locally.
 
 ### At wrap: the soul review
 
@@ -110,7 +111,7 @@ Wrap step 4 compares the whole session with the baseline and sorts every new ite
 | Role in this project | `user.md` | repo |
 | Goals | `objectives.md` | private or repo |
 | Delivered in the project | `achievements.md` | repo |
-| Finances, health, family, relationships | never written by a work agent | mentioned in the receipt, so the person can add it themselves |
+| Finances, health, family, relationships | a handover to the person's private agent in `sessions/` | private, never in the soul files or the project repo |
 
 **Rules:**
 - **Update and optimize, don't just append.** Merge duplicates, replace what no longer holds, prune what is outdated, and keep each file short. Date corrections and events.
@@ -165,6 +166,7 @@ WDS notices a new user and builds the cabinets from the first session on:
 | **New user** | Detected at start. Asked at wrap where the private cabinet should live |
 | **Team repos** | Repo cabinet shared, private cabinet never copied in |
 | **Agent instructions** | Method corrections go upstream, never into a soul |
+| **Skills catalog** | Synced before every session. Wrap moves skill changes to their source repo and updates the catalog |
 
 ---
 
