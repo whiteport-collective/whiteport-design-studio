@@ -15,11 +15,18 @@ Continue regardless of sync outcome.
 
 ---
 
-## Step: state
+## Step: soul
 
-Check for session state via the memory tool.
-Read `agents/wds/shared/tools/memory.md` and follow the `load` operation for the current agent_id.
-If state found: show resume prompt. Wait for user response before continuing.
+Read the user's soul files before any work. This is how the agent knows who it works with.
+Based on Nate B. Jones' two filing cabinets: the **repo cabinet** holds what the person works on here and stays with the project. The **private cabinet** holds who the person is and travels with them.
+
+1. Identify the user per `agents/wds/shared/tools/git.md`. `.wds/me.md` gives `user:` and `private:`.
+2. **Repo cabinet:** read `users/<user>/user.md`, `soul.md`, `objectives.md` and `achievements.md`.
+3. **Private cabinet:** if `private:` points to a folder on this machine, read `user.md`, `soul.md`, `identity.md`, `objectives.md` and `heartbeat.md` there. **Never read the `private/` subfolder.**
+4. Follow both soul files. If they conflict, the repo's soul wins because it is more specific.
+5. Keep what you read as the baseline for the session. Wrap compares the session against it (wrap step 4).
+
+Do not print the files. If a file is missing, continue. Wrap creates it when there is something to write.
 
 ---
 

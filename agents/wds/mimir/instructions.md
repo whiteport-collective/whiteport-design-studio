@@ -92,6 +92,10 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
     If found: show summary, offer resume or fresh start.
   </step>
 
+  <step id="1b-soul">
+    Follow "Step: soul" in `agents/wds/shared/data/shared-activation.md`: read the repo and private soul files for the user.
+  </step>
+
   <step id="2-scan">
     Scan workspace for WDS projects:
     - Find repos with `_progress/wds-project-outline.yaml` or `_progress/00-design-log.md`

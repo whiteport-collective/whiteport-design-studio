@@ -1,7 +1,7 @@
 ---
 name: wrap
 source: wds
-description: Avsluta en session. Skriver överlämningen (till samma eller en annan agent), uppdaterar soul, achievements och objectives samt projektloggen, och delar arbetet.
+description: Avsluta en session. Skriver överlämningen (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, uppdaterar projektloggen och delar arbetet.
 tools: [wds/shared/git]
 ---
 
@@ -79,34 +79,54 @@ För varje projekt som rördes: lägg en rad **överst** i `projects/<projekt>/d
 - En till tre punkter om vad som hände i projektet. [Överlämning](../../../../sessions/<användare>/<till>/<fil>.md)
 ```
 
-## 4. Användarfilerna
+## 4. Soul-genomgång: jämför och uppdatera
 
-I `users/<användare>/`. Varje punkt ska ha datum. **Skriv inget privat**, eftersom filerna är delade med teamet. Ändra aldrig i någon annans mapp. Rör bara de filer där något nytt faktiskt hänt.
+Agenten läste soul-filerna vid start ("Step: soul" i `shared-activation.md`). Gå nu igenom hela samtalet och jämför det med vad filerna redan säger. Leta efter allt som är nytt eller har ändrats:
 
-| Vad som hände | Fil | Rubrik |
+- **Fakta om personen:** var hen jobbar, roll, chef och kollegor, kunder, vad som har hänt
+- **Rättelser** av agenten, och vad personen uppskattade eller avvisade
+- **Insikter** om hur personen tänker, beslutar och vad hen värdesätter
+- **Mål** som tillkom, ändrades eller nåddes
+- Sådant som **levererades**
+
+Varje nyhet sorteras till rätt fil:
+
+| Nytt | Fil | Skåp |
 |---|---|---|
-| Personen rättade agenten: vad som var fel, hur det ska vara | `soul.md` | Rättelser |
-| Personen uppskattade eller avvisade något | `soul.md` | Uppskattat / avvisat |
-| Något blev klart och levererat | `achievements.md` | överst, med länk till överlämningen |
-| Ett mål tillkom, ändrades eller nåddes | `objectives.md` | uppdatera listan |
-| Rollen i projektet ändrades | `user.md` | Roll |
+| Nuläge: arbetsplats, roll, chef, kollegor, kunder, vad som har hänt | `heartbeat.md` | privat |
+| Hur agenter ska jobba med personen, överallt | `soul.md` | privat |
+| Hur agenter ska jobba med personen, i det här repot | `soul.md` | repo |
+| Vem personen är: värderingar, drivkrafter, sätt att tänka | `identity.md` | privat |
+| Professionell profil: kompetens, erfarenhet, arbetssätt | `user.md` | privat |
+| Roll i det här projektet | `user.md` | repo |
+| Mål, personliga eller i projektet | `objectives.md` | privat eller repo |
+| Levererat i projektet | `achievements.md` | repo, överst, med länk till överlämningen |
+| Ekonomi, hälsa, familj, relationer | skrivs aldrig av en arbetsagent | nämns i kvittensen så att personen själv kan föra in det |
 
-Något som gäller personen **överallt**, inte bara i det här repot, hör hemma i personens privata soul-fil (`private:` i `user.md`). Föreslå det för personen i stället för att skriva det här.
+Repots filer ligger i `users/<användare>/`. De privata ligger i mappen som `private:` i `.wds/me.md` pekar på.
+
+**Regler**
+- **Uppdatera och optimera, lägg inte bara till nya rader.** Skriv in det nya där det hör hemma, slå ihop dubbletter, ersätt det som inte längre gäller och stryk det inaktuella. Håll varje fil kort och lätt att läsa. Rättelser och händelser får datum.
+- **Agentens metod hör inte hemma i soul.** Rättar personen hur agenten följer sin egen metod, till exempel samtalsguiden eller en mall, är det en brist i agentinstruktionerna. Föreslå en ändring uppströms i stället för att skriva i någons soul.
+- **Repots filer delas med teamet.** Skriv aldrig något privat där, och ändra aldrig i någon annans mapp.
+- **Privata filer skrivs direkt** och delas i personens privata repo enligt git-toolet. Kvittensen visar vad som ändrades.
+- Rör bara de filer där något nytt faktiskt har hänt. `heartbeat.md` skapas första gången det finns något att skriva.
 
 ## 5. Dela
 
-Spara och dela överlämningen, projektloggarna och användarfilerna enligt git-toolet. Commit-meddelandet ska vara `wrap: <session-id> — <en rad>`.
+Spara och dela överlämningen, projektloggarna och repots användarfiler enligt git-toolet. De privata filerna delas i sitt eget repo. Commit-meddelandet ska vara `wrap: <session-id> — <en rad>`.
 
 ## 6. Andra repon och personlig logg
 
 - **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `sessions/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
-- **Privat logg:** om `user.md` har `private:` och repot finns på datorn, lägg en rad där med session-id, repo och länk. Dela där också.
+- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad — sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas och dela den i det privata repot.
 
 ## 7. Kvittens
 
 Visa användaren:
 - session-id, mottagare och sökväg till överlämningen
-- vad som lades till i användarfilerna, eller "inget nytt"
+- vad som ändrades i soul-filerna, per fil och skåp (repo eller privat), eller "inget nytt"
+- sådant som bara personen själv ska föra in (ekonomi, hälsa, familj), om något kom upp
 - commit-hash och att push gick igenom
 
 Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent, `<repo>` är repots mappnamn och tidsstämpeln är sessionens start:

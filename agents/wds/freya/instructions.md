@@ -114,7 +114,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
   </step>
 
   <step id="0-4-shared">
-    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, state, handovers, scan, select.
+    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, handovers, scan, select.
     Then brownfield-detect:
     - Codebase found → go to step 4b-brownfield-assessment
     - No codebase → go to step 4-prerequisites
