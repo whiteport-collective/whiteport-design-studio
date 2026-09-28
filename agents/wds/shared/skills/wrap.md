@@ -118,11 +118,17 @@ Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` p
 
 ## 5. Skills: katalogen och källrepona
 
-Gäller när sessionen skapade, ändrade, flyttade eller tog bort en skill, ett tool eller ett skript.
+Skills ligger i repot för det projekt, initiativ eller företag de gäller. Personens katalog (`skills.md` och `skills.json` i det privata skåpet) listar personens egna skills och alla repon personen jobbar i.
+
+- **Nytt projekt:** finns det här repot inte i katalogen, lägg till det med sökväg, GitHub-adress och vad det innehåller. Från och med nu synkas det vid varje wrap.
+
+Resten gäller när sessionen skapade, ändrade, flyttade eller tog bort en skill, ett tool eller ett skript.
 
 - **Ändringen ska ligga i källan.** Varje skill har exakt ett källrepo. En ändring som gjordes i en lokal kopia, till exempel `~/.claude/commands`, en adaptermapp eller en synkad `agents/wds/`, flyttas till källrepot. Där görs commit och push. Externa källor ändras uppströms.
+- **En commit per skill eller tool.** Varje ändrad skill eller tool får en egen commit med bara den filen och dess skript, aldrig annat arbete. Meddelandet ska vara `skill(<namn>): <vad som ändrades och varför>` eller `tool(<namn>): …`. Då visar `git log -- <fil>` hur skillen har utvecklats.
 - **Katalogen uppdateras.** Har personen en skillskatalog i sitt privata skåp (`skills.md`, och `skills.json` om den finns), lägg in nya skills och källor, och ändra raden för det som flyttats eller tagits bort. Skriv över inget. Uppdatera raden där skillen står.
 - **Sprid versionen.** Kör synken enligt katalogen, så att alla repon och den här datorn får den nya versionen.
+- **Bekräftelse:** synk, en ny rad i katalogen samt commit och push i personens egna repon görs utan att fråga, och kvittensen visar vad som hände. Personen bekräftar bara när ändringen går till ett publikt repo, hamnar i någon annans repo, eller tar bort eller flyttar en skill.
 - **Skill och tool hålls isär** enligt `agents/wds/README.md` (Skills and tools). Kontrollera att skillen listar sina tools i `tools:` och att varje tool listar sina skills i `used_by:`. Kommandon som hamnat i en skill flyttas till ett tool.
 
 ## 6. Dela
