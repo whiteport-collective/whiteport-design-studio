@@ -45,6 +45,7 @@ git push
 ```
 
 - `<typ>` är till exempel `wrap`, `brief`, `design` eller `fix`.
+- En skill eller ett tool committas alltid för sig: `skill(<namn>): <vad och varför>` eller `tool(<namn>): <vad och varför>`, med bara den filen och dess skript.
 - Lägg till specifika sökvägar, inte `git add -A` i blindo. Kolla `git status` först.
 - **Om `pull --rebase` krockar:** stanna och visa konflikten för användaren. Lös den inte på egen hand i någon annans filer.
 - **Om `push` misslyckas:** säg det rakt ut med felmeddelandet. Påstå aldrig att något är pushat utan att ha sett det gå igenom.
