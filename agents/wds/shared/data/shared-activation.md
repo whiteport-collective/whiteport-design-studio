@@ -34,16 +34,17 @@ Do not print the files. If a file is missing, continue. Wrap creates it when the
 
 ## Step: resume (timestamp)
 
-Used when the agent is started with a resume command: `/saga visita-kommunikation 2026-09-27_13-22`.
-First the repo, then the start time of the session that wrote the handover. The repo may be left out.
+Used when the agent is started with a resume command: `/saga visita-kommunikation 2026-09-27_13-22 product brief en karriar tack`.
+First the repo, then the start time of the session that wrote the handover, then a short summary of what the handover is about. The repo and the summary may be left out. The file is found by the timestamp; the summary is there so the user knows what the command is for.
 
 1. **Right repo?** Compare the repo name with the current repo folder.
    - Same, or no repo given: continue.
    - Different: look for it under the dev root (`C:/dev/*/<repo>` or `~/dev/*/<repo>`). Found: tell the user in one line to start the session there, and stop. Agent sessions should run in the repo they work in. Not found: say the repo is not cloned on this machine and stop.
-2. Find the file `sessions/*/<agent_id>/<timestamp>-*.md` (filename: `<session-id>-<från>-<sammandrag>.md`, any user folder including `all-users`). Several matches: prefer the current user's folder, else list them and ask.
+2. Find the file `<timestamp>-*.md` in `sessions/*/<agent_id>/` at the repo root or in a project folder (`projects/*/sessions/*/<agent_id>/`, any letter case). Filename: `<session-id>-<från>-<sammandrag>.md`, any user folder including `all-users`. Several matches: pick the one whose `<sammandrag>` matches the summary in the command, else prefer the current user's folder, else list them and ask.
 3. Read it. Print EXACTLY:
 
    ── Återupptar <Agent> · <repo> · <timestamp> ─
+   Om:     <sammandrag from the filename, with spaces>
    Från:   <från> (<user>)
    Nästa:  <first line or step of ## Nästa>
    ──────────────────────────────────────────────
@@ -56,9 +57,9 @@ First the repo, then the start time of the session that wrote the handover. The 
 
 ## Step: handovers
 
-Read the latest handover to this agent: `sessions/<user>/<agent_id>/` (newest file by name).
+Read the latest handover to this agent: `sessions/<user>/<agent_id>/` (newest file by name), at the repo root and in project folders (`projects/*/sessions/`).
 Also check `sessions/all-users/<agent_id>/` for files with `status: öppen` (handovers to anyone running this agent).
-IF an open handover exists: show it (Nästa + projects) and propose taking it.
+IF an open handover exists: show it (summary from the filename, Nästa and projects) and propose taking it.
 When the user accepts: set `status: tagen` and `tagen_av: <session-id>` in the file, commit.
 Wrap sets `status: klar` when the work is done. Never delete a handover.
 
