@@ -40,7 +40,7 @@ First the repo, then the start time of the session that wrote the handover, then
 1. **Right repo?** Compare the repo name with the current repo folder.
    - Same, or no repo given: continue.
    - Different: look for it under the dev root (`C:/dev/*/<repo>` or `~/dev/*/<repo>`). Found: tell the user in one line to start the session there, and stop. Agent sessions should run in the repo they work in. Not found: say the repo is not cloned on this machine and stop.
-2. Find the file `<timestamp>-*.md` in `sessions/*/<agent_id>/` at the repo root or in a project folder (`projects/*/sessions/*/<agent_id>/`, any letter case). Filename: `<session-id>-<från>-<sammandrag>.md`, any user folder including `all-users`. Several matches: pick the one whose `<sammandrag>` matches the summary in the command, else prefer the current user's folder, else list them and ask.
+2. Find the file `<timestamp>-*.md` in `sessions/*/<agent_id>/` at the repo root or in a project folder (`projects/*/sessions/*/<agent_id>/`, any letter case). If the repo's `sessions/README.md` says `sessions: private`, look in the user's own sessions folder for this repo instead: the `sessions:` line in `projects/<repo>.md` in the private cabinet (wrap step 1). Filename: `<session-id>-<från>-<sammandrag>.md`, any user folder including `all-users`. Several matches: pick the one whose `<sammandrag>` matches the summary in the command, else prefer the current user's folder, else list them and ask.
 3. Read it. Print EXACTLY:
 
    ── Återupptar <Agent> · <repo> · <timestamp> ─
@@ -57,7 +57,7 @@ First the repo, then the start time of the session that wrote the handover, then
 
 ## Step: handovers
 
-Read the latest handover to this agent: `sessions/<user>/<agent_id>/` (newest file by name), at the repo root and in project folders (`projects/*/sessions/`).
+Read the latest handover to this agent: `sessions/<user>/<agent_id>/` (newest file by name), at the repo root and in project folders (`projects/*/sessions/`). If the repo's `sessions/README.md` says `sessions: private`, read from the user's own sessions folder for this repo instead (see resume, step 2).
 Also check `sessions/all-users/<agent_id>/` for files with `status: öppen` (handovers to anyone running this agent).
 IF an open handover exists: show it (summary from the filename, Nästa and projects) and propose taking it.
 When the user accepts: set `status: tagen` and `tagen_av: <session-id>` in the file, commit.
