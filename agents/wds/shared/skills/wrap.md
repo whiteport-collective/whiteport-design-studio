@@ -16,6 +16,7 @@ Agentoberoende. Skillen beskriver *vad* som ska göras. Hur git används står i
 - **Från:** den agent som var aktiv (saga, freya, mimir, ivonne …), oavsett modell. Utan agent: modellnamnet med små bokstäver och bindestreck, till exempel `claude-opus-5-5`.
 - **Till:** vem som ska ta nästa steg. Oftast samma agent, och då är wrapen en överlämning till sig själv. Hör nästa steg till en annan agent blir det den agenten.
 - **Vad:** ta reda på vad som ändrats enligt git-toolet. Med det och samtalet framför dig: vilka projekt rördes, vad blev klart och vad återstår?
+- **Projektrot:** mappen där projektet bor. Det är repots rot, utom när repot har flera projekt. Då är det projektets egen mapp, till exempel `projects/<projekt>/`, och repots `AGENTS.md` säger vilken. Rörde sessionen inget enskilt projekt: repots rot.
 
 ## 2. Överlämningen
 
@@ -25,15 +26,14 @@ Varje wrap är en överlämning. Mappen är **mottagarens**. Filnamnet är `<ses
 - `<från>` = agenten som skrev.
 - `<sammandrag>` = vad sessionen gjorde, 3–6 ord, små bokstäver, bindestreck, å/ä → a och ö → o. Exempel: `2026-09-27_13-22-martenangner-ivonne-product-brief-en-karriar-tack.md`.
 
-Filnamnet börjar med tidsstämpeln, så `/<agent> <repo> YYYY-MM-DD_HH-MM` hittar den.
-
+Filnamnet börjar med tidsstämpeln och slutar med sammandraget. Återupptagningskommandot (steg 8) hittar filen på tidsstämpeln och visar sammandraget, så att man ser vad överlämningen handlar om innan man kör den.
 
 | Mottagare | Sökväg |
 |---|---|
-| Samma person, samma agent (vanlig wrap) | `sessions/<användare>/<från>/<session-id>-<från>-<sammandrag>.md` |
-| Samma person, annan agent | `sessions/<användare>/<till>/<session-id>-<från>-<sammandrag>.md` |
-| Känd annan person | `sessions/<person>/<till>/<session-id>-<från>-<sammandrag>.md` |
-| Vi vet inte vem som kör | `sessions/all-users/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Samma person, samma agent (vanlig wrap) | `<projektrot>/sessions/<användare>/<från>/<session-id>-<från>-<sammandrag>.md` |
+| Samma person, annan agent | `<projektrot>/sessions/<användare>/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Känd annan person | `<projektrot>/sessions/<person>/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Vi vet inte vem som kör | `<projektrot>/sessions/all-users/<till>/<session-id>-<från>-<sammandrag>.md` |
 
 ```markdown
 ---
@@ -72,11 +72,11 @@ Konkreta steg i ordning för mottagaren.
 
 ## 3. Projektloggen: teamets gemensamma tidslinje
 
-För varje projekt som rördes: lägg en rad **överst** i `projects/<projekt>/design-process/_progress/design-log.md`:
+För varje projekt som rördes: lägg en post i projektets designlogg. Den ligger i projektroten. Ta den som finns av `_progress/00-design-log.md`, `design-process/_progress/00-design-log.md`, `00-design-log.md` och `design-log.md`. Har loggen en `## Log`-rubrik läggs posten överst under den, annars överst i filen, med samma rubriknivå som posterna som redan finns. Saknas loggen: hoppa över steget.
 
 ```markdown
-## YYYY-MM-DD_HH-MM-<användare> (<från> → <till>)
-- En till tre punkter om vad som hände i projektet. [Överlämning](../../../../sessions/<användare>/<till>/<fil>.md)
+### YYYY-MM-DD_HH-MM-<användare> (<från> → <till>)
+- En till tre punkter om vad som hände i projektet. [Överlämning](<relativ sökväg till överlämningen>)
 ```
 
 ## 4. Soul-genomgång: jämför och uppdatera
@@ -137,7 +137,7 @@ Spara och dela överlämningen, projektloggarna och repots användarfiler enligt
 
 ## 7. Andra repon och personlig logg
 
-- **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `sessions/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
+- **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `<projektrot>/sessions/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
 - **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad · sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
 
 ## 8. Kvittens
@@ -149,10 +149,12 @@ Visa användaren:
 - skills som ändrades: var de ligger nu och att katalogen är uppdaterad
 - commit-hash och att push gick igenom
 
-Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent, `<repo>` är repots mappnamn och tidsstämpeln är sessionens start:
+Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent, `<repo>` är repots mappnamn, tidsstämpeln är sessionens start och `<sammandrag>` är samma ord som i filnamnet, med mellanslag i stället för bindestreck:
 
 ````
 ```
-/<till> <repo> YYYY-MM-DD_HH-MM
+/<till> <repo> YYYY-MM-DD_HH-MM <sammandrag>
 ```
 ````
+
+Exempel: `/ivonne martens-documents 2026-09-27_13-22 product brief en karriar tack`. Utan sammandraget vet man inte vad kommandot gäller när det ligger bland andra.
