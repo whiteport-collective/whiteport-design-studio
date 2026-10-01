@@ -17,6 +17,9 @@ Agentoberoende. Skillen beskriver *vad* som ska göras. Hur git används står i
 - **Till:** vem som ska ta nästa steg. Oftast samma agent, och då är wrapen en överlämning till sig själv. Hör nästa steg till en annan agent blir det den agenten.
 - **Vad:** ta reda på vad som ändrats enligt git-toolet. Med det och samtalet framför dig: vilka projekt rördes, vad blev klart och vad återstår?
 - **Projektrot:** mappen där projektet bor. Det är repots rot, utom när repot har flera projekt. Då är det projektets egen mapp, till exempel `projects/<projekt>/`, och repots `AGENTS.md` säger vilken. Rörde sessionen inget enskilt projekt: repots rot.
+- **Sessionsmapp:** där överlämningarna sparas. Normalt `<projektrot>/sessions/`. Repot kan bestämma annat i `<projektrot>/sessions/README.md`:
+  - `sessions: private` betyder att ingen sparar sessioner i repot, vilket passar ett publikt repo som många arbetar i. Varje person väljer själv en plats i sitt privata skåp. Platsen står i skåpets `projects/<repo>.md` på raden `sessions:`, som en länk relativt den filen.
+  - Saknas raden, fråga personen en gång var sessionerna för det här repot ska ligga, och skriv svaret där. Saknas skåpet, eller avstår personen, visas överlämningen bara i chatten och sparas inte.
 
 ## 2. Överlämningen
 
@@ -30,10 +33,10 @@ Filnamnet börjar med tidsstämpeln och slutar med sammandraget. Återupptagning
 
 | Mottagare | Sökväg |
 |---|---|
-| Samma person, samma agent (vanlig wrap) | `<projektrot>/sessions/<användare>/<från>/<session-id>-<från>-<sammandrag>.md` |
-| Samma person, annan agent | `<projektrot>/sessions/<användare>/<till>/<session-id>-<från>-<sammandrag>.md` |
-| Känd annan person | `<projektrot>/sessions/<person>/<till>/<session-id>-<från>-<sammandrag>.md` |
-| Vi vet inte vem som kör | `<projektrot>/sessions/all-users/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Samma person, samma agent (vanlig wrap) | `<sessionsmapp>/<användare>/<från>/<session-id>-<från>-<sammandrag>.md` |
+| Samma person, annan agent | `<sessionsmapp>/<användare>/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Känd annan person | `<sessionsmapp>/<person>/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Vi vet inte vem som kör | `<sessionsmapp>/all-users/<till>/<session-id>-<från>-<sammandrag>.md` |
 
 ```markdown
 ---
@@ -72,7 +75,7 @@ Konkreta steg i ordning för mottagaren.
 
 ## 3. Projektloggen: teamets gemensamma tidslinje
 
-För varje projekt som rördes: lägg en post i projektets designlogg. Den ligger i projektroten. Ta den som finns av `_progress/00-design-log.md`, `design-process/_progress/00-design-log.md`, `00-design-log.md` och `design-log.md`. Har loggen en `## Log`-rubrik läggs posten överst under den, annars överst i filen, med samma rubriknivå som posterna som redan finns. Saknas loggen: hoppa över steget.
+För varje projekt som rördes: lägg en post i projektets designlogg. Den ligger i projektroten, eller i mappen ovanför sessionsmappen när sessionerna sparas privat. Ta den som finns av `_progress/00-design-log.md`, `design-process/_progress/00-design-log.md`, `00-design-log.md` och `design-log.md`. Har loggen en `## Log`-rubrik läggs posten överst under den, annars överst i filen, med samma rubriknivå som posterna som redan finns. Saknas loggen: hoppa över steget.
 
 ```markdown
 ### YYYY-MM-DD_HH-MM-<användare> (<från> → <till>)
@@ -137,7 +140,7 @@ Spara och dela överlämningen, projektloggarna och repots användarfiler enligt
 
 ## 7. Andra repon och personlig logg
 
-- **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `<projektrot>/sessions/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
+- **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `<sessionsmapp>/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
 - **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad · sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
 
 ## 8. Kvittens
