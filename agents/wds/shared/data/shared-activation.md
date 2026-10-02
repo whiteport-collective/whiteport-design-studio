@@ -30,6 +30,28 @@ Based on Nate B. Jones' two filing cabinets: the **repo cabinet** holds what the
 
 Do not print the files. If a file is missing, continue. Wrap creates it when there is something to write.
 
+Then run "Step: governance". Every agent that runs this step runs that one too.
+
+---
+
+## Step: governance
+
+Read the policy before any work, and follow it. It lives in `governance/` at the repo root, one flat folder, each file prefixed with its source (`agents/wds/shared/tools/sync.md`, Governance policy).
+
+1. **Read the principles, in this order:**
+   - `governance/wds-principles.md`: the WDS default
+   - the organization's principles: `governance/<org>-principles.md`, or the localized file that the organization's framework file links to (Visita: `visita-principer.md`, linked from `visita-ramverk.md`)
+   - this repo's tightenings, if any: `governance/<project>-*.md`
+   Each file states its level on its `Level:` line (default, organization, project).
+2. **Follow them.** The organization's policy is complete on its own; the default applies only where it is silent. A lower level may tighten a rule, never loosen it. When two levels say different things, the stricter one wins, unless the organization's framework file lists the difference with a reason.
+3. **Read the other policy files when a task touches their area:** tools and vendors, data, risk, agents and approvals, access, incidents, transparency. Same order, same precedence.
+4. **Never edit a copy.** A file whose first line is `Copy. Edit in <source repo>.` is changed in that repo, then synced.
+5. If a task would break a principle, say so before doing it, and offer to record a deviation in the organization's principles file.
+
+No `governance/` folder: continue, and mention once that the repo has no policy yet (Idun sets it up).
+
+Do not print the files.
+
 ---
 
 ## Step: resume (timestamp)

@@ -73,23 +73,30 @@ Takes Idun from a confirmed scope to a repo where people can start working with 
   </step>
 
   <step id="4-governance" condition="governance was chosen in qualification">
-    Scale governance to the organization. Write the documents from the conversation, not from blank templates, in `shared/<org>/governance/`.
+    Scale governance to the organization. Start from the WDS default policy, never from blank pages: copy
+    `agents/wds/idun/templates/governance/` to `governance/<org>-<name>.md` at the root of the organization's
+    source repo, as in Step 0 of `skills/governance-report.md` (one source repo per organization; its other repos
+    get read-only copies through the sync tool; `governance/wds-*` is the synced default and is never edited).
+    Then tailor from the conversation: confirm or adjust each default, and list every difference in the
+    differences table in `<org>-framework.md`.
 
     **Always (every scale that has governance):**
-    - `00-introduction.md` — what AI agents do here, who is responsible
-    - `04-agent-asset-organization.md` — how agents, skills, tools and templates are organized, who owns what, and why.
+    - `<org>-framework.md` — scope, who is responsible, and what AI agents do here
+    - `<org>-principles.md` — the default principles, confirmed or adjusted
+    - `<org>-agents.md`, section Skill governance — how agents, skills, tools and templates are organized, who owns what, and why.
       Written from the step 1 conversation. A solo developer gets three lines ("flat, one person, no layers"). A larger org
       gets its department structure and ownership boundaries. The decision and the reasoning are what matter.
 
-    **Lean (1–2 people):** add `01-data-handling.md`, `02-agent-authorization.md`, `03-access-control.md`.
-    **Standard (3–10 people):** also add `05-incident-response.md`, `06-vendor-management.md`.
-    **Full suite (10+ people, external stakeholders, regulated):** do not write the lean set. Run `skills/governance-report.md`, which owns the full suite and its location.
+    **Lean (1–2 people):** also tailor `<org>-data.md`, `<org>-agents.md` (authorization) and `<org>-access.md`.
+    **Standard (3–10 people):** also tailor `<org>-incidents.md` and `<org>-tools.md`.
+    Files that are not tailored stay as copied: the default applies to them until they are.
+    **Full suite (10+ people, external stakeholders, regulated):** do not tailor the lean set here. Run `skills/governance-report.md`, which owns the full dialog.
 
     Also write, for lean and standard:
     - `shared/<org>/access-audit/people-access-map.md` — every person, their role, what they can access
     - `shared/<org>/access-audit/repo-access-map.md` — every repo and who has access (GitHub tool reads the facts)
 
-    **Gate:** at least one non-technical stakeholder has read and approved `00-introduction.md`.
+    **Gate:** at least one non-technical stakeholder has read and approved `<org>-framework.md`.
   </step>
 
   <step id="5-org-agents" condition="the organization needs its own agents, skills or tools">
@@ -132,6 +139,6 @@ Takes Idun from a confirmed scope to a repo where people can start working with 
 ## Quality rules
 
 - **Model first, apply second.** The workspace follows the WDS conventions. The organization is an instance of them, adapted to its context.
-- **Doc 04 is always produced** when there is governance. Three lines is fine. The decision must be recorded.
+- **The agent asset organization is always recorded** (in `<org>-agents.md`, Skill governance) when there is governance. Three lines is fine. The decision must be recorded.
 - **The confirmed qualification summary is the source of truth.** Discovery is not reopened.
 - **Every phase ends with a clear gate.** The person knows what was done and what's next.

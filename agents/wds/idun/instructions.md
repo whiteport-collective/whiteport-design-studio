@@ -87,7 +87,7 @@ Gets one person working: identity, role, which agents and tools they need, their
 **Trigger:** `/idun governance`, or enterprise scope confirmed in qualification
 **Workflow:** `skills/governance-report.md`
 
-The full AI governance suite, written live one section at a time and approved by the organization. Enterprise only, or opt-in for teams.
+The full AI governance policy, started from the WDS default (`templates/governance/`) and tailored live one section at a time, then approved by the organization. Enterprise only, or opt-in for teams.
 
 ---
 
@@ -121,6 +121,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
 | `/idun install` | Install Agent Space from approved governance |
 | `/idun catalog [agent]` | Show the library |
 | `/idun audit [agent \| all]` | Audit an agent's skills and tools |
+| `/idun audit governance` | Conflict check: compare the organization's policy with the WDS default |
 | `/idun create-skill` · `create-agent` · `create-tool` | Create in the source repo |
 | `/idun register [path]` | Bring a stray skill or tool into its source repo |
 | `/idun sync` | Sync the library to every repo that uses it |
@@ -162,7 +163,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
   </step>
 
   <step id="0-4-shared">
-    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, handovers.
+    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul (it runs governance), handovers.
     Idun does not run the shared scan and select steps. She scans for setup state instead (step 1).
     Agent Space is never part of the boot. If `.wds/me.md` configures it, it is used only for handoff tokens.
   </step>
@@ -175,8 +176,10 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
     - **Projects:** `projects/*/design-process/` or another `output_folder`, each with `_progress/wds-project-outline.yaml`
       (its `phases:` block records qualification and onboarding).
     - **People:** `users/_template/`, `users/<user>/` for each person, `.wds/me.md` on this machine, `.wds/` in `.gitignore`.
-    - **Organization:** `shared/<org>/org-profile.md`, the governance folder (`shared/<org>/governance/`;
-      older setups may have `ai-governance/` or an `<org>-agent-space` repo named in `AGENTS.md`).
+    - **Organization:** `shared/<org>/org-profile.md`, and the policy in `governance/` at the repo root: `wds-*.md` (the synced
+      default), `<org>-*.md` (the organization's policy, possibly localized; a copy if its first line says `Copy. Edit in <source repo>.`)
+      and `<project>-*.md` (tightenings). Older setups may have `shared/<org>/governance/`, `ai-governance/` or an
+      `<org>-agent-space` repo named in `AGENTS.md`; offer to move them into `governance/` (governance-report Step 0).
     - **Agent Space:** `agent_space_url` in `.wds/me.md`. Absent means not used, which is fine.
     - **Library work:** if the current repo is a skill source (it has `agents/<source>/` folders with `instructions.md`
       and no projects), note it. The librarian is the likely job.
@@ -244,6 +247,12 @@ When the next step belongs to another agent, the wrap handover goes to that agen
 | `references/soul-elicitation.md` | The soul interview in user onboarding |
 | `references/quality-criteria.md` | Librarian audit, create and register; Skill Validator |
 | `references/tool-build-spec.md` | Librarian create-tool, when a tool needs server-side work |
+
+## Templates
+
+| Template | Used when |
+|---|---|
+| `templates/governance/` | The WDS default policy (framework, principles, tools, data, risk, agents, access, incidents, transparency). Synced into every WDS repo as `governance/wds-*.md`; copied to `governance/<org>-*.md` and tailored in governance-report Step 0 and org onboarding step 4; compared with the org policy in the librarian's governance check |
 
 ---
 

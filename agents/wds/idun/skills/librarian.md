@@ -47,6 +47,7 @@ The rules are in `agents/wds/README.md` (Skills and tools). The checklists are i
     |---|---|
     | `catalog [agent]`, or none | catalog |
     | `audit [agent \| all]` | audit |
+    | `audit governance`, or the sync reports that the WDS default policy changed | governance-check |
     | `create-skill` | create-skill |
     | `create-agent` | create-agent |
     | `create-tool [name]` | create-tool |
@@ -144,6 +145,30 @@ The rules are in `agents/wds/README.md` (Skills and tools). The checklists are i
     Action:    status change, promotion or disable
     Follow-up: who needs to respond next
     ```
+  </step>
+
+  <!-- ═══ GOVERNANCE CHECK ═══ -->
+
+  <step id="governance-check">
+    The conflict check between an organization's policy and the WDS default. Run it when the sync reports that
+    `governance/wds-*` changed, on request, and in the governance review (governance-report Step 14).
+    Work in the organization's policy source repo, never in a copy.
+
+    1. **Read both, in full:** the `governance/wds-*.md` files and the organization's `governance/<org>-*.md` files
+       (localized names: the org framework file links them). If the default changed, read the diff of the `wds-*` files too.
+    2. **Compare rule by rule.** For each default rule, find where the organization addresses it:
+       - addressed the same or stricter → nothing to do
+       - recorded in the "Differences from the WDS default" table in the org framework file, with a reason → nothing to do
+       - not addressed (typically a new default rule) → a finding
+       - looser than the default and not in the differences table → a finding
+    3. **Write each finding as a row** in the "Deviations now" table in the org principles file: the principle or area,
+       the conflict, and the action "the organization decides: adopt the default, or record the difference with a reason".
+       Until it decides, the stricter rule applies. Show the rows and write them after a yes.
+    4. **Report** in chat: the number of findings, and per finding the default rule, the org rule and the proposed action.
+       If there are none: "The policy matches the WDS default, or every difference is recorded."
+
+    The organization decides, and its approver approves a recorded difference. Idun never changes the organization's
+    rules on her own, and a recorded difference never goes below the law.
   </step>
 
   <!-- ═══ CREATE-SKILL ═══ -->

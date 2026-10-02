@@ -8,6 +8,7 @@ agents/wds/
 ├── freya/     UX designer — scenarios, UX design, specs
 ├── mimir/     Implementation — tech audit, PRD, build
 ├── idun/      Setup and governance — qualification, onboarding, governance suite, skill library
+│   └── templates/governance/   the WDS default policy (framework, principles, tools, data, risk, agents, access, incidents, transparency)
 └── shared/    What no single agent owns
     ├── skills/   wrap, start, handoff, feedback, prd-workflow, design-delivery
     ├── tools/    git, agent-space, memory, sync, wireframe, rendering …
@@ -22,6 +23,7 @@ Each agent folder:
 | `skills/` | WHAT: workflows (product-brief, trigger-map, ux-design …) |
 | `subagents/` | Focused writers and reviewers the agent delegates to |
 | `references/` | Method guides loaded when a step needs them |
+| `templates/` | Default documents the agent copies into a repo and tailors (Idun: `templates/governance/`, the default policy) |
 | `tools/` | HOW: commands and API calls only this agent uses (shared ones live in `shared/tools/`) |
 
 **Roles:** Idun sets up the workspace, onboards organizations and people, runs AI governance and keeps the skill library. Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
@@ -55,6 +57,10 @@ tools: [<source>/<tool>]              type: http | cli | script
 ## Installing in a project
 
 `/sync-skills` copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [shared/adapters/](shared/adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Idun, Saga, Freya, Mimir and wrap. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
+
+## Governance policy
+
+Every WDS repo has one flat policy folder, `governance/`, at its root. Each file name starts with its source: `wds-*.md` is the WDS default from `idun/templates/governance/`, synced and read-only; `<org>-*.md` is the organization's policy, edited only in the organization's one source repo and synced to its other repos; `<project>-*.md` tightens the rules for one repo. Precedence: WDS default < organization < project. A lower level may tighten a rule, never loosen it, and the stricter rule wins. Every agent reads the principles at session start ([shared/data/shared-activation.md](shared/data/shared-activation.md), Step: governance). How the copies are made: [shared/tools/sync.md](shared/tools/sync.md). How Idun tailors the policy: [idun/skills/governance-report.md](idun/skills/governance-report.md).
 
 ## Secrets
 

@@ -2,7 +2,7 @@
 name: idun-governance-report
 agent: idun
 phase: 1
-version: 0.4
+version: 0.5
 inputs:
   - business name
   - org structure (size, roles, decision-makers)
@@ -14,17 +14,30 @@ inputs:
   - integration architecture (what AI connects to)
   - agent roster and autonomy levels
 outputs:
-  - a governance/ folder in the organization's existing repo (default `shared/<org>/governance/`), live-written, one commit per section
-  - an approved suite the organization keeps as its own evidence (nothing is filed with an authority)
+  - the organization's policy as `governance/<org>-<doc>.md` in its source repo, started from the WDS default policy and tailored live, one commit per section
+  - read-only copies of it in the organization's other repos, through the sync tool
+  - an approved policy the organization keeps as its own evidence (nothing is filed with an authority)
 ---
 
 ## Intent
 
-Produce a complete, signed AI governance suite for a WDS client. The suite is written live — one commit per dialog step — so the client follows progress in real time.
+Produce a complete, signed AI governance policy for a WDS client. Idun does not write it from blank pages: she copies the WDS default policy (`agents/wds/idun/templates/governance/`), which is based on best practice for organizations and teams that work with AI agents, and tailors it with the organization in a dialog. Each dialog step confirms or adjusts the default in one file, with one commit per step, so the client follows progress in real time.
 
 The suite is structured around the **AI Governance Stack** (Kenney, 2026): five layers covering Data, Model, System Integration, Control & Monitoring, and Audit & Evidence — plus a WDS-original Layer 2.5 for Agent Governance. The suite is designed to support compliance with GDPR (ROPA, DPIAs, Article 22) and the EU AI Act (Article 4 AI literacy, Article 50 transparency, and Articles 8–15 and 26 where a high-risk system is involved), and it maps to the NIST AI RMF (GOVERN, MAP, MEASURE, MANAGE functions). Writing the suite does not by itself make an organization compliant.
 
-The governance folder and document skeletons exist before the first question is asked. There is no separate governance repo: the policy documents live in one folder in the repo the organization already works in.
+The organization's policy files exist, copied from the default, before the first question is asked. There is no separate governance repo. Every repo has one flat folder, `governance/`, at its root, because an agent often sees only one repo:
+
+```
+governance/
+├── wds-framework.md, wds-principles.md …   the WDS default. Synced into every WDS repo, read-only.
+├── <org>-<doc>.md                          the organization's policy. Edited only in the org's source repo, synced read-only to its other repos.
+└── <project>-<doc>.md                      optional tightenings for one repo
+```
+
+- **One source repo per organization.** The organization's policy is edited in one repo, the one it already works in (for Visita: visita-kommunikation). The sync tool (`agents/wds/shared/tools/sync.md`) copies it to the organization's other repos. Each copy starts with the line `Copy. Edit in <source repo>.`
+- **Precedence: WDS default < organization < project.** The organization policy is complete on its own; the default applies only where it is silent. A lower level may tighten a rule but never loosen it. When two levels differ, the stricter rule wins unless the difference is recorded with a reason in the "Differences from the WDS default" table in the organization's framework file.
+- **Localized names are allowed.** Visita's policy is Swedish: `governance/visita-ramverk.md`, `governance/visita-principer.md`. The framework file links the others.
+- **No organization policy yet:** the `wds-*` files alone apply.
 
 ---
 
@@ -44,16 +57,16 @@ Reference these frameworks throughout the dialog and documents:
 
 ## AI Governance Stack (Organizing Framework)
 
-All 12 documents map to this stack. Use it to explain the structure to clients:
+Every policy file maps to this stack. Use it to explain the structure to clients. Default file first, the full-set document in brackets:
 
 | Layer | Covers | Documents |
 |-------|--------|-----------|
-| Layer 1: Data Governance | Data inventory, classification, quality, privacy, bias | 03 (Data Processing Register, including Data Classification) |
-| Layer 2: Model Governance | Architecture review, fairness testing, robustness, model cards | 07 (Model Governance / Human Oversight) |
-| Layer 2.5: Agent Governance | Authorization profiles, agent-to-agent interaction, auditability, versioning | 12 (Agent Governance) |
-| Layer 3: System Integration | Integration architecture, pipeline security, cascading failure, boundary testing | 11 (System Integration Governance) |
-| Layer 4: Control & Monitoring | Access controls, real-time monitoring, incident response, deployment gates | 05 (Incident Response), 10 (Access Control Groups) |
-| Layer 5: Audit & Evidence | Documentation standards, audit trails, review schedules | 09 (Audit & Review Log) |
+| Layer 1: Data Governance | Data inventory, classification, quality, privacy, bias | `data` (03 Data Processing Register, including Data Classification) |
+| Layer 2: Model Governance | Architecture review, fairness testing, robustness, model cards | `agents`, `risk` (07 Model Governance / Human Oversight) |
+| Layer 2.5: Agent Governance | Authorization profiles, agent-to-agent interaction, auditability, versioning | `agents` (12 Agent Governance) |
+| Layer 3: System Integration | Integration architecture, pipeline security, cascading failure, boundary testing | `access` (11 System Integration Governance) |
+| Layer 4: Control & Monitoring | Access controls, real-time monitoring, incident response, deployment gates | `incidents`, `access` (05 Incident Response, 10 Access Control Groups) |
+| Layer 5: Audit & Evidence | Documentation standards, audit trails, review schedules | `framework`, `principles` (09 Audit & Review Log) |
 
 **Critical Integration Rule**: Failures cascade upward through the Stack. Layer 1 failures corrupt Layer 2 outputs, which corrupt Layer 3 behavior, which evade Layer 4 detection. Every layer must have exactly one primary owner.
 
@@ -75,16 +88,23 @@ Recommended target (Kenney 2026, not a legal requirement): high-risk AI systems 
 
 ## Process
 
-### Step 0 — Create the folder and skeleton BEFORE the first question
+### Step 0 — Copy the default policy BEFORE the first question
 
 As soon as the client provides their business name, execute all of the following before asking anything else:
 
-1. Create the folder `shared/<org>/governance/` in the organization's existing repo, or confirm it exists. If the repo already has a governance or policy folder, use that one. Never create a separate repo for governance.
-2. Decide the document set. The 12 documents below are the full set. For a small organization or a single department, propose merging them (for example tools + vendors, data register + classification, oversight + agent governance) and confirm the set before writing.
-3. Write the skeleton documents (see Document Skeletons section below)
-4. Commit: `chore: create AI governance skeleton`
-5. Tell the user where the folder is and that they can follow the documents being written in real time. Let's begin.
-6. Then ask the first question.
+1. **Find the source repo.** The organization's policy lives in the repo it already works in. If it works in several, agree which one is the source; every other repo gets a read-only copy. Never create a separate repo for governance.
+2. **Choose the prefix and the language.** The prefix is the organization's short name in lowercase (`acme`). The files may be localized, file names included (`acme-ramverk.md`).
+3. **Decide the document set.** The merged default (nine files) fits most organizations. For a larger or high-risk organization, propose the full 12-document set (see Default policy) and confirm before writing.
+4. **Copy the default.** Copy each file in `agents/wds/idun/templates/governance/` to `governance/<org>-<name>.md` at the root of the source repo. In each copy:
+   - replace the `{org}-` link prefix with `<org>-` (or the localized file names), and `{Org}` with the organization's name
+   - set `Status: in progress (from the WDS default, <date>)` and `Level: organization`
+   - keep the `Tailor in dialog` lines until step 17
+5. **Merge, never overwrite.** If `governance/` already has `<org>-*` files, keep them and add only the default sections and files they lack. If the organization has an older governance folder (`shared/<org>/governance/`, `ai-governance/`, numbered `00-…12-` files), propose moving it into `governance/` with the prefix and merging it with the default, and do it after a yes, with `git mv` so the history follows.
+6. **Leave `wds-*` alone.** They are the synced default. If they are missing, run the sync tool.
+7. **Register the source.** Add the organization to the sync configuration as described in `agents/wds/shared/tools/sync.md`, so its other repos get copies.
+8. Commit: `docs(governance): <org> policy from the WDS default`
+9. Tell the user where the files are, that the default already applies, and that each step now confirms or adjusts it. Let's begin.
+10. Then ask the first question.
 
 ---
 
@@ -142,14 +162,14 @@ Once current level is assessed, present it and ask these four questions. One at 
 
 | Current → Target | WDS-E scope |
 |-----------------|------------|
-| L1–2 → L3 | Full 12-doc governance suite — must be in place before L3 deployment |
+| L1–2 → L3 | The full governance policy (the merged default, or the 12-document set) — must be in place before L3 deployment |
 | L3 → L4 | Governance suite + per-user authorization profiles + AIVSS scoring |
 | L3 (retroactive) | Same suite + gap assessment of live agent deployments |
 | L4+ | Targeted governance audit — not standard onboarding |
 
 ---
 
-**Write into `00-introduction.md`:**
+**Tailors:** `<org>-framework.md`, section Maturity. The default holds the governance maturity target (Level 3) and empty adoption fields. Fill them in and confirm or adjust the target. Use this format:
 
 > ## AI Adoption Commitment
 >
@@ -162,7 +182,7 @@ Once current level is assessed, present it and ask these four questions. One at 
 > **Adoption owner:** [Named person, title]
 > **Confirmed by:** [Decision-maker name, title, date]
 
-**Commit:** `docs: 00 — AI adoption commitment`
+**Commit:** `docs(governance): framework — AI adoption commitment`
 
 ---
 
@@ -225,9 +245,7 @@ Surface the blocker explicitly: *"What you're describing sounds like [blocker]. 
 
 ---
 
-**Write into `00-introduction.md`:**
-
-For each level on the path, a section:
+**Tailors:** `<org>-framework.md`, section Maturity. For each level on the path, add a section:
 
 > ## Level-Up Plan: Level [X] → Level [Y]
 >
@@ -245,7 +263,7 @@ For each level on the path, a section:
 >
 > **Signed off by:** [Name, title, date]
 
-**Commit per level:** `docs: 00 — Level-up plan L[X] to L[Y]`
+**Commit per level:** `docs(governance): framework — level-up plan L[X] to L[Y]`
 
 ---
 
@@ -257,8 +275,8 @@ For each level on the path, a section:
 
 **Governance implication:** Swedish organization → IMY is the GDPR supervisory authority. For the EU AI Act, the government has given interim assignments (decision 12 June 2026, until 31 December 2026, pending national legislation) to PTS (single point of contact), IMY (for example law enforcement and creditworthiness AI), Finansinspektionen, Läkemedelsverket and Swedac. Any sub-contractor or tool outside the EU/EEA that receives personal data triggers the GDPR Chapter V transfer rules (Articles 44–49). Document explicitly.
 
-**Write:** `00-introduction.md` — Organization section + Document Index
-**Commit:** `docs: 00 — Introduction and organization`
+**Tailors:** `<org>-framework.md`, sections Scope and Documents. Confirm or adjust the default scope (who and what it applies to, what is out of scope) and the document index. Fill in the supervisory authority in the "Not filed" table.
+**Commit:** `docs(governance): framework — organization and scope`
 
 ---
 
@@ -270,8 +288,8 @@ For each level on the path, a section:
 
 **Governance implication:** GDPR Article 5(2) makes the controller accountable for, and able to demonstrate, compliance. For high-risk AI systems, EU AI Act Article 17(1)(m) requires providers to have an accountability framework in their quality management system, and Article 26(2) requires deployers to assign human oversight to people with the necessary competence, training and authority. (Article 9 is the risk management system, not a governance structure.) Solo principal = clear and auditable. Multi-person orgs need documented authority chains.
 
-**Write:** Accountability section in `00-introduction.md`, named principal in signature block
-**Commit:** `docs: 00 — Accountability structure`
+**Tailors:** `<org>-framework.md`, sections Accountability and AI literacy. The default has seven roles (approver, policy owner, privacy contact, agent owner, access owner, incident lead, everyone). Confirm or adjust them, record who holds each role in the organization's own people list, and put the named principal in the approval block.
+**Commit:** `docs(governance): framework — accountability`
 
 ---
 
@@ -290,8 +308,8 @@ For each level on the path, a section:
 | AI used in Annex III areas (biometrics, critical infrastructure, education, employment, access to essential private and public services such as public benefits, credit scoring, life and health insurance pricing and emergency call triage, law enforcement, migration and border control, justice and democratic processes), or AI that is a safety component of a product under Annex I (e.g. medical devices, toys, lifts) | **High risk** — Articles 8–15 (providers) and Article 26 (deployers); applies from 2 Dec 2027 (Annex III) and 2 Aug 2028 (Annex I) | All 5 layers at maximum rigor |
 | The org itself provides a GPAI model (systemic risk is presumed above 10^25 FLOP of training compute, Article 51). Using a GPAI model through a tool does not make the org a GPAI provider | GPAI provider obligations (Article 53), plus systemic-risk obligations (Article 55); apply from 2 Aug 2025 | Enhanced Layer 2 + 5 |
 
-**Write:** `04-ai-risk-assessment.md` — risk classification section
-**Commit:** `docs: 04 — AI risk classification`
+**Tailors:** `<org>-risk.md`, section AI Act classification. The default has the decision tree and an empty classification table. Add one row per AI system or use, with the organization's role (deployer or provider), and confirm or adjust the default assumption that reviewed assistant and agent work is minimal risk plus Article 50.
+**Commit:** `docs(governance): risk — AI Act classification`
 
 **If high-risk classification applies:** Document the Articles 8–15 requirements (providers) and the Article 26 deployer obligations, plus a fundamental rights impact assessment (Article 27) where the deployer is a public body, provides public services, or uses credit scoring or life and health insurance pricing. This is not optional. The binding dates are 2 December 2027 for Annex III systems and 2 August 2028 for Annex I products, as amended by the Digital Omnibus on AI (Regulation (EU) 2026/1744).
 
@@ -320,9 +338,9 @@ No additional question needed. Based on Steps 3 and 4 answers, silently assess t
 
 | Factor_Sum | Risk Level | Governance implication |
 |-----------|-----------|----------------------|
-| 0–4 | **Low** | Standard 12-doc suite sufficient |
-| 4.1–7 | **Moderate** | All docs mandatory; Section 11 + 12 at full depth; named approver required |
-| 7.1–10 | **High** | Full suite + AIVSS-specific controls in docs 11 and 12; pre-deployment sign-off required; kill switch and prompt injection defense must be built before go-live |
+| 0–4 | **Low** | The default policy is sufficient |
+| 4.1–7 | **Moderate** | All files mandatory; `access` and `agents` (11 and 12 in the full set) at full depth; named approver required |
+| 7.1–10 | **High** | Full policy + AIVSS-specific controls in `access` and `agents` (11 and 12); pre-deployment sign-off required; kill switch and prompt injection defense must be built before go-live |
 
 These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum inside a per-vulnerability formula together with a CVSS v4.0 base score, and its severity bands (Low 0.1–3.9, Medium 4.0–6.9, High 7.0–8.9, Critical 9.0–10.0) apply to that final score.
 
@@ -334,12 +352,12 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 - Agent coordinates with other agents in workflows (Multi-Agent 0.5+)
 
 **Mandatory additions at Moderate/High:**
-- Doc 04 gets AIVSS score and factor breakdown
-- Doc 11 gets tool inventory, DLP, and kill switch sections
-- Doc 12 gets memory scope policy, prompt injection defense, and governance structure
+- `risk` (04) gets the AIVSS score and factor breakdown
+- `access` (11) gets the tool inventory, outbound data controls (DLP) and a tested kill switch
+- `agents` (12) gets the memory scope policy, prompt injection defense and governance structure
 
-**Write:** AIVSS Factor_Sum, risk level, and factor breakdown into `04-ai-risk-assessment.md`
-**Commit:** `docs: 04 — AIVSS agentic risk scoring`
+**Tailors:** `<org>-risk.md`, section Agentic risk score. Add one row per agent with the factor breakdown, Factor_Sum and level. Confirm or adjust the default risk register rows.
+**Commit:** `docs(governance): risk — AIVSS agentic risk scoring`
 
 ---
 
@@ -349,11 +367,11 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 
 **Probe for:** Core tools (LLMs), agentic tools (that take actions autonomously), task-specific tools, tools used by sub-contractors.
 
-**Write:** `02-ai-use-policy.md` — Tool table: Tool | Provider | Role | Type (Core / Agentic / Task-specific) | Data processor location
+**Tailors:** `<org>-tools.md`, sections Permitted uses, Prohibited uses and Tools in use. Confirm or adjust the default uses, and fill the tool table: Tool | Vendor | Used for | Type (Core / Agentic / Task-specific) | Highest data tier | Account | Owner | Status. Data location goes in the vendor table (Step 11).
 
 **GDPR flag (mandatory):** If any tool's data processor is outside EU/EEA, note the cross-border transfer basis explicitly: an adequacy decision (Article 45) or appropriate safeguards such as SCCs (Article 46). For US processors, the EU–US Data Privacy Framework covers only certified organizations. The General Court upheld it on 3 September 2025 (T-553/23, Latombe), and an appeal (C-703/25 P) is pending at the Court of Justice, so note a fallback such as SCCs.
 
-**Commit:** `docs: 02 — AI tools in use`
+**Commit:** `docs(governance): tools — AI tools in use`
 
 ---
 
@@ -368,9 +386,9 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 - Training data: document demographic distribution vs. deployment population
 - Identify proxy variables with >0.7 correlation to protected characteristics
 
-**Write:** `03-data-processing-register.md` — ROPA (GDPR Article 30): Data subject | Data category | Legal basis | Processor | Retention | Cross-border transfer
+**Tailors:** `<org>-data.md`, sections Records of processing, DPIA and Data quality. The default has the Article 30(1) columns and no rows. Add a row per processing activity, decide whether any activity needs a DPIA, and keep or remove the data quality section (only relevant if the organization trains, fine-tunes or evaluates models, or builds data sets about people).
 
-**Commit:** `docs: 03 — Data processing register (ROPA)`
+**Commit:** `docs(governance): data — records of processing (ROPA)`
 
 ---
 
@@ -378,7 +396,7 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 
 **Question:** "How sensitive is the data you handle? Does any of it include personal data, health information, financial records, or credentials?"
 
-**Write:** Data classification section in `03-data-processing-register.md` — classification tiers:
+**Tailors:** `<org>-data.md`, sections Classification, Shared and private, and Never in a repo. The default has these tiers, with an extra column for what may go into AI tools. Confirm or adjust:
 
 | Tier | Definition | Examples | Required controls |
 |------|-----------|---------|------------------|
@@ -387,7 +405,7 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 | Confidential | Personal or sensitive business data | Client details, financial | Encrypted, access-logged |
 | Restricted | Special categories, credentials | Health data, passwords | Encrypted, strictly need-to-know |
 
-**Commit:** `docs: 03 — Data classification`
+**Commit:** `docs(governance): data — classification`
 
 ---
 
@@ -409,9 +427,9 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Override rate target** (heuristic from Kenney 2026, not a legal requirement): 5–20%. Below 2% = possible automation bias. Above 20% = possible model performance issue.
 
-**Write:** `12-agent-governance.md` — agent roster with authorization profiles, escalation thresholds, coordination failure controls
+**Tailors:** `<org>-agents.md`, sections Roster, Authorization levels, Authorization defaults and Agent to agent. The default has an authorization level for each action category and who may say yes. Fill in the roster, then confirm or adjust the defaults per agent. Any loosening goes in the differences table in `<org>-framework.md`.
 
-**Commit:** `docs: 12 — Agent governance`
+**Commit:** `docs(governance): agents — authorization`
 
 ---
 
@@ -430,9 +448,9 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Automation bias warning:** If the review process shows "AI recommended X — approve?" without showing the reasoning, document this as a governance gap. Humans must have genuine authority to override, not just a confirm button.
 
-**Write:** `07-human-oversight-protocol.md` — autonomy levels, review gates, override logging, override rate monitoring
+**Tailors:** `<org>-agents.md`, sections The review gate and Overrides. Confirm or adjust the default checklist, say where approvals are given and recorded, and where overrides are logged.
 
-**Commit:** `docs: 07 — Human oversight protocol`
+**Commit:** `docs(governance): agents — review gate and overrides`
 
 ---
 
@@ -447,9 +465,9 @@ Walk through categories if needed: client communications, code commits, deployme
 - AI output triggers financial record creation → human-in-the-loop required before the record is created
 - Data pipeline crosses org boundary → integrity verification at the boundary required
 
-**Write:** `11-system-integration-governance.md` — integration architecture, data pipeline security, circuit breaker plan, boundary condition testing
+**Tailors:** `<org>-access.md`, all sections: Accounts, Least privilege, Credentials, Integrations, Kill switch. Fill the integrations table and the groups, name the password manager, and confirm or adjust the default cascade rules and kill switch procedure.
 
-**Commit:** `docs: 11 — System integration governance`
+**Commit:** `docs(governance): access — accounts, integrations and kill switch`
 
 ---
 
@@ -466,9 +484,9 @@ Walk through categories if needed: client communications, code commits, deployme
 4. Security incident / unauthorized access
 5. Meeting recorded without consent
 
-**Write:** `05-incident-response-plan.md` — step-by-step procedures per incident type, GDPR 72-hour clock, named contacts
+**Tailors:** `<org>-incidents.md`. The default has the roles, the first steps, a procedure per type (the five above plus an agent acting outside its authorization), the 72-hour clock and the breach log (Article 33(5)). Fill in the contacts and the supervisory authority, and confirm or adjust the procedures.
 
-**Commit:** `docs: 05 — Incident response plan`
+**Commit:** `docs(governance): incidents — response plan`
 
 ---
 
@@ -476,9 +494,9 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Question:** "For each AI tool you use — do you know whether they use your data for model training, and where they store it?"
 
-**Write:** `06-vendor-assessment.md` — Due diligence table: Vendor | Service | Data location | GDPR compliant | Trains on data | Risk rating | Required actions
+**Tailors:** `<org>-tools.md`, sections Vendor due diligence and Transfers outside the EU/EEA. Fill one row per vendor: Vendor | Service | Data location | Trains on our data | DPA (Article 28) | Transfer basis (Chapter V) | Retention | Risk | Actions. Confirm or adjust the default plan and review cadence.
 
-**Commit:** `docs: 06 — Third-party vendor assessment`
+**Commit:** `docs(governance): tools — vendor due diligence`
 
 ---
 
@@ -492,9 +510,9 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **EU AI Act Article 50 (applies from 2 August 2026):** People must be told when they interact with an AI system such as a chatbot (50(1)). Providers of generative AI must mark output as AI-generated in a machine-readable way (50(2)). Deployers must inform people exposed to emotion recognition or biometric categorisation (50(3)), and must disclose deepfakes (50(4)). Under 50(4), AI-generated or manipulated text published to inform the public on matters of public interest must be disclosed, unless it has gone through human review or editorial control and a person or organization holds editorial responsibility. This clause matters for communications departments. If any applies, this is mandatory — not optional.
 
-**Write:** `08-client-disclosure-policy.md` — disclosure text, timing, client objection handling, meeting recording consent (if Fireflies or equivalent)
+**Tailors:** `<org>-transparency.md`. The default has the client text above, the Article 50 rules, what the organization discloses beyond the law, sample disclosures, consent for recordings, film and interviews, and objection handling. Confirm or adjust each, and add the organization's recording tools (for example Fireflies).
 
-**Commit:** `docs: 08 — Client disclosure policy`
+**Commit:** `docs(governance): transparency — disclosure and consent`
 
 ---
 
@@ -512,7 +530,7 @@ Three stances:
 
 Default: **Managed** unless the org explicitly chooses otherwise.
 
-**Write into `12-agent-governance.md`:**
+**Tailors:** `<org>-agents.md`, section Skill governance. The default stance is Managed, with this table. Confirm or adjust, and record how agents, skills and tools are organized and who owns what:
 
 | Action | Agent can do autonomously | Requires approval |
 |--------|--------------------------|------------------|
@@ -521,7 +539,7 @@ Default: **Managed** unless the org explicitly chooses otherwise.
 | Promote a skill to org-wide use | — | ✓ Idun |
 | Modify an existing org-level skill | — | ✓ Idun |
 
-**Commit:** `docs: 12 — AI skill governance added`
+**Commit:** `docs(governance): agents — skill governance`
 
 ---
 
@@ -529,7 +547,7 @@ Default: **Managed** unless the org explicitly chooses otherwise.
 
 No additional questions needed. Based on all previous answers, establish the monitoring schedule.
 
-**Write:** `09-audit-review-log.md` — review schedule with named responsible parties:
+**Tailors:** `<org>-framework.md`, section Review. The default has this schedule with roles. Confirm or adjust who and how often:
 
 | Cadence | Who | What |
 |---------|-----|------|
@@ -537,14 +555,23 @@ No additional questions needed. Based on all previous answers, establish the mon
 | **Monthly** | Idun (automated) | Skill audit, override rate, audit log anomalies, governance manifest check |
 | **Quarterly** | Principal | Tool and access review, override rate analysis, vendor assessment refresh |
 | **Annually** | Principal | Full governance suite review, GDPR safeguards, EU AI Act re-classification, version increment |
+| **When the WDS default changes** | Idun | Conflict check (below) |
 
 **Trigger reviews** (immediate):
 - New AI tool or sub-contractor added
 - Personal data breach or near-miss
 - Agent acts outside its authorized scope
 - Relevant regulatory change (EU AI Act guidance, IMY ruling)
+- The WDS default changes (the sync tool flags it)
 
-**Commit:** `docs: 09 — Monitoring and audit schedule`
+**Conflict check.** Idun's job, in this step and afterwards whenever the `wds-*` files change at sync, or on request (`/idun audit governance`, see `skills/librarian.md`). Compare the organization's policy with the default, rule by rule:
+- a default rule the organization has not addressed → a row in the deviations table in `<org>-principles.md`
+- an organization rule that is looser than the default and is not in the differences table in `<org>-framework.md` → a row in the deviations table
+- a difference that is recorded with a reason → no action
+
+The stricter rule applies until the organization decides: adopt the default, or record the difference with a reason, approved by the approver. A recorded difference never goes below the law.
+
+**Commit:** `docs(governance): framework — review schedule`
 
 ---
 
@@ -552,7 +579,7 @@ No additional questions needed. Based on all previous answers, establish the mon
 
 No additional questions needed. Map each governance section to a concrete Agent Space build requirement.
 
-**Write:** Implementation requirements section in `00-introduction.md`:
+**Tailors:** `<org>-agents.md`, section Controls and verification. The default lists generic controls (identity, review gate, authorization profile, audit trail, skill registry, kill switch). Confirm or adjust them. With Agent Space, add these requirements:
 
 | Governance area | Required Agent Space capability | Status |
 |----------------|--------------------------------|--------|
@@ -567,7 +594,7 @@ No additional questions needed. Map each governance section to a concrete Agent 
 
 Mark Built only if already confirmed. Everything else: Pending.
 
-**Commit:** `docs: 00 — Agent Space implementation requirements`
+**Commit:** `docs(governance): agents — implementation requirements`
 
 ---
 
@@ -575,16 +602,16 @@ Mark Built only if already confirmed. Everything else: Pending.
 
 Write one test per capability confirming it actually works. Short and actionable.
 
-**Write:** Verification section in `00-introduction.md`
+**Tailors:** `<org>-agents.md`, the Test column in Controls and verification.
 
-**Commit:** `docs: 00 — Build verification tests`
+**Commit:** `docs(governance): agents — verification tests`
 
 ---
 
 ### Step 17 — Finalize
 
-1. Remove "Status: In progress" from all document headers
-2. Add approval block to `00-introduction.md`:
+1. In every `<org>-*` file: set `Status: approved v1.0 <date>` and remove the `Tailor in dialog` lines
+2. Fill in the approval block in `<org>-framework.md`:
 
 ```markdown
 ---
@@ -597,10 +624,11 @@ Write one test per capability confirming it actually works. Short and actionable
 **Signature:** ________________________
 ```
 
-3. Update `00-introduction.md` Document Index to list all 12 documents accurately
-4. Final commit: `docs: AI governance suite v1.0 — complete (12 documents)`
-5. Show completed document index in chat for review
-6. Tell the client: the suite is the organization's own evidence. It is not filed with any authority. It is kept up to date and shown on request, for example during an inspection.
+3. Update the Documents index and the Differences from the WDS default table in `<org>-framework.md`, so every difference agreed in the dialog is listed with its reason
+4. Final commit: `docs(governance): <org> policy v1.0 — approved`
+5. Sync, so the organization's other repos get the approved copies (sync tool)
+6. Show completed document index in chat for review
+7. Tell the client: the suite is the organization's own evidence. It is not filed with any authority. It is kept up to date and shown on request, for example during an inspection.
 
 ---
 
@@ -612,9 +640,9 @@ Only these events involve an authority, and each one is documented in its own do
 
 | Event | Authority | Document |
 |-------|-----------|----------|
-| Personal data breach that is likely to result in a risk to people (GDPR Article 33, where feasible within 72 hours) | Supervisory authority (IMY in Sweden) | 05 Incident response |
-| A DPIA shows high residual risk that cannot be mitigated (GDPR Article 36, prior consultation) | Supervisory authority | 03 Data processing register |
-| A data protection officer is designated (GDPR Article 37(7): the DPO's contact details are communicated to the authority) | Supervisory authority | 00 Introduction |
+| Personal data breach that is likely to result in a risk to people (GDPR Article 33, where feasible within 72 hours) | Supervisory authority (IMY in Sweden) | `<org>-incidents.md` (05 Incident response) |
+| A DPIA shows high residual risk that cannot be mitigated (GDPR Article 36, prior consultation) | Supervisory authority | `<org>-data.md` (03 Data processing register) |
+| A data protection officer is designated (GDPR Article 37(7): the DPO's contact details are communicated to the authority) | Supervisory authority | `<org>-framework.md` (00 Introduction) |
 
 **Flag explicitly:**
 - Special category data (health, biometrics, ethnicity, etc.) → a DPIA under Article 35 may be required. It is kept internally, not filed.
@@ -622,9 +650,31 @@ Only these events involve an authority, and each one is documented in its own do
 
 ---
 
-## Document Skeletons
+## Default policy
 
-Create these 12 files (or the merged set agreed in Step 0) in the governance folder before the first question. All sections marked `*[In progress]*`:
+The WDS default policy lives in `agents/wds/idun/templates/governance/`. It is neutral, in English, based on best practice for organizations and teams that work with AI agents, and adoptable as it is. Every number in it that is not law is marked as a recommendation or a heuristic.
+
+It reaches every repo in two ways:
+- **As the baseline:** the sync tool copies it into every WDS repo as `governance/wds-<name>.md`, read-only. It applies wherever the organization's policy is silent, and alone when the organization has none.
+- **As the starting point:** Step 0 copies it to `governance/<org>-<name>.md` in the organization's source repo, and the dialog tailors it.
+
+The template files are unprefixed. Links between them use the placeholder prefix `{org}-` (for example `{org}-principles.md`). The sync tool replaces it with `wds-`; Step 0 replaces it with the organization's prefix or localized file names. `{Org}` and other `{…}` placeholders are filled in the dialog.
+
+| File | Covers | Tailored in steps |
+|---|---|---|
+| `framework.md` | Where the policy lives, precedence, differences from the default, scope, maturity, accountability (roles), AI literacy, documents, review and conflict check, no filing, approval | 0, 0.5, 0.6, 1, 2, 14, 17 |
+| `principles.md` | Default principles (S1–S4 security, P1–P4 privacy, H1–H3 human oversight, T1–T2 transparency, Q1–Q4 quality and competence) and the deviations now | all |
+| `tools.md` | Permitted and prohibited uses, adding a tool, tool table, vendor due diligence, Chapter V transfers | 4, 11 |
+| `data.md` | Records of processing (Article 30), classification tiers, shared and private, never in a repo, DPIA (Article 35), data quality | 5, 6 |
+| `risk.md` | AI Act classification, agentic risk score (AIVSS, WDS heuristic), risk register | 3, 3.5, 4 |
+| `agents.md` | Roster, authorization levels and defaults, the review gate, overrides, agent to agent, skill governance, controls and verification | 7, 8, 13, 15, 16 |
+| `access.md` | Accounts, least privilege, credentials, integrations and cascade rules, kill switch, access review | 9, 14 |
+| `incidents.md` | Roles, first steps, procedure per type, the 72-hour clock, breach log (Article 33(5)), incident log | 10 |
+| `transparency.md` | Disclosure to clients and the public (Article 50), sample texts, consent for recordings, film and interviews, objections | 12 |
+
+### Full set (option)
+
+For a larger or high-risk organization (for example more than ten people with external stakeholders, a regulated sector, a High AIVSS score, or a high-risk classification under the AI Act), propose the full 12-document set. Build it by splitting the default files, so no content is lost, and name the files `<org>-00-introduction.md` and so on. Confirm the set in Step 0.
 
 ```
 00-introduction.md           — Org overview, AI adoption commitment (current level / target / owner / sign-off), document index, implementation requirements, approval block
@@ -645,11 +695,27 @@ Create these 12 files (or the merged set agreed in Step 0) in the governance fol
                                 prompt injection defense, AI governance structure
 ```
 
+| Full set | Default file and section |
+|---|---|
+| 00 Introduction | `framework` (all sections); controls and verification from `agents` |
+| 02 AI use policy | `tools`: Permitted uses, Prohibited uses, Adding a tool, Tools in use |
+| 03 Data processing register | `data` (all sections) |
+| 04 AI risk assessment | `risk` (all sections) |
+| 05 Incident response plan | `incidents` (all sections) |
+| 06 Vendor assessment | `tools`: Vendor due diligence, Transfers outside the EU/EEA |
+| 07 Human oversight protocol | `agents`: Authorization levels, The review gate, Overrides |
+| 08 Client disclosure policy | `transparency` (all sections) |
+| 09 Audit and review log | `framework`: Review, Version history; `principles`: Deviations now |
+| 10 Access control groups policy | `access`: Accounts, Least privilege, Credentials, Access review |
+| 11 System integration governance | `access`: Integrations, Kill switch; `risk`: tool rows in the risk register |
+| 12 Agent governance | `agents`: Roster, Authorization defaults, Agent to agent, Skill governance |
+| *(none)* | `principles` stays a file of its own in both sets |
+
 ---
 
 ## Quality Rules
 
-- The governance folder and skeletons MUST exist before the first question. No exceptions. No separate governance repo.
+- The organization's policy files, copied from the default into `governance/` in its source repo, MUST exist before the first question. No exceptions. No separate governance repo, and no edits in a copy.
 - One commit per section. Never batch commits.
 - Never skip a section — even "not applicable" must be written explicitly with rationale.
 - GDPR cross-border transfer note is mandatory if any party or tool is outside EU/EEA.
@@ -658,14 +724,16 @@ Create these 12 files (or the merged set agreed in Step 0) in the governance fol
 - Final document must have a named approver and signature block before it is complete.
 - AI Skill Governance is mandatory for any org using Agent Space — never skip it.
 - Sections covering implementation requirements, verification tests, and audit schedule are mandatory — a governance document without operational controls is a paper artifact, not a live system.
-- Sections 11 (System Integration) and 12 (Agent Governance) are mandatory for any org deploying agentic AI.
-- AIVSS agentic risk scoring (Step 3.5) is mandatory for any org with autonomous agents — the Factor_Sum must appear in Doc 04 before the suite is complete.
-- At Moderate AIVSS risk (Factor_Sum 4.1–7): docs 11 and 12 must include all AIVSS-specific sections (tool inventory, kill switch, memory scope, prompt injection defense).
-- At High AIVSS risk (Factor_Sum 7.1–10): a named pre-deployment approver and sign-off date must appear in Doc 12 before any agent goes live.
+- `access` and `agents` (11 System Integration and 12 Agent Governance in the full set) are mandatory for any org deploying agentic AI.
+- AIVSS agentic risk scoring (Step 3.5) is mandatory for any org with autonomous agents — the Factor_Sum must appear in `<org>-risk.md` (Doc 04) before the suite is complete.
+- At Moderate AIVSS risk (Factor_Sum 4.1–7): `access` and `agents` (docs 11 and 12) must include all AIVSS-specific sections (tool inventory, kill switch, memory scope, prompt injection defense).
+- At High AIVSS risk (Factor_Sum 7.1–10): a named pre-deployment approver and sign-off date must appear in `<org>-agents.md` (Doc 12) before any agent goes live.
+- Every difference from the WDS default is listed in the differences table in `<org>-framework.md`. A conflict check runs whenever the default changes.
 
 ## Reference
 
-Canonical examples: `whiteport-collective/whiteport-agent-space` — `ai-governance/` (full set, April 2026), and `visita-kommunikation` — `shared/visita/governance/` (merged set for one department, October 2026).
+Canonical examples: `whiteport-collective/whiteport-agent-space` — `ai-governance/` (full set, April 2026), and `visita-kommunikation` — `governance/visita-*.md` (merged set for one department, localized to Swedish, October 2026).
+Default policy: `agents/wds/idun/templates/governance/`.
 Produced during Idun dry run with Whiteport (Mårten Angner, April 2026).
 
 Regulatory framework: Governing Intelligence — Law, Privacy, Security, and Compliance in the Age of Artificial Intelligence (Noah M. Kenney, Digital 520, 2026). Full text: `docs/references/governing-intelligence.md` in WDS-EC repo.

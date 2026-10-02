@@ -22,7 +22,9 @@ What a WDS workspace contains and the starting content of each file. Used by org
 ├── sessions/                     Handovers. Folder = receiving agent.
 │   ├── <user>/<agent>/
 │   └── all-users/<agent>/
-├── shared/<org>/                 Shared across projects: org profile, brand, contacts, governance
+├── governance/                   Policy, flat. wds-*.md: the synced WDS default. <org>-*.md: the org's policy
+│                                 (edited only in its source repo). <project>-*.md: tightenings for this repo.
+├── shared/<org>/                 Shared across projects: org profile, brand, contacts
 ├── projects/<project>/design-process/
 │   ├── A-Product-Brief/ … E-Development/
 │   └── _progress/
@@ -53,8 +55,9 @@ Language: <language for client-facing material>. All folder and file names in lo
 
 1. Note the start time (`YYYY-MM-DD_HH-MM`, local time). The session id is `YYYY-MM-DD_HH-MM-<user>`.
 2. Find out who you work with: read `.wds/me.md`. If missing, follow `agents/wds/shared/tools/git.md`.
-3. Read the latest handover to you in `sessions/<user>/<agent>/` and open ones in `sessions/all-users/<agent>/`.
-4. Work inside one project folder at a time.
+3. Read the principles in `governance/` and follow them: `wds-principles.md`, then the organization's, then this repo's (see "Step: governance" in `agents/wds/shared/data/shared-activation.md`).
+4. Read the latest handover to you in `sessions/<user>/<agent>/` and open ones in `sessions/all-users/<agent>/`.
+5. Work inside one project folder at a time.
 
 ## At session end
 
@@ -74,6 +77,7 @@ Run wrap: `agents/wds/shared/skills/wrap.md`.
 - One project = one folder under `projects/`, each a separate WDS structure. `output_folder` is `projects/<project>/design-process/`.
 - What several projects share lives in `shared/<org>/`, never copied into projects.
 - One folder per source in `agents/`. WDS agents are synced from whiteport-design-studio and never edited here.
+- Policy lives in `governance/`, one flat folder. `wds-*` and copied `<org>-*` files are read-only; edit them in their source repo.
 - Everything in the repo is shared and professional. Private matters go in each person's private cabinet.
 - No credentials in the repo. Name who has access and the Bitwarden item, never the value.
 - Commit and push after each finished step.
