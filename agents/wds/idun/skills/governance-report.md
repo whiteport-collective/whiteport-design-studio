@@ -2,7 +2,7 @@
 name: idun-governance-report
 agent: idun
 phase: 1
-version: 0.3
+version: 0.4
 inputs:
   - business name
   - org structure (size, roles, decision-makers)
@@ -16,7 +16,7 @@ inputs:
 outputs:
   - {businessname}-agent-space GitHub repo
   - ai-governance/ folder with 12 documents (live-written, one commit per section)
-  - submission-ready suite for IMY (Sweden) and EU AI Act
+  - an approved suite the organization keeps as its own evidence (nothing is filed with an authority)
 ---
 
 ## Intent
@@ -598,24 +598,25 @@ Write one test per capability confirming it actually works. Short and actionable
 3. Update `00-introduction.md` Document Index to list all 12 documents accurately
 4. Final commit: `docs: AI governance suite v1.0 — complete (12 documents)`
 5. Show completed document index in chat for review
-6. Ask: "Ready to submit? IMY (Sweden/GDPR) and/or EU AI Act filing?"
+6. Tell the client: the suite is the organization's own evidence. It is not filed with any authority. It is kept up to date and shown on request, for example during an inspection.
 
 ---
 
-### Step 18 — Submission prep (on command)
+### No filing — what does go to an authority
 
-**IMY (Sweden / GDPR):**
-- Documents 03 (ROPA) and 05 (Incident Response) are the primary GDPR compliance records
-- If processing special category data (health, biometrics, ethnicity, etc.): a formal DPIA under Article 35 may be required separately — flag this explicitly
-- IMY contact: imy.se · Box 8114 · 104 20 Stockholm · +46 8 657 61 00
-- Add `## Submission Log` section with date and authority name
+The governance suite is never submitted. Neither GDPR nor the EU AI Act requires an organization to file its governance documents. Do not offer to submit them.
 
-**EU AI Act:**
-- Identify risk classification from Step 3 and document in `04-ai-risk-assessment.md`
-- High-risk systems: Articles 8–15 full compliance required by August 2026
-- Limited-risk systems: Article 52 transparency disclosures required now
-- Minimal-risk: voluntary codes; no mandatory filing
-- GPAI systems (≥10^25 FLOP): transparency and adversarial testing required from May 2025
+Only these events involve an authority, and each one is documented in its own document:
+
+| Event | Authority | Document |
+|-------|-----------|----------|
+| Personal data breach (GDPR Article 33, within 72 hours) | Supervisory authority (IMY in Sweden) | 05 Incident response |
+| A DPIA shows high residual risk that cannot be mitigated (GDPR Article 36, prior consultation) | Supervisory authority | 03 Data processing register |
+| A data protection officer is appointed (GDPR Article 37) | Supervisory authority | 00 Introduction |
+
+**Flag explicitly:**
+- Special category data (health, biometrics, ethnicity, etc.) → a DPIA under Article 35 may be required. It is kept internally, not filed.
+- High-risk classification under the EU AI Act (Step 3) → refer to legal review for any registration obligation.
 
 ---
 

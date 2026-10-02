@@ -7,6 +7,7 @@ agents/wds/
 ├── saga/      Strategic analyst — Product Brief, Trigger Map
 ├── freya/     UX designer — scenarios, UX design, specs
 ├── mimir/     Implementation — tech audit, PRD, build
+├── idun/      Setup and governance — governance-report (moved in from the archived WDS-E repo)
 └── shared/    What no single agent owns
     ├── skills/   wrap, start, handoff, feedback, prd-workflow, design-delivery
     ├── tools/    git, agent-space, memory, sync, wireframe, rendering …
