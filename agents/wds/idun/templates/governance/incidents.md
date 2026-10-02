@@ -6,7 +6,7 @@ Status: default (WDS)
 Level: default
 Tailor in dialog: step 10
 
-Part of the [framework]({org}-framework.md). Keeps principle Q4. Owner: the incident lead. (NIST AI RMF MANAGE 4.3; ISO/IEC 42001 clause 10.2.)
+Part of the [framework]({org}-framework.md). Keeps principle Q4. Owner: the incident lead. (NIST AI RMF MANAGE 4.3; ISO/IEC 42001 clause 10.2, nonconformity and corrective action.)
 
 ## Roles
 

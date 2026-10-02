@@ -60,7 +60,7 @@ A principle is like a goal but stays within the constraints. It is never done. I
 
 ## Accountability
 
-Roles, not names. One person may hold several roles in a small organization. Every area of this policy has exactly one owner. Names appear only in the approval block. (GDPR Art. 5(2) accountability; ISO/IEC 42001 clause 5.3; NIST AI RMF GOVERN 2.1.)
+Roles, not names. One person may hold several roles in a small organization. Every area of this policy has exactly one owner. Names appear only in the approval block. (GDPR Art. 5(2) accountability; ISO/IEC 42001 clause 5.3, roles, responsibilities and authorities; NIST AI RMF GOVERN 2.1.)
 
 | Role | Accountable for | Default owner of |
 |---|---|---|
@@ -76,7 +76,7 @@ The person who delivers work is responsible for it, whether a person, an agent o
 
 ## AI literacy
 
-EU AI Act Art. 4: providers and deployers "shall take measures to support the development of AI literacy of their staff and other persons dealing with the operation and use of AI systems on their behalf". (ISO/IEC 42001 clauses 7.2 and 7.3; NIST AI RMF GOVERN 2.2.)
+EU AI Act Art. 4: providers and deployers "shall take measures to support the development of AI literacy of their staff and other persons dealing with the operation and use of AI systems on their behalf". (ISO/IEC 42001 clauses 7.2, competence, and 7.3, awareness; NIST AI RMF GOVERN 2.2.)
 
 Defaults (recommendations):
 - **Before first use:** everyone who works with AI for {Org} reads the principles, the tool limits ([tools]({org}-tools.md)), the review gate ([agents]({org}-agents.md)) and how to report an incident.
@@ -100,7 +100,7 @@ Defaults (recommendations):
 
 ## Review
 
-Cadences are recommendations. Who and how often is confirmed in step 14. (NIST AI RMF GOVERN 1.5; ISO/IEC 42001 clauses 9.3 and 10.2.)
+Cadences are recommendations. Who and how often is confirmed in step 14. (NIST AI RMF GOVERN 1.5; ISO/IEC 42001 clauses 9.3, management review, and 10.1, continual improvement.)
 
 | Cadence | Who | What |
 |---|---|---|
