@@ -163,7 +163,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
   </step>
 
   <step id="0-4-shared">
-    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul (it runs governance), handovers.
+    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, governance, handovers.
     Idun does not run the shared scan and select steps. She scans for setup state instead (step 1).
     Agent Space is never part of the boot. If `.wds/me.md` configures it, it is used only for handoff tokens.
   </step>

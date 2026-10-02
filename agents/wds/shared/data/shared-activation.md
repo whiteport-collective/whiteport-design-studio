@@ -30,7 +30,7 @@ Based on Nate B. Jones' two filing cabinets: the **repo cabinet** holds what the
 
 Do not print the files. If a file is missing, continue. Wrap creates it when there is something to write.
 
-Then run "Step: governance". Every agent that runs this step runs that one too.
+Then run "Step: governance". Every agent lists it explicitly in its activation as well; it runs once per session.
 
 ---
 
@@ -63,7 +63,7 @@ First the repo, then the start time of the session that wrote the handover, then
    - Same, or no repo given: continue.
    - Different: look for it under the dev root (`C:/dev/*/<repo>` or `~/dev/*/<repo>`). Found: tell the user in one line to start the session there, and stop. Agent sessions should run in the repo they work in. Not found: say the repo is not cloned on this machine and stop.
 2. Find the file `<timestamp>-*.md` in `sessions/*/<agent_id>/` at the repo root or in a project folder (`projects/*/sessions/*/<agent_id>/`, any letter case). If the repo's `sessions/README.md` says `sessions: private`, look in the user's own sessions folder for this repo instead: the `sessions:` line in `projects/<repo>.md` in the private cabinet (wrap step 1). Filename: `<session-id>-<från>-<sammandrag>.md`, any user folder including `all-users`. Several matches: pick the one whose `<sammandrag>` matches the summary in the command, else prefer the current user's folder, else list them and ask.
-3. Read it. Print EXACTLY:
+3. Read it. Run "Step: soul" and "Step: governance" silently first: a resumed session follows the policy too. Then print EXACTLY:
 
    ── Återupptar <Agent> · <repo> · <timestamp> ─
    Om:     <sammandrag from the filename, with spaces>
