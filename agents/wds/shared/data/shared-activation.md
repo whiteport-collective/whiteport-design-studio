@@ -63,6 +63,8 @@ IF an open handover exists: show it (summary from the filename, Nästa and proje
 When the user accepts: set `status: tagen` and `tagen_av: <session-id>` in the file, commit.
 Wrap sets `status: klar` when the work is done. Never delete a handover.
 
+IF the project has `_progress/plan.md`: show the user's open tasks (dimension Vem) and the tasks that block the most others (dimension Efter). Format: [project-plan.md](project-plan.md).
+
 ---
 
 ## Step: scan
