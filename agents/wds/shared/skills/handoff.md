@@ -1,98 +1,48 @@
 ---
 name: handoff
-version: "1.0.0"
-description: Passes a specific task to another WDS agent via the memory tool. Use when handing targeted work to mimir, saga, or freya.
-agents: [saga, freya, mimir]
+source: wds
+description: Lämna över en avgränsad uppgift till en annan agent eller person mitt i sessionen. Samma överlämningsfil och återupptagningskommando som wrap, men sessionen fortsätter.
+tools: [wds/shared/git]
 ---
 
-# /handoff — Cross-Agent Handoff
+# Handoff: lämna över en uppgift
 
-Pass a specific piece of work to another WDS agent. This is NOT a session wrap — it is a targeted transfer of one task or artifact to a different agent.
+En handoff är en överlämning utan wrap. Den lämnar **en** uppgift till någon annan, och sessionen fortsätter. Allt annat följer [wrap](wrap.md), så att mottagaren tar en handoff på samma sätt som en wrap: med återupptagningskommandot.
 
-**Usage:** `/handoff [target-agent]`
-**Example:** `/handoff mimir`
+**Användning:** `/handoff <till> [person]`, till exempel `/handoff mimir` eller `/handoff wera camilla`.
 
----
+Fråga ingenting. Ta allt ur samtalet.
 
-<handoff-steps>
+## 1. Vem, vilken session, till vem
 
-  <constraints>
-    - Derive everything from the conversation. Do NOT ask questions.
-    - Do NOT summarize this session. That is a wrap, not a handoff.
-    - Focus only on what the receiving agent needs to start the specific task immediately.
-    - Handoff is written to `progress/[target_agent].md` — the receiving agent picks it up via `/start`.
-  </constraints>
+Som [wrap steg 1](wrap.md#1-vem-vilken-session-till-vem): användare, session-id, från, projektrot och sessionsmapp.
 
-  <step id="1-compile">
-    Determine:
-    - `target_agent` — from the argument. If none: infer from context (strategy → saga, design → freya, implementation → mimir).
-    - `from_agent` — your current agent base name.
-    - `project` — current project repo name.
+- **Till:** agenten i argumentet. Saknas det: strategi → saga, design → freya, bygge → mimir.
+- **Person:** samma person som standard. En annan person om argumentet säger det, och `all-users` om vi inte vet vem som kör.
 
-    Compose the handoff content — what the receiving agent needs to start immediately:
+## 2. Överlämningen
 
-    ```
-    ## Task
-    [Single specific task being handed off. What it is, what state it's in, what remains.]
+Samma filnamn, mapp och format som [wrap steg 2](wrap.md#2-överlämningen), med `status: öppen`. `<sammandrag>` beskriver uppgiften, inte sessionen.
 
-    ## Files
-    [Full absolute paths to every relevant file. The receiving agent should never have to search for them.]
+Innehållet gäller bara uppgiften:
 
-    ## Next
-    [Single immediately-actionable next step for the receiving agent.]
-    ```
+- **Gjort:** det som redan är klart av uppgiften, och de beslut den vilar på.
+- **Kvar:** det som återstår.
+- **Nästa:** konkreta steg i ordning, så att mottagaren kan börja direkt.
+- **Filer:** relativa länkar till allt mottagaren behöver.
 
-    This is task context, not session history. Always include full absolute file paths — never just filenames. If the receiving agent doesn't need something to do the task, leave it out.
-  </step>
+## 3. Dela
 
-  <step id="2-show">
-    Print EXACTLY this block:
+Spara och dela bara överlämningsfilen enligt git-toolet. Commit-meddelandet är `handoff: <session-id> → <till> — <en rad>`. Soul-filer, projektlogg och skills lämnas till wrap.
 
-    ── Handoff to [target_agent] ─────────────────
-    Task:    [one-line task description]
-    Next:    [the Next line you composed]
-    ──────────────────────────────────────────────
+## 4. Kvittens
 
-    Then proceed immediately to step 3.
-  </step>
+Visa mottagare och sökväg. Avsluta med återupptagningskommandot som ett eget kodblock, i samma format som [wrap steg 8](wrap.md#8-kvittens):
 
-  <step id="3-write">
-    Spawn a sub-agent with this exact prompt — substitute the bracketed values:
+````
+```
+/<till> <repo> YYYY-MM-DD_HH-MM <sammandrag>
+```
+````
 
-    ---
-    You are a handoff writer. Your only job is to save a handoff file via the memory tool.
-
-    **Step A — Save handoff via memory tool:**
-    Read `agents/wds/shared/tools/memory.md` and follow the `save` operation:
-    - agent_id: [target_agent]
-    - data:
-    ```
-    ## Wrapped
-    [current date and time]
-
-    ## Context
-    [task content from step 1]
-
-    ## Next
-    [next line from step 1]
-
-    ## Learned
-    None
-
-    ## Spec Sync
-    None
-    ```
-
-    **Step B — Confirm:**
-    Return ONLY: `done`
-    ---
-
-    Wait for the sub-agent to return. Then print EXACTLY this — nothing before, nothing after:
-    ```
-    /[target_agent] progress/[target_agent].md
-    ```
-
-    Session continues.
-  </step>
-
-</handoff-steps>
+Fortsätt sedan sessionen där den var.
