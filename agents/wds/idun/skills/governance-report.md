@@ -14,8 +14,7 @@ inputs:
   - integration architecture (what AI connects to)
   - agent roster and autonomy levels
 outputs:
-  - {businessname}-agent-space GitHub repo
-  - ai-governance/ folder with 12 documents (live-written, one commit per section)
+  - a governance/ folder in the organization's existing repo (default `shared/<org>/governance/`), live-written, one commit per section
   - an approved suite the organization keeps as its own evidence (nothing is filed with an authority)
 ---
 
@@ -25,7 +24,7 @@ Produce a complete, signed AI governance suite for a WDS client. The suite is wr
 
 The suite is structured around the **AI Governance Stack** (Kenney, 2026): five layers covering Data, Model, System Integration, Control & Monitoring, and Audit & Evidence — plus a WDS-original Layer 2.5 for Agent Governance. The suite is designed to support compliance with GDPR (ROPA, DPIAs, Article 22) and the EU AI Act (Article 4 AI literacy, Article 50 transparency, and Articles 8–15 and 26 where a high-risk system is involved), and it maps to the NIST AI RMF (GOVERN, MAP, MEASURE, MANAGE functions). Writing the suite does not by itself make an organization compliant.
 
-The repo and document skeletons exist before the first question is asked.
+The governance folder and document skeletons exist before the first question is asked. There is no separate governance repo: the policy documents live in one folder in the repo the organization already works in.
 
 ---
 
@@ -76,15 +75,15 @@ Recommended target (Kenney 2026, not a legal requirement): high-risk AI systems 
 
 ## Process
 
-### Step 0 — Create repo and skeleton BEFORE the first question
+### Step 0 — Create the folder and skeleton BEFORE the first question
 
 As soon as the client provides their business name, execute all of the following before asking anything else:
 
-1. Create GitHub repo: `{org}/{businessname}-agent-space` (private) — or confirm it exists
-2. Create folder: `ai-governance/`
-3. Write 12 skeleton documents (see Document Skeletons section below)
-4. Commit: `chore: create AI governance suite skeleton — 12 documents`
-5. Tell the user: "The repo is live at {url}. You can follow the documents being written in real time. Let's begin."
+1. Create the folder `shared/<org>/governance/` in the organization's existing repo, or confirm it exists. If the repo already has a governance or policy folder, use that one. Never create a separate repo for governance.
+2. Decide the document set. The 12 documents below are the full set. For a small organization or a single department, propose merging them (for example tools + vendors, data register + classification, oversight + agent governance) and confirm the set before writing.
+3. Write the skeleton documents (see Document Skeletons section below)
+4. Commit: `chore: create AI governance skeleton`
+5. Tell the user where the folder is and that they can follow the documents being written in real time. Let's begin.
 6. Then ask the first question.
 
 ---
@@ -625,7 +624,7 @@ Only these events involve an authority, and each one is documented in its own do
 
 ## Document Skeletons
 
-Create these 12 files in `ai-governance/` before the first question. All sections marked `*[In progress]*`:
+Create these 12 files (or the merged set agreed in Step 0) in the governance folder before the first question. All sections marked `*[In progress]*`:
 
 ```
 00-introduction.md           — Org overview, AI adoption commitment (current level / target / owner / sign-off), document index, implementation requirements, approval block
@@ -650,7 +649,7 @@ Create these 12 files in `ai-governance/` before the first question. All section
 
 ## Quality Rules
 
-- Repo and skeletons MUST exist before the first question. No exceptions.
+- The governance folder and skeletons MUST exist before the first question. No exceptions. No separate governance repo.
 - One commit per section. Never batch commits.
 - Never skip a section — even "not applicable" must be written explicitly with rationale.
 - GDPR cross-border transfer note is mandatory if any party or tool is outside EU/EEA.
@@ -666,7 +665,7 @@ Create these 12 files in `ai-governance/` before the first question. All section
 
 ## Reference
 
-Canonical example: `whiteport-collective/whiteport-agent-space` — `ai-governance/`
+Canonical examples: `whiteport-collective/whiteport-agent-space` — `ai-governance/` (full set, April 2026), and `visita-kommunikation` — `shared/visita/governance/` (merged set for one department, October 2026).
 Produced during Idun dry run with Whiteport (Mårten Angner, April 2026).
 
 Regulatory framework: Governing Intelligence — Law, Privacy, Security, and Compliance in the Age of Artificial Intelligence (Noah M. Kenney, Digital 520, 2026). Full text: `docs/references/governing-intelligence.md` in WDS-EC repo.

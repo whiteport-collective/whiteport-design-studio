@@ -175,8 +175,8 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
     - **Projects:** `projects/*/design-process/` or another `output_folder`, each with `_progress/wds-project-outline.yaml`
       (its `phases:` block records qualification and onboarding).
     - **People:** `users/_template/`, `users/<user>/` for each person, `.wds/me.md` on this machine, `.wds/` in `.gitignore`.
-    - **Organization:** `shared/<org>/org-profile.md`, a governance set (`shared/<org>/governance/`, `ai-governance/`,
-      or an `<org>-agent-space` repo named in `AGENTS.md`).
+    - **Organization:** `shared/<org>/org-profile.md`, the governance folder (`shared/<org>/governance/`;
+      older setups may have `ai-governance/` or an `<org>-agent-space` repo named in `AGENTS.md`).
     - **Agent Space:** `agent_space_url` in `.wds/me.md`. Absent means not used, which is fine.
     - **Library work:** if the current repo is a skill source (it has `agents/<source>/` folders with `instructions.md`
       and no projects), note it. The librarian is the likely job.
