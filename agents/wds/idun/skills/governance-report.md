@@ -23,7 +23,7 @@ outputs:
 
 Produce a complete, signed AI governance suite for a WDS client. The suite is written live — one commit per dialog step — so the client follows progress in real time.
 
-The suite is structured around the **AI Governance Stack** (Kenney, 2026): five layers covering Data, Model, System Integration, Control & Monitoring, and Audit & Evidence — plus a WDS-original Layer 2.5 for Agent Governance. This framework satisfies GDPR (ROPA, DPIAs, Article 22), EU AI Act (Articles 8–15), and NIST AI RMF (GOVERN, MAP, MEASURE, MANAGE functions).
+The suite is structured around the **AI Governance Stack** (Kenney, 2026): five layers covering Data, Model, System Integration, Control & Monitoring, and Audit & Evidence — plus a WDS-original Layer 2.5 for Agent Governance. The suite is designed to support compliance with GDPR (ROPA, DPIAs, Article 22) and the EU AI Act (Article 4 AI literacy, Article 50 transparency, and Articles 8–15 and 26 where a high-risk system is involved), and it maps to the NIST AI RMF (GOVERN, MAP, MEASURE, MANAGE functions). Writing the suite does not by itself make an organization compliant.
 
 The repo and document skeletons exist before the first question is asked.
 
@@ -35,11 +35,11 @@ Reference these frameworks throughout the dialog and documents:
 
 | Framework | Key requirements | Applicability |
 |-----------|-----------------|---------------|
-| **GDPR** | Article 5 (7 principles), Article 22 (no solely automated decisions), Article 30 (ROPA), Article 35 (DPIA) | Any org processing personal data of EU residents |
-| **EU AI Act 2024/1689** | Articles 8–15 for high-risk systems; Article 52 transparency for limited-risk; GPAI rules if using foundation models | Any org deploying AI systems in the EU |
-| **NIST AI RMF 1.0** | GOVERN, MAP, MEASURE, MANAGE | Voluntary but expected as "reasonable care" |
-| **EU AI Act timeline** | Prohibited practices: Feb 2025 ✓ · GPAI: May 2025 ✓ · High-risk full requirements: Aug 2026 | |
-| **Penalties** | EU AI Act: up to €35M or 7% global turnover · GDPR: up to €20M or 4% global turnover | |
+| **GDPR** | Article 5 (7 principles), Article 22 (right not to be subject to a solely automated decision with legal or similarly significant effects, with limited exceptions), Article 30 (ROPA), Article 35 (DPIA) | Organizations in the EU processing personal data, and organizations outside the EU that offer goods or services to, or monitor, people in the EU |
+| **EU AI Act 2024/1689** (as amended by the Digital Omnibus on AI, Regulation (EU) 2026/1744) | Article 4 AI literacy for all providers and deployers; Article 50 transparency (chatbots, synthetic content, deepfakes, AI-generated text published to inform the public, emotion recognition and biometric categorisation); Articles 8–15 (provider requirements) and Article 26 (deployer obligations) for high-risk systems; GPAI model rules (Articles 53–55) apply to model providers, not to organizations that only use the models | Providers and deployers of AI systems in the EU |
+| **NIST AI RMF 1.0** (NIST AI 100-1, January 2023; a revision is in progress) | GOVERN, MAP, MEASURE, MANAGE | Voluntary. Often cited as a benchmark of reasonable care, but not a legal requirement |
+| **EU AI Act timeline** (Article 113, as amended) | AI literacy (Article 4) and prohibited practices: 2 Feb 2025 ✓ · GPAI model obligations: 2 Aug 2025 ✓ · Article 50 transparency and most remaining provisions: 2 Aug 2026 ✓ (systems already on the market before 2 Aug 2026 have until 2 Dec 2026 for the Article 50(2) machine-readable marking) · New prohibitions on non-consensual intimate imagery and child sexual abuse material: 2 Dec 2026 · High-risk, Annex III: 2 Dec 2027 · High-risk, Annex I (regulated products): 2 Aug 2028 | |
+| **Penalties** | EU AI Act (Article 99): up to €35M or 7% of global turnover for prohibited practices · up to €15M or 3% for most other obligations, including deployer duties (Article 26) and transparency (Article 50) · up to €7.5M or 1% for incorrect or misleading information to authorities · for SMEs, whichever is lower. GDPR (Article 83): up to €20M or 4% (e.g. principles, legal basis, Article 22, transfers) · up to €10M or 2% (e.g. Articles 30, 33, 35, 37) | |
 
 ---
 
@@ -49,7 +49,7 @@ All 12 documents map to this stack. Use it to explain the structure to clients:
 
 | Layer | Covers | Documents |
 |-------|--------|-----------|
-| Layer 1: Data Governance | Data inventory, classification, quality, privacy, bias | 03 (Data Processing Register), 09 (Data Classification) |
+| Layer 1: Data Governance | Data inventory, classification, quality, privacy, bias | 03 (Data Processing Register, including Data Classification) |
 | Layer 2: Model Governance | Architecture review, fairness testing, robustness, model cards | 07 (Model Governance / Human Oversight) |
 | Layer 2.5: Agent Governance | Authorization profiles, agent-to-agent interaction, auditability, versioning | 12 (Agent Governance) |
 | Layer 3: System Integration | Integration architecture, pipeline security, cascading failure, boundary testing | 11 (System Integration Governance) |
@@ -66,11 +66,11 @@ All 12 documents map to this stack. Use it to explain the structure to clients:
 |-------|-------------|--------|
 | 1 — Ad Hoc | No systematic governance | |
 | 2 — Defined | Policies exist, implementation inconsistent | |
-| **3 — Managed** | **Processes standardized and consistently applied. Metrics tracked.** | **�? WDS-E default target** |
+| **3 — Managed** | **Processes standardized and consistently applied. Metrics tracked.** | **← WDS default target** |
 | 4 — Measured | Governance effectiveness quantitatively measured | |
 | 5 — Optimized | Fully automated governance integrated into development workflows | |
 
-High-risk AI systems require Level 3 minimum at all five layers.
+Recommended target (Kenney 2026, not a legal requirement): high-risk AI systems at Level 3 minimum at all five layers.
 
 ---
 
@@ -97,7 +97,7 @@ This step has two parts: Idun assesses the current level from the conversation, 
 
 **Part A — Current Level Assessment (Idun infers silently)**
 
-Listen for signals across the five Shapiro/AE-MM levels:
+Listen for signals across the Shapiro/AE-MM levels (both models run from Level 0 to Level 5):
 
 | What they say | Level |
 |--------------|-------|
@@ -256,7 +256,7 @@ For each level on the path, a section:
 
 **Listen for:** Business type, location (Sweden/EU = GDPR + EU AI Act), org size, principal name, sub-contractors or external parties.
 
-**Governance implication:** Swedish organization → IMY is the supervisory authority. Any sub-contractor outside EU/EEA triggers GDPR cross-border transfer obligations. Document explicitly.
+**Governance implication:** Swedish organization → IMY is the GDPR supervisory authority. For the EU AI Act, the government has given interim assignments (decision 12 June 2026, until 31 December 2026, pending national legislation) to PTS (single point of contact), IMY (for example law enforcement and creditworthiness AI), Finansinspektionen, Läkemedelsverket and Swedac. Any sub-contractor or tool outside the EU/EEA that receives personal data triggers the GDPR Chapter V transfer rules (Articles 44–49). Document explicitly.
 
 **Write:** `00-introduction.md` — Organization section + Document Index
 **Commit:** `docs: 00 — Introduction and organization`
@@ -269,7 +269,7 @@ For each level on the path, a section:
 
 **Listen for:** Named principal, chain of accountability, whether any governance board or compliance function exists.
 
-**Governance implication:** EU AI Act Article 9 requires a governance structure with clear accountability. Solo principal = clear and auditable. Multi-person orgs need documented authority chains.
+**Governance implication:** GDPR Article 5(2) makes the controller accountable for, and able to demonstrate, compliance. For high-risk AI systems, EU AI Act Article 17(1)(m) requires providers to have an accountability framework in their quality management system, and Article 26(2) requires deployers to assign human oversight to people with the necessary competence, training and authority. (Article 9 is the risk management system, not a governance structure.) Solo principal = clear and auditable. Multi-person orgs need documented authority chains.
 
 **Write:** Accountability section in `00-introduction.md`, named principal in signature block
 **Commit:** `docs: 00 — Accountability structure`
@@ -286,15 +286,15 @@ For each level on the path, a section:
 
 | If... | Then... | Layer activation |
 |-------|---------|-----------------|
-| AI performs a narrow procedural task only | Minimal risk — voluntary codes | Baseline |
-| AI makes recommendations affecting humans | Limited risk — Article 52 transparency | Layers 1–3 |
-| AI used in Annex III domains (employment, credit, education, law enforcement, healthcare, biometrics, critical infrastructure) | **High risk** — Articles 8–15 full compliance | All 5 layers at maximum rigor |
-| AI is a GPAI model (≥10^25 FLOP) | Systemic risk obligations | Enhanced Layer 2 + 5 |
+| None of the rows below applies (also an Annex III system that only performs a narrow procedural task, Article 6(3), unless it profiles people) | Minimal risk — no specific obligations beyond Article 4 AI literacy; voluntary codes of conduct (Article 95) | Baseline |
+| AI interacts directly with people (chatbot), generates synthetic audio, image, video or text, produces deepfakes or AI-generated text published to inform the public on matters of public interest, or performs emotion recognition or biometric categorisation | Limited risk — Article 50 transparency (applies from 2 Aug 2026) | Layers 1–3 |
+| AI used in Annex III areas (biometrics, critical infrastructure, education, employment, access to essential private and public services such as public benefits, credit scoring, life and health insurance pricing and emergency call triage, law enforcement, migration and border control, justice and democratic processes), or AI that is a safety component of a product under Annex I (e.g. medical devices, toys, lifts) | **High risk** — Articles 8–15 (providers) and Article 26 (deployers); applies from 2 Dec 2027 (Annex III) and 2 Aug 2028 (Annex I) | All 5 layers at maximum rigor |
+| The org itself provides a GPAI model (systemic risk is presumed above 10^25 FLOP of training compute, Article 51). Using a GPAI model through a tool does not make the org a GPAI provider | GPAI provider obligations (Article 53), plus systemic-risk obligations (Article 55); apply from 2 Aug 2025 | Enhanced Layer 2 + 5 |
 
 **Write:** `04-ai-risk-assessment.md` — risk classification section
 **Commit:** `docs: 04 — AI risk classification`
 
-**If high-risk classification applies:** Document full Articles 8–15 compliance requirements. This is not optional — August 2026 deadline is binding.
+**If high-risk classification applies:** Document the Articles 8–15 requirements (providers) and the Article 26 deployer obligations, plus a fundamental rights impact assessment (Article 27) where the deployer is a public body, provides public services, or uses credit scoring or life and health insurance pricing. This is not optional. The binding dates are 2 December 2027 for Annex III systems and 2 August 2028 for Annex I products, as amended by the Digital Omnibus on AI (Regulation (EU) 2026/1744).
 
 ---
 
@@ -325,10 +325,13 @@ No additional question needed. Based on Steps 3 and 4 answers, silently assess t
 | 4.1–7 | **Moderate** | All docs mandatory; Section 11 + 12 at full depth; named approver required |
 | 7.1–10 | **High** | Full suite + AIVSS-specific controls in docs 11 and 12; pre-deployment sign-off required; kill switch and prompt injection defense must be built before go-live |
 
+These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum inside a per-vulnerability formula together with a CVSS v4.0 base score, and its severity bands (Low 0.1–3.9, Medium 4.0–6.9, High 7.0–8.9, Critical 9.0–10.0) apply to that final score.
+
 **Key signals that push toward High:**
 - Agent sends external communications autonomously (Autonomy 1.0)
 - Agent accesses production databases or APIs with write access (Tools 1.0)
-- No human checkpoint before client-facing output (Opacity 1.0)
+- No human checkpoint before client-facing output (Autonomy 1.0)
+- No way to trace why the agent took an action (Opacity 1.0)
 - Agent coordinates with other agents in workflows (Multi-Agent 0.5+)
 
 **Mandatory additions at Moderate/High:**
@@ -349,7 +352,7 @@ No additional question needed. Based on Steps 3 and 4 answers, silently assess t
 
 **Write:** `02-ai-use-policy.md` — Tool table: Tool | Provider | Role | Type (Core / Agentic / Task-specific) | Data processor location
 
-**GDPR flag (mandatory):** If any tool's data processor is outside EU/EEA, note the cross-border transfer basis (adequacy decision or SCCs) explicitly.
+**GDPR flag (mandatory):** If any tool's data processor is outside EU/EEA, note the cross-border transfer basis explicitly: an adequacy decision (Article 45) or appropriate safeguards such as SCCs (Article 46). For US processors, the EU–US Data Privacy Framework covers only certified organizations. The General Court upheld it on 3 September 2025 (T-553/23, Latombe), and an appeal (C-703/25 P) is pending at the Court of Justice, so note a fallback such as SCCs.
 
 **Commit:** `docs: 02 — AI tools in use`
 
@@ -361,10 +364,10 @@ No additional question needed. Based on Steps 3 and 4 answers, silently assess t
 
 **Probe for:** Data categories, special categories (health, biometrics, financial), credential handling, sub-contractor data access.
 
-**GDPR data quality thresholds to introduce:**
+**Recommended data quality targets to introduce** (Kenney 2026, control DG-2 and data governance decision rules; not legal thresholds. GDPR Article 5(1)(d) requires accurate data but sets no percentages):
 - Completeness ≥95%, Accuracy ≥98%, Consistency ≥90%, Timeliness ≤30 days stale
-- Training data: demographic distribution vs. deployment population must be documented
-- Proxy variables with >0.7 correlation to protected characteristics must be identified
+- Training data: document demographic distribution vs. deployment population
+- Identify proxy variables with >0.7 correlation to protected characteristics
 
 **Write:** `03-data-processing-register.md` — ROPA (GDPR Article 30): Data subject | Data category | Legal basis | Processor | Retention | Cross-border transfer
 
@@ -376,7 +379,7 @@ No additional question needed. Based on Steps 3 and 4 answers, silently assess t
 
 **Question:** "How sensitive is the data you handle? Does any of it include personal data, health information, financial records, or credentials?"
 
-**Write:** `09-data-classification-policy.md` (or incorporate into 03 for small orgs) — classification tiers:
+**Write:** Data classification section in `03-data-processing-register.md` — classification tiers:
 
 | Tier | Definition | Examples | Required controls |
 |------|-----------|---------|------------------|
@@ -385,7 +388,7 @@ No additional question needed. Based on Steps 3 and 4 answers, silently assess t
 | Confidential | Personal or sensitive business data | Client details, financial | Encrypted, access-logged |
 | Restricted | Special categories, credentials | Health data, passwords | Encrypted, strictly need-to-know |
 
-**Commit:** `docs: 09 — Data classification policy`
+**Commit:** `docs: 03 — Data classification`
 
 ---
 
@@ -405,7 +408,7 @@ Walk through categories if needed: client communications, code commits, deployme
 - Multi-agent outputs → always require human review before client delivery
 - Financial commitments, credential access, production deployments → Prohibited without explicit human initiation
 
-**Override rate target:** 5–20%. Below 2% = automation bias risk. Above 20% = model performance issue.
+**Override rate target** (heuristic from Kenney 2026, not a legal requirement): 5–20%. Below 2% = possible automation bias. Above 20% = possible model performance issue.
 
 **Write:** `12-agent-governance.md` — agent roster with authorization profiles, escalation thresholds, coordination failure controls
 
@@ -419,7 +422,7 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Listen for:** Review gates, approval steps, what the human actually sees before approving.
 
-**Article 14 compliance checklist:**
+**Human oversight checklist** (WDS, based on EU AI Act Article 14(4) and Article 26(2). Those articles bind high-risk systems only; WDS applies the checklist to every agent as good practice):
 - Human can see what inputs the AI used ✓/✗
 - Confidence or reasoning is visible to reviewer ✓/✗
 - Human can override or reject at any point ✓/✗
@@ -455,7 +458,7 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Question:** "If an AI agent makes a mistake that affects a client — who handles it, and what are the first three things they do?"
 
-**GDPR 72-hour breach notification:** If the incident involves a personal data breach, GDPR Article 33 requires notification to the supervisory authority within 72 hours. Named principal must know this obligation exists and have IMY contact ready.
+**GDPR 72-hour breach notification:** If the incident involves a personal data breach, GDPR Article 33 requires notification to the supervisory authority without undue delay and, where feasible, within 72 hours of becoming aware of it, unless the breach is unlikely to result in a risk to people's rights and freedoms. Every breach must be documented internally, whether notified or not. Named principal must know this obligation exists and have IMY contact ready. (The general Digital Omnibus, COM(2025) 837, proposes 96 hours and notification only of high-risk breaches. It is proposed, not adopted.)
 
 **Incident categories to cover:**
 1. Wrong content sent to client
@@ -488,7 +491,7 @@ Walk through categories if needed: client communications, code commits, deployme
 
 > {Business} uses AI-assisted tools in the delivery of services. All work is reviewed and approved by {Principal} before delivery. {Business} remains fully responsible for the quality and accuracy of all deliverables. Clients may request information about which AI tools were used in the delivery of any specific project.
 
-**EU AI Act Article 52:** Certain AI systems must disclose they are AI (chatbots, deepfakes, emotion recognition). If any applies, this is mandatory — not optional.
+**EU AI Act Article 50 (applies from 2 August 2026):** People must be told when they interact with an AI system such as a chatbot (50(1)). Providers of generative AI must mark output as AI-generated in a machine-readable way (50(2)). Deployers must inform people exposed to emotion recognition or biometric categorisation (50(3)), and must disclose deepfakes (50(4)). Under 50(4), AI-generated or manipulated text published to inform the public on matters of public interest must be disclosed, unless it has gone through human review or editorial control and a person or organization holds editorial responsibility. This clause matters for communications departments. If any applies, this is mandatory — not optional.
 
 **Write:** `08-client-disclosure-policy.md` — disclosure text, timing, client objection handling, meeting recording consent (if Fireflies or equivalent)
 
@@ -527,7 +530,7 @@ Default: **Managed** unless the org explicitly chooses otherwise.
 
 No additional questions needed. Based on all previous answers, establish the monitoring schedule.
 
-**Write:** `10-audit-review-log.md` — review schedule with named responsible parties:
+**Write:** `09-audit-review-log.md` — review schedule with named responsible parties:
 
 | Cadence | Who | What |
 |---------|-----|------|
@@ -542,7 +545,7 @@ No additional questions needed. Based on all previous answers, establish the mon
 - Agent acts outside its authorized scope
 - Relevant regulatory change (EU AI Act guidance, IMY ruling)
 
-**Commit:** `docs: 10 — Monitoring and audit schedule`
+**Commit:** `docs: 09 — Monitoring and audit schedule`
 
 ---
 
@@ -610,13 +613,13 @@ Only these events involve an authority, and each one is documented in its own do
 
 | Event | Authority | Document |
 |-------|-----------|----------|
-| Personal data breach (GDPR Article 33, within 72 hours) | Supervisory authority (IMY in Sweden) | 05 Incident response |
+| Personal data breach that is likely to result in a risk to people (GDPR Article 33, where feasible within 72 hours) | Supervisory authority (IMY in Sweden) | 05 Incident response |
 | A DPIA shows high residual risk that cannot be mitigated (GDPR Article 36, prior consultation) | Supervisory authority | 03 Data processing register |
-| A data protection officer is appointed (GDPR Article 37) | Supervisory authority | 00 Introduction |
+| A data protection officer is designated (GDPR Article 37(7): the DPO's contact details are communicated to the authority) | Supervisory authority | 00 Introduction |
 
 **Flag explicitly:**
 - Special category data (health, biometrics, ethnicity, etc.) → a DPIA under Article 35 may be required. It is kept internally, not filed.
-- High-risk classification under the EU AI Act (Step 3) → refer to legal review for any registration obligation.
+- High-risk classification under the EU AI Act (Step 3) → refer to legal review for the obligations that involve an authority: registration in the EU database (Article 49; for deployers, only public authorities), notifying the results of a fundamental rights impact assessment (Article 27(3)), and reporting serious incidents (Articles 26(5) and 73).
 
 ---
 
@@ -666,10 +669,10 @@ Create these 12 files in `ai-governance/` before the first question. All section
 Canonical example: `whiteport-collective/whiteport-agent-space` — `ai-governance/`
 Produced during Idun dry run with Whiteport (Mårten Angner, April 2026).
 
-Regulatory framework: Governing Intelligence — Law, Privacy, Security, and Compliance in the Age of Artificial Intelligence (Noah M. Kenney, 2026). Full text: `docs/references/governing-intelligence.md` in WDS-EC repo.
+Regulatory framework: Governing Intelligence — Law, Privacy, Security, and Compliance in the Age of Artificial Intelligence (Noah M. Kenney, Digital 520, 2026). Full text: `docs/references/governing-intelligence.md` in WDS-EC repo.
 
-Security risk framework: OWASP AIVSS Scoring System for Agentic AI Core Security Risks v0.8. Full text: `docs/references/aivss-scoring-system.md`. Gap analysis vs. docs 11 and 12: `docs/references/aivss-extraction.md`. Both in WDS-EC repo.
+Security risk framework: AIVSS Scoring System For OWASP Agentic AI Core Security Risks v0.8 (OWASP AI Vulnerability Scoring System project, aivss.owasp.org; v1.0 announced but not yet published). Full text: `docs/references/aivss-scoring-system.md`. Gap analysis vs. docs 11 and 12: `docs/references/aivss-extraction.md`. Both in WDS-EC repo.
 
-Maturity model: ENDGAME Agentic Engineering Maturity Model (AE-MM) — Alex Barády. Full text: `docs/references/ae-maturity-model.md`. WDS-E implications: `docs/references/ae-maturity-model-extraction.md`. Both in WDS-EC repo.
+Maturity model: ENDGAME Agentic Engineering Maturity Model (AE-MM) — Alex Barády, LinkedIn post and infographic, 2026 (not verified). Full text: `docs/references/ae-maturity-model.md`. WDS-E implications: `docs/references/ae-maturity-model-extraction.md`. Both in WDS-EC repo.
 
-Adoption levels: Dan Shapiro's 5 Levels of Vibe Coding (via Nate B Jones). Full analysis: `martens-documents/Projects/WDS/References/five-levels-of-ai-coding.md`. Core insight: the bottleneck moves from "can we build it" to "can we specify it." Level 5 (Dark Factory) requires spec-writing ability — WDS is the specification factory that enables it.
+Adoption levels: Dan Shapiro, "The Five Levels: from Spicy Autocomplete to the Dark Factory" (blog post, January 2026; Levels 0–5), popularized by Nate B Jones. Full analysis: `martens-documents/Projects/WDS/References/five-levels-of-ai-coding.md`. Core insight: the bottleneck moves from "can we build it" to "can we specify it." Level 5 (Dark Factory) requires spec-writing ability — WDS is the specification factory that enables it.
