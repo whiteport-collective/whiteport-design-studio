@@ -2,7 +2,7 @@
 name: sync
 version: "1.0.0"
 description: Syncs all WDS skills from the configured source. Called automatically by agents on startup, or directly by the user at any time.
-agents: [saga, freya, mimir]
+agents: [idun, saga, freya, mimir]
 ---
 
 # WDS Sync
@@ -72,7 +72,7 @@ Read updated `install.md` frontmatter. Note new `wds-version`.
 
 ### 5 — Verify command files
 
-Check that `{home}/.claude/commands/` has: `saga.md`, `freya.md`, `mimir.md`, `sync.md`.
+Check that `{home}/.claude/commands/` has: `idun.md`, `saga.md`, `freya.md`, `mimir.md`, `sync.md`.
 If any are missing: recreate them following install.md Step 6.
 
 ### 6 — Report
@@ -85,4 +85,4 @@ If any are missing: recreate them following install.md Step 6.
 > Source: [sync-source]
 > [list of commit messages pulled]  —or—  Already up to date.
 > Version: [version]
-> Commands: /saga ✓  /freya ✓  /mimir ✓  /sync ✓
+> Commands: /idun ✓  /saga ✓  /freya ✓  /mimir ✓  /sync ✓

@@ -1,6 +1,6 @@
 # WDS Shared Activation Steps
 
-Common startup sequence for all WDS agents (Saga, Freya, Mimir).
+Common startup sequence for all WDS agents (Idun, Saga, Freya, Mimir).
 Each agent's SKILL.md references this file instead of repeating these steps.
 
 ---

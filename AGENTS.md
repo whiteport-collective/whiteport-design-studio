@@ -4,7 +4,7 @@ Applies to every agent working in this repo: Claude, Copilot, Codex and others. 
 
 ## What this repo is
 
-The source of the WDS agents: **Saga** (strategy), **Freya** (UX design) and **Mimir** (build). They live in [agents/wds/](agents/wds/README.md). Project repos get a copy through `/sync-skills`; changes are made here, never in a copy.
+The source of the WDS agents: **Idun** (setup, governance and the skill library), **Saga** (strategy), **Freya** (UX design) and **Mimir** (build). They live in [agents/wds/](agents/wds/README.md). Project repos get a copy through `/sync-skills`; changes are made here, never in a copy.
 
 WDS is its own framework, inspired by BMad. It is open to other frameworks: another source is simply another folder under `agents/<source>/`.
 

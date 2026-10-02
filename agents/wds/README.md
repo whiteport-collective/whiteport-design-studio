@@ -7,7 +7,7 @@ agents/wds/
 ├── saga/      Strategic analyst — Product Brief, Trigger Map
 ├── freya/     UX designer — scenarios, UX design, specs
 ├── mimir/     Implementation — tech audit, PRD, build
-├── idun/      Setup and governance — governance-report (moved in from the archived WDS-E repo)
+├── idun/      Setup and governance — qualification, onboarding, governance suite, skill library
 └── shared/    What no single agent owns
     ├── skills/   wrap, start, handoff, feedback, prd-workflow, design-delivery
     ├── tools/    git, agent-space, memory, sync, wireframe, rendering …
@@ -22,8 +22,9 @@ Each agent folder:
 | `skills/` | WHAT: workflows (product-brief, trigger-map, ux-design …) |
 | `subagents/` | Focused writers and reviewers the agent delegates to |
 | `references/` | Method guides loaded when a step needs them |
+| `tools/` | HOW: commands and API calls only this agent uses (shared ones live in `shared/tools/`) |
 
-**Roles:** Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
+**Roles:** Idun sets up the workspace, onboards organizations and people, runs AI governance and keeps the skill library. Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
 
 ## Skills and tools
 
@@ -53,7 +54,7 @@ tools: [<source>/<tool>]              type: http | cli | script
 
 ## Installing in a project
 
-`/sync-skills` copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [shared/adapters/](shared/adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Saga, Freya, Mimir and wrap. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
+`/sync-skills` copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [shared/adapters/](shared/adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Idun, Saga, Freya, Mimir and wrap. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
 
 ## Secrets
 

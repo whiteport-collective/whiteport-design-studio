@@ -1,0 +1,137 @@
+---
+name: org-onboarding
+description: Turns a confirmed qualification summary into a working WDS workspace, and for organizations into an org profile, a scaled governance set and onboarded people.
+agent: idun
+version: 2.0
+tools: [wds/shared/git, wds/shared/sync, wds/idun/github]
+---
+
+# Org Onboarding
+
+Takes Idun from a confirmed scope to a repo where people can start working with Saga, Freya and Mimir. For a solo project that is a few files and a handoff. For an organization it is a sequence of gated phases: understand the business, connect the basics, set up the workspace, scale governance, onboard people, and only then, if wanted, Agent Space.
+
+**Understand before building.** Each phase informs the next. Skipping ahead produces wrong decisions.
+
+---
+
+<workflow id="org-onboarding">
+
+  <constraints>
+    - Start only from a confirmed qualification summary. Do not reopen questions it already answered.
+    - Follow the phases in order. Each phase ends with a gate the person can see.
+    - Scale to context. A solo developer never gets enterprise ceremony. An enterprise never gets a flat folder.
+    - Facilitate, don't dictate. Structure principles are guidelines; record the organization's own decision and its reasons.
+    - Check before writing: if a file exists, read it and update it. Never overwrite.
+    - The WDS agents are installed from their source, never copied by hand or edited in the copy.
+    - No keys in any file. Name the Bitwarden item, never the value. No MCP servers in sessions.
+    - `meta:` from the person means the process itself is wrong: edit the source skill in whiteport-design-studio, not a local copy, then continue.
+    - Commit and push after each phase (git tool).
+  </constraints>
+
+  <step id="1-understand-business" condition="scope is team or organization">
+    Understand the organization before touching any systems. Gather through conversation, one question at a time:
+
+    - What does the organization do? (industry, services, customers)
+    - Who are the people? (partners, employees, roles, technical comfort)
+    - What does the current workflow look like? (tools, processes, pain points)
+    - What should agents handle? (what people do today that agents could take over)
+    - What is its relationship to whoever runs the setup? (client, partner, internal)
+
+    Read the room on depth. A two-person studio needs five sentences. A department needs a page.
+
+    **Deliverable:** `shared/<org>/org-profile.md`, written once the workspace exists in step 3.
+    **Gate:** the person confirms the profile is accurate.
+  </step>
+
+  <step id="2-connect-basics">
+    Make sure the session can do what the setup needs. Use the git tool and the GitHub tool:
+
+    1. Git identity is set (name and email) and matches the person.
+    2. GitHub access works for the account or organization that will own the repo.
+    3. Anything else the integrations need is noted with its Bitwarden item name. Nothing is stored in files.
+
+    If the person is new to git: be patient and walk them through it. If they're experienced: move fast.
+
+    **Gate:** the person can push to the repo, or to the GitHub account where it will be created.
+  </step>
+
+  <step id="3-workspace">
+    Set up the WDS workspace. Templates: `references/workspace-templates.md`.
+
+    1. **Repo.** Use the existing repo, or create one (GitHub tool). Private unless the person says otherwise.
+    2. **`AGENTS.md`** with the team, the rules, the project table and the `output_folder`. `CLAUDE.md` points to it.
+    3. **Projects.** One folder per project, each a separate WDS structure: `projects/<project>/design-process/`
+       with `_progress/wds-project-outline.yaml` (phases: qualification and org_onboarding done) and `_progress/00-design-log.md`.
+    4. **People.** `users/_template/`, `users/README.md`, `sessions/`, and `.wds/` in `.gitignore`.
+    5. **Shared org material.** `shared/<org>/` with the org profile from step 1. Org scope only.
+    6. **Agents.** Install the WDS agents and their adapters as described in "Installing in a project" in
+       `agents/wds/README.md`, using the sync tool. Never copy them by hand.
+
+    Show the file tree before writing. Write after a yes.
+
+    **Gate:** `/saga` starts in the repo and finds the project.
+  </step>
+
+  <step id="4-governance" condition="governance was chosen in qualification">
+    Scale governance to the organization. Write the documents from the conversation, not from blank templates, in `shared/<org>/governance/`.
+
+    **Always (every scale that has governance):**
+    - `00-introduction.md` — what AI agents do here, who is responsible
+    - `04-agent-asset-organization.md` — how agents, skills, tools and templates are organized, who owns what, and why.
+      Written from the step 1 conversation. A solo developer gets three lines ("flat, one person, no layers"). A larger org
+      gets its department structure and ownership boundaries. The decision and the reasoning are what matter.
+
+    **Lean (1–2 people):** add `01-data-handling.md`, `02-agent-authorization.md`, `03-access-control.md`.
+    **Standard (3–10 people):** also add `05-incident-response.md`, `06-vendor-management.md`.
+    **Full suite (10+ people, external stakeholders, regulated):** do not write the lean set. Run `skills/governance-report.md`, which owns the full suite and its location.
+
+    Also write, for lean and standard:
+    - `shared/<org>/access-audit/people-access-map.md` — every person, their role, what they can access
+    - `shared/<org>/access-audit/repo-access-map.md` — every repo and who has access (GitHub tool reads the facts)
+
+    **Gate:** at least one non-technical stakeholder has read and approved `00-introduction.md`.
+  </step>
+
+  <step id="5-org-agents" condition="the organization needs its own agents, skills or tools">
+    Map the business needs from step 1 to agent capabilities. Reuse the WDS agents first. Create organization agents, skills and tools only when needed, with the librarian (`skills/librarian.md`), in their own source folder `agents/<org>/`, one folder per source. They never go inside `agents/wds/`.
+
+    Write a short onboarding guide for non-technical people in the organization's language: which agents exist and what they do in their terms, how to give them work (commands and plain language), what agents never do without asking, where things are, and who to ask.
+
+    **Gate:** each agent starts and can do its primary task.
+  </step>
+
+  <step id="6-people">
+    Run `skills/user-onboarding.md` for each person. Owners and admins first, then members.
+    For three or more people, spawn setup workers for the file work (`subagents/setup-worker.md`) and keep the conversations yourself.
+
+    **Gate:** each person can start an agent and complete a real task.
+  </step>
+
+  <step id="7-agent-space" condition="Agent Space was chosen in qualification">
+    Agent Space comes last, because what it supports must exist first.
+
+    - With the full governance suite: run `skills/agent-space-install.md` once the suite is approved.
+    - Without it (presence and handoff tokens only): add `agent_space_url` and `agent_space_bitwarden` to each person's
+      `.wds/me.md` as described in `agents/wds/shared/tools/agent-space.md`. Nothing goes in the repo.
+  </step>
+
+  <step id="8-handoff">
+    Update `_progress/wds-project-outline.yaml` (`org_onboarding: done`, user_onboarding status, governance status) and add a line to the design log.
+
+    Say:
+
+    > All set. Run `/saga` to begin the strategy phase.
+
+    If the session ends here, wrap with the handover to Saga (`sessions/<user>/saga/`), so `/saga <repo> <timestamp>` starts from the confirmed scope.
+  </step>
+
+</workflow>
+
+---
+
+## Quality rules
+
+- **Model first, apply second.** The workspace follows the WDS conventions. The organization is an instance of them, adapted to its context.
+- **Doc 04 is always produced** when there is governance. Three lines is fine. The decision must be recorded.
+- **The confirmed qualification summary is the source of truth.** Discovery is not reopened.
+- **Every phase ends with a clear gate.** The person knows what was done and what's next.
