@@ -36,19 +36,15 @@ Then run "Step: governance". Every agent lists it explicitly in its activation a
 
 ## Step: governance
 
-Read the policy before any work, and follow it. It lives in `governance/` at the repo root, one flat folder, each file prefixed with its source (`agents/wds/shared/tools/sync.md`, Governance policy).
+Read the policy before any work, and follow it. It lives in `governance/` at the repo root, one folder per source: `wds/` (the WDS default), `<org>/` (the organization) and, optionally, `<project>/` (this repo's tightenings). See `agents/wds/shared/tools/sync.md`, Governance policy.
 
-1. **Read the principles, in this order:**
-   - `governance/wds-principles.md`: the WDS default
-   - the organization's principles: `governance/<org>-principles.md`, or the localized file that the organization's framework file links to (Visita: `visita-principer.md`, linked from `visita-ramverk.md`)
-   - this repo's tightenings, if any: `governance/<project>-*.md`
-   Each file states its level on its `Level:` line (default, organization, project).
-2. **Follow them.** The organization's policy is complete on its own; the default applies only where it is silent. A lower level may tighten a rule, never loosen it. When two levels say different things, the stricter one wins, unless the organization's framework file lists the difference with a reason.
-3. **Read the other policy files when a task touches their area:** tools and vendors, data, risk, agents and approvals, access, incidents, transparency. Same order, same precedence.
-4. **Never edit a copy.** A file whose first line is `Copy. Edit in <source repo>.` is changed in that repo, then synced.
-5. If a task would break a principle, say so before doing it, and offer to record a deviation in the organization's principles file.
+1. **Read `governance/policies.md`.** It lists the policy files in reading order: the WDS default, then the organization, then the project.
+2. **Follow the files in that order.** Read the principles files every session; read the other files when a task touches their area (tools and vendors, data, risk, agents and approvals, access, incidents, transparency). The organization's policy is complete on its own; the default applies only where it is silent. A lower level may tighten a rule, never loosen it. When two levels say different things, the stricter one wins, unless the organization's framework file lists the difference with a reason.
+3. **Never edit a folder that has a `.source` file.** It is a synced copy. Changes are made in the source repo it names, then synced.
+4. If a task would break a principle, say so before doing it, and offer to record a deviation in the organization's principles file.
 
-No `governance/` folder: continue, and mention once that the repo has no policy yet (Idun sets it up).
+`governance/` exists but has no `policies.md`: read `wds/`, then `<org>/`, then `<project>/`, and mention once that the list is missing (Idun creates it).
+No `governance/` folder: continue silently. Governance is not set up in this repo.
 
 Do not print the files.
 
