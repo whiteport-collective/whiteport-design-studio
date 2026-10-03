@@ -21,7 +21,7 @@ WDS is its own framework, inspired by BMad. It is open to other frameworks: anot
 
 Tested in visita-kommunikation (2026-09-27): every project lives in `projects/<project>/design-process/` as a **completely separate WDS folder structure** (A-Product-Brief … E-Development, `_progress/`). One repo can then hold several WDS projects, and each one keeps its own design log. Shared material (brand, tone, contacts) goes in `shared/<org>/`, never inside a project.
 
-This works better than the single `docs/` output folder. Proposal: make `projects/<project>/design-process/` the default `output_folder`, and have agents resolve it from the project repo's `AGENTS.md`.
+This works better than the single `docs/` output folder. The wider pattern (folders with one owner: `agents/`, `governance/`, `projects/`, `users/`, `sessions/`, and where tasks live) is in [agents/wds/shared/data/repo-structure.md](agents/wds/shared/data/repo-structure.md). Proposal: make `projects/<project>/design-process/` the default `output_folder`, and have agents resolve it from the project repo's `AGENTS.md`.
 
 ## Legacy, pending removal
 

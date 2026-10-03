@@ -1,7 +1,7 @@
 ---
 name: wrap
 source: wds
-description: Avsluta en session. Skriver överlämningen (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, för skill-ändringar till källrepot och katalogen, uppdaterar projektloggen och delar arbetet.
+description: Avsluta en session. Skriver överlämningen (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, för skill-ändringar till källrepot och katalogen, rapporterar incidenter och föreslår G&C-punkter, uppdaterar projektloggen och delar arbetet.
 tools: [wds/shared/git]
 ---
 
@@ -29,7 +29,7 @@ Varje wrap är en överlämning. Mappen är **mottagarens**. Filnamnet är `<ses
 - `<från>` = agenten som skrev.
 - `<sammandrag>` = vad sessionen gjorde, 3–6 ord, små bokstäver, bindestreck, å/ä → a och ö → o. Exempel: `2026-09-27_13-22-martenangner-ivonne-product-brief-en-karriar-tack.md`.
 
-Filnamnet börjar med tidsstämpeln och slutar med sammandraget. Återupptagningskommandot (steg 8) hittar filen på tidsstämpeln och visar sammandraget, så att man ser vad överlämningen handlar om innan man kör den.
+Filnamnet börjar med tidsstämpeln och slutar med sammandraget. Återupptagningskommandot (steg 9) hittar filen på tidsstämpeln och visar sammandraget, så att man ser vad överlämningen handlar om innan man kör den.
 
 | Mottagare | Sökväg |
 |---|---|
@@ -134,22 +134,42 @@ Resten gäller när sessionen skapade, ändrade, flyttade eller tog bort en skil
 - **Bekräftelse:** synk, en ny rad i katalogen samt commit och push i personens egna repon görs utan att fråga, och kvittensen visar vad som hände. Personen bekräftar bara när ändringen går till ett publikt repo, hamnar i någon annans repo, eller tar bort eller flyttar en skill.
 - **Skill och tool hålls isär** enligt `agents/wds/README.md` (Skills and tools). Kontrollera att skillen listar sina tools i `tools:` och att varje tool listar sina skills i `used_by:`. Kommandon som hamnat i en skill flyttas till ett tool.
 
-## 6. Dela
+## 6. G&C: incidenter och förslag
+
+Governance säger *vad* som gäller och varför: principerna, policyerna och vem som beslutar. Compliance är *hur* vi håller oss till dem: rutiner, kontroller, avvikelser och incidenter. Varje session kan visa att ramverket saknar något, och wrap är skyddsnätet som fångar det.
+
+Gå igenom sessionen och leta efter:
+- **Incident:** något hände som bryter mot en princip, eller nästan gjorde det. Exempel: ett lösenord som projektet använder finns i en publik databas efter en läcka.
+- **Avvikelse:** något i repot eller arbetssättet följer inte en princip just nu.
+- **Lucka:** ett fall som ramverket inte täcker, så att agenten fick improvisera.
+
+För varje fynd:
+1. **Akut först.** Står en hemlighet öppen eller pågår skada, säg det direkt i sessionen när det upptäcks, inte vid wrap. Människan agerar, till exempel byter lösenordet.
+2. **Incidentrapport** i incidentloggen för rätt nivå: organisationens eller projektets policy, enligt policylistan i `governance/`. Skriv datum, vad som hände, påverkan, vad som gjordes och vem som vet. **Skriv aldrig själva hemligheten**, bara var den fanns och om den är bytt.
+3. **Förslag på ny punkt:** en rutin för hur vi agerar (compliance), eller en ny princip om fallet visar att den saknas (governance). Märk den `förslag`, med datum och länk till incidenten.
+4. **Mandatet:** agenten får rapportera, föreslå och skärpa. Den får aldrig själv mildra eller ta bort en princip, eller vidga vad agenter får göra. Det kräver människans uttryckliga ja. Policyns ägare godkänner förslagen.
+5. **WDS standardpolicy** ändras i källan, whiteport-design-studio, aldrig i den synkade kopian. Lägg förslaget i överlämningen till den som förvaltar ramverket.
+6. **Saknas incidentlogg eller policy** i repot: skriv fyndet under `## G&C` i överlämningen.
+
+Inget fynd: hoppa över steget.
+
+## 7. Dela
 
 Spara och dela överlämningen, projektloggarna och repots användarfiler enligt git-toolet. De privata filerna delas i sitt eget repo. Commit-meddelandet ska vara `wrap: <session-id> — <en rad>`.
 
-## 7. Andra repon och personlig logg
+## 8. Andra repon och personlig logg
 
 - **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `<sessionsmapp>/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
 - **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad · sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
 
-## 8. Kvittens
+## 9. Kvittens
 
 Visa användaren:
 - session-id, mottagare och sökväg till överlämningen
 - vad som ändrades i soul-filerna, per fil och skåp (repo eller privat), eller "inget nytt"
 - den privata överlämningen, om något om ekonomi, hälsa eller familj kom upp
 - skills som ändrades: var de ligger nu och att katalogen är uppdaterad
+- G&C: incidenter som rapporterades och punkter som föreslogs, eller "inget nytt"
 - commit-hash och att push gick igenom
 
 Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent, `<repo>` är repots mappnamn, tidsstämpeln är sessionens start och `<sammandrag>` är samma ord som i filnamnet, med mellanslag i stället för bindestreck:

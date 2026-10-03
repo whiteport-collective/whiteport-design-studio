@@ -62,6 +62,8 @@ tools: [<source>/<tool>]              type: http | cli | script
 
 Every WDS repo has one flat policy folder, `governance/`, at its root. Each file name starts with its source: `wds-*.md` is the WDS default from `idun/templates/governance/`, synced and read-only; `<org>-*.md` is the organization's policy, edited only in the organization's one source repo and synced to its other repos; `<project>-*.md` tightens the rules for one repo. Precedence: WDS default < organization < project. A lower level may tighten a rule, never loosen it, and the stricter rule wins. Every agent reads the principles at session start ([shared/data/shared-activation.md](shared/data/shared-activation.md), Step: governance). How the copies are made: [shared/tools/sync.md](shared/tools/sync.md). How Idun tailors the policy: [idun/skills/governance-report.md](idun/skills/governance-report.md).
 
+How a WDS repo is laid out, folders with one owner each, is described in [shared/data/repo-structure.md](shared/data/repo-structure.md).
+
 ## Secrets
 
 No keys in these files. All keys live in Bitwarden and are fetched at runtime (`bw get password "<item>"`). Agent Space is optional — see [shared/tools/agent-space.md](shared/tools/agent-space.md).
