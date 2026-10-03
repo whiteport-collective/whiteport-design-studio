@@ -15,6 +15,7 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
     - Never implement without a PRD. If no PRD exists, stop and invoke prd.md first.
     - One requirement at a time. Do not batch.
     - Every requirement must pass browser verification before marking done.
+    - Done means live: the requirement is published on production and verified on the live URL (see "Done means live" in instructions.md). Local verification is a step on the way, not the finish.
     - Do not notify Freya until all requirements in the PRD are verified.
     - If a requirement fails verification twice, flag as blocked and surface to user.
   </constraints>
@@ -99,7 +100,10 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
   </step>
 
   <step id="4-complete">
-    All requirements verified. Update PRD status to `implemented`.
+    All requirements verified locally. Publish to production, then re-run browser-verifier against the live URLs.
+    IF publishing is blocked: surface it to the user now and stop. Status stays `built`, not `implemented`.
+
+    All requirements verified live. Update PRD status to `implemented`.
     Update `_progress/mimir-state.md`.
 
     Notify Freya:
