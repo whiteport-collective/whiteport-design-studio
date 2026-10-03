@@ -21,7 +21,7 @@ The policy is in `governance/` at the root of every repo {Org} works in. An agen
 - {Org} has exactly one source repo for its policy. The policy may be localized, file names included (for example `governance/visita/ramverk.md`). The framework file links the others.
 - **A copied folder is a mirror of its source.** It has a `.source` file (`source: <repo>@<sha>`) that shows which version it is. Never edit a folder that has `.source`; change the source and sync. Updates and deletions in the source reach every copy.
 - Files link to each other within their own folder (`principles.md`). An organization or project file links to the default with `../wds/<file>.md`.
-- Every policy file states its level on its `Level:` line (default, organization or project) and its approval on its `Status:` line: `default (WDS)` in the template, `draft` while it is tailored, and `approved <date>, <role>` once the approver has said yes at a milestone.
+- Every policy file states its level on its `Level:` line (default, organization or project) and its approval on its `Status:` line: `default (WDS)` in the template, `in progress (from the WDS default, <date>)` while it is tailored, and `approved v<version> <date>, <role>` once the approver has said yes at a milestone agreed with {Org}.
 - In `governance/wds/`, `{Org}` and the other `{…}` placeholders stand for the organization and its own details.
 
 ## Precedence
