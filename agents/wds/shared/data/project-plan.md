@@ -2,6 +2,11 @@
 
 **Status: förslag (2026-10-02).** Prövas i ett kundprojekt innan den blir standard.
 
+**Beslut 2026-10-03:**
+- Uppgifterna följer sin ägare, som allt annat i [repostrukturen](repo-structure.md). Projektets uppgifter ligger i en egen fil, `_progress/plan.md`, inte i design-log. Personens egna ligger hos personen.
+- En persons lista är en vy av alla planer, inte en kopia. GTD-kontexterna är dimensionen Var.
+- Agenterna i kundprojektet får pröva sig fram fritt med formatet. Konventionen låses först när vi ser vad som håller.
+
 WDS har designlogg (vad som hänt), överlämningar (nästa steg för en agent) och triggerkarta (varför produkten finns). Det som saknats är projektets **uppgifter**: konkreta saker som någon ska göra och som inte hör till en enskild agentsession, till exempel "ring byrån och få åtkomst till repot". Utan en plats hamnar de i chatten och försvinner.
 
 Planen ligger i `_progress/plan.md` i projektet. En plan per projekt.
