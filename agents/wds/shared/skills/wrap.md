@@ -74,6 +74,7 @@ Konkreta steg i ordning för mottagaren.
 ```
 
 - Håll den kort. Den ska kunna läsas på en minut. `projects: []` om sessionen inte rörde något specifikt projekt.
+- **Gjort betyder levererat.** Under `## Gjort` står bara det som mottagaren faktiskt har fått: publicerat på live och kontrollerat i webbläsaren, skickat eller godkänt. Det som bara finns lokalt, i ett utkast eller i en databas som ingen ser, hör till `## Kvar` och märks "bara lokalt, inte live" med vad som stoppar det. Ett uppdrag med sådant kvar får inte `status: klar`.
 - **Till en annan agent:** skriv även en kort wrap till dig själv om du har egna trådar kvar, och länka överlämningen därifrån.
 - **Status:** mottagaren sätter `status: tagen` och `tagen_av: <session-id>` när hen börjar (se AGENTS.md, sessionsstart). Tog den här sessionen en överlämning: sätt `status: klar` i den filen om uppdraget är gjort.
 - **Överlämningar raderas aldrig.** `sessions/all-users/` är neutral och har inget användar-id. Vem som körde framgår av sessionen när den tas (`tagen_av: <session-id>`).
