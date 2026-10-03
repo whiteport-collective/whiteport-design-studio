@@ -54,6 +54,8 @@ tools: [<source>/<tool>]              type: http | cli | script
 
 `/sync-skills` copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [shared/adapters/](shared/adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Saga, Freya, Mimir and wrap. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
 
+How a WDS repo is laid out, folders with one owner each, is described in [shared/data/repo-structure.md](shared/data/repo-structure.md).
+
 ## Secrets
 
 No keys in these files. All keys live in Bitwarden and are fetched at runtime (`bw get password "<item>"`). Agent Space is optional — see [shared/tools/agent-space.md](shared/tools/agent-space.md).
