@@ -40,7 +40,7 @@ A principle is like a goal but stays within the constraints. It is never done. I
 
 ## Human oversight
 
-**H1. A human approves what leaves us or cannot be undone.** Anything sent, published or delivered outside {Org}, and anything irreversible, waits for a person's yes. An agent never approves its own work or another agent's.
+**H1. A human approves what leaves us or cannot be undone.** Anything sent, published or delivered outside {Org}, anything irreversible, and any sync or push to a repo other than the one the session works in, waits for a person's yes. An agent never approves its own work or another agent's.
 *Measured:* actions that left {Org} or could not be undone without a recorded approval. · *Kept in:* [agents](agents.md#the-review-gate)
 
 **H2. The approver can see and can say no.** The person who approves sees what the agent used and did, has real authority to reject, and is never rushed.
@@ -62,7 +62,7 @@ A principle is like a goal but stays within the constraints. It is never done. I
 **Q1. AI literacy.** Everyone who works with AI for {Org} has the knowledge their role needs before they start, and it is refreshed (EU AI Act Art. 4).
 *Measured:* people working with AI without a recorded introduction for their role. · *Kept in:* [framework](framework.md#ai-literacy)
 
-**Q2. Skills and instructions are versioned and auditable.** Every agent instruction, skill and tool used in {Org}'s work lives in git with one source repo, and every change is a commit. Local copies are never edited.
+**Q2. Skills and instructions are versioned and auditable.** Every agent instruction, skill and tool used in {Org}'s work lives in git with one source repo, and every change is a commit. Local copies are never edited. They spread only from the source's default branch, after review; work in progress stays in its own worktree.
 *Measured:* skills or instructions in use outside version control, or copies that differ from their source. · *Kept in:* [agents](agents.md#skill-governance)
 
 **Q3. The deliverer owns the result.** Facts, figures and sources in AI output are checked before they leave {Org}. The person who delivers is responsible, whoever drafted it.
