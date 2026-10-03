@@ -37,7 +37,7 @@ Spara och dela bara överlämningsfilen enligt git-toolet. Commit-meddelandet ä
 
 ## 4. Kvittens
 
-Visa mottagare och sökväg. Avsluta med återupptagningskommandot som ett eget kodblock, i samma format som [wrap steg 8](wrap.md#8-kvittens):
+Visa mottagare och sökväg. Avsluta med återupptagningskommandot som ett eget kodblock, i samma format som [wrap steg 9](wrap.md#9-kvittens):
 
 ````
 ```
