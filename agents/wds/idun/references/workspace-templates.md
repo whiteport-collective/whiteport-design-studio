@@ -202,6 +202,7 @@ org: <org, or empty>
 scope: solo | team | organization
 created: YYYY-MM-DD
 output_folder: projects/<project>/design-process
+code: <folder in this repo, such as app/ | another repo | undecided>
 agents: [idun, saga, freya, mimir]
 agent_space: none | <where it runs>
 phases:

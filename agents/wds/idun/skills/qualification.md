@@ -91,6 +91,7 @@ The confirmed summary is the source of truth for everything after it. Org onboar
     |---|---|
     | No workspace yet, or a partial one | `skills/org-onboarding.md` with the summary |
     | Workspace exists, a new person | `skills/user-onboarding.md` |
+    | Workspace exists, a new project | `skills/project-setup.md` with the summary |
     | Full governance suite chosen | Org onboarding first, then `skills/governance-report.md` |
 
     If the session ends before onboarding: wrap with the summary under `## Nästa`, to Idun.

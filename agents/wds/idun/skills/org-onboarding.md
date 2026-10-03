@@ -60,8 +60,9 @@ Takes Idun from a confirmed scope to a repo where people can start working with 
 
     1. **Repo.** Use the existing repo, or create one (GitHub tool). Private unless the person says otherwise.
     2. **`AGENTS.md`** with the team, the rules, the project table and the `output_folder`. `CLAUDE.md` points to it.
-    3. **Projects.** One folder per project, each a separate WDS structure: `projects/<project>/design-process/`
-       with `_progress/wds-project-outline.yaml` (phases: qualification and org_onboarding done) and `_progress/00-design-log.md`.
+    3. **Projects.** One folder per project, each a separate WDS structure, made with `skills/project-setup.md`
+       (intake, where the code lives, `projects/<project>/design-process/` with its outline and design log).
+       Run its steps 2–4 for each project. The handover to Saga is written once, in step 8.
     4. **People.** `users/_template/`, `users/README.md`, `sessions/`, and `.wds/` in `.gitignore`.
     5. **Shared org material.** `shared/<org>/` with the org profile from step 1. Org scope only.
     6. **Agents.** Install the WDS agents and their adapters as described in "Installing in a project" in
@@ -135,7 +136,7 @@ Takes Idun from a confirmed scope to a repo where people can start working with 
 
     > All set. Run `/saga` to begin the strategy phase.
 
-    If the session ends here, wrap with the handover to Saga (`sessions/<user>/saga/`), so `/saga <repo> <timestamp>` starts from the confirmed scope.
+    If the session ends here, wrap with the handover to Saga (`sessions/<user>/saga/`), so `/saga <repo> <timestamp>` starts from the confirmed scope and each project's intake (`skills/project-setup.md`, step 5).
   </step>
 
 </workflow>
