@@ -151,11 +151,13 @@ The rules are in `agents/wds/README.md` (Skills and tools). The checklists are i
 
   <step id="governance-check">
     The conflict check between an organization's policy and the WDS default. Run it when the sync reports that
-    `governance/wds-*` changed, on request, and in the governance review (governance-report Step 14).
-    Work in the organization's policy source repo, never in a copy.
+    `governance/wds/` changed (its `.source` names a new version), on request, and in the governance review
+    (governance-report Step 14). Work in the organization's policy source repo, in `governance/<org>/`, never in a
+    folder that has `.source`.
 
-    1. **Read both, in full:** the `governance/wds-*.md` files and the organization's `governance/<org>-*.md` files
-       (localized names: the org framework file links them). If the default changed, read the diff of the `wds-*` files too.
+    1. **Read both, in full:** `governance/wds/` and the organization's `governance/<org>/`, in the order
+       `governance/policies.md` lists them (localized names: the list and the org framework file link them).
+       If the default changed, read the diff between the old and new `.source` versions too.
     2. **Compare rule by rule.** For each default rule, find where the organization addresses it:
        - addressed the same or stricter → nothing to do
        - recorded in the "Differences from the WDS default" table in the org framework file, with a reason → nothing to do
