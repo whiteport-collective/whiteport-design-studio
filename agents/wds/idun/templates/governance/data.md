@@ -6,7 +6,7 @@ Status: default (WDS)
 Level: default
 Tailor in dialog: step 5 (records of processing, DPIA), step 6 (classification, shared and private)
 
-Part of the [framework]({org}-framework.md). Keeps principles P1, P2 and P3. Owner: the privacy contact.
+Part of the [framework](framework.md). Keeps principles P1, P2 and P3. Owner: the privacy contact.
 
 ## Records of processing
 
@@ -16,7 +16,7 @@ GDPR Art. 30(1). One row per processing activity that involves personal data, AI
 |---|---|---|---|---|---|---|---|---|---|---|
 | | | | | | | | | | | |
 
-The controller's name and contact details, and the data protection officer's if one is designated, are in the [framework]({org}-framework.md#accountability).
+The controller's name and contact details, and the data protection officer's if one is designated, are in the [framework](framework.md#accountability).
 
 ## Classification
 
@@ -46,7 +46,7 @@ Never write in someone else's folder.
 - other clients' confidential information
 - private matters: personal finances, health, family
 
-If something lands in a repo by mistake, it is an incident ([incidents]({org}-incidents.md)). Removing it also means removing it from the git history.
+If something lands in a repo by mistake, it is an incident ([incidents](incidents.md)). Removing it also means removing it from the git history.
 
 ## DPIA
 

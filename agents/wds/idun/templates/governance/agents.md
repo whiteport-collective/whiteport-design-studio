@@ -6,11 +6,11 @@ Status: default (WDS)
 Level: default
 Tailor in dialog: step 7 (authorization), step 8 (review gate, overrides), step 13 (skill governance), steps 15–16 (controls and verification)
 
-Part of the [framework]({org}-framework.md). Keeps principles S4, H1, H2, H3, Q2 and Q3. Owner: each agent's owner. (NIST AI RMF GOVERN 3.2; ISO/IEC 42001 Annex A.9, use of AI systems.)
+Part of the [framework](framework.md). Keeps principles S4, H1, H2, H3, Q2 and Q3. Owner: each agent's owner. (NIST AI RMF GOVERN 3.2; ISO/IEC 42001 Annex A.9, use of AI systems.)
 
 ## Roster
 
-| Agent | Does | Owner (role) | Tools and systems | Memory | Risk score ([risk]({org}-risk.md#agentic-risk-score)) | Profile |
+| Agent | Does | Owner (role) | Tools and systems | Memory | Risk score ([risk](risk.md#agentic-risk-score)) | Profile |
 |---|---|---|---|---|---|---|
 | | | | | | | default |
 
@@ -24,7 +24,7 @@ An agent with no row does not run on {Org}'s work.
 
 ## Authorization defaults
 
-Best-practice defaults. An agent's profile may tighten them. Loosening one is a difference from the default ([framework]({org}-framework.md#differences-from-the-wds-default)).
+Best-practice defaults. An agent's profile may tighten them. Loosening one is a difference from the default ([framework](framework.md#differences-from-the-wds-default)).
 
 | Action | Default | Who may say yes |
 |---|---|---|
@@ -53,7 +53,7 @@ Before anything leaves {Org} or becomes irreversible, the approver checks:
 - [ ] I can see what it did and why.
 - [ ] Facts, figures, names and links are checked (Q3).
 - [ ] Nothing in it is Restricted, and personal data is minimized (P1).
-- [ ] Disclosure is decided ([transparency]({org}-transparency.md)).
+- [ ] Disclosure is decided ([transparency](transparency.md)).
 - [ ] I can reject or change it, and nothing advances on a timer.
 - [ ] My approval is recorded: who, when, what.
 
@@ -63,7 +63,7 @@ This checklist follows EU AI Act Art. 14(4) and Art. 26(2). Those articles bind 
 
 Log every time a person rejects or substantially changes an agent's output: date, agent, item, decision, reason. One line is enough.
 
-**Override rate target: 5–20%** (a heuristic from Kenney 2026, not a legal requirement). Below 2%: possible automation bias. Above 20%: possible model or instruction problem. Reviewed monthly ([framework]({org}-framework.md#review)).
+**Override rate target: 5–20%** (a heuristic from Kenney 2026, not a legal requirement). Below 2%: possible automation bias. Above 20%: possible model or instruction problem. Reviewed monthly ([framework](framework.md#review)).
 
 ## Agent to agent
 
@@ -100,4 +100,4 @@ How the rules above are enforced in practice, and one test per control that show
 | Authorization profile | {how escalate and prohibited actions are blocked} | Ask an agent to do a prohibited action | pending |
 | Audit trail | Git history and tool logs, append-only | Find who approved last week's delivery | pending |
 | Skill registry | {where skills are registered} | List the skills in use; compare with the registry | pending |
-| Kill switch | [access]({org}-access.md#kill-switch) | Stop one agent within minutes | pending |
+| Kill switch | [access](access.md#kill-switch) | Stop one agent within minutes | pending |

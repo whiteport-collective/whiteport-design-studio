@@ -6,7 +6,7 @@ Status: default (WDS)
 Level: default
 Tailor in dialog: step 10
 
-Part of the [framework]({org}-framework.md). Keeps principle Q4. Owner: the incident lead. (NIST AI RMF MANAGE 4.3; ISO/IEC 42001 clause 10.2, nonconformity and corrective action.)
+Part of the [framework](framework.md). Keeps principle Q4. Owner: the incident lead. (NIST AI RMF MANAGE 4.3; ISO/IEC 42001 clause 10.2, nonconformity and corrective action.)
 
 ## Roles
 
@@ -21,7 +21,7 @@ Contacts: {incident lead, privacy contact, approver: how to reach each}. Supervi
 
 ## First steps, every incident
 
-1. **Stop.** Stop the agent or the flow ([kill switch]({org}-access.md#kill-switch)).
+1. **Stop.** Stop the agent or the flow ([kill switch](access.md#kill-switch)).
 2. **Contain.** Withdraw, correct or block what went out, if you can.
 3. **Log.** Open a row in the incident log the same day: what, when found, who knows.
 4. **Personal data?** Ask the privacy contact. If yes, the breach clock below has started.
@@ -32,11 +32,11 @@ Contacts: {incident lead, privacy contact, approver: how to reach each}. Supervi
 | Type | Also do |
 |---|---|
 | **1. Wrong content sent to a client** | Tell the client, correct it, find why the review gate let it through. |
-| **2. Personal data processed without a valid basis** | Stop the processing. Privacy contact assesses whether it is a breach. Add or fix the row in [data]({org}-data.md#records-of-processing). |
+| **2. Personal data processed without a valid basis** | Stop the processing. Privacy contact assesses whether it is a breach. Add or fix the row in [data](data.md#records-of-processing). |
 | **3. AI output led to wrong advice to a client** | Tell the client what was wrong and what is correct. Check other deliveries built on the same output. |
 | **4. Security incident or unauthorized access** (incl. a leaked credential) | Rotate credentials, revoke access, check logs for what was reached. Treat as a breach until shown otherwise. |
 | **5. Recording without consent** | Stop and delete the recording or footage unless there is another legal basis. Tell the people recorded. |
-| **6. An agent acted outside its authorization** | Tighten its profile. Check what else it did. Review its risk score ([risk]({org}-risk.md#agentic-risk-score)). |
+| **6. An agent acted outside its authorization** | Tighten its profile. Check what else it did. Review its risk score ([risk](risk.md#agentic-risk-score)). |
 
 ## Personal data breach: the 72-hour clock
 

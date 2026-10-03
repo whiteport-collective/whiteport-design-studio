@@ -6,7 +6,7 @@ Status: default (WDS)
 Level: default
 Tailor in dialog: step 9 (accounts, integrations, kill switch), step 14 (access review cadence)
 
-Part of the [framework]({org}-framework.md). Keeps principles S1, S2 and S3. Owner: the access owner.
+Part of the [framework](framework.md). Keeps principles S1, S2 and S3. Owner: the access owner.
 
 ## Accounts
 
@@ -31,7 +31,7 @@ Keep a people access map (person, role, what they can access) and a repo access 
 - All passwords, keys and tokens live in {Org}'s password manager: {password manager}. Agents fetch them at runtime.
 - A repo, a skill or a tool names the item in the password manager, never the value (S2).
 - Secret scanning is switched on for every repo where the platform supports it (recommendation).
-- A credential that has been exposed is rotated at once and handled as an incident ([incidents]({org}-incidents.md)).
+- A credential that has been exposed is rotated at once and handled as an incident ([incidents](incidents.md)).
 
 ## Integrations
 
@@ -54,10 +54,10 @@ Anyone who sees an agent cause harm may stop it. The agent owner restarts it aft
 To stop an agent:
 1. Stop its running sessions and scheduled jobs.
 2. Revoke or disable its tokens and integration access (table above, last column).
-3. Tell the agent owner and the incident lead, and log it ([incidents]({org}-incidents.md)).
+3. Tell the agent owner and the incident lead, and log it ([incidents](incidents.md)).
 
 Test the kill switch before an agent with a Moderate or High risk score goes live, and then quarterly (recommendation).
 
 ## Access review
 
-Quarterly, and at every role change or departure (recommendation). The access owner checks every account, group, token and integration against this file, removes what is not needed, and records the deviations in [principles]({org}-principles.md#deviations-now).
+Quarterly, and at every role change or departure (recommendation). The access owner checks every account, group, token and integration against this file, removes what is not needed, and records the deviations in [principles](principles.md#deviations-now).

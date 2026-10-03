@@ -8,34 +8,37 @@ Tailor in dialog: step 0 (set up), step 0.5 (maturity), step 1 (scope), step 2 (
 
 ## Where the policy lives
 
-All policy files are in one flat folder, `governance/`, at the root of every repo {Org} works in. An agent often sees only one repo, so each repo carries the whole policy. Each file name starts with its source:
+The policy is in `governance/` at the root of every repo {Org} works in. An agent often sees only one repo, so each repo carries the whole policy. Each folder in `governance/` has one owner:
 
-| Files | Level | Source | Edited where |
+| Folder | Level | Source | Edited where |
 |---|---|---|---|
-| `wds-*.md` | Default | WDS: `agents/wds/idun/templates/governance/` in whiteport-design-studio | Never in a project repo. Read-only copy, synced. |
-| `<org>-*.md` | Organization | {Org}'s source repo for its policy: `{org-source-repo}` | Only in the source repo. Every other {Org} repo gets a read-only copy through sync. |
-| `<project>-*.md` | Project | This repo | Here. Only tightens. |
+| `governance/wds/` | Default | WDS: `agents/wds/idun/templates/governance/` in whiteport-design-studio | Never in a project repo. A synced, read-only copy. |
+| `governance/{org}/` | Organization | `governance/{org}/` in {Org}'s source repo for its policy: `{org-source-repo}` | Only in the source repo. Every other {Org} repo gets a read-only copy through sync. |
+| `governance/<project>/` | Project (optional) | This repo | Here. Only tightens. |
+| `governance/policies.md` | The reading list | This repo | Here. Idun creates it at setup. |
 
-- {Org} has exactly one source repo for its policy. The policy may be localized, file names included (for example `<org>-ramverk.md`). The framework file links the others.
-- Every copied file starts with the line `Copy. Edit in <source repo>.` Never edit a copy. Change the source and sync.
-- Every policy file states its level on its `Level:` line: default, organization or project.
-- In the `wds-*` files, `{Org}` and the other `{…}` placeholders stand for the organization and its own details.
+- **`governance/policies.md` lists every policy file in reading order:** the default, then the organization, then the project. Agents read the list and follow the files in that order.
+- {Org} has exactly one source repo for its policy. The policy may be localized, file names included (for example `governance/visita/ramverk.md`). The framework file links the others.
+- **A copied folder is a mirror of its source.** It has a `.source` file (`source: <repo>@<sha>`) that shows which version it is. Never edit a folder that has `.source`; change the source and sync. Updates and deletions in the source reach every copy.
+- Files link to each other within their own folder (`principles.md`). An organization or project file links to the default with `../wds/<file>.md`.
+- Every policy file states its level on its `Level:` line (default, organization or project) and its approval on its `Status:` line: `default (WDS)` in the template, `draft` while it is tailored, and `approved <date>, <role>` once the approver has said yes at a milestone.
+- In `governance/wds/`, `{Org}` and the other `{…}` placeholders stand for the organization and its own details.
 
 ## Precedence
 
-WDS default < organization < project.
+WDS default < organization < project. `policies.md` lists them in that order.
 
-- **The organization policy is complete on its own.** People and agents working for {Org} follow the `<org>-*` files. The WDS default applies only where the organization policy is silent.
+- **The organization policy is complete on its own.** People and agents working for {Org} follow `governance/{org}/`. The default in `governance/wds/` applies only where the organization policy is silent.
 - **A lower level may tighten a rule, never loosen it.** When two levels say different things, the stricter one wins, unless the difference is recorded below with a reason and approved. A recorded difference never goes below what the law requires.
 - A project tightening names the rule it tightens. It cannot loosen anything.
 
 ## Differences from the WDS default
 
-Every place where {Org}'s policy differs from the WDS default is listed here. Everything not listed follows the default. Idun keeps this table current with a conflict check whenever the default changes (see Review).
+Every place where {Org}'s policy differs from the WDS default is listed here. Everything not listed follows the default. Link the default rule in `../wds/` and the {Org} rule in this folder. Idun keeps this table current with a conflict check whenever the default changes (see Review).
 
-| Area / principle | WDS default | {Org} rule | Why |
-|---|---|---|---|
-| *None yet* | | | |
+| Area / principle | WDS default | {Org} rule | Why | Approved (role, date) |
+|---|---|---|---|---|
+| *None yet* | | | | |
 
 ## Scope
 
@@ -45,7 +48,7 @@ Every place where {Org}'s policy differs from the WDS default is listed here. Ev
 
 ## Principles
 
-A principle is like a goal but stays within the constraints. It is never done. It is measured in deviations, not progress, and every deviation gets an action. The principles and the current deviations: [principles]({org}-principles.md).
+A principle is like a goal but stays within the constraints. It is never done. It is measured in deviations, not progress, and every deviation gets an action. The principles and the current deviations: [principles](principles.md).
 
 ## Maturity
 
@@ -79,7 +82,7 @@ The person who delivers work is responsible for it, whether a person, an agent o
 EU AI Act Art. 4: providers and deployers "shall take measures to support the development of AI literacy of their staff and other persons dealing with the operation and use of AI systems on their behalf". (ISO/IEC 42001 clauses 7.2, competence, and 7.3, awareness; NIST AI RMF GOVERN 2.2.)
 
 Defaults (recommendations):
-- **Before first use:** everyone who works with AI for {Org} reads the principles, the tool limits ([tools]({org}-tools.md)), the review gate ([agents]({org}-agents.md)) and how to report an incident.
+- **Before first use:** everyone who works with AI for {Org} reads the principles, the tool limits ([tools](tools.md)), the review gate ([agents](agents.md)) and how to report an incident.
 - **By role:** agent owners and approvers also learn how the agents they own work, where they fail, and what automation bias looks like.
 - **Refresh:** yearly, and when a tool or an agent's autonomy changes.
 - **Record:** who, what, when, in {Org}'s own people records.
@@ -88,15 +91,15 @@ Defaults (recommendations):
 
 | File | Covers | Dialog steps |
 |---|---|---|
-| [framework]({org}-framework.md) | Where the policy lives, precedence, differences, scope, maturity, accountability, AI literacy, review, approval | 0, 0.5, 0.6, 1, 2, 14, 17 |
-| [principles]({org}-principles.md) | The principles and the deviations now | all |
-| [tools]({org}-tools.md) | AI tools and vendors: permitted and prohibited uses, due diligence, transfers | 4, 11 |
-| [data]({org}-data.md) | Records of processing, classification, what never goes into a repo, DPIA | 5, 6 |
-| [risk]({org}-risk.md) | AI Act classification, agentic risk score, risk register | 3, 3.5 |
-| [agents]({org}-agents.md) | Authorization levels, review gate, overrides, skill governance, controls | 7, 8, 13, 15, 16 |
-| [access]({org}-access.md) | Accounts, least privilege, credentials, integrations, kill switch, access review | 9 |
-| [incidents]({org}-incidents.md) | Roles, procedures, the personal data breach clock, logs | 10 |
-| [transparency]({org}-transparency.md) | Disclosure to clients and the public, consent, objections | 12 |
+| [framework](framework.md) | Where the policy lives, precedence, differences, scope, maturity, accountability, AI literacy, review, approval | 0, 0.5, 0.6, 1, 2, 14, 17 |
+| [principles](principles.md) | The principles and the deviations now | all |
+| [tools](tools.md) | AI tools and vendors: permitted and prohibited uses, due diligence, transfers | 4, 11 |
+| [data](data.md) | Records of processing, classification, what never goes into a repo, DPIA | 5, 6 |
+| [risk](risk.md) | AI Act classification, agentic risk score, risk register | 3, 3.5 |
+| [agents](agents.md) | Authorization levels, review gate, overrides, skill governance, controls | 7, 8, 13, 15, 16 |
+| [access](access.md) | Accounts, least privilege, credentials, integrations, kill switch, access review | 9 |
+| [incidents](incidents.md) | Roles, procedures, the personal data breach clock, logs | 10 |
+| [transparency](transparency.md) | Disclosure to clients and the public, consent, objections | 12 |
 
 ## Review
 
@@ -117,7 +120,7 @@ Cadences are recommendations. Who and how often is confirmed in step 14. (NIST A
 - the law or guidance changes (AI Act acts and guidelines, a supervisory authority decision)
 - **the WDS default changes:** the conflict check below
 
-**Conflict check (Idun).** When the `wds-*` files change at sync, or on request, Idun compares {Org}'s policy with the default. A new default rule that {Org} has not addressed, or an {Org} rule that is looser than the default, becomes a row in the deviations table in [principles]({org}-principles.md). The stricter rule applies until {Org} decides: adopt the default, or record a difference in the table above with a reason, approved by the approver.
+**Conflict check (Idun).** When `governance/wds/` changes at sync (its `.source` names a new version), or on request, Idun compares {Org}'s policy with the default. A new default rule that {Org} has not addressed, or an {Org} rule that is looser than the default, becomes a row in the deviations table in [principles](principles.md). The stricter rule applies until {Org} decides: adopt the default, or record a difference in the table above with a reason, approved by the approver.
 
 ## Not filed with any authority
 
@@ -127,11 +130,11 @@ Only these events involve an authority, and each is handled in its own file:
 
 | Event | Authority | File |
 |---|---|---|
-| A personal data breach likely to result in a risk to people (GDPR Art. 33) | The supervisory authority ({supervisory authority}) | [incidents]({org}-incidents.md) |
-| A DPIA shows high residual risk that cannot be mitigated (GDPR Art. 36, prior consultation) | The supervisory authority | [data]({org}-data.md) |
+| A personal data breach likely to result in a risk to people (GDPR Art. 33) | The supervisory authority ({supervisory authority}) | [incidents](incidents.md) |
+| A DPIA shows high residual risk that cannot be mitigated (GDPR Art. 36, prior consultation) | The supervisory authority | [data](data.md) |
 | A data protection officer is designated (GDPR Art. 37(7)) | The supervisory authority | this file, Accountability |
 
-A high-risk classification under the AI Act brings obligations that involve an authority (registration, Art. 49; fundamental rights impact assessment results, Art. 27(3); serious incidents, Arts. 26(5) and 73). See [risk]({org}-risk.md) and get legal review.
+A high-risk classification under the AI Act brings obligations that involve an authority (registration, Art. 49; fundamental rights impact assessment results, Art. 27(3); serious incidents, Arts. 26(5) and 73). See [risk](risk.md) and get legal review.
 
 ## Approval
 

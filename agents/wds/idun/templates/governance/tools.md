@@ -6,16 +6,16 @@ Status: default (WDS)
 Level: default
 Tailor in dialog: step 4 (tools and uses), step 11 (vendor due diligence)
 
-Part of the [framework]({org}-framework.md). Keeps principle P4. (NIST AI RMF GOVERN 6.1; ISO/IEC 42001 Annex A.10, third-party and customer relationships.)
+Part of the [framework](framework.md). Keeps principle P4. (NIST AI RMF GOVERN 6.1; ISO/IEC 42001 Annex A.10, third-party and customer relationships.)
 
 ## Permitted uses
 
-With an approved tool, on {Org}'s account, within the tool's approved data tier ([data]({org}-data.md#classification)) and through the review gate ([agents]({org}-agents.md#the-review-gate)):
+With an approved tool, on {Org}'s account, within the tool's approved data tier ([data](data.md#classification)) and through the review gate ([agents](agents.md#the-review-gate)):
 
 - drafting, editing, translating and summarizing
 - research and analysis
 - code, tests and documentation
-- design, images and media, with disclosure where [transparency]({org}-transparency.md) requires it
+- design, images and media, with disclosure where [transparency](transparency.md) requires it
 - agent work within the agent's authorization profile
 
 ## Prohibited uses
@@ -34,7 +34,7 @@ With an approved tool, on {Org}'s account, within the tool's approved data tier 
 3. The access owner completes the vendor due diligence. The approver approves or rejects.
 4. Approved: the status becomes *approved* with its highest data tier. Rejected: *prohibited*, with the reason.
 
-A new tool triggers a review ([framework]({org}-framework.md#review)).
+A new tool triggers a review ([framework](framework.md#review)).
 
 ## Tools in use
 
@@ -42,7 +42,7 @@ A new tool triggers a review ([framework]({org}-framework.md#review)).
 |---|---|---|---|---|---|---|---|
 | | | | | | | | |
 
-*Agentic* means the tool takes actions on its own: it writes, sends, deploys or calls other systems. Every agentic tool also has a row in the roster in [agents]({org}-agents.md#roster) and in the integrations table in [access]({org}-access.md#integrations).
+*Agentic* means the tool takes actions on its own: it writes, sends, deploys or calls other systems. Every agentic tool also has a row in the roster in [agents](agents.md#roster) and in the integrations table in [access](access.md#integrations).
 
 ## Vendor due diligence
 

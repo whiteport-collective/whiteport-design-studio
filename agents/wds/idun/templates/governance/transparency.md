@@ -6,7 +6,7 @@ Status: default (WDS)
 Level: default
 Tailor in dialog: step 12
 
-Part of the [framework]({org}-framework.md). Keeps principles T1 and T2. Owner: the privacy contact, with the owner of each channel. (ISO/IEC 42001 Annex A.8, information for interested parties of AI systems.)
+Part of the [framework](framework.md). Keeps principles T1 and T2. Owner: the privacy contact, with the owner of each channel. (ISO/IEC 42001 Annex A.8, information for interested parties of AI systems.)
 
 ## To clients
 
@@ -16,7 +16,7 @@ Sample text for agreements:
 
 > {Org} uses AI-assisted tools in the delivery of services. All work is reviewed and approved by {role} before delivery. {Org} remains fully responsible for the quality and accuracy of all deliverables. Clients may request information about which AI tools were used in the delivery of any specific project.
 
-On request, tell the client which tools were used on their project ([tools]({org}-tools.md)).
+On request, tell the client which tools were used on their project ([tools](tools.md)).
 
 ## To the public
 
@@ -39,7 +39,7 @@ On request, tell the client which tools were used on their project ([tools]({org
 
 Recordings, transcripts, film, photos and interviews are personal data. Before recording, tell people who records, why, where it is kept, for how long and how to object (GDPR Art. 13).
 
-- **Meetings and AI notetakers:** announce the recorder at the start. Anyone may say no, and then it is switched off. Transcripts are kept as [data]({org}-data.md#never-in-a-repo) says, not in a repo.
+- **Meetings and AI notetakers:** announce the recorder at the start. Anyone may say no, and then it is switched off. Transcripts are kept as [data](data.md#never-in-a-repo) says, not in a repo.
 - **Film, photos and interviews for publication:** written consent before recording, covering the purpose, the channels, how long it is published, whether AI will edit or alter it, and how to withdraw. Consent can be withdrawn at any time, as easily as it was given (GDPR Art. 7(3)).
 - **AI that alters a real person's image or voice:** explicit consent from that person (recommendation), and disclosure as a deepfake where Art. 50(4) applies.
 - Consent records are kept for as long as the material is used.
