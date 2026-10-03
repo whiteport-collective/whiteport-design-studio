@@ -73,30 +73,36 @@ Takes Idun from a confirmed scope to a repo where people can start working with 
   </step>
 
   <step id="4-governance" condition="governance was chosen in qualification">
-    Scale governance to the organization. Start from the WDS default policy, never from blank pages: copy
-    `agents/wds/idun/templates/governance/` to `governance/<org>-<name>.md` at the root of the organization's
-    source repo, as in Step 0 of `skills/governance-report.md` (one source repo per organization; its other repos
-    get read-only copies through the sync tool; `governance/wds-*` is the synced default and is never edited).
+    Scale governance to the organization. Start from the WDS default policy, never from blank pages: create
+    `governance/<org>/` from `agents/wds/idun/templates/governance/` at the root of the organization's source repo,
+    and `governance/policies.md` from `agents/wds/idun/templates/policies.md`, as in Step 0 of
+    `skills/governance-report.md`. One source repo per organization; its other repos get a read-only copy of
+    `governance/<org>/` through the sync tool, and `governance/wds/` is the synced default. A folder with a
+    `.source` file is never edited. Register the organization in the sync config (sync tool).
     Then tailor from the conversation: confirm or adjust each default, and list every difference in the
-    differences table in `<org>-framework.md`.
+    differences table in `<org>/framework.md`.
 
     **Always (every scale that has governance):**
-    - `<org>-framework.md` — scope, who is responsible, and what AI agents do here
-    - `<org>-principles.md` — the default principles, confirmed or adjusted
-    - `<org>-agents.md`, section Skill governance — how agents, skills, tools and templates are organized, who owns what, and why.
+    - `<org>/framework.md` — scope, who is responsible, and what AI agents do here
+    - `<org>/principles.md` — the default principles, confirmed or adjusted
+    - `<org>/incidents.md` — at least the incident log, so wrap step 6 has somewhere to write
+    - `governance/policies.md` — the reading order, with the incident log named
+    - `<org>/agents.md`, section Skill governance — how agents, skills, tools and templates are organized, who owns what, and why.
       Written from the step 1 conversation. A solo developer gets three lines ("flat, one person, no layers"). A larger org
       gets its department structure and ownership boundaries. The decision and the reasoning are what matter.
 
-    **Lean (1–2 people):** also tailor `<org>-data.md`, `<org>-agents.md` (authorization) and `<org>-access.md`.
-    **Standard (3–10 people):** also tailor `<org>-incidents.md` and `<org>-tools.md`.
-    Files that are not tailored stay as copied: the default applies to them until they are.
+    **Lean (1–2 people):** also tailor `<org>/data.md`, `<org>/agents.md` (authorization) and `<org>/access.md`.
+    **Standard (3–10 people):** also tailor the rest of `<org>/incidents.md` and `<org>/tools.md`.
+    Files that are not tailored stay as copied: the default applies to them until they are. Localized file names
+    are fine (`governance/visita/ramverk.md`); `policies.md` lists them.
     **Full suite (10+ people, external stakeholders, regulated):** do not tailor the lean set here. Run `skills/governance-report.md`, which owns the full dialog.
 
     Also write, for lean and standard:
     - `shared/<org>/access-audit/people-access-map.md` — every person, their role, what they can access
     - `shared/<org>/access-audit/repo-access-map.md` — every repo and who has access (GitHub tool reads the facts)
 
-    **Gate:** at least one non-technical stakeholder has read and approved `<org>-framework.md`.
+    **Gate:** the client's principal has read and approved `<org>/framework.md` at an agreed milestone, and its
+    `Status:` line says so (`approved v<version> <date>, <role>`). Until then the status is `in progress`.
   </step>
 
   <step id="5-org-agents" condition="the organization needs its own agents, skills or tools">
@@ -139,6 +145,6 @@ Takes Idun from a confirmed scope to a repo where people can start working with 
 ## Quality rules
 
 - **Model first, apply second.** The workspace follows the WDS conventions. The organization is an instance of them, adapted to its context.
-- **The agent asset organization is always recorded** (in `<org>-agents.md`, Skill governance) when there is governance. Three lines is fine. The decision must be recorded.
+- **The agent asset organization is always recorded** (in `<org>/agents.md`, Skill governance) when there is governance. Three lines is fine. The decision must be recorded.
 - **The confirmed qualification summary is the source of truth.** Discovery is not reopened.
 - **Every phase ends with a clear gate.** The person knows what was done and what's next.
