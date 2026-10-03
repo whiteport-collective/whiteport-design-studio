@@ -1,7 +1,7 @@
 ---
 name: sync
 version: "1.0.0"
-description: Syncs all WDS skills from the configured source, and the governance policy into every repo. Called automatically by agents on startup, or directly by the user at any time.
+description: Syncs all WDS skills from the configured source, and the governance policy folders into every repo where governance is set up. Called automatically by agents on startup, or directly by the user at any time.
 agents: [idun, saga, freya, mimir]
 ---
 
@@ -87,73 +87,95 @@ If any are missing: recreate them following install.md Step 6.
 > [list of commit messages pulled]  —or—  Already up to date.
 > Version: [version]
 > Commands: /idun ✓  /saga ✓  /freya ✓  /mimir ✓  /sync ✓
-> Governance: wds → [N repos] · [org] from [source repo] → [N repos] · [skipped, locally edited]
+> Governance: wds@[sha] → [N repos] · [org] from [source repo]@[sha] → [N repos] · skipped: [repo: no .source / edited locally / not clean]
 
 ---
 
 ## Governance policy
 
-Runs after step 4 (or after "Already up to date"), in both modes. It keeps the policy folder `governance/` current in every WDS repo, because an agent often sees only one repo. It adds `governance/` only: how `agents/` is synced does not change.
+Keeps the policy folders in `governance/` current in every repo where governance is set up, because an agent often sees only one repo. It touches `governance/` only; how `agents/` is synced does not change.
 
-`governance/` is one flat folder at the repo root. Each file name starts with its source:
+- **On agent startup** it is a dry run: it lists what would change and writes nothing.
+- **On a direct request** it writes, commits and pushes, after the person's yes. A real sync writes into repos other than the one the session works in, so it is never run without asking (principle H1 in the WDS default policy). Unknown or misspelled options never start a real sync.
 
-| Files | Source | Synced to |
+### Folders
+
+Each folder in `governance/` has one owner (`agents/wds/shared/data/repo-structure.md`). A synced folder is a copy of a whole folder, like `agents/wds/`:
+
+| Folder | Source | Synced to |
 |---|---|---|
-| `wds-<name>.md` | `agents/wds/idun/templates/governance/<name>.md` in whiteport-design-studio | every WDS repo (a repo with `agents/wds/`) |
-| `<org>-<name>.md` (may be localized, e.g. `visita-ramverk.md`) | `governance/<org>-*.md` in the organization's one source repo | the organization's other repos |
-| `<project>-<name>.md` | the repo itself | never synced |
+| `governance/wds/` | `agents/wds/idun/templates/governance/` in whiteport-design-studio, file names kept (`framework.md`, `principles.md` …) | every repo where governance is set up (G1) |
+| `governance/<org>/` | `governance/<org>/` in the organization's one source repo. File names may be localized (`governance/visita/ramverk.md`). | the organization's other repos |
+| `governance/<project>/` | the repo itself | never synced |
+| `governance/policies.md` | the repo itself. Idun creates it at setup. | never synced |
 
-Every copy starts with one line, then a blank line, then the source content:
+### The rules
 
-```
-Copy. Edit in <source repo>.
-```
+- **A copy is a mirror of its source.** The sync replaces the whole folder: changed files are updated, new files are added, and files removed from the source are removed from the copy.
+- **`.source` shows the version.** Every synced folder holds `governance/<folder>/.source` with one line:
 
-For `wds-*`: `Copy. Edit in whiteport-design-studio: agents/wds/idun/templates/governance/<name>.md.`
+  ```
+  source: <repo>@<sha>
+  ```
+
+  `<repo>` is the source repo and `<sha>` the commit the copy was made from.
+- **No `.source`, no write.** The sync writes only into a folder that has `.source`, or creates a folder that does not exist yet (with its `.source`). A folder without `.source` is a source or a local folder: the sync leaves it alone and reports it.
+- **A copy is never edited.** Agents never change a folder that has `.source`. Changes are made in the source and reach the copies at the next sync. If a copy differs from the version its `.source` names, it has been edited locally: the sync reports it, leaves it, and offers to move the change to the source.
+- **No governance folder, no sync.** `governance/wds/` is written only into a repo that already has a `governance/` folder, or that the sync config names as an organization's source or target. Where Idun has not set up governance there is no `governance/` folder, and the sync does not create one.
+- **Only reviewed content spreads.** The source is read from its default branch, committed content only, and only when the source repo's checkout is on its default branch and clean. Otherwise nothing is synced from it, and the sync says why.
+- **The target must be ready.** Same conditions as the agent sync: the target repo is on its default branch and clean. Skip and report otherwise.
+- `governance/policies.md` and `governance/<project>/` are never touched.
 
 ### G1 — Find the repos and the sources
 
-Repos are found by folder name under the dev root, as in the resume step of `agents/wds/shared/data/shared-activation.md`. The organizations come from the same config file as step 2, `{home}/.claude/wds-config.yaml`:
+Repos are found by folder name under the dev root, as in the resume step of `agents/wds/shared/data/shared-activation.md`. No path is hard-coded: repos are named, and resolved under the dev root.
 
-```yaml
-dev-root: <folder that holds the repos>   # optional; default: the dev root the resume step uses
-governance:
-  - org: <org>                            # the file prefix, lowercase
-    governance_source: <repo>             # the one repo where governance/<org>-*.md is edited
-    repos: [<repo>, <repo>]               # the organization's other repos (optional)
+The organizations come from **the sync config**, the same file that lists the sources of vendor agents to sync. The WDS vendor-agents source has a `governance` list, one entry per organization:
+
+```json
+"governance": [
+  { "org": "<org>", "governance_source": "<repo>", "repos": ["<repo>", "<repo>"] }
+]
 ```
 
-An organization's repos are the ones listed in `repos:`, plus every repo whose `governance/` already holds an `<org>-*` copy. Its header names the source, so a repo that has had one sync stays in step even on a machine whose config lacks it. No path is ever hard-coded: repos are named, and resolved under the dev root.
+- `org`: the folder name under `governance/`, lowercase
+- `governance_source`: the one repo where `governance/<org>/` is edited
+- `repos`: the organization's other repos
 
-No `governance:` entry and no copies: the organization has no policy of its own yet, and only `wds-*` is synced.
+**Targets for `governance/wds/`:** every repo that already has a `governance/` folder, plus every `governance_source` and every repo in a `repos` list.
+**Targets for `governance/<org>/`:** the repos in its `repos` list, plus every repo whose `governance/<org>/.source` names its `governance_source`, so a repo that has had one sync stays in step even on a machine whose config lacks it.
+
+No `governance` entry: only `governance/wds/` is synced, and only into repos that already have `governance/`.
 
 ### G2 — Sync the default
 
-For each WDS repo except whiteport-design-studio, for each file in `agents/wds/idun/templates/governance/`:
-1. Build the copy: the header line, then the template with the link prefix `{org}-` replaced by `wds-`.
-2. Write it to `governance/wds-<name>.md`. Note every file whose content changed (for G4).
+For each target repo except whiteport-design-studio:
+1. `governance/wds/` exists without `.source`: skip the repo and report it.
+2. Mirror `agents/wds/idun/templates/governance/` into `governance/wds/` as it is. The templates link within their folder, so nothing is rewritten.
+3. Write `.source`: `source: whiteport-design-studio@<sha>`.
+4. Note whether anything changed (for G4).
 
 ### G3 — Sync each organization's policy
 
-For each organization: read the committed `governance/<org>-*.md` files in `governance_source` (never uncommitted changes there). For each of the organization's other repos, write each file with the header `Copy. Edit in <governance_source>.`
+For each organization, read the committed `governance/<org>/` in `governance_source`. For each of its targets:
+1. `governance/<org>/` exists without `.source`: skip and report. It is a source or a local folder.
+2. Mirror the folder, then write `.source`: `source: <governance_source>@<sha>`.
 
-### Rules for G2 and G3
+The source repo's own `governance/<org>/` has no `.source` and is never written.
 
-- **Never overwrite a file without the copy header.** It is a source or a local edit. Report it as locally edited and offer to move the change to its source, as for agent copies.
-- **Never write into the source repo's own `<org>-*` files.**
-- **Never delete.** A file removed at the source is reported, not deleted in the copies.
-- Same conditions as the agent sync: the target repo is on its default branch and clean. Skip and report otherwise.
-- Commit only `governance/` paths, then push:
+### Commit
+
+Commit only `governance/` paths, then push:
 
 ```bash
-git -C <repo> add -- governance/
+git -C <repo> add -A -- governance/
 git -C <repo> commit -m "governance: synced from <source repo> <short sha>" -- governance/
 git -C <repo> push
 ```
 
 ### G4 — Flag a conflict check
 
-If G2 changed any `wds-*` file in a repo that also has `<org>-*` files, report, in startup mode too:
+If G2 changed `governance/wds/` in a repo that holds an organization's policy, report it, in a dry run too:
 
 > WDS default policy changed. Conflict check due for <org>: run `/idun audit governance` in <governance_source>.
 
