@@ -120,7 +120,7 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
   </step>
 
   <step id="0-4-shared">
-    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, handovers, scan, select.
+    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, governance, handovers, scan, select.
     Then brownfield-detect:
     - Codebase found + no Product Brief → go to step 4b-brownfield-brief
     - Codebase found + Product Brief exists, or no codebase → go to step 4-status

@@ -37,6 +37,12 @@ Filnamnet börjar med tidsstämpeln och slutar med sammandraget. Återupptagning
 | Samma person, annan agent | `<sessionsmapp>/<användare>/<till>/<session-id>-<från>-<sammandrag>.md` |
 | Känd annan person | `<sessionsmapp>/<person>/<till>/<session-id>-<från>-<sammandrag>.md` |
 | Vi vet inte vem som kör | `<sessionsmapp>/all-users/<till>/<session-id>-<från>-<sammandrag>.md` |
+| Förslag till WDS-metoden (steg 4 och 6) | Idun hos den som förvaltar WDS, se nedan |
+
+**Förslag till WDS-metoden** gäller agenterna, deras skills och tools och WDS standardpolicy. De ändras bara i WDS källrepo, whiteport-design-studio, och Mårten Angner godkänner. Förslaget blir en egen överlämning till Idun, som samlar in förslagen från alla kunders wraps och för dem vidare till källrepot:
+- **Den som förvaltar WDS kör wrapen:** i den egna sessionsmappen för WDS källrepo, `<sessionsmapp>/<användare>/idun/`. Källrepots `sessions/README.md` avgör var mappen ligger; säger den `sessions: private` är det personens privata sessionsmapp för whiteport-design-studio.
+- **Någon annan kör wrapen:** i WDS källrepo `sessions/all-users/idun/` om repot sparar sessioner och agenten får skriva där. Annars i det här repots `<sessionsmapp>/all-users/idun/`, där Idun hämtar den när hon går igenom kundens repon.
+- Skriv bara det som tål att läsas av alla i projektet: bristen, vad som hände och förslaget, med länk till incidenten om det finns en.
 
 ```markdown
 ---
@@ -114,7 +120,7 @@ Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` p
 
 **Regler**
 - **Uppdatera och optimera, lägg inte bara till nya rader.** Skriv in det nya där det hör hemma, slå ihop dubbletter, ersätt det som inte längre gäller och stryk det inaktuella. Håll varje fil kort och lätt att läsa. Rättelser och händelser får datum.
-- **Agentens metod hör inte hemma i soul.** Rättar personen hur agenten följer sin egen metod, till exempel samtalsguiden eller en mall, är det en brist i agentinstruktionerna. Föreslå en ändring uppströms i stället för att skriva i någons soul.
+- **Agentens metod hör inte hemma i soul.** Rättar personen hur agenten följer sin egen metod, till exempel samtalsguiden eller en mall, är det en brist i agentinstruktionerna. Föreslå en ändring uppströms i stället för att skriva i någons soul. Gäller det WDS-agenterna blir förslaget en överlämning till Idun hos den som förvaltar WDS (steg 2, Förslag till WDS-metoden).
 - **Repots filer delas med teamet.** Skriv aldrig något privat där, och ändra aldrig i någon annans mapp.
 - **Privata filer skrivs direkt.** Är skåpet ett repo görs commit och push enligt git-toolet. Är det en lokal mapp sparas filerna bara. Kvittensen visar vad som ändrades.
 - Rör bara de filer där något nytt faktiskt har hänt. `heartbeat.md` skapas första gången det finns något att skriva.
@@ -145,11 +151,11 @@ Gå igenom sessionen och leta efter:
 
 För varje fynd:
 1. **Akut först.** Står en hemlighet öppen eller pågår skada, säg det direkt i sessionen när det upptäcks, inte vid wrap. Människan agerar, till exempel byter lösenordet.
-2. **Incidentrapport** i incidentloggen för rätt nivå: organisationens eller projektets policy, enligt policylistan i `governance/`. Skriv datum, vad som hände, påverkan, vad som gjordes och vem som vet. **Skriv aldrig själva hemligheten**, bara var den fanns och om den är bytt.
+2. **Incidentrapport** i incidentloggen som `governance/policies.md` pekar ut för rätt nivå: organisationens (`governance/<org>/incidents.md`, eller det lokala namnet, till exempel `governance/visita/incidenter.md`) eller projektets. Har organisationens mapp en `.source`-fil är den en kopia: skriv rapporten i källrepot som `.source` anger, och kan agenten inte skriva där blir rapporten en överlämning till policyns ägare. Skriv datum, vad som hände, påverkan, vad som gjordes och vem som vet. **Skriv aldrig själva hemligheten**, bara var den fanns och om den är bytt.
 3. **Förslag på ny punkt:** en rutin för hur vi agerar (compliance), eller en ny princip om fallet visar att den saknas (governance). Märk den `förslag`, med datum och länk till incidenten.
-4. **Mandatet:** agenten får rapportera, föreslå och skärpa. Den får aldrig själv mildra eller ta bort en princip, eller vidga vad agenter får göra. Det kräver människans uttryckliga ja. Policyns ägare godkänner förslagen.
-5. **WDS standardpolicy** ändras i källan, whiteport-design-studio, aldrig i den synkade kopian. Lägg förslaget i överlämningen till den som förvaltar ramverket.
-6. **Saknas incidentlogg eller policy** i repot: skriv fyndet under `## G&C` i överlämningen.
+4. **Mandatet:** agenten får rapportera, föreslå och skärpa. Den får aldrig själv mildra eller ta bort en princip, eller vidga vad agenter får göra. Det kräver människans uttryckliga ja. Policyns ägare godkänner förslagen. Det gäller Idun också.
+5. **WDS standardpolicy** ändras i källan, whiteport-design-studio, aldrig i den synkade kopian `governance/wds/`. Förslaget blir en överlämning till Idun hos den som förvaltar WDS (steg 2, Förslag till WDS-metoden).
+6. **Saknas `governance/` eller en incidentlogg** i repot: skriv fyndet under `## G&C` i överlämningen.
 
 Inget fynd: hoppa över steget.
 

@@ -96,6 +96,11 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
     Follow "Step: soul" in `agents/wds/shared/data/shared-activation.md`: read the repo and private soul files for the user.
   </step>
 
+  <step id="1c-governance">
+    Follow "Step: governance" in `agents/wds/shared/data/shared-activation.md`: read the principles in `governance/` and follow them.
+    Mimir builds and deploys, so also read the organization's agents and access policies before any task that pushes, deploys or touches credentials.
+  </step>
+
   <step id="2-scan">
     Scan workspace for WDS projects:
     - Find repos with `_progress/wds-project-outline.yaml` or `_progress/00-design-log.md`

@@ -33,8 +33,12 @@ Tre regler:
 governance/
 ├── policies.md      den platta listan: alla policyer i läsordning
 ├── wds/             WDS standardpolicy, synkad och skrivskyddad
-└── <org>/           organisationens policy, källan i ett repo, kopieras till organisationens andra repon
+├── <org>/           organisationens policy, källan i ett repo, speglas till organisationens andra repon
+└── <projekt>/       skärpningar som bara gäller ett repo, vid behov
 ```
+
+- En synkad mapp är en spegel av källan och har en fil `.source` (`source: <repo>@<sha>`). Den ändras aldrig på plats. Se [sync-toolet](../tools/sync.md#governance-policy).
+- Där Idun inte har satt upp governance finns ingen `governance/`-mapp.
 
 - Säger två nivåer olika gäller den strängare. En lägre nivå får skärpa men aldrig mildra en högre.
 - Agenter rapporterar incidenter och föreslår nya punkter vid varje wrap ([wrap steg 6](../skills/wrap.md#6-gc-incidenter-och-förslag)). De får skärpa men aldrig mildra eller vidga sitt eget mandat.
@@ -64,6 +68,6 @@ En persons lista är en vy, inte en egen fil: personens egna uppgifter plus alla
 ## Öppet
 
 - Ska personens uppgifter bara ligga i det privata skåpet, eller också i `users/<användare>/` i varje repo?
-- Ska `.wds-sync` ersättas av en generell `.source` med källrepo och version?
+- Ska `.wds-sync` ersättas av en generell `.source` med källrepo och version? Governance använder `.source` sedan 2026-10-03; `agents/wds/` använder fortfarande `.wds-sync`.
 - Vilken uppsättning ska WDS rekommendera en ny kund?
 - Var anger projektet kodens plats: i `AGENTS.md`, i produktbriefen eller i en egen fil?

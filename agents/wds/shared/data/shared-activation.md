@@ -1,6 +1,6 @@
 # WDS Shared Activation Steps
 
-Common startup sequence for all WDS agents (Saga, Freya, Mimir).
+Common startup sequence for all WDS agents (Idun, Saga, Freya, Mimir).
 Each agent's SKILL.md references this file instead of repeating these steps.
 
 ---
@@ -30,6 +30,24 @@ Based on Nate B. Jones' two filing cabinets: the **repo cabinet** holds what the
 
 Do not print the files. If a file is missing, continue. Wrap creates it when there is something to write.
 
+Then run "Step: governance". Every agent lists it explicitly in its activation as well; it runs once per session.
+
+---
+
+## Step: governance
+
+Read the policy before any work, and follow it. It lives in `governance/` at the repo root, one folder per source: `wds/` (the WDS default), `<org>/` (the organization) and, optionally, `<project>/` (this repo's tightenings). See `agents/wds/shared/tools/sync.md`, Governance policy.
+
+1. **Read `governance/policies.md`.** It lists the policy files in reading order: the WDS default, then the organization, then the project.
+2. **Follow the files in that order.** Read the principles files every session; read the other files when a task touches their area (tools and vendors, data, risk, agents and approvals, access, incidents, transparency). The organization's policy is complete on its own; the default applies only where it is silent. A lower level may tighten a rule, never loosen it. When two levels say different things, the stricter one wins, unless the organization's framework file lists the difference with a reason.
+3. **Never edit a folder that has a `.source` file.** It is a synced copy. Changes are made in the source repo it names, then synced.
+4. If a task would break a principle, say so before doing it, and offer to record a deviation in the organization's principles file.
+
+`governance/` exists but has no `policies.md`: read `wds/`, then `<org>/`, then `<project>/`, and mention once that the list is missing (Idun creates it).
+No `governance/` folder: continue silently. Governance is not set up in this repo.
+
+Do not print the files.
+
 ---
 
 ## Step: resume (timestamp)
@@ -41,7 +59,7 @@ First the repo, then the start time of the session that wrote the handover, then
    - Same, or no repo given: continue.
    - Different: look for it under the dev root (`C:/dev/*/<repo>` or `~/dev/*/<repo>`). Found: tell the user in one line to start the session there, and stop. Agent sessions should run in the repo they work in. Not found: say the repo is not cloned on this machine and stop.
 2. Find the file `<timestamp>-*.md` in `sessions/*/<agent_id>/` at the repo root or in a project folder (`projects/*/sessions/*/<agent_id>/`, any letter case). If the repo's `sessions/README.md` says `sessions: private`, look in the user's own sessions folder for this repo instead: the `sessions:` line in `projects/<repo>.md` in the private cabinet (wrap step 1). Filename: `<session-id>-<från>-<sammandrag>.md`, any user folder including `all-users`. Several matches: pick the one whose `<sammandrag>` matches the summary in the command, else prefer the current user's folder, else list them and ask.
-3. Read it. Print EXACTLY:
+3. Read it. Run "Step: soul" and "Step: governance" silently first: a resumed session follows the policy too. Then print EXACTLY:
 
    ── Återupptar <Agent> · <repo> · <timestamp> ─
    Om:     <sammandrag from the filename, with spaces>

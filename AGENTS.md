@@ -4,9 +4,9 @@ Applies to every agent working in this repo: Claude, Copilot, Codex and others. 
 
 ## What this repo is
 
-The source of the WDS agents: **Saga** (strategy), **Freya** (UX design) and **Mimir** (build). They live in [agents/wds/](agents/wds/README.md). Project repos get a copy through `/sync-skills`; changes are made here, never in a copy.
+The source of the WDS agents: **Idun** (setup, governance and the skill library), **Saga** (strategy), **Freya** (UX design) and **Mimir** (build). They live in [agents/wds/](agents/wds/README.md). Project repos get a copy through `/sync-skills`; changes are made here, never in a copy.
 
-WDS is its own framework, inspired by BMad. It is open to other frameworks: another source is simply another folder under `agents/<source>/`.
+WDS is its own framework, fully independent of BMad. Mårten Angner approves everything at WDS level. It is open to other frameworks: another source is simply another folder under `agents/<source>/`.
 
 ## Rules
 
@@ -14,6 +14,7 @@ WDS is its own framework, inspired by BMad. It is open to other frameworks: anot
 - **Skill = what, tool = how, instructions = who.** Commands and API calls belong in a tool, never in a skill or instructions file.
 - **No secrets in any file.** All keys live in Bitwarden and are fetched at runtime with `bw get password "<item>"`. Files may name the Bitwarden item, never the value.
 - **Paths are relative to the repo root** (`agents/wds/shared/...`), so they work unchanged in project repos.
+- **Policy lives in `governance/`**, one folder per source: `governance/wds/` (the default, a copy of `agents/wds/idun/templates/governance/`), `governance/<org>/` (the organization's policy, edited only in its source repo) and, optionally, `governance/<project>/` (tightenings). `governance/policies.md` lists the files in reading order, and agents follow it at session start. A folder with a `.source` file is a synced copy and is never edited. Repos where Idun has not set up governance have no `governance/` folder. See [agents/wds/README.md](agents/wds/README.md#governance-policy).
 - **Memory lives in the project repo** (`sessions/<user>/<agent>/`, `users/<user>/`, `design-process/_progress/`). Every wrap is a handover — to the same agent or another one. Agent Space is only for realtime and is optional.
 
 ## Proposed: projects/ instead of docs/
