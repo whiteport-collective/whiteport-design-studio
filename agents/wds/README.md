@@ -8,7 +8,7 @@ agents/wds/
 ├── freya/     UX designer — scenarios, UX design, specs
 ├── mimir/     Implementation — tech audit, PRD, build
 ├── idun/      Setup and governance — qualification, onboarding, governance suite, skill library
-│   └── templates/governance/   the WDS default policy (framework, principles, tools, data, risk, agents, access, incidents, transparency)
+│   └── templates/              governance/: the WDS default policy (framework, principles, tools, data, risk, agents, access, incidents, transparency) · policies.md: the reading list
 └── shared/    What no single agent owns
     ├── skills/   wrap, start, handoff, feedback, prd-workflow, design-delivery
     ├── tools/    git, agent-space, memory, sync, wireframe, rendering …
@@ -23,10 +23,10 @@ Each agent folder:
 | `skills/` | WHAT: workflows (product-brief, trigger-map, ux-design …) |
 | `subagents/` | Focused writers and reviewers the agent delegates to |
 | `references/` | Method guides loaded when a step needs them |
-| `templates/` | Default documents the agent copies into a repo and tailors (Idun: `templates/governance/`, the default policy) |
+| `templates/` | Default documents the agent copies into a repo and tailors (Idun: `templates/governance/`, the default policy, and `templates/policies.md`) |
 | `tools/` | HOW: commands and API calls only this agent uses (shared ones live in `shared/tools/`) |
 
-**Roles:** Idun sets up the workspace, onboards organizations and people, runs AI governance and keeps the skill library. Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
+**Roles:** Idun installs WDS and gets people started, looks after WDS at each client (structure, sync, governance and compliance, and the conversations about the process) and keeps the WDS method and the skill library. Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
 
 ## Skills and tools
 
@@ -60,7 +60,16 @@ tools: [<source>/<tool>]              type: http | cli | script
 
 ## Governance policy
 
-Every WDS repo has one flat policy folder, `governance/`, at its root. Each file name starts with its source: `wds-*.md` is the WDS default from `idun/templates/governance/`, synced and read-only; `<org>-*.md` is the organization's policy, edited only in the organization's one source repo and synced to its other repos; `<project>-*.md` tightens the rules for one repo. Precedence: WDS default < organization < project. A lower level may tighten a rule, never loosen it, and the stricter rule wins. Every agent reads the principles at session start ([shared/data/shared-activation.md](shared/data/shared-activation.md), Step: governance). How the copies are made: [shared/tools/sync.md](shared/tools/sync.md). How Idun tailors the policy: [idun/skills/governance-report.md](idun/skills/governance-report.md).
+A repo where governance is set up has a folder `governance/` at its root, with one folder per source:
+
+| Folder | What | Edited where |
+|---|---|---|
+| `governance/wds/` | The WDS default, a copy of `idun/templates/governance/` with the same file names | Never. Synced, read-only. |
+| `governance/<org>/` | The organization's policy, possibly localized (`governance/visita/ramverk.md`) | Only in the organization's one source repo; its other repos get a copy |
+| `governance/<project>/` | Optional tightenings for one repo | Here |
+| `governance/policies.md` | The policy files in reading order: wds, then org, then project | Here. Idun creates it at setup. |
+
+A synced folder is a mirror of its source, and its `.source` file (`source: <repo>@<sha>`) shows the version. A folder with `.source` is never edited. Precedence: WDS default < organization < project. A lower level may tighten a rule, never loosen it, and the stricter rule wins. Every agent reads `governance/policies.md` at session start and follows the files in that order ([shared/data/shared-activation.md](shared/data/shared-activation.md), Step: governance). A repo without `governance/` has no governance set up, and agents continue without it. How the copies are made: [shared/tools/sync.md](shared/tools/sync.md). How Idun tailors the policy: [idun/skills/governance-report.md](idun/skills/governance-report.md).
 
 How a WDS repo is laid out, folders with one owner each, is described in [shared/data/repo-structure.md](shared/data/repo-structure.md).
 
