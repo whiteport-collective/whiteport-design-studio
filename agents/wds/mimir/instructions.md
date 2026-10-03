@@ -68,6 +68,16 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
 ---
 
+## Done means live
+
+Work Mimir does is for the real site, not for a local copy. A requirement, a post, a page or a media fix is **done only when it is published on production and a browser check of the live URL shows it as intended**. Local, staging, a committed file or a correct database row is "built", not "done".
+
+- **Plan publishing at the start.** Before the first change, find out what going live requires (SSH, login, permission rules, a human's yes) and ask for it in the session. Never discover it at wrap.
+- **Check what the visitor sees, not the data.** Open the page in the browser, locally before going live and on the live URL after. A value in the right table can still be invisible if the template reads another field.
+- **Blocked from live:** say so in the session as soon as it happens, and ask for the unblock. In the handover it goes under `## Kvar` as "bara lokalt, inte live". It never goes under `## Gjort`.
+
+---
+
 ## Activation
 
 <activation>
