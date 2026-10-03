@@ -14,8 +14,9 @@ inputs:
   - integration architecture (what AI connects to)
   - agent roster and autonomy levels
 outputs:
-  - the organization's policy as `governance/<org>-<doc>.md` in its source repo, started from the WDS default policy and tailored live, one commit per section
-  - read-only copies of it in the organization's other repos, through the sync tool
+  - the organization's policy as `governance/<org>/<doc>.md` in its source repo, started from the WDS default policy and tailored live, one commit per section
+  - `governance/policies.md`, the list of policy files in reading order
+  - read-only copies of `governance/<org>/` in the organization's other repos, through the sync tool
   - an approved policy the organization keeps as its own evidence (nothing is filed with an authority)
 ---
 
@@ -25,19 +26,23 @@ Produce a complete, signed AI governance policy for a WDS client. Idun does not 
 
 The suite is structured around the **AI Governance Stack** (Kenney, 2026): five layers covering Data, Model, System Integration, Control & Monitoring, and Audit & Evidence — plus a WDS-original Layer 2.5 for Agent Governance. The suite is designed to support compliance with GDPR (ROPA, DPIAs, Article 22) and the EU AI Act (Article 4 AI literacy, Article 50 transparency, and Articles 8–15 and 26 where a high-risk system is involved), and it maps to the NIST AI RMF (GOVERN, MAP, MEASURE, MANAGE functions). Writing the suite does not by itself make an organization compliant.
 
-The organization's policy files exist, copied from the default, before the first question is asked. There is no separate governance repo. Every repo has one flat folder, `governance/`, at its root, because an agent often sees only one repo:
+The organization's policy files exist, copied from the default, before the first question is asked. There is no separate governance repo. Every repo has a folder `governance/` at its root, because an agent often sees only one repo. Each folder in it has one owner (see `agents/wds/shared/data/repo-structure.md`):
 
 ```
 governance/
-├── wds-framework.md, wds-principles.md …   the WDS default. Synced into every WDS repo, read-only.
-├── <org>-<doc>.md                          the organization's policy. Edited only in the org's source repo, synced read-only to its other repos.
-└── <project>-<doc>.md                      optional tightenings for one repo
+├── policies.md      the flat list of policy files in reading order. Owned by the repo; Idun creates it at setup.
+├── wds/             the WDS default, file names as in the template (framework.md, principles.md …). Synced, read-only.
+├── <org>/           the organization's policy. Edited only in the org's source repo, copied read-only to its other repos.
+└── <project>/       optional tightenings for this repo only
 ```
 
-- **One source repo per organization.** The organization's policy is edited in one repo, the one it already works in (for Visita: visita-kommunikation). The sync tool (`agents/wds/shared/tools/sync.md`) copies it to the organization's other repos. Each copy starts with the line `Copy. Edit in <source repo>.`
-- **Precedence: WDS default < organization < project.** The organization policy is complete on its own; the default applies only where it is silent. A lower level may tighten a rule but never loosen it. When two levels differ, the stricter rule wins unless the difference is recorded with a reason in the "Differences from the WDS default" table in the organization's framework file.
-- **Localized names are allowed.** Visita's policy is Swedish: `governance/visita-ramverk.md`, `governance/visita-principer.md`. The framework file links the others.
-- **No organization policy yet:** the `wds-*` files alone apply.
+- **One source repo per organization.** The organization's policy is edited in `governance/<org>/` in one repo, the one it already works in (for Visita: visita-kommunikation). The sync tool (`agents/wds/shared/tools/sync.md`) copies the folder to the organization's other repos.
+- **A copied folder is a mirror.** It has a `.source` file (`source: <repo>@<sha>`) that shows its version, and updates and deletions in the source reach it. Never edit a folder that has `.source`. The source folder has no `.source`.
+- **Reading order: WDS default, organization, project.** `policies.md` lists the files in that order. The organization policy is complete on its own; the default applies only where it is silent. A lower level may tighten a rule but never loosen it. When two levels differ, the stricter rule wins unless the difference is recorded with a reason in the "Differences from the WDS default" table in the organization's framework file.
+- **Localized names are allowed.** Visita's policy is Swedish: `governance/visita/ramverk.md`, `governance/visita/principer.md`. The framework file links the others, and `policies.md` lists them.
+- **Links:** files link within their own folder (`principles.md`). An organization or project file links to the default with `../wds/<file>.md`.
+- **No organization policy yet:** `governance/wds/` alone applies.
+- **No `governance/` folder:** governance has not been set up. Agents continue without it, and the sync does not create it.
 
 ---
 
@@ -93,18 +98,23 @@ Recommended target (Kenney 2026, not a legal requirement): high-risk AI systems 
 As soon as the client provides their business name, execute all of the following before asking anything else:
 
 1. **Find the source repo.** The organization's policy lives in the repo it already works in. If it works in several, agree which one is the source; every other repo gets a read-only copy. Never create a separate repo for governance.
-2. **Choose the prefix and the language.** The prefix is the organization's short name in lowercase (`acme`). The files may be localized, file names included (`acme-ramverk.md`).
+2. **Choose the folder name and the language.** The folder is the organization's short name in lowercase (`governance/acme/`). The files may be localized, file names included (`governance/acme/ramverk.md`).
 3. **Decide the document set.** The merged default (nine files) fits most organizations. For a larger or high-risk organization, propose the full 12-document set (see Default policy) and confirm before writing.
-4. **Copy the default.** Copy each file in `agents/wds/idun/templates/governance/` to `governance/<org>-<name>.md` at the root of the source repo. In each copy:
-   - replace the `{org}-` link prefix with `<org>-` (or the localized file names), and `{Org}` with the organization's name
+4. **Create `governance/<org>/` from the templates.** Copy each file in `agents/wds/idun/templates/governance/` into `governance/<org>/` at the root of the source repo, with the same names or localized ones. In each copy:
+   - keep the same-folder links (`principles.md`), renamed if the files are localized, and replace `{Org}` with the organization's name
    - set `Status: in progress (from the WDS default, <date>)` and `Level: organization`
    - keep the `Tailor in dialog` lines until step 17
-5. **Merge, never overwrite.** If `governance/` already has `<org>-*` files, keep them and add only the default sections and files they lack. If the organization has an older governance folder (`shared/<org>/governance/`, `ai-governance/`, numbered `00-…12-` files), propose moving it into `governance/` with the prefix and merging it with the default, and do it after a yes, with `git mv` so the history follows.
-6. **Leave `wds-*` alone.** They are the synced default. If they are missing, run the sync tool.
-7. **Register the source.** Add the organization to the sync configuration as described in `agents/wds/shared/tools/sync.md`, so its other repos get copies.
-8. Commit: `docs(governance): <org> policy from the WDS default`
-9. Tell the user where the files are, that the default already applies, and that each step now confirms or adjusts it. Let's begin.
-10. Then ask the first question.
+   - do not add a `.source` file: this folder is the source
+5. **Create `governance/policies.md`** from `agents/wds/idun/templates/policies.md`: the WDS default first, then `<org>/`, then any `<project>/`, in the organization's language, with the incident log named. If it exists, update it; never overwrite.
+6. **Merge, never overwrite.** If `governance/<org>/` already exists, keep it and add only the default sections and files it lacks. Older layouts are moved after a yes, with `git mv` so the history follows:
+   - flat prefixes (`governance/<org>-*.md`) → `governance/<org>/*.md`; flat `governance/wds-*.md` copies are removed, since the sync writes `governance/wds/`
+   - an older governance folder (`shared/<org>/governance/`, `ai-governance/`, numbered `00-…12-` files) → `governance/<org>/`, merged with the default
+   - links between the moved files are updated to the same-folder form
+7. **Leave `governance/wds/` alone.** It is the synced default, with a `.source` file. If it is missing, the repo is not yet registered for governance: step 8 registers it, and the next sync writes it. A real sync writes into other repos, so it runs only after the person's yes.
+8. **Register the source.** Add the organization to the sync config as described in `agents/wds/shared/tools/sync.md`: the organization, its source repo and its other repos.
+9. Commit: `docs(governance): <org> policy from the WDS default`
+10. Tell the user where the files are, that the default already applies, and that each step now confirms or adjusts it. Let's begin.
+11. Then ask the first question.
 
 ---
 
@@ -169,7 +179,7 @@ Once current level is assessed, present it and ask these four questions. One at 
 
 ---
 
-**Tailors:** `<org>-framework.md`, section Maturity. The default holds the governance maturity target (Level 3) and empty adoption fields. Fill them in and confirm or adjust the target. Use this format:
+**Tailors:** `<org>/framework.md`, section Maturity. The default holds the governance maturity target (Level 3) and empty adoption fields. Fill them in and confirm or adjust the target. Use this format:
 
 > ## AI Adoption Commitment
 >
@@ -245,7 +255,7 @@ Surface the blocker explicitly: *"What you're describing sounds like [blocker]. 
 
 ---
 
-**Tailors:** `<org>-framework.md`, section Maturity. For each level on the path, add a section:
+**Tailors:** `<org>/framework.md`, section Maturity. For each level on the path, add a section:
 
 > ## Level-Up Plan: Level [X] → Level [Y]
 >
@@ -275,7 +285,7 @@ Surface the blocker explicitly: *"What you're describing sounds like [blocker]. 
 
 **Governance implication:** Swedish organization → IMY is the GDPR supervisory authority. For the EU AI Act, the government has given interim assignments (decision 12 June 2026, until 31 December 2026, pending national legislation) to PTS (single point of contact), IMY (for example law enforcement and creditworthiness AI), Finansinspektionen, Läkemedelsverket and Swedac. Any sub-contractor or tool outside the EU/EEA that receives personal data triggers the GDPR Chapter V transfer rules (Articles 44–49). Document explicitly.
 
-**Tailors:** `<org>-framework.md`, sections Scope and Documents. Confirm or adjust the default scope (who and what it applies to, what is out of scope) and the document index. Fill in the supervisory authority in the "Not filed" table.
+**Tailors:** `<org>/framework.md`, sections Scope and Documents. Confirm or adjust the default scope (who and what it applies to, what is out of scope) and the document index. Fill in the supervisory authority in the "Not filed" table.
 **Commit:** `docs(governance): framework — organization and scope`
 
 ---
@@ -288,7 +298,7 @@ Surface the blocker explicitly: *"What you're describing sounds like [blocker]. 
 
 **Governance implication:** GDPR Article 5(2) makes the controller accountable for, and able to demonstrate, compliance. For high-risk AI systems, EU AI Act Article 17(1)(m) requires providers to have an accountability framework in their quality management system, and Article 26(2) requires deployers to assign human oversight to people with the necessary competence, training and authority. (Article 9 is the risk management system, not a governance structure.) Solo principal = clear and auditable. Multi-person orgs need documented authority chains.
 
-**Tailors:** `<org>-framework.md`, sections Accountability and AI literacy. The default has seven roles (approver, policy owner, privacy contact, agent owner, access owner, incident lead, everyone). Confirm or adjust them, record who holds each role in the organization's own people list, and put the named principal in the approval block.
+**Tailors:** `<org>/framework.md`, sections Accountability and AI literacy. The default has seven roles (approver, policy owner, privacy contact, agent owner, access owner, incident lead, everyone). Confirm or adjust them, record who holds each role in the organization's own people list, and put the named principal in the approval block.
 **Commit:** `docs(governance): framework — accountability`
 
 ---
@@ -308,7 +318,7 @@ Surface the blocker explicitly: *"What you're describing sounds like [blocker]. 
 | AI used in Annex III areas (biometrics, critical infrastructure, education, employment, access to essential private and public services such as public benefits, credit scoring, life and health insurance pricing and emergency call triage, law enforcement, migration and border control, justice and democratic processes), or AI that is a safety component of a product under Annex I (e.g. medical devices, toys, lifts) | **High risk** — Articles 8–15 (providers) and Article 26 (deployers); applies from 2 Dec 2027 (Annex III) and 2 Aug 2028 (Annex I) | All 5 layers at maximum rigor |
 | The org itself provides a GPAI model (systemic risk is presumed above 10^25 FLOP of training compute, Article 51). Using a GPAI model through a tool does not make the org a GPAI provider | GPAI provider obligations (Article 53), plus systemic-risk obligations (Article 55); apply from 2 Aug 2025 | Enhanced Layer 2 + 5 |
 
-**Tailors:** `<org>-risk.md`, section AI Act classification. The default has the decision tree and an empty classification table. Add one row per AI system or use, with the organization's role (deployer or provider), and confirm or adjust the default assumption that reviewed assistant and agent work is minimal risk plus Article 50.
+**Tailors:** `<org>/risk.md`, section AI Act classification. The default has the decision tree and an empty classification table. Add one row per AI system or use, with the organization's role (deployer or provider), and confirm or adjust the default assumption that reviewed assistant and agent work is minimal risk plus Article 50.
 **Commit:** `docs(governance): risk — AI Act classification`
 
 **If high-risk classification applies:** Document the Articles 8–15 requirements (providers) and the Article 26 deployer obligations, plus a fundamental rights impact assessment (Article 27) where the deployer is a public body, provides public services, or uses credit scoring or life and health insurance pricing. This is not optional. The binding dates are 2 December 2027 for Annex III systems and 2 August 2028 for Annex I products, as amended by the Digital Omnibus on AI (Regulation (EU) 2026/1744).
@@ -356,7 +366,7 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 - `access` (11) gets the tool inventory, outbound data controls (DLP) and a tested kill switch
 - `agents` (12) gets the memory scope policy, prompt injection defense and governance structure
 
-**Tailors:** `<org>-risk.md`, section Agentic risk score. Add one row per agent with the factor breakdown, Factor_Sum and level. Confirm or adjust the default risk register rows.
+**Tailors:** `<org>/risk.md`, section Agentic risk score. Add one row per agent with the factor breakdown, Factor_Sum and level. Confirm or adjust the default risk register rows.
 **Commit:** `docs(governance): risk — AIVSS agentic risk scoring`
 
 ---
@@ -367,7 +377,7 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 
 **Probe for:** Core tools (LLMs), agentic tools (that take actions autonomously), task-specific tools, tools used by sub-contractors.
 
-**Tailors:** `<org>-tools.md`, sections Permitted uses, Prohibited uses and Tools in use. Confirm or adjust the default uses, and fill the tool table: Tool | Vendor | Used for | Type (Core / Agentic / Task-specific) | Highest data tier | Account | Owner | Status. Data location goes in the vendor table (Step 11).
+**Tailors:** `<org>/tools.md`, sections Permitted uses, Prohibited uses and Tools in use. Confirm or adjust the default uses, and fill the tool table: Tool | Vendor | Used for | Type (Core / Agentic / Task-specific) | Highest data tier | Account | Owner | Status. Data location goes in the vendor table (Step 11).
 
 **GDPR flag (mandatory):** If any tool's data processor is outside EU/EEA, note the cross-border transfer basis explicitly: an adequacy decision (Article 45) or appropriate safeguards such as SCCs (Article 46). For US processors, the EU–US Data Privacy Framework covers only certified organizations. The General Court upheld it on 3 September 2025 (T-553/23, Latombe), and an appeal (C-703/25 P) is pending at the Court of Justice, so note a fallback such as SCCs.
 
@@ -386,7 +396,7 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 - Training data: document demographic distribution vs. deployment population
 - Identify proxy variables with >0.7 correlation to protected characteristics
 
-**Tailors:** `<org>-data.md`, sections Records of processing, DPIA and Data quality. The default has the Article 30(1) columns and no rows. Add a row per processing activity, decide whether any activity needs a DPIA, and keep or remove the data quality section (only relevant if the organization trains, fine-tunes or evaluates models, or builds data sets about people).
+**Tailors:** `<org>/data.md`, sections Records of processing, DPIA and Data quality. The default has the Article 30(1) columns and no rows. Add a row per processing activity, decide whether any activity needs a DPIA, and keep or remove the data quality section (only relevant if the organization trains, fine-tunes or evaluates models, or builds data sets about people).
 
 **Commit:** `docs(governance): data — records of processing (ROPA)`
 
@@ -396,7 +406,7 @@ These Factor_Sum bands are a WDS heuristic. AIVSS v0.8 itself uses Factor_Sum in
 
 **Question:** "How sensitive is the data you handle? Does any of it include personal data, health information, financial records, or credentials?"
 
-**Tailors:** `<org>-data.md`, sections Classification, Shared and private, and Never in a repo. The default has these tiers, with an extra column for what may go into AI tools. Confirm or adjust:
+**Tailors:** `<org>/data.md`, sections Classification, Shared and private, and Never in a repo. The default has these tiers, with an extra column for what may go into AI tools. Confirm or adjust:
 
 | Tier | Definition | Examples | Required controls |
 |------|-----------|---------|------------------|
@@ -427,7 +437,7 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Override rate target** (heuristic from Kenney 2026, not a legal requirement): 5–20%. Below 2% = possible automation bias. Above 20% = possible model performance issue.
 
-**Tailors:** `<org>-agents.md`, sections Roster, Authorization levels, Authorization defaults and Agent to agent. The default has an authorization level for each action category and who may say yes. Fill in the roster, then confirm or adjust the defaults per agent. Any loosening goes in the differences table in `<org>-framework.md`.
+**Tailors:** `<org>/agents.md`, sections Roster, Authorization levels, Authorization defaults and Agent to agent. The default has an authorization level for each action category and who may say yes. Fill in the roster, then confirm or adjust the defaults per agent. Any loosening goes in the differences table in `<org>/framework.md`.
 
 **Commit:** `docs(governance): agents — authorization`
 
@@ -448,7 +458,7 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Automation bias warning:** If the review process shows "AI recommended X — approve?" without showing the reasoning, document this as a governance gap. Humans must have genuine authority to override, not just a confirm button.
 
-**Tailors:** `<org>-agents.md`, sections The review gate and Overrides. Confirm or adjust the default checklist, say where approvals are given and recorded, and where overrides are logged.
+**Tailors:** `<org>/agents.md`, sections The review gate and Overrides. Confirm or adjust the default checklist, say where approvals are given and recorded, and where overrides are logged.
 
 **Commit:** `docs(governance): agents — review gate and overrides`
 
@@ -465,7 +475,7 @@ Walk through categories if needed: client communications, code commits, deployme
 - AI output triggers financial record creation → human-in-the-loop required before the record is created
 - Data pipeline crosses org boundary → integrity verification at the boundary required
 
-**Tailors:** `<org>-access.md`, all sections: Accounts, Least privilege, Credentials, Integrations, Kill switch. Fill the integrations table and the groups, name the password manager, and confirm or adjust the default cascade rules and kill switch procedure.
+**Tailors:** `<org>/access.md`, all sections: Accounts, Least privilege, Credentials, Integrations, Kill switch. Fill the integrations table and the groups, name the password manager, and confirm or adjust the default cascade rules and kill switch procedure.
 
 **Commit:** `docs(governance): access — accounts, integrations and kill switch`
 
@@ -484,7 +494,7 @@ Walk through categories if needed: client communications, code commits, deployme
 4. Security incident / unauthorized access
 5. Meeting recorded without consent
 
-**Tailors:** `<org>-incidents.md`. The default has the roles, the first steps, a procedure per type (the five above plus an agent acting outside its authorization), the 72-hour clock and the breach log (Article 33(5)). Fill in the contacts and the supervisory authority, and confirm or adjust the procedures.
+**Tailors:** `<org>/incidents.md`. The default has the roles, the first steps, a procedure per type (the five above plus an agent acting outside its authorization), the 72-hour clock and the breach log (Article 33(5)). Fill in the contacts and the supervisory authority, and confirm or adjust the procedures.
 
 **Commit:** `docs(governance): incidents — response plan`
 
@@ -494,7 +504,7 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **Question:** "For each AI tool you use — do you know whether they use your data for model training, and where they store it?"
 
-**Tailors:** `<org>-tools.md`, sections Vendor due diligence and Transfers outside the EU/EEA. Fill one row per vendor: Vendor | Service | Data location | Trains on our data | DPA (Article 28) | Transfer basis (Chapter V) | Retention | Risk | Actions. Confirm or adjust the default plan and review cadence.
+**Tailors:** `<org>/tools.md`, sections Vendor due diligence and Transfers outside the EU/EEA. Fill one row per vendor: Vendor | Service | Data location | Trains on our data | DPA (Article 28) | Transfer basis (Chapter V) | Retention | Risk | Actions. Confirm or adjust the default plan and review cadence.
 
 **Commit:** `docs(governance): tools — vendor due diligence`
 
@@ -510,7 +520,7 @@ Walk through categories if needed: client communications, code commits, deployme
 
 **EU AI Act Article 50 (applies from 2 August 2026):** People must be told when they interact with an AI system such as a chatbot (50(1)). Providers of generative AI must mark output as AI-generated in a machine-readable way (50(2)). Deployers must inform people exposed to emotion recognition or biometric categorisation (50(3)), and must disclose deepfakes (50(4)). Under 50(4), AI-generated or manipulated text published to inform the public on matters of public interest must be disclosed, unless it has gone through human review or editorial control and a person or organization holds editorial responsibility. This clause matters for communications departments. If any applies, this is mandatory — not optional.
 
-**Tailors:** `<org>-transparency.md`. The default has the client text above, the Article 50 rules, what the organization discloses beyond the law, sample disclosures, consent for recordings, film and interviews, and objection handling. Confirm or adjust each, and add the organization's recording tools (for example Fireflies).
+**Tailors:** `<org>/transparency.md`. The default has the client text above, the Article 50 rules, what the organization discloses beyond the law, sample disclosures, consent for recordings, film and interviews, and objection handling. Confirm or adjust each, and add the organization's recording tools (for example Fireflies).
 
 **Commit:** `docs(governance): transparency — disclosure and consent`
 
@@ -530,7 +540,7 @@ Three stances:
 
 Default: **Managed** unless the org explicitly chooses otherwise.
 
-**Tailors:** `<org>-agents.md`, section Skill governance. The default stance is Managed, with this table. Confirm or adjust, and record how agents, skills and tools are organized and who owns what:
+**Tailors:** `<org>/agents.md`, section Skill governance. The default stance is Managed, with this table. Confirm or adjust, and record how agents, skills and tools are organized and who owns what:
 
 | Action | Agent can do autonomously | Requires approval |
 |--------|--------------------------|------------------|
@@ -547,7 +557,7 @@ Default: **Managed** unless the org explicitly chooses otherwise.
 
 No additional questions needed. Based on all previous answers, establish the monitoring schedule.
 
-**Tailors:** `<org>-framework.md`, section Review. The default has this schedule with roles. Confirm or adjust who and how often:
+**Tailors:** `<org>/framework.md`, section Review. The default has this schedule with roles. Confirm or adjust who and how often:
 
 | Cadence | Who | What |
 |---------|-----|------|
@@ -564,9 +574,9 @@ No additional questions needed. Based on all previous answers, establish the mon
 - Relevant regulatory change (EU AI Act guidance, IMY ruling)
 - The WDS default changes (the sync tool flags it)
 
-**Conflict check.** Idun's job, in this step and afterwards whenever the `wds-*` files change at sync, or on request (`/idun audit governance`, see `skills/librarian.md`). Compare the organization's policy with the default, rule by rule:
-- a default rule the organization has not addressed → a row in the deviations table in `<org>-principles.md`
-- an organization rule that is looser than the default and is not in the differences table in `<org>-framework.md` → a row in the deviations table
+**Conflict check.** Idun's job, in this step and afterwards whenever `governance/wds/` changes at sync (its `.source` names a new version), or on request (`/idun audit governance`, see `skills/librarian.md`). Compare the organization's policy with the default, rule by rule:
+- a default rule the organization has not addressed → a row in the deviations table in `<org>/principles.md`
+- an organization rule that is looser than the default and is not in the differences table in `<org>/framework.md` → a row in the deviations table
 - a difference that is recorded with a reason → no action
 
 The stricter rule applies until the organization decides: adopt the default, or record the difference with a reason, approved by the approver. A recorded difference never goes below the law.
@@ -579,7 +589,7 @@ The stricter rule applies until the organization decides: adopt the default, or 
 
 No additional questions needed. Map each governance section to a concrete Agent Space build requirement.
 
-**Tailors:** `<org>-agents.md`, section Controls and verification. The default lists generic controls (identity, review gate, authorization profile, audit trail, skill registry, kill switch). Confirm or adjust them. With Agent Space, add these requirements:
+**Tailors:** `<org>/agents.md`, section Controls and verification. The default lists generic controls (identity, review gate, authorization profile, audit trail, skill registry, kill switch). Confirm or adjust them. With Agent Space, add these requirements:
 
 | Governance area | Required Agent Space capability | Status |
 |----------------|--------------------------------|--------|
@@ -602,7 +612,7 @@ Mark Built only if already confirmed. Everything else: Pending.
 
 Write one test per capability confirming it actually works. Short and actionable.
 
-**Tailors:** `<org>-agents.md`, the Test column in Controls and verification.
+**Tailors:** `<org>/agents.md`, the Test column in Controls and verification.
 
 **Commit:** `docs(governance): agents — verification tests`
 
@@ -610,8 +620,8 @@ Write one test per capability confirming it actually works. Short and actionable
 
 ### Step 17 — Finalize
 
-1. In every `<org>-*` file: set `Status: approved v1.0 <date>` and remove the `Tailor in dialog` lines
-2. Fill in the approval block in `<org>-framework.md`:
+1. In every file in `governance/<org>/`: set `Status: approved v1.0 <date>, <approver role>` and remove the `Tailor in dialog` lines. The client's principal approves at a milestone agreed with the client; until then the status stays `in progress`.
+2. Fill in the approval block in `<org>/framework.md`:
 
 ```markdown
 ---
@@ -624,9 +634,9 @@ Write one test per capability confirming it actually works. Short and actionable
 **Signature:** ________________________
 ```
 
-3. Update the Documents index and the Differences from the WDS default table in `<org>-framework.md`, so every difference agreed in the dialog is listed with its reason
+3. Update the Documents index and the Differences from the WDS default table in `<org>/framework.md`, so every difference agreed in the dialog is listed with its reason
 4. Final commit: `docs(governance): <org> policy v1.0 — approved`
-5. Sync, so the organization's other repos get the approved copies (sync tool)
+5. Sync, after the person's yes, so the organization's other repos get the approved copy of `governance/<org>/` (sync tool)
 6. Show completed document index in chat for review
 7. Tell the client: the suite is the organization's own evidence. It is not filed with any authority. It is kept up to date and shown on request, for example during an inspection.
 
@@ -640,9 +650,9 @@ Only these events involve an authority, and each one is documented in its own do
 
 | Event | Authority | Document |
 |-------|-----------|----------|
-| Personal data breach that is likely to result in a risk to people (GDPR Article 33, where feasible within 72 hours) | Supervisory authority (IMY in Sweden) | `<org>-incidents.md` (05 Incident response) |
-| A DPIA shows high residual risk that cannot be mitigated (GDPR Article 36, prior consultation) | Supervisory authority | `<org>-data.md` (03 Data processing register) |
-| A data protection officer is designated (GDPR Article 37(7): the DPO's contact details are communicated to the authority) | Supervisory authority | `<org>-framework.md` (00 Introduction) |
+| Personal data breach that is likely to result in a risk to people (GDPR Article 33, where feasible within 72 hours) | Supervisory authority (IMY in Sweden) | `<org>/incidents.md` (05 Incident response) |
+| A DPIA shows high residual risk that cannot be mitigated (GDPR Article 36, prior consultation) | Supervisory authority | `<org>/data.md` (03 Data processing register) |
+| A data protection officer is designated (GDPR Article 37(7): the DPO's contact details are communicated to the authority) | Supervisory authority | `<org>/framework.md` (00 Introduction) |
 
 **Flag explicitly:**
 - Special category data (health, biometrics, ethnicity, etc.) → a DPIA under Article 35 may be required. It is kept internally, not filed.
@@ -654,11 +664,13 @@ Only these events involve an authority, and each one is documented in its own do
 
 The WDS default policy lives in `agents/wds/idun/templates/governance/`. It is neutral, in English, based on best practice for organizations and teams that work with AI agents, and adoptable as it is. Every number in it that is not law is marked as a recommendation or a heuristic.
 
-It reaches every repo in two ways:
-- **As the baseline:** the sync tool copies it into every WDS repo as `governance/wds-<name>.md`, read-only. It applies wherever the organization's policy is silent, and alone when the organization has none.
-- **As the starting point:** Step 0 copies it to `governance/<org>-<name>.md` in the organization's source repo, and the dialog tailors it.
+It reaches a repo in two ways:
+- **As the baseline:** the sync tool copies the whole folder into `governance/wds/`, read-only, with a `.source` file. It applies wherever the organization's policy is silent, and alone when the organization has none. It is synced only into repos where governance is set up: repos that already have a `governance/` folder, or that the sync config names as an organization's source or target.
+- **As the starting point:** Step 0 copies it into `governance/<org>/` in the organization's source repo, and the dialog tailors it.
 
-The template files are unprefixed. Links between them use the placeholder prefix `{org}-` (for example `{org}-principles.md`). The sync tool replaces it with `wds-`; Step 0 replaces it with the organization's prefix or localized file names. `{Org}` and other `{…}` placeholders are filled in the dialog.
+The template files link to each other within the folder (`principles.md`), so the copy in `governance/wds/` works as it is and Step 0 only renames links when it localizes the file names. An organization file that refers to the default links `../wds/<file>.md`. `{Org}` and other `{…}` placeholders are filled in the dialog.
+
+The template for `governance/policies.md` is `agents/wds/idun/templates/policies.md`. It lies outside `templates/governance/` because that folder is copied as it is.
 
 | File | Covers | Tailored in steps |
 |---|---|---|
@@ -674,7 +686,7 @@ The template files are unprefixed. Links between them use the placeholder prefix
 
 ### Full set (option)
 
-For a larger or high-risk organization (for example more than ten people with external stakeholders, a regulated sector, a High AIVSS score, or a high-risk classification under the AI Act), propose the full 12-document set. Build it by splitting the default files, so no content is lost, and name the files `<org>-00-introduction.md` and so on. Confirm the set in Step 0.
+For a larger or high-risk organization (for example more than ten people with external stakeholders, a regulated sector, a High AIVSS score, or a high-risk classification under the AI Act), propose the full 12-document set. Build it by splitting the default files, so no content is lost, and name the files `governance/<org>/00-introduction.md` and so on. Confirm the set in Step 0.
 
 ```
 00-introduction.md           — Org overview, AI adoption commitment (current level / target / owner / sign-off), document index, implementation requirements, approval block
@@ -715,7 +727,9 @@ For a larger or high-risk organization (for example more than ten people with ex
 
 ## Quality Rules
 
-- The organization's policy files, copied from the default into `governance/` in its source repo, MUST exist before the first question. No exceptions. No separate governance repo, and no edits in a copy.
+- The organization's policy files, copied from the default into `governance/<org>/` in its source repo, MUST exist before the first question, together with `governance/policies.md`. No exceptions. No separate governance repo, and no edits in a folder that has `.source`.
+- `governance/wds/` and copies of `governance/<org>/` are never edited by hand. Changes go to the source and reach the copies through the sync.
+- The incident log named in `policies.md` exists before the suite is complete. Wrap step 6 writes there.
 - One commit per section. Never batch commits.
 - Never skip a section — even "not applicable" must be written explicitly with rationale.
 - GDPR cross-border transfer note is mandatory if any party or tool is outside EU/EEA.
@@ -725,14 +739,14 @@ For a larger or high-risk organization (for example more than ten people with ex
 - AI Skill Governance is mandatory for any org using Agent Space — never skip it.
 - Sections covering implementation requirements, verification tests, and audit schedule are mandatory — a governance document without operational controls is a paper artifact, not a live system.
 - `access` and `agents` (11 System Integration and 12 Agent Governance in the full set) are mandatory for any org deploying agentic AI.
-- AIVSS agentic risk scoring (Step 3.5) is mandatory for any org with autonomous agents — the Factor_Sum must appear in `<org>-risk.md` (Doc 04) before the suite is complete.
+- AIVSS agentic risk scoring (Step 3.5) is mandatory for any org with autonomous agents — the Factor_Sum must appear in `<org>/risk.md` (Doc 04) before the suite is complete.
 - At Moderate AIVSS risk (Factor_Sum 4.1–7): `access` and `agents` (docs 11 and 12) must include all AIVSS-specific sections (tool inventory, kill switch, memory scope, prompt injection defense).
-- At High AIVSS risk (Factor_Sum 7.1–10): a named pre-deployment approver and sign-off date must appear in `<org>-agents.md` (Doc 12) before any agent goes live.
-- Every difference from the WDS default is listed in the differences table in `<org>-framework.md`. A conflict check runs whenever the default changes.
+- At High AIVSS risk (Factor_Sum 7.1–10): a named pre-deployment approver and sign-off date must appear in `<org>/agents.md` (Doc 12) before any agent goes live.
+- Every difference from the WDS default is listed in the differences table in `<org>/framework.md`. A conflict check runs whenever the default changes.
 
 ## Reference
 
-Canonical examples: `whiteport-collective/whiteport-agent-space` — `ai-governance/` (full set, April 2026), and `visita-kommunikation` — `governance/visita-*.md` (merged set for one department, localized to Swedish, October 2026).
+Canonical examples: `whiteport-collective/whiteport-agent-space` — `ai-governance/` (full set, April 2026), and `visita-kommunikation` — `governance/visita/` with `governance/policies.md` (merged set for one department, localized to Swedish, October 2026).
 Default policy: `agents/wds/idun/templates/governance/`.
 Produced during Idun dry run with Whiteport (Mårten Angner, April 2026).
 
