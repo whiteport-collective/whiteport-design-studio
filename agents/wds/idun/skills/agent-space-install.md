@@ -14,7 +14,7 @@ Governance defines the rules. This skill builds the infrastructure that enforces
 
 Nothing is installed that is not in the governance documents. Agent permissions match `12-agent-governance.md` exactly. Tool connections come from the tool inventory in `11-system-integration-governance.md`. Safety settings follow the AIVSS score in `04-ai-risk-assessment.md`. The result is a configuration that is traceable back to approved decisions.
 
-The numbers refer to the full 12-document set. With the merged default policy, read `governance/<org>-agents.md` for 12, `governance/<org>-access.md` for 11 and `governance/<org>-risk.md` for 04 (mapping table in `skills/governance-report.md`, Default policy).
+The numbers refer to the full 12-document set. With the merged default policy, read `governance/<org>/agents.md` for 12, `governance/<org>/access.md` for 11 and `governance/<org>/risk.md` for 04 (mapping table in `skills/governance-report.md`, Default policy).
 
 ---
 

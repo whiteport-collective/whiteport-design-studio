@@ -22,8 +22,11 @@ What a WDS workspace contains and the starting content of each file. Used by org
 ├── sessions/                     Handovers. Folder = receiving agent.
 │   ├── <user>/<agent>/
 │   └── all-users/<agent>/
-├── governance/                   Policy, flat. wds-*.md: the synced WDS default. <org>-*.md: the org's policy
-│                                 (edited only in its source repo). <project>-*.md: tightenings for this repo.
+├── governance/
+│   ├── policies.md               The policy files in reading order. Owned by this repo.
+│   ├── wds/                      The WDS default. Synced, read-only (has .source).
+│   ├── <org>/                    The org's policy. Edited only in its source repo; a copy elsewhere (has .source).
+│   └── <project>/                Optional tightenings for this repo.
 ├── shared/<org>/                 Shared across projects: org profile, brand, contacts
 ├── projects/<project>/design-process/
 │   ├── A-Product-Brief/ … E-Development/
@@ -55,7 +58,7 @@ Language: <language for client-facing material>. All folder and file names in lo
 
 1. Note the start time (`YYYY-MM-DD_HH-MM`, local time). The session id is `YYYY-MM-DD_HH-MM-<user>`.
 2. Find out who you work with: read `.wds/me.md`. If missing, follow `agents/wds/shared/tools/git.md`.
-3. Read the principles in `governance/` and follow them: `wds-principles.md`, then the organization's, then this repo's (see "Step: governance" in `agents/wds/shared/data/shared-activation.md`).
+3. Read `governance/policies.md` and follow the policy files in that order: the WDS default, then the organization's, then this repo's (see "Step: governance" in `agents/wds/shared/data/shared-activation.md`).
 4. Read the latest handover to you in `sessions/<user>/<agent>/` and open ones in `sessions/all-users/<agent>/`.
 5. Work inside one project folder at a time.
 
@@ -77,7 +80,7 @@ Run wrap: `agents/wds/shared/skills/wrap.md`.
 - One project = one folder under `projects/`, each a separate WDS structure. `output_folder` is `projects/<project>/design-process/`.
 - What several projects share lives in `shared/<org>/`, never copied into projects.
 - One folder per source in `agents/`. WDS agents are synced from whiteport-design-studio and never edited here.
-- Policy lives in `governance/`, one flat folder. `wds-*` and copied `<org>-*` files are read-only; edit them in their source repo.
+- Policy lives in `governance/`, one folder per source: `wds/`, `<org>/` and, optionally, `<project>/`. A folder with a `.source` file is a synced copy and is read-only; edit it in its source repo. `governance/policies.md` lists the files in reading order.
 - Everything in the repo is shared and professional. Private matters go in each person's private cabinet.
 - No credentials in the repo. Name who has access and the Bitwarden item, never the value.
 - Commit and push after each finished step.
