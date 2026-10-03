@@ -82,6 +82,10 @@ För varje projekt som rördes: lägg en post i projektets designlogg. Den ligge
 - En till tre punkter om vad som hände i projektet. [Överlämning](<relativ sökväg till överlämningen>)
 ```
 
+### Planen
+
+Finns `_progress/plan.md` i projektet: bocka av uppgifter som blev klara (flytta dem till `### Klart` med datum), lägg till nya uppgifter med koordinater och uppdatera vyerna. Formatet står i [project-plan.md](../data/project-plan.md).
+
 ## 4. Soul-genomgång: jämför och uppdatera
 
 **Var ligger det privata skåpet?** Platsen står i `private:` i `users/<användare>/user.md`, och en kopia står i `.wds/me.md`. Det kan vara en lokal mapp eller ett repo.
