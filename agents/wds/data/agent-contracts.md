@@ -24,7 +24,7 @@ Each agent requires the following before starting core work:
 | Agent | Required | Blocks |
 |-------|----------|--------|
 | Saga | Nothing | — |
-| Freya | `A-Product-Brief/product-brief.md` + `B-Trigger-Map/00-trigger-map.md` | Cannot design without strategic foundation |
+| Freya | `A-Product-Brief/00-product-brief.md` + `B-Trigger-Map/00-trigger-map.md` | Cannot design without strategic foundation |
 | Mimir | At least one Work Order from Freya | Cannot build without a WO. Cannot PRD without a WO. |
 | Mimir (existing codebase) | `E-Development/000-tech-audit.md` | Cannot PRD without knowing the codebase |
 

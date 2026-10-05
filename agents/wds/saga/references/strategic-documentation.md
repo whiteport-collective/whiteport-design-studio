@@ -42,7 +42,7 @@ phases:
     name: "Product Exploration"
     status: [not_started|in_progress|complete]
     artifacts:
-      - product-brief.md
+      - 00-product-brief.md
       - pitch-deck.md (if created)
   
   phase_2_trigger_mapping:
@@ -232,7 +232,7 @@ Generate complete Product Brief document using template.
 ---
 
 ### ✅ Right (Specific)
-- `product-brief.md`
+- `00-product-brief.md`
 - `trigger-mapping-guide.md`
 - `platform-requirements.md`
 - `design-system-guide.md`
@@ -249,7 +249,7 @@ Generate complete Product Brief document using template.
 - `content-creation-philosophy.md`
 
 **For deliverables:**
-- `product-brief.md`
+- `00-product-brief.md`
 - `00-trigger-map.md`
 - `platform-prd.md`
 
@@ -341,7 +341,7 @@ Good structure:
 
 ### ✅ Absolute (Explicit)
 ```
-docs/A-Product-Brief/product-brief.md
+docs/A-Product-Brief/00-product-brief.md
 docs/B-Trigger-Map/00-trigger-map.md
 docs/C-UX-Scenarios/landing-page/01-hero-section.md
 ```
@@ -352,7 +352,7 @@ docs/C-UX-Scenarios/landing-page/01-hero-section.md
 
 ### ❌ Relative (Ambiguous)
 ```
-../product-brief.md
+../00-product-brief.md
 ../../00-trigger-map.md
 ```
 

@@ -5,15 +5,15 @@ Write the Product Brief document suite from the discovery data Saga has collecte
 ## What to write
 
 Always write:
-- `{output_folder}/A-Product-Brief/product-brief.md`
+- `{output_folder}/A-Product-Brief/00-product-brief.md`
 
 Write if content & language data was collected:
-- `{output_folder}/A-Product-Brief/content-language.md`
+- `{output_folder}/A-Product-Brief/01-content-language.md`
 
 Write if visual direction data was collected:
-- `{output_folder}/A-Product-Brief/visual-direction.md`
+- `{output_folder}/A-Product-Brief/02-visual-direction.md`
 
-## product-brief.md structure
+## 00-product-brief.md structure
 
 ```
 # Product Brief — [Project Name]
@@ -47,7 +47,7 @@ Write if visual direction data was collected:
 [Technical, budget, timeline, regulatory]
 ```
 
-## content-language.md structure
+## 01-content-language.md structure
 
 ```
 # Content & Language — [Project Name]
@@ -59,7 +59,7 @@ Write if visual direction data was collected:
 ## Content Structure
 ```
 
-## visual-direction.md structure
+## 02-visual-direction.md structure
 
 ```
 # Visual Direction — [Project Name]

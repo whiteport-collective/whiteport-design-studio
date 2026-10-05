@@ -213,7 +213,7 @@ Newest first, at most five lines. The full timeline is in [the design log](_prog
 
 | Phase | Material | Status |
 |---|---|---|
-| Product brief | [product-brief.md](A-Product-Brief/product-brief.md) | pending |
+| Product brief | [00-product-brief.md](A-Product-Brief/00-product-brief.md) | pending |
 | Trigger map | [00-trigger-map.md](B-Trigger-Map/00-trigger-map.md) | pending |
 | UX scenarios | `C-UX-Scenarios/` | pending |
 | UX design | `D-UX-Design/` | pending |

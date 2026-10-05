@@ -21,7 +21,7 @@ Called once, after all persona workshops are complete and all persona documents 
 # Trigger Map — [Project Name]
 
 > Phase 2 — Trigger Mapping
-> Source: Workshops 1–4, product-brief.md
+> Source: Workshops 1–4, 00-product-brief.md
 > Status: Draft — pending review
 
 ---

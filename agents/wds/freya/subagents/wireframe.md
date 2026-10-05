@@ -5,7 +5,7 @@ Create a wireframe for a page from its specification.
 ## Input
 
 - Page spec: `{output_folder}/D-UX-Design/[page-slug].md`
-- Visual direction (if exists): `{output_folder}/A-Product-Brief/visual-direction.md`
+- Visual direction (if exists): `{output_folder}/A-Product-Brief/02-visual-direction.md`
 - Existing wireframes (for consistency): `{output_folder}/D-UX-Design/wireframes/`
 
 ## Output

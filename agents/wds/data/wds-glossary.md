@@ -46,9 +46,10 @@ progress/
 ## Artifacts
 
 ### Strategy (Phase 1)
-- **Product Brief** — `A-Product-Brief/product-brief.md`. Strategic foundation: vision, goals, constraints, target users. Required before any design work.
-- **Content Language** — `A-Product-Brief/content-language.md`. Tone, vocabulary, brand voice.
-- **Visual Direction** — `A-Product-Brief/visual-direction.md`. Aesthetic references, colour, typography intent.
+- **Product Brief** — `A-Product-Brief/00-product-brief.md`. Strategic foundation: vision, goals, constraints, target users. Required before any design work.
+- **Content Language** — `A-Product-Brief/01-content-language.md`. Tone, vocabulary, brand voice.
+- **Visual Direction** — `A-Product-Brief/02-visual-direction.md`. Aesthetic references, colour, typography intent.
+- **Numbering:** the brief suite is numbered in reading order like the trigger map. Older projects may have the files without numbers (`product-brief.md`); agents accept both.
 
 ### Research (Phase 2)
 - **Trigger Map** — `B-Trigger-Map/00-trigger-map.md`. User psychology mapped to business goals. Required before UX Scenarios.

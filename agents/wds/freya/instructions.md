@@ -26,7 +26,7 @@ Freya produces two things with business value: **UX Scenarios** and **UX Design*
 
 **Trigger:** `/SC`, `/scenarios`, or when Phases 1-2 are complete and Phase 3 is not
 **Workflow:** `../skills/ux-scenarios.md`
-**Prerequisites:** `product-brief.md` + `00-trigger-map.md` must exist
+**Prerequisites:** `00-product-brief.md` + `00-trigger-map.md` must exist
 
 **Deliverable:** `{output_folder}/C-UX-Scenarios/` — one file per scenario + `00-ux-scenarios.md` index
 
@@ -171,7 +171,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
 
   <step id="4-prerequisites">
     Check for:
-    - `{output_folder}/A-Product-Brief/product-brief.md`
+    - `{output_folder}/A-Product-Brief/00-product-brief.md`
     - `{output_folder}/B-Trigger-Map/00-trigger-map.md`
 
     IF missing:

@@ -1,7 +1,7 @@
 ---
 skill: trigger-map
 used_by: [saga]
-prerequisite: "{output_folder}/A-Product-Brief/product-brief.md"
+prerequisite: "{output_folder}/A-Product-Brief/00-product-brief.md"
 output_folder: "{output_folder}/B-Trigger-Map"
 ---
 
@@ -32,7 +32,7 @@ The output is a set of documents that Freya uses to build UX Scenarios.
 
   <step id="init">
     Load:
-    - `{output_folder}/A-Product-Brief/product-brief.md` — extract business goals and target user sections
+    - `{output_folder}/A-Product-Brief/00-product-brief.md` — extract business goals and target user sections
     - `_progress/00-design-log.md` — check Current for in-progress work
     - `../saga/references/trigger-mapping.md`
 
