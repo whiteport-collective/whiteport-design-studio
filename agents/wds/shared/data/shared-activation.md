@@ -7,11 +7,12 @@ Each agent's SKILL.md references this file instead of repeating these steps.
 
 ## Step: sync
 
-Silently sync WDS skills before doing anything else.
-Read `agents/wds/shared/tools/sync.md` and run it in startup mode.
-If WDS is not installed: print install instructions and stop.
-If updates were pulled: note them — report at end of activation.
-Continue regardless of sync outcome.
+Check, never write. A real sync writes in other repos and waits for the person's yes ([sync-skills](../skills/sync-skills.md)).
+
+1. Find the WDS repo on this machine (`<dev_root>/whiteport-collective/whiteport-design-studio`, or the `repo` of the WDS source in the person's skills catalog).
+2. **No WDS repo and no `agents/wds/` in this repo:** WDS is not installed. Tell the person to say "installera WDS" (Idun's [install-wds](../../idun/skills/install-wds.md)) and stop.
+3. **Compare versions:** the sha in the latest commit message for `agents/wds/` in this repo (`agents/wds: synkad från whiteport-design-studio <sha>`) against the WDS repo's `HEAD`. If they differ, note in one line at the end of activation that WDS has updates and that `/sync-skills` brings them in.
+4. Continue regardless of the outcome.
 
 ---
 

@@ -1,91 +1,49 @@
 # Installation
 
-WDS installs via Claude. One prompt, no manual steps.
+WDS installs through Claude. One prompt, and Idun, the WDS setup agent, guides you the rest of the way.
 
 ---
 
-## Personal Install
+## Start
 
-Open a Claude session and type:
-
-```
-Install whiteport-design-studio from GitHub for me
-```
-
-Claude fetches `install.md` from the WDS GitHub repo and follows the steps automatically. When done you'll see:
+Open **Claude Code**, in the Claude desktop app or in VS Code, and type:
 
 ```
-✓ Whiteport Design Studio installed
-  Version: 1.0.0
-  Location: ~/.claude/wds/
-  Commands: /saga  /freya  /mimir  /sync
+Install whiteport-design-studio from GitHub
 ```
+
+In Swedish: `Installera WDS från whiteport-design-studio på GitHub`.
+
+Claude reads [`install.md`](../../install.md) in the WDS repo, becomes Idun and starts the conversation. The plain Claude chat app cannot install programs or clone repos, so use Claude Code.
 
 ---
 
-## What the Installer Does
+## What Idun does
 
-1. Detects your home directory
-2. Checks for an existing WDS installation (offers upgrade or clean install)
-3. Clones the WDS repo to `~/.claude/wds/`
-4. Writes `~/.claude/wds-config.yaml` with default settings
-5. Creates slash command files in `~/.claude/commands/`
+Installing WDS means getting you into your repos. The agents, their commands and the policy already live in every WDS repo, so nothing is copied into Claude by hand.
 
----
+1. **Your Claude account.** Checks that you use your own account and that training on your chats is off.
+2. **Programs.** Git, GitHub CLI and Python, and VS Code if you want it. She asks before installing anything.
+3. **WDS.** Clones whiteport-design-studio into your dev folder (`C:/dev` or `~/dev`).
+4. **GitHub.** You log in in the browser. Idun never asks for a password.
+5. **Your personal repo.** A private repo that you own, for your soul files, your skill catalog and your own skills and agents. They follow you across projects and computers. If you prefer, a local folder works too.
+6. **Your repos.** Accepts the invitations you expect, finds your WDS repos and clones them.
+7. **The skill sync.** Keeps WDS, your personal repo, your project repos and Claude's commands in step. After the first sync, `/idun`, `/saga`, `/freya`, `/mimir`, `/wrap` and `/sync-skills` work everywhere.
+8. **A first task.** Shows where your projects stand and hands you over to the right agent.
 
-## Configuration — `wds-config.yaml`
-
-WDS stores its configuration at `~/.claude/wds-config.yaml`. You can edit this file at any time — it survives updates because it lives outside the git clone.
-
-**Default config:**
-
-```yaml
-sync-source: https://github.com/whiteport-collective/whiteport-design-studio
-branch: main
-```
-
-**`sync-source`** — where WDS updates are pulled from. Change this if your org forks WDS.
+The full workflow: [agents/wds/idun/skills/install-wds.md](../../agents/wds/idun/skills/install-wds.md).
 
 ---
 
-## Org Install
+## Keeping WDS updated
 
-If you're distributing WDS across a team with a custom fork, host your own `wds-config.yaml` and pass the URL during install:
-
-```
-Install whiteport-design-studio from GitHub, use org config from https://your-org.com/wds-config.yaml
-```
-
-Claude fetches your config file and writes it as `~/.claude/wds-config.yaml` instead of the defaults. Every employee points to your fork automatically.
-
-**Example org config:**
-
-```yaml
-sync-source: https://github.com/your-org/wds-fork
-branch: main
-```
-
----
-
-## Keeping WDS Updated
-
-WDS agents sync automatically on startup. You can also sync manually at any time:
+Agents check for WDS updates at the start of every session and tell you when there are any. Then run:
 
 ```
-/sync
+/sync-skills
 ```
 
-Or ask directly: `sync WDS` / `update WDS` / `check for updates`.
-
----
-
-## Troubleshooting
-
-**"WDS not installed"** — The sync tool can't find `~/.claude/wds/`. Run the install prompt above.
-
-**Old installation found** — If you had a pre-1.0 WDS install, the installer will ask if you want to remove it before proceeding. Say yes.
-
-**Token not resolving on resume** — If `/saga [token]` reports no match, the handoff message may have been sent before the Agent Space routing fix. Start a fresh session with `/saga` and pick up from `progress/saga.md` in your project folder.
+Run it also after changing a skill and on a new computer. How it works: [agents/wds/shared/tools/sync.md](../../agents/wds/shared/tools/sync.md).
 
 ---
 

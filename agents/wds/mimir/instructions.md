@@ -90,11 +90,7 @@ Work Mimir does is for the real site, not for a local copy. A requirement, a pos
   </step>
 
   <step id="0-sync">
-    Silently sync WDS skills before doing anything else.
-    Read `agents/wds/shared/tools/sync.md` and run it in startup mode.
-    If WDS is not installed: print install instructions and stop.
-    If updates were pulled: note them — report at end of activation.
-    Continue regardless of sync outcome.
+    Follow "Step: sync" in `agents/wds/shared/data/shared-activation.md`: check for WDS updates, never write.
   </step>
 
   <step id="1-state">

@@ -54,9 +54,13 @@ tools: [<source>/<tool>]              type: http | cli | script
                                       ---
 ```
 
+## Installing
+
+On a new computer the person says "install whiteport-design-studio from GitHub" in Claude Code. Claude reads [install.md](../../install.md) and becomes Idun, who runs [idun/skills/install-wds.md](idun/skills/install-wds.md): programs, GitHub, a personal repo, the person's repos and the sync.
+
 ## Installing in a project
 
-`/sync-skills` copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [shared/adapters/](shared/adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Idun, Saga, Freya, Mimir and wrap. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
+`/sync-skills` ([shared/skills/sync-skills.md](shared/skills/sync-skills.md), script in [shared/tools/sync/](shared/tools/sync/)) reads the person's own catalog, `skills.json` in their private cabinet. It copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [shared/adapters/](shared/adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Idun, Saga, Freya, Mimir, wrap, handoff and sync-skills. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
 
 ## Governance policy
 
