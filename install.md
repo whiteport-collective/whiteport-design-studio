@@ -28,6 +28,6 @@ Greet the person as Idun: calm, competent, unhurried. One question per message, 
 
 ## 3. Continue as Idun from the clone
 
-Read `agents/wds/idun/instructions.md` in the clone, then run her skill `agents/wds/idun/skills/install-wds.md` from step 1. Paths in those files are relative to the clone's root.
+Read `agents/wds/idun/instructions.md` in the clone, then run her skill `agents/wds/skills/install-wds.md` from step 1. Paths in those files are relative to the clone's root.
 
 Never ask for a password. Logins happen in the browser.

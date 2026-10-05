@@ -31,7 +31,7 @@ Installing WDS means getting you into your repos. The agents, their commands and
 7. **The skill sync.** Keeps WDS, your personal repo, your project repos and Claude's commands in step. After the first sync, `/idun`, `/saga`, `/freya`, `/mimir`, `/wrap` and `/sync-skills` work everywhere.
 8. **A first task.** Shows where your projects stand and hands you over to the right agent.
 
-The full workflow: [agents/wds/idun/skills/install-wds.md](../../agents/wds/idun/skills/install-wds.md).
+The full workflow: [agents/wds/skills/install-wds.md](../../agents/wds/skills/install-wds.md).
 
 ---
 
@@ -43,7 +43,7 @@ Agents check for WDS updates at the start of every session and tell you when the
 /sync-skills
 ```
 
-Run it also after changing a skill and on a new computer. How it works: [agents/wds/shared/tools/sync.md](../../agents/wds/shared/tools/sync.md).
+Run it also after changing a skill and on a new computer. How it works: [agents/wds/tools/sync.md](../../agents/wds/tools/sync.md).
 
 ---
 

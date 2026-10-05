@@ -11,7 +11,7 @@ Most tools don't need this. A tool that calls an existing API or CLI with a key 
 - Decide the cache now, never "later". Or decide there is none.
 - If the API's behavior is unclear, list it as an open question. Never invent behavior.
 - Keys and tokens live in Bitwarden or the backend's secret store. The spec names where, never the value.
-- The spec lives next to the tool file: `agents/<source>/<agent>/tools/<tool>-build-spec.md`.
+- The spec lives next to the tool file: `agents/<source>/tools/<tool>-build-spec.md`.
 
 ## Template
 
@@ -19,7 +19,7 @@ Most tools don't need this. A tool that calls an existing API or CLI with a key 
 # Tool build spec: <Tool name>
 
 Status: draft | approved
-Tool file: agents/<source>/<agent>/tools/<tool>.md
+Tool file: agents/<source>/tools/<tool>.md
 
 ## Overview
 One paragraph: what the tool does, which service, who uses it.

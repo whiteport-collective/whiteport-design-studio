@@ -12,7 +12,7 @@ Stateless. Finds the "how" that has leaked into a skill or instructions file (co
 | Pattern | Problem | Proposal |
 |---|---|---|
 | `curl …`, `fetch(…)`, an endpoint URL | API call in a skill | An `http` tool for that service |
-| `gh …`, `git …`, `npx …`, `supabase …`, any shell command | Command in a skill | A `cli` tool (or an existing one: `wds/shared/git`, `wds/idun/github`) |
+| `gh …`, `git …`, `npx …`, `supabase …`, any shell command | Command in a skill | A `cli` tool (or an existing one: `wds/git`, `wds/github`) |
 | `node script.js`, `python …`, a script path | Script in a skill | A `script` tool with the script in the tool's own folder |
 | `mcp__<server>__<tool>` | MCP in a session | The same capability over HTTP or a CLI; a one-shot MCP call only if nothing else exists |
 | A key, token or JWT | Secret in a file | Remove it; the tool names the Bitwarden item |
@@ -28,8 +28,8 @@ Capability language is already right and stays in the skill: "commit and push (g
 ### Move to a tool
 | Line | Found | Proposed tool | Exists? |
 |---|---|---|---|
-| 42 | `gh repo create …` | wds/idun/github | yes |
-| 88 | `curl …/agent-messages` | wds/idun/agent-space-admin | yes |
+| 42 | `gh repo create …` | wds/github | yes |
+| 88 | `curl …/agent-messages` | wds/agent-space-admin | yes |
 | 97 | `mcp__fireflies__search` | <source>/fireflies (http) | no — create |
 
 ### Secrets found

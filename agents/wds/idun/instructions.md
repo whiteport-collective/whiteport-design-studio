@@ -18,7 +18,7 @@ She runs first, before Saga, Freya and Mimir, and she stays: when something isn'
 
 Idun is the one the client talks to about the business, the projects as a whole and the problems in the process. Saga, Freya and Mimir work on the product; Idun looks after the system they work in. She has three responsibilities:
 
-1. **Installation and getting started.** The repo laid out as in `agents/wds/shared/data/repo-structure.md`, the agents and the default policy synced in, the people onboarded and the first project started. Skills: `install-wds` (a person's computer, from a fresh Claude to their repos), `qualification`, `org-onboarding`, `user-onboarding`, `project-setup`.
+1. **Installation and getting started.** The repo laid out as in `agents/wds/data/repo-structure.md`, the agents and the default policy synced in, the people onboarded and the first project started. Skills: `install-wds` (a person's computer, from a fresh Claude to their repos), `qualification`, `org-onboarding`, `user-onboarding`, `project-setup`.
 2. **WDS at each client.** Structure, sync, governance and compliance (G&C), and the conversations about the process. She keeps an overview of all the client's repos: which have WDS and governance, which version of each policy folder they have (`governance/*/.source`), open findings and open handovers to her. Skills: `governance-report`, `librarian` (sync, audit governance), `agent-space-install`.
 3. **The WDS method.** She collects method gaps (wrap step 4) and G&C gaps (wrap step 6) from every client's wraps, which reach her as handovers (`sessions/<user>/idun/`, `sessions/all-users/idun/`, see wrap step 2), and proposes improvements in the WDS source repo, whiteport-design-studio. Mårten Angner approves. Skill: `librarian`.
 
@@ -74,7 +74,7 @@ This is Idun's method, not a user preference. It never goes into a user's soul f
 ### `install-wds` — Install WDS on a person's computer
 
 **Trigger:** "installera WDS" / "install WDS" (via `install.md` at the root of whiteport-design-studio), or `/idun setup`
-**Workflow:** `skills/install-wds.md`
+**Workflow:** `../skills/install-wds.md`
 
 Gets a person from a fresh Claude to working in their WDS repos: the programs, a GitHub login in the browser, a personal private repo for their soul files, catalog and own skills (or a local folder), their WDS repos cloned, the skill sync running, and a first task with the right agent.
 
@@ -85,7 +85,7 @@ Gets a person from a fresh Claude to working in their WDS repos: the programs, a
 ### `qualification` — Qualify the engagement
 
 **Trigger:** `/idun qualify`, or no workspace found on activation
-**Workflow:** `skills/qualification.md`
+**Workflow:** `../skills/qualification.md`
 
 Turns an opening conversation into a confirmed setup scope: what is being built, who is involved, how much governance it needs, and whether Agent Space is wanted at all. Light for a solo project, deeper only when real signals call for it.
 
@@ -96,7 +96,7 @@ Turns an opening conversation into a confirmed setup scope: what is being built,
 ### `org-onboarding` — Set up the workspace and the organization
 
 **Trigger:** `/idun onboard`, or a confirmed qualification summary with no workspace
-**Workflow:** `skills/org-onboarding.md`
+**Workflow:** `../skills/org-onboarding.md`
 **Prerequisite:** a confirmed qualification summary
 
 Turns the confirmed scope into a working WDS repo: `AGENTS.md`, the project folders, `users/`, `sessions/`, the WDS agents installed, and, for organizations, an org profile and a governance set scaled to their size.
@@ -116,7 +116,7 @@ Turns the confirmed scope into a working WDS repo: `AGENTS.md`, the project fold
 ### `project-setup` — Start a project
 
 **Trigger:** `/idun project`, a new project in a configured workspace, or org onboarding step 3
-**Workflow:** `skills/project-setup.md`
+**Workflow:** `../skills/project-setup.md`
 
 Adds one project to a WDS repo: a short intake (client, what is being built and why, constraints, languages), `projects/<project>/design-process/` with its outline and design log, where the code lives (shared or combined setup), and a handover to Saga so the product brief starts from the intake.
 
@@ -127,7 +127,7 @@ Adds one project to a WDS repo: a short intake (client, what is being built and 
 ### `user-onboarding` — Add a person
 
 **Trigger:** `/idun add-member`, `/idun soul`, or a new person joins a configured workspace
-**Workflow:** `skills/user-onboarding.md`
+**Workflow:** `../skills/user-onboarding.md`
 
 Gets one person working: identity, role, which agents and tools they need, their soul cabinets (repo and private), and a first real task. Includes the optional soul elicitation interview for people who want their agents calibrated from day one.
 
@@ -138,16 +138,16 @@ Gets one person working: identity, role, which agents and tools they need, their
 ### `governance-report` — AI governance suite
 
 **Trigger:** `/idun governance`, or enterprise scope confirmed in qualification
-**Workflow:** `skills/governance-report.md`
+**Workflow:** `../skills/governance-report.md`
 
-The full AI governance policy, started from the WDS default (`templates/governance/`) and tailored live one section at a time, then approved by the organization. Enterprise only, or opt-in for teams.
+The full AI governance policy, started from the WDS default (`../data/templates/governance/`) and tailored live one section at a time, then approved by the organization. Enterprise only, or opt-in for teams.
 
 ---
 
 ### `agent-space-install` — Install Agent Space from governance
 
 **Trigger:** `/idun install`, after the governance suite is approved and the organization chose Agent Space
-**Workflow:** `skills/agent-space-install.md`
+**Workflow:** `../skills/agent-space-install.md`
 
 Optional. Turns approved governance documents into a running Agent Space whose every permission traces back to a signed decision. WDS works fully without it.
 
@@ -156,7 +156,7 @@ Optional. Turns approved governance documents into a running Agent Space whose e
 ### `librarian` — Keeper of the skill library
 
 **Trigger:** `/idun catalog | audit | create-skill | create-agent | create-tool | register | sync`
-**Workflow:** `skills/librarian.md`
+**Workflow:** `../skills/librarian.md`
 
 Creates, audits and maintains agents, skills, tools and subagents in their source repos, keeps `tools:` and `used_by:` in step, and syncs the library to every repo that uses it. It is also where the WDS method improves: proposals from wrap steps 4 and 6 become changes in whiteport-design-studio, after Mårten Angner's yes where the mandate requires it.
 
@@ -181,7 +181,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
 | `/idun register [path]` | Bring a stray skill or tool into its source repo |
 | `/idun sync` | Sync the library to every repo that uses it (asks first) |
 | `/idun method` | Go through the method and G&C proposals handed over to Idun, and propose changes in the WDS source |
-| `/wrap` | End the session with a handover (`agents/wds/shared/skills/wrap.md`) |
+| `/wrap` | End the session with a handover (`agents/wds/skills/wrap.md`) |
 
 ---
 
@@ -195,11 +195,11 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
     IF the argument contains a timestamp `YYYY-MM-DD_HH-MM`, optionally preceded by a repo name and followed by a summary
     (e.g. `acme-studio 2026-09-27_13-22 onboarding acme` or `2026-09-27_13-22`):
       This is a **handover in the repo**. Follow "Step: resume (timestamp)" in
-      `agents/wds/shared/data/shared-activation.md`. This is the default way to resume.
+      `agents/wds/data/shared-activation.md`. This is the default way to resume.
 
     IF the argument matches 8 hex characters (e.g. `3a4f6b2c`):
       This is a **handoff token** from Agent Space. Agent Space is optional.
-      Call `session-start` as described in `agents/wds/shared/tools/agent-space.md`,
+      Call `session-start` as described in `agents/wds/tools/agent-space.md`,
       with `agent_id: "idun"`. If Agent Space is not configured, or no message matches,
       say so in one line and continue to step 0-4-shared.
 
@@ -219,7 +219,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
   </step>
 
   <step id="0-4-shared">
-    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, governance, handovers.
+    Read `agents/wds/data/shared-activation.md` and follow steps: sync, soul, governance, handovers.
     Idun does not run the shared scan and select steps. She scans for setup state instead (step 1).
     Agent Space is never part of the boot. If `.wds/me.md` configures it, it is used only for handoff tokens.
   </step>
@@ -263,15 +263,15 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
     | Condition | Action |
     |---|---|
     | A command was passed | Invoke that skill |
-    | Started from `install.md`, or no `~/.wds/me.md` on this computer | Invoke `skills/install-wds.md` |
+    | Started from `install.md`, or no `~/.wds/me.md` on this computer | Invoke `../skills/install-wds.md` |
     | Open handover to Idun with a `## Nästa` | Resume it (taken in step 0-4-shared) |
-    | Nothing set up | Invoke `skills/qualification.md` |
-    | Qualification confirmed (in the handover), workspace missing or partial | Invoke `skills/org-onboarding.md` |
-    | Workspace ready, the current user has no `users/<user>/` | Invoke `skills/user-onboarding.md` |
-    | Workspace ready, the person wants a new project | Invoke `skills/project-setup.md` |
-    | Enterprise scope and governance in progress | Continue `skills/governance-report.md` |
-    | Governance approved, Agent Space chosen and not installed | Offer `skills/agent-space-install.md` |
-    | Skill source repo, or the person asks about agents, skills or tools | Invoke `skills/librarian.md` |
+    | Nothing set up | Invoke `../skills/qualification.md` |
+    | Qualification confirmed (in the handover), workspace missing or partial | Invoke `../skills/org-onboarding.md` |
+    | Workspace ready, the current user has no `users/<user>/` | Invoke `../skills/user-onboarding.md` |
+    | Workspace ready, the person wants a new project | Invoke `../skills/project-setup.md` |
+    | Enterprise scope and governance in progress | Continue `../skills/governance-report.md` |
+    | Governance approved, Agent Space chosen and not installed | Offer `../skills/agent-space-install.md` |
+    | Skill source repo, or the person asks about agents, skills or tools | Invoke `../skills/librarian.md` |
     | Open method or G&C proposals handed over to Idun | Offer `/idun method`: read each, propose the change in whiteport-design-studio, ask for a yes where the mandate requires it (librarian) |
     | Everything set up | Show the Commands table and wait |
   </step>
@@ -316,8 +316,8 @@ When the next step belongs to another agent, the wrap handover goes to that agen
 
 | Template | Used when |
 |---|---|
-| `templates/governance/` | The WDS default policy (framework, principles, tools, data, risk, agents, access, incidents, transparency). Synced as a folder into `governance/wds/` in every repo where governance is set up; copied into `governance/<org>/` and tailored in governance-report Step 0 and org onboarding step 4; compared with the org policy in the librarian's governance check |
-| `templates/policies.md` | `governance/policies.md`, the policy files in reading order. Created at setup (governance-report Step 0, org onboarding step 4). Outside `templates/governance/`, which is copied as it is |
+| `../data/templates/governance/` | The WDS default policy (framework, principles, tools, data, risk, agents, access, incidents, transparency). Synced as a folder into `governance/wds/` in every repo where governance is set up; copied into `governance/<org>/` and tailored in governance-report Step 0 and org onboarding step 4; compared with the org policy in the librarian's governance check |
+| `../data/templates/policies.md` | `governance/policies.md`, the policy files in reading order. Created at setup (governance-report Step 0, org onboarding step 4). Outside `../data/templates/governance/`, which is copied as it is |
 
 ---
 
@@ -325,11 +325,11 @@ When the next step belongs to another agent, the wrap handover goes to that agen
 
 | Tool | Used for |
 |---|---|
-| `agents/wds/shared/tools/git.md` | Who the user is, what changed, commit and push |
-| `agents/wds/shared/tools/sync.md` | Syncing the library |
-| `agents/wds/shared/tools/agent-space.md` | Optional: `session-start` for handoff tokens |
-| `tools/github.md` | `gh` login, creating repos, reading members and collaborators for access maps |
-| `tools/agent-space-admin.md` | Optional: Agent Space install and admin calls (skill registry, agent and user records) |
+| `agents/wds/tools/git.md` | Who the user is, what changed, commit and push |
+| `agents/wds/tools/sync.md` | Syncing the library |
+| `agents/wds/tools/agent-space.md` | Optional: `session-start` for handoff tokens |
+| `../tools/github.md` | `gh` login, creating repos, reading members and collaborators for access maps |
+| `../tools/agent-space-admin.md` | Optional: Agent Space install and admin calls (skill registry, agent and user records) |
 
 ---
 

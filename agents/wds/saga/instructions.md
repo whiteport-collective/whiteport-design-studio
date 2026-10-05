@@ -34,7 +34,7 @@ This is Saga's method, not a user preference. It never goes into a user's soul f
 ### `product-brief` — Product Brief Suite
 
 **Trigger:** `/PB`, `/product-brief`, or when Phase 1 is not complete
-**Workflow:** `skills/product-brief.md`
+**Workflow:** `../skills/product-brief.md`
 
 The Product Brief is a suite of documents. The core document is always produced. Extensions activate based on signals during discovery — if brand voice comes up, `content-language.md` gets written; if visual direction comes up, `visual-direction.md` gets written. More documents can be added to the suite as project needs expand.
 
@@ -51,7 +51,7 @@ The Product Brief is a suite of documents. The core document is always produced.
 ### `trigger-map` — Trigger Map
 
 **Trigger:** `/TM`, `/trigger-map`, or when Phase 1 is complete and Phase 2 is not
-**Workflow:** `skills/trigger-map.md`
+**Workflow:** `../skills/trigger-map.md`
 **Prerequisite:** `product-brief.md` must exist
 
 **Deliverables** (in `{output_folder}/B-Trigger-Map/`):
@@ -70,7 +70,7 @@ Five workshops build the map: (1) Business Goals, (2–4) one persona per target
 ### `prd` — Product Requirements
 
 **Trigger:** `/PRD`, after Platform Requirements are complete, or when a feature is ready to build
-**Workflow:** `agents/wds/shared/skills/prd-workflow.md`
+**Workflow:** `agents/wds/skills/prd-workflow.md`
 
 Two outputs:
 - `E-Development/000-PRD.md` — master technical document, written once after Product Brief
@@ -90,13 +90,13 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
     IF the argument contains a timestamp `YYYY-MM-DD_HH-MM`, optionally preceded by a repo name and followed by a summary
     (e.g. `visita-kommunikation 2026-09-27_13-22 product brief en karriar tack` or `2026-09-27_13-22`):
       This is a **handover in the repo**. Follow "Step: resume (timestamp)" in
-      `agents/wds/shared/data/shared-activation.md`. This is the default way to resume.
+      `agents/wds/data/shared-activation.md`. This is the default way to resume.
 
     IF the argument matches 8 hex characters (e.g. `3a4f6b2c`):
       This is a **handoff token** — the first 8 characters of a Design Space message UUID.
       It is NOT a session ID. Do not treat it as a phase code or project name.
 
-      Call `session-start` as described in `agents/wds/shared/tools/agent-space.md`,
+      Call `session-start` as described in `agents/wds/tools/agent-space.md`,
       with `agent_id: "saga"`. If no Agent Space key is configured, skip to step 0-4-shared.
 
       Scan `messages[]` for the first message where `id` starts with the argument token.
@@ -120,7 +120,7 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
   </step>
 
   <step id="0-4-shared">
-    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, governance, handovers, scan, select.
+    Read `agents/wds/data/shared-activation.md` and follow steps: sync, soul, governance, handovers, scan, select.
     Then brownfield-detect:
     - Codebase found + no Product Brief → go to step 4b-brownfield-brief
     - Codebase found + Product Brief exists, or no codebase → go to step 4-status
@@ -163,8 +163,8 @@ Saga writes the master PRD and the first feature PRDs. Freya adds feature PRDs a
     | Condition | Action |
     |---|---|
     | In-progress task in design log | Resume — read log, continue without asking |
-    | Product Brief not started | Invoke `skills/product-brief.md` |
-    | Product Brief complete, Trigger Map not started | Invoke `skills/trigger-map.md` |
+    | Product Brief not started | Invoke `../skills/product-brief.md` |
+    | Product Brief complete, Trigger Map not started | Invoke `../skills/trigger-map.md` |
     | Both complete | Offer: review, extend suite, or handoff to Freya |
   </step>
 

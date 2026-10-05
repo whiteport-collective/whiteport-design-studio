@@ -1,0 +1,51 @@
+{
+  "_doc": "Mall för en persons skillkatalog. Idun kopierar den till det privata skåpet som skills.json vid installationen och fyller i <...>. Källorna körs i ordning, och senare källa vinner vid namnkrock, så det personliga ligger sist.",
+  "dev_root": "<dev-mappen, t.ex. C:/dev eller ~/dev>",
+  "sources": [
+    {
+      "name": "whiteport-design-studio",
+      "kind": "vendor-agents",
+      "repo": "<dev_root>/whiteport-collective/whiteport-design-studio",
+      "subdir": "agents/wds",
+      "governance_templates": "data/templates/governance",
+      "governance": [],
+      "why": "Kopierar agents/wds/ och adaptrarna in i alla WDS-repon på datorn, och governance/wds/ där governance är uppsatt. Ett WDS-repo har någon av markörerna eller agents/wds/.wds-sync. Utan .wds-sync krävs att repot ägs av någon i owners och har en commit inom active_days dagar.",
+      "markers": ["agents/wds", "design-process", "projects/*/design-process"],
+      "owners": ["<github-användaren>", "<organisationerna personen arbetar i>"],
+      "exclude": [],
+      "active_days": 180
+    },
+    {
+      "name": "whiteport-design-studio (globalt)",
+      "kind": "pointer-skills",
+      "repo": "<dev_root>/whiteport-collective/whiteport-design-studio",
+      "base": "repo",
+      "subdir": "agents/wds",
+      "agents": {
+        "idun": "agents/wds/idun/instructions.md",
+        "saga": "agents/wds/saga/instructions.md",
+        "freya": "agents/wds/freya/instructions.md",
+        "mimir": "agents/wds/mimir/instructions.md",
+        "wrap": "agents/wds/skills/wrap.md",
+        "handoff": "agents/wds/skills/handoff.md",
+        "sync-skills": "agents/wds/skills/sync-skills.md"
+      },
+      "why": "WDS-agenterna och WDS-kommandona på hela datorn, även i repon som inte är WDS-repon."
+    },
+    {
+      "name": "<personliga repot>",
+      "kind": "pointer-skills",
+      "repo": "<sökväg till det personliga repot>",
+      "base": "repo",
+      "subdir": "agents/<användare>",
+      "skills_glob": "agents/<användare>/**/skills/*.md",
+      "agents": {},
+      "why": "Personens egna skills och agenter. Sist, så att det personliga vinner. Ta bort posten om personen inte har ett personligt repo."
+    }
+  ],
+  "project_discovery": {
+    "_doc": "Projektrepon med egen .claude/ hålls uppdaterade (git pull). Deras skills gäller bara i repot.",
+    "max_depth": 2,
+    "markers": [".claude/skills", ".claude/commands"]
+  }
+}

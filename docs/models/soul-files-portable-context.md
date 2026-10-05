@@ -89,7 +89,7 @@ The private folder may contain a `private/` subfolder for finances, health, fami
 
 ### At session start
 
-Every WDS agent (Saga, Freya, Mimir) runs **Step: soul** in `agents/wds/shared/data/shared-activation.md`:
+Every WDS agent (Saga, Freya, Mimir) runs **Step: soul** in `agents/wds/data/shared-activation.md`:
 
 1. Identify the user from `.wds/me.md`, or through the git tool.
 2. Read the repo cabinet and the private cabinet, but never `private/`.

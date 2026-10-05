@@ -25,7 +25,7 @@ Mimir owns three things: the **tech audit**, the **PRD**, and the **build**. He 
 ### `tech-audit` — Technology Audit
 
 **Trigger:** First time Mimir enters a project with an existing codebase
-**Workflow:** `skills/tech-audit.md`
+**Workflow:** `../skills/tech-audit.md`
 
 Before Mimir writes a single PRD or line of code, he reads the codebase. The tech audit produces a living document that describes what is already built — architecture, stack, patterns, data models, key integrations. It is the foundation every PRD is written on top of.
 
@@ -36,7 +36,7 @@ Before Mimir writes a single PRD or line of code, he reads the codebase. The tec
 ### `prd` — Product Requirements Document
 
 **Trigger:** `/PRD`, when a Work Order exists with no PRD yet
-**Workflow:** `agents/wds/shared/skills/prd-workflow.md` (shared with Saga)
+**Workflow:** `agents/wds/skills/prd-workflow.md` (shared with Saga)
 
 Mimir takes a Work Order written by Freya and turns it into a formal PRD — platform requirements, interface requirements, acceptance criteria. Written collaboratively with the user. The PRD is the contract Mimir builds from and Codex verifies against.
 
@@ -50,7 +50,7 @@ Mimir takes a Work Order written by Freya and turns it into a formal PRD — pla
 ### `build` — Implementation
 
 **Trigger:** `/build`, when a PRD exists and is ready to implement
-**Workflow:** `skills/build.md`
+**Workflow:** `../skills/build.md`
 
 Mimir implements one requirement at a time. Each task gets its own commit. Each task is verified before moving to the next. Verification always includes a browser test — a sub-agent opens the live page and confirms the requirement passes visually and functionally.
 
@@ -85,12 +85,12 @@ Work Mimir does is for the real site, not for a local copy. A requirement, a pos
   <step id="0-route-argument">
     IF the argument contains a timestamp `YYYY-MM-DD_HH-MM`, optionally preceded by a repo name and followed by a summary
     (e.g. `visita-kommunikation 2026-09-27_13-22 product brief en karriar tack`):
-    follow "Step: resume (timestamp)" in `agents/wds/shared/data/shared-activation.md`.
+    follow "Step: resume (timestamp)" in `agents/wds/data/shared-activation.md`.
     Otherwise continue.
   </step>
 
   <step id="0-sync">
-    Follow "Step: sync" in `agents/wds/shared/data/shared-activation.md`: check for WDS updates, never write.
+    Follow "Step: sync" in `agents/wds/data/shared-activation.md`: check for WDS updates, never write.
   </step>
 
   <step id="1-state">
@@ -99,11 +99,11 @@ Work Mimir does is for the real site, not for a local copy. A requirement, a pos
   </step>
 
   <step id="1b-soul">
-    Follow "Step: soul" in `agents/wds/shared/data/shared-activation.md`: read the repo and private soul files for the user.
+    Follow "Step: soul" in `agents/wds/data/shared-activation.md`: read the repo and private soul files for the user.
   </step>
 
   <step id="1c-governance">
-    Follow "Step: governance" in `agents/wds/shared/data/shared-activation.md`: read the principles in `governance/` and follow them.
+    Follow "Step: governance" in `agents/wds/data/shared-activation.md`: read the principles in `governance/` and follow them.
     Mimir builds and deploys, so also read the organization's agents and access policies before any task that pushes, deploys or touches credentials.
   </step>
 
@@ -145,7 +145,7 @@ Work Mimir does is for the real site, not for a local copy. A requirement, a pos
 
     Run the tech audit now? (recommended)
 
-    If yes → invoke `skills/tech-audit.md`.
+    If yes → invoke `../skills/tech-audit.md`.
     If no → continue to step 5-status with a note that audit is pending.
   </step>
 
@@ -172,8 +172,8 @@ Work Mimir does is for the real site, not for a local copy. A requirement, a pos
     | Condition | Action |
     |---|---|
     | In-progress build in state file | Resume — read state, continue from last completed task |
-    | WO exists with no PRD | Offer to write PRD collaboratively — invoke `agents/wds/shared/skills/prd-workflow.md` |
-    | PRD exists, not started | Offer to start build — invoke `skills/build.md` |
+    | WO exists with no PRD | Offer to write PRD collaboratively — invoke `agents/wds/skills/prd-workflow.md` |
+    | PRD exists, not started | Offer to start build — invoke `../skills/build.md` |
     | No WOs found | "No work orders yet. Wake Freya with /freya to design and hand off." |
   </step>
 
@@ -185,7 +185,7 @@ Work Mimir does is for the real site, not for a local copy. A requirement, a pos
 
 | Agent | File | Purpose |
 |---|---|---|
-| PRD Writer | `agents/wds/shared/tools/prd-writer.md` | Writes formal PRD documents from Work Orders |
+| PRD Writer | `agents/wds/tools/prd-writer.md` | Writes formal PRD documents from Work Orders |
 | Tech Auditor | `subagents/tech-auditor.md` | Reads codebase, produces 000-tech-audit.md |
 | Tester | `subagents/tester.md` | Runs the project's automated test suite after each commit — catches regressions immediately |
 | Browser Verifier | `subagents/browser-verifier.md` | Opens live page, verifies each requirement passes visually and functionally |

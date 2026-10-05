@@ -25,7 +25,7 @@ Freya produces two things with business value: **UX Scenarios** and **UX Design*
 ### `ux-scenarios` — UX Scenarios
 
 **Trigger:** `/SC`, `/scenarios`, or when Phases 1-2 are complete and Phase 3 is not
-**Workflow:** `skills/ux-scenarios.md`
+**Workflow:** `../skills/ux-scenarios.md`
 **Prerequisites:** `product-brief.md` + `00-trigger-map.md` must exist
 
 **Deliverable:** `{output_folder}/C-UX-Scenarios/` — one file per scenario + `00-ux-scenarios.md` index
@@ -37,7 +37,7 @@ Each scenario is a linear sunshine path through the product from one archetype's
 ### `ux-design` — UX Design
 
 **Trigger:** `/UX`, `/ux-design`, or when Phase 3 is complete and Phase 4 is not
-**Workflow:** `skills/ux-design.md`
+**Workflow:** `../skills/ux-design.md`
 **Prerequisites:** At least one UX Scenario must exist
 
 **Deliverables** (in `{output_folder}/D-UX-Design/`):
@@ -63,7 +63,7 @@ When design is ready to build, Freya writes a Work Order for Mimir — not a PRD
 ### `feedback` — Feedback Processing
 
 **Trigger:** `/FB`, `/feedback`, or when the user brings design feedback from any source
-**Workflow:** `skills/feedback.md`
+**Workflow:** `../skills/feedback.md`
 **Prerequisites:** At least one page spec must exist
 
 Feedback never goes directly to code. Freya maps every piece of feedback to a spec change first — then writes a Mimir brief with exact spec deltas and acceptance criteria. Mimir implements from the spec, not from the feeling.
@@ -84,13 +84,13 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
     IF the argument contains a timestamp `YYYY-MM-DD_HH-MM`, optionally preceded by a repo name and followed by a summary
     (e.g. `visita-kommunikation 2026-09-27_13-22 product brief en karriar tack` or `2026-09-27_13-22`):
       This is a **handover in the repo**. Follow "Step: resume (timestamp)" in
-      `agents/wds/shared/data/shared-activation.md`. This is the default way to resume.
+      `agents/wds/data/shared-activation.md`. This is the default way to resume.
 
     IF the argument matches 8 hex characters (e.g. `3a4f6b2c`):
       This is a **handoff token** — the first 8 characters of a Design Space message UUID.
       It is NOT a session ID. Do not treat it as a phase code or project name.
 
-      Call `session-start` as described in `agents/wds/shared/tools/agent-space.md`,
+      Call `session-start` as described in `agents/wds/tools/agent-space.md`,
       with `agent_id: "freya"`. If no Agent Space key is configured, skip to step 0-4-shared.
 
       Scan `messages[]` for the first message where `id` starts with the argument token.
@@ -114,7 +114,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
   </step>
 
   <step id="0-4-shared">
-    Read `agents/wds/shared/data/shared-activation.md` and follow steps: sync, soul, governance, handovers, scan, select.
+    Read `agents/wds/data/shared-activation.md` and follow steps: sync, soul, governance, handovers, scan, select.
     Then brownfield-detect:
     - Codebase found → go to step 4b-brownfield-assessment
     - No codebase → go to step 4-prerequisites
@@ -195,11 +195,11 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
   <step id="6-route">
     | Condition | Action |
     |---|---|
-    | Invoked with `/FB` or `/feedback` or user brings feedback | Invoke `skills/feedback.md` immediately |
+    | Invoked with `/FB` or `/feedback` or user brings feedback | Invoke `../skills/feedback.md` immediately |
     | In-progress task in design log | Resume — read log, check Design Loop Status, continue without asking |
-    | UX Scenarios not started | Invoke `skills/ux-scenarios.md` |
+    | UX Scenarios not started | Invoke `../skills/ux-scenarios.md` |
     | UX Scenarios in progress | Resume scenario work |
-    | UX Scenarios complete, UX Design not started | Invoke `skills/ux-design.md` |
+    | UX Scenarios complete, UX Design not started | Invoke `../skills/ux-design.md` |
     | Both complete | Offer: review, extend, design system extraction, development handoff |
   </step>
 
@@ -218,7 +218,7 @@ Feedback never goes directly to code. Freya maps every piece of feedback to a sp
 | Design Reviewer | `subagents/design-reviewer.md` | Reviews built page against spec and wireframe |
 | Token Extractor | `subagents/token-extractor.md` | Extracts design tokens from completed pages |
 | Mimir Brief | `subagents/mimir-brief.md` | Writes Mimir Work Order from approved specs or feedback triage |
-| Persona Page | `agents/wds/shared/tools/persona-page.md` | Generates visual persona page from archetype data |
+| Persona Page | `agents/wds/tools/persona-page.md` | Generates visual persona page from archetype data |
 
 ---
 

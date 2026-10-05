@@ -24,7 +24,7 @@ PARTIAL when most of it holds and the gaps are named. FAIL otherwise.
 - [ ] Clear identity: name, icon, tone, domain, and what is explicitly not its job
 - [ ] Method stated as part of the persona, separate from user preferences
 - [ ] Activation: resume by `[repo] YYYY-MM-DD_HH-MM [summary]`, then the shared activation steps, then its own status and routing
-- [ ] No required boot call. Agent Space only through `agents/wds/shared/tools/agent-space.md`, optional
+- [ ] No required boot call. Agent Space only through `agents/wds/tools/agent-space.md`, optional
 - [ ] Skills assigned, not duplicated from another agent
 - [ ] Ends sessions with the shared wrap
 - [ ] Adapters in `.claude/commands/`, `.github/prompts/`, `.github/agents/`, `.agents/skills/`, pointing at `instructions.md`

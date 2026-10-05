@@ -88,7 +88,7 @@ A designer in Copilot and a strategist in Claude work in the same repo, with the
 ## Get started
 
 1. Copy [`agents/wds/`](agents/wds/) into your project repo.
-2. Add an `AGENTS.md` that says who is on the team, where projects live and how sessions start and end. The session start and wrap rules in [agents/wds/shared/](agents/wds/shared/) describe what it needs to cover.
+2. Add an `AGENTS.md` that says who is on the team, where projects live and how sessions start and end. The session start and wrap rules in [agents/wds/skills/](agents/wds/skills/) describe what it needs to cover.
 3. Add one adapter per agent for the tools your team uses (see the table above).
 4. Open the repo and run `/saga`.
 
