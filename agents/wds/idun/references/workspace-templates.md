@@ -28,7 +28,8 @@ What a WDS workspace contains and the starting content of each file. Used by org
 │   ├── <org>/                    The org's policy. Edited only in its source repo; a copy elsewhere (has .source).
 │   └── <project>/                Optional tightenings for this repo.
 ├── shared/<org>/                 Shared across projects: org profile, brand, contacts
-├── projects/<project>/design-process/
+├── projects/<project>/            The project folder is the output_folder
+│   ├── 00-index.md               Front page: what is new, menu, material. Wrap updates it.
 │   ├── A-Product-Brief/ … E-Development/
 │   └── _progress/
 │       ├── wds-project-outline.yaml
@@ -36,7 +37,7 @@ What a WDS workspace contains and the starting content of each file. Used by org
 └── .wds/me.md                    Who sits at this machine. Gitignored, one per machine.
 ```
 
-A single-project repo may keep its `output_folder` at the root instead of under `projects/`. `AGENTS.md` says which.
+A single-project repo may keep its `output_folder` at the root instead of under `projects/`. An older repo may have a `design-process/` folder inside the project folder. `AGENTS.md` says which.
 
 ---
 
@@ -77,7 +78,7 @@ Run wrap: `agents/wds/skills/wrap.md`.
 
 ## Rules
 
-- One project = one folder under `projects/`, each a separate WDS structure. `output_folder` is `projects/<project>/design-process/`.
+- One project = one folder under `projects/`, each a separate WDS structure. `output_folder` is `projects/<project>/`, and `00-index.md` is its front page.
 - What several projects share lives in `shared/<org>/`, never copied into projects.
 - One folder per source in `agents/`. WDS agents are synced from whiteport-design-studio and never edited here.
 - Policy lives in `governance/`, one folder per source: `wds/`, `<org>/` and, optionally, `<project>/`. A folder with a `.source` file is a synced copy and is read-only; edit it in its source repo. `governance/policies.md` lists the files in reading order.
@@ -193,6 +194,39 @@ Shared file. What actually got done, with date and link. Wrap adds rows, newest 
 
 ---
 
+## projects/<project>/00-index.md
+
+The project's front page: what it is, what is new, and a menu to everything made so far. Shared and committed. Wrap updates it at the end of every session (`agents/wds/shared/skills/wrap.md`, step 3). Written in the organization's language.
+
+```markdown
+# <Project name>
+
+<One or two lines: what the project is, for whom, and where it stands now.>
+
+## New
+
+Newest first, at most five lines. The full timeline is in [the design log](_progress/00-design-log.md).
+
+- YYYY-MM-DD · <agent> · <what is new, one line>. [<material>](<path>)
+
+## Menu
+
+| Phase | Material | Status |
+|---|---|---|
+| Product brief | [product-brief.md](A-Product-Brief/product-brief.md) | pending |
+| Trigger map | [00-trigger-map.md](B-Trigger-Map/00-trigger-map.md) | pending |
+| UX scenarios | `C-UX-Scenarios/` | pending |
+| UX design | `D-UX-Design/` | pending |
+| Development | `E-Development/` | pending |
+| Plan and log | [plan.md](_progress/plan.md) · [design log](_progress/00-design-log.md) | |
+
+## Material
+
+Presentations, analyses and other material made in the project, newest first: date, name and link.
+```
+
+---
+
 ## _progress/wds-project-outline.yaml
 
 ```yaml
@@ -201,7 +235,7 @@ repo: <folder>
 org: <org, or empty>
 scope: solo | team | organization
 created: YYYY-MM-DD
-output_folder: projects/<project>/design-process
+output_folder: projects/<project>
 code: <folder in this repo, such as app/ | another repo | undecided>
 agents: [idun, saga, freya, mimir]
 agent_space: none | <where it runs>

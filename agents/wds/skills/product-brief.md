@@ -26,7 +26,7 @@ Produces the Product Brief document suite through structured discovery conversat
 
   <step id="init">
     Load:
-    - The project repo's `AGENTS.md` — resolve project_name, output_folder (the project's `design-process/` folder), communication_language, document_output_language. user_name comes from `.wds/me.md`.
+    - The project repo's `AGENTS.md` — resolve project_name, output_folder (the project folder, `projects/<project>/`), communication_language, document_output_language. user_name comes from `.wds/me.md`.
     - `_progress/00-design-log.md` — check Current for in-progress work
     - `_progress/wds-project-outline.yaml` — check existing_materials flag
 

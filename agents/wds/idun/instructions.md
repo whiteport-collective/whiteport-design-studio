@@ -106,7 +106,7 @@ Turns the confirmed scope into a working WDS repo: `AGENTS.md`, the project fold
 | File | When |
 |---|---|
 | `AGENTS.md` + agent adapters | Always |
-| `projects/<project>/design-process/` with `_progress/wds-project-outline.yaml` | Always |
+| `projects/<project>/` with `00-index.md` and `_progress/wds-project-outline.yaml` | Always |
 | `users/_template/`, `users/<user>/` | Always |
 | `shared/<org>/org-profile.md` | Team and enterprise |
 | `governance/<org>/` and `governance/policies.md`, lean or standard | Team and enterprise, when governance is wanted |
@@ -118,7 +118,7 @@ Turns the confirmed scope into a working WDS repo: `AGENTS.md`, the project fold
 **Trigger:** `/idun project`, a new project in a configured workspace, or org onboarding step 3
 **Workflow:** `../skills/project-setup.md`
 
-Adds one project to a WDS repo: a short intake (client, what is being built and why, constraints, languages), `projects/<project>/design-process/` with its outline and design log, where the code lives (shared or combined setup), and a handover to Saga so the product brief starts from the intake.
+Adds one project to a WDS repo: a short intake (client, what is being built and why, constraints, languages), `projects/<project>/` with its front page, outline and design log, where the code lives (shared or combined setup), and a handover to Saga so the product brief starts from the intake.
 
 **Deliverables:** the project folder, a row in `AGENTS.md`, and the handover to Saga.
 
@@ -229,7 +229,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
 
     - **Workspace:** `AGENTS.md` at the root naming the WDS agents and `output_folder`; `agents/wds/` installed;
       the adapters (`.claude/commands/`, `.github/prompts/`, `.github/agents/`, `.agents/skills/`).
-    - **Projects:** `projects/*/design-process/` or another `output_folder`, each with `_progress/wds-project-outline.yaml`
+    - **Projects:** `projects/*/` (older repos: `projects/*/design-process/`) or another `output_folder`, each with `_progress/wds-project-outline.yaml`
       (its `phases:` block records qualification and onboarding).
     - **People:** `users/_template/`, `users/<user>/` for each person, `.wds/me.md` on this machine, `.wds/` in `.gitignore`.
     - **Organization:** `shared/<org>/org-profile.md`, and the policy in `governance/` at the repo root: `policies.md`

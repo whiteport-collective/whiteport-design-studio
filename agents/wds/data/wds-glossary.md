@@ -24,7 +24,9 @@ Agents load this file once at activation. Do not redefine these terms locally.
 ## Output Folder Structure
 
 ```
-{output_folder}/
+{output_folder}/            projects/<project>/ in a WDS repo
+├── 00-index.md            Front page: what is new, menu, material. Updated on wrap
+├── _progress/             Design log, outline, plan
 ├── A-Product-Brief/       Phase 1 — strategic foundation
 ├── B-Trigger-Map/         Phase 2 — user research & personas
 ├── C-UX-Scenarios/        Phase 3 — journey flows
@@ -71,7 +73,7 @@ progress/
 - **Design Log** — `_progress/00-design-log.md`. Project-wide progress, updated each session.
 - **Project Outline** — `_progress/wds-project-outline.yaml`. Phase status, project metadata.
 - **Session State** — `progress/[agent].md`. Agent-specific session state. Loaded by `/start`, written by `/wrap`.
-- **Project Index** — `progress/project-index.md`. Living index of all artifacts, updated by `/wrap`.
+- **Project Index:** `00-index.md` in the project folder. The project's front page: what is new, a menu per phase and the material made so far. Shared and committed, updated by wrap.
 
 ---
 

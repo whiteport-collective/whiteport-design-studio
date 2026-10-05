@@ -65,7 +65,7 @@ Uppgifterna följer sin ägare. Ingen toppmapp för todos.
 
 | Ägare | Plats |
 |---|---|
-| Projektet | `projects/<projekt>/design-process/_progress/plan.md` |
+| Projektet | `projects/<projekt>/_progress/plan.md` |
 | Personen | `users/<användare>/`, eller personens privata skåp |
 
 En persons lista är en vy, inte en egen fil: personens egna uppgifter plus alla planers uppgifter där personen står som ansvarig. GTD-kontexterna (@phone, @computer) är ett filter på var uppgiften görs. Formatet prövas fritt i Visita innan det blir standard.

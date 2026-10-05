@@ -89,6 +89,12 @@ För varje projekt som rördes: lägg en post i projektets designlogg. Den ligge
 - En till tre punkter om vad som hände i projektet. [Överlämning](<relativ sökväg till överlämningen>)
 ```
 
+**Projektets startsida.** Uppdatera `00-index.md` i projektmappen (mallen står i `agents/wds/idun/references/workspace-templates.md`):
+- **Nytt:** en rad överst med datum, agent, vad som är nytt och en länk till det nya materialet. Behåll de fem senaste raderna. Hela tidslinjen finns i designloggen.
+- **Meny:** länka varje ny leverans under sin fas, och uppdatera fasens status.
+- **Material:** lägg till nya presentationer, analyser och annat material överst, med datum.
+Saknas startsidan: skapa den från mallen.
+
 ## 4. Soul-genomgång: jämför och uppdatera
 
 **Var ligger det privata skåpet?** Platsen står i `private:` i `users/<användare>/user.md`, och en kopia står i `.wds/me.md`. Det kan vara en lokal mapp eller ett repo.
