@@ -1,93 +1,61 @@
 ---
 name: sync
-version: "1.0.0"
-description: Syncs all WDS skills from the configured source, and the governance policy folders into every repo where governance is set up. Called automatically by agents on startup, or directly by the user at any time.
-agents: [idun, saga, freya, mimir]
+type: script
+version: "2.0.0"
+description: Kör synken av skills, agenter och governance mellan WDS-repot, personens privata repo, projektrepona och datorns .claude-mapp. Skriptet ligger i sync/sync.py.
+used_by: [sync-skills, idun]
 ---
 
 # WDS Sync
 
-Keeps WDS skills current against the configured source repository.
+Hur synken körs. Vad den är till för och när den körs står i skillen [sync-skills](../skills/sync-skills.md).
 
----
+## Var allt ligger
 
-## Entry points
+| Vad | Var |
+|---|---|
+| Skriptet | `agents/wds/shared/tools/sync/sync.py` i WDS-repot på datorn |
+| Personens katalog | `skills.json` i det privata skåpet, alltså mappen på raden `private:` i `~/.wds/me.md`. Saknas den: `~/.wds/skills.json`. |
+| Mall för katalogen | `agents/wds/shared/tools/sync/catalog-template.json` |
+| Tillstånd och undansparade lokala ändringar | `~/.claude/.sync-skills-state.json` och `~/.claude/commands-local-edits/` |
 
-**On agent startup** — run silently. Only surface to the user if:
-- WDS is not installed
-- Updates were pulled (report what changed)
-- An error occurred
-- The WDS default policy changed (a conflict check is due, see G4)
+Kör alltid skriptet från WDS-repots egen klon, så att den senaste versionen används. Ligger den på standardplatsen är sökvägen `<dev_root>/whiteport-collective/whiteport-design-studio`.
 
-**Direct user request** ("sync", "update WDS", "sync all skills", "check for updates") — run verbosely, report each step.
-
----
-
-## Steps
-
-### 1 — Locate installation
-
-Detect home directory (Mac/Linux: `$HOME`, Windows: `%USERPROFILE%`).
-Check if `{home}/.claude/wds/` exists and is a git repo.
-
-IF not found:
-> ⚠️ WDS not installed.
-> Tell Claude: "install whiteport-design-studio from GitHub" to set it up.
-
-Stop.
-
-### 2 — Read config
-
-Read `{home}/.claude/wds-config.yaml`.
-
-```yaml
-sync-source: https://github.com/whiteport-collective/whiteport-design-studio
-branch: main
-```
-
-If the file does not exist: use defaults above.
-Store `sync-source` and `branch` for use in step 3.
-
-Read frontmatter of `{home}/.claude/wds/install.md` — note current `wds-version`.
-
-### 3 — Check for updates
+## Köra
 
 ```bash
-git -C {home}/.claude/wds/ fetch origin
-git -C {home}/.claude/wds/ log HEAD..origin/{branch} --oneline
+python "<wds-repot>/agents/wds/shared/tools/sync/sync.py"             # full synk
+python "<wds-repot>/agents/wds/shared/tools/sync/sync.py" --dry-run   # visa bara
+python "<wds-repot>/agents/wds/shared/tools/sync/sync.py" --no-pull   # hoppa över git pull
 ```
 
-IF no changes:
-- Startup: finish silently
-- Direct call: report "Already up to date."
+Okända flaggor synkar aldrig. Skriptet visar då hjälpen och avslutar.
 
-IF changes found: continue to step 4.
+## Vad skriptet gör
 
-### 4 — Pull updates
+1. **Sparar undan lokala ändringar.** Kommandon som har redigerats direkt i `~/.claude/commands/` sedan förra synken kopieras till `~/.claude/commands-local-edits/` innan något skrivs över.
+2. **Hämtar senaste versionen** (`git pull --ff-only`) av alla källrepon och projektrepon. Repon med osparade ändringar hoppas över.
+3. **Kör källorna i katalogens ordning.** Senare källa vinner vid namnkrock.
+   - `vendor-agents`: kopierar `agents/wds/` och adaptrarna in i alla WDS-repon, och speglar governance (se nedan). Bara från källans standardbranch utan ändringar, och bara till repon på standardbranchen utan ändringar. Commit och push av bara de filerna.
+   - `pointer-skills`: skriver pekare i `~/.claude/commands/`, en fil per agent eller skill, som läser originalet.
+   - `capabilities-py`, `agent-space-js`: äldre källtyper som kör källans eget installationsskript.
+4. **Rapporterar krockar**, alltså samma kommando från flera källor.
 
-```bash
-git -C {home}/.claude/wds/ pull
+## Katalogen
+
+```json
+{
+  "dev_root": "C:/dev",
+  "sources": [ { "name": "...", "kind": "vendor-agents | pointer-skills | ...", "repo": "...", ... } ],
+  "project_discovery": { "max_depth": 2, "markers": [".claude/skills", ".claude/commands"] }
+}
 ```
 
-Read updated `install.md` frontmatter. Note new `wds-version`.
+Mallen visar standardkällorna: WDS-agenterna till alla WDS-repon, WDS-kommandona globalt och personens privata repo sist. En ny källa är en ny post. Varje post har `why`, som förklarar varför källan finns.
 
-### 5 — Verify command files
+## Kvittens
 
-Check that `{home}/.claude/commands/` has: `idun.md`, `saga.md`, `freya.md`, `mimir.md`, `sync.md`.
-If any are missing: recreate them following install.md Step 6.
-
-### 6 — Report
-
-**Startup:**
-> ✓ WDS updated to [new-version] — [N] changes pulled.
-
-**Direct call:**
-> WDS synced.
-> Source: [sync-source]
-> [list of commit messages pulled]  —or—  Already up to date.
-> Version: [version]
-> Commands: /idun ✓  /saga ✓  /freya ✓  /mimir ✓  /sync ✓
-> Governance: wds@[sha] → [N repos] · [org] from [source repo]@[sha] → [N repos] · skipped: [repo: no .source / edited locally / not clean]
+Skriptet skriver ut vad det gjorde per källa, repon som hoppades över med skäl, lokalt ändrade kommandon, krockar och governance-raden. Skillen sammanfattar det för personen.
 
 ---
 
