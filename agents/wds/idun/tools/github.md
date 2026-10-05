@@ -2,7 +2,7 @@
 name: github
 description: GitHub CLI for setup work. Login, creating repos, and reading members and collaborators for access maps.
 type: cli
-used_by: [org-onboarding, user-onboarding]
+used_by: [org-onboarding, user-onboarding, install-wds]
 ---
 
 # Tool: github
@@ -48,6 +48,30 @@ Last activity for a person (for access reviews):
 
 ```bash
 gh api users/<login>/events/public --jq '.[0].created_at'
+```
+
+## Invitations and the person's WDS repos
+
+Pending invitations. The person accepts them; never accept on their behalf without their yes in the session:
+
+```bash
+gh api user/repository_invitations --jq '.[] | "\(.id) \(.repository.full_name) \(.inviter.login)"'
+gh api -X PATCH user/repository_invitations/<id>          # accept, after the person's yes
+```
+
+The person's repos and organizations, and which of them are WDS repos (they have `agents/wds/` or a design process):
+
+```bash
+gh api user/orgs --jq '.[].login'
+gh repo list --limit 200 --json nameWithOwner --jq '.[].nameWithOwner'
+gh repo list <org> --limit 200 --json nameWithOwner --jq '.[].nameWithOwner'
+gh api repos/<owner>/<repo>/contents/agents/wds --silent && echo wds
+```
+
+Clone into the dev root, one folder per owner:
+
+```bash
+gh repo clone <owner>/<repo> "<dev_root>/<owner>/<repo>"
 ```
 
 ## Add a person to a repo
