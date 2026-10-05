@@ -196,33 +196,43 @@ Shared file. What actually got done, with date and link. Wrap adds rows, newest 
 
 ## projects/<project>/00-index.md
 
-The project's front page: what it is, what is new, and a menu to everything made so far. Shared and committed. Wrap updates it at the end of every session (`agents/wds/shared/skills/wrap.md`, step 3). Written in the organization's language.
+The project's front page and its living documentation. Anyone can read what the project is for, what happens next and what has been made, and follow links down into the structure from the text itself. Shared and committed. Wrap updates it after every agent session (`agents/wds/shared/skills/wrap.md`, step 3), so it always reflects the latest conversations. Written in the organization's language.
+
+Three parts, in this order: why the project exists, the strategy for the next step, and what has been made. Write the headings in the project's own words, never "Why", "What" and "How". Link from the running text: every claim that has a source document links to it (a goal to the business goals, a persona to its file, a figure to the analysis it comes from), so the reader can go down into the structure without a menu.
 
 ```markdown
 # <Project name>
 
 <One or two lines: what the project is, for whom, and where it stands now.>
 
-## New
+## <Why the project exists, in its own words>
+
+- The need or problem, with the figure and its source linked.
+- What the product is for, and for whom. Link the product brief and the personas.
+- The goals and the first proof of success. Link the business goals.
+
+## <The strategy for the next step, in its own words>
+
+1. The step now, why it comes first, and how it serves the goals. Link the trigger map or feature impact.
+2. How the effect is measured. Link the baseline.
+3. What follows, in order. Order is priority, not rejection.
+4. Open questions and strategic decisions, with links.
+
+## <What has been made, in its own words>
+
+**The foundation, in reading order**
+- A. [Product brief](A-Product-Brief/00-product-brief.md): one line. Status.
+- B. [Trigger map](B-Trigger-Map/00-trigger-map.md): one line. Status.
+
+**Analyses and presentations**, newest first: date, name and link.
+
+**The work:** [plan](_progress/plan.md) · [design log](_progress/00-design-log.md). Phases not started yet: <list>.
+
+## <What is new>
 
 Newest first, at most five lines. The full timeline is in [the design log](_progress/00-design-log.md).
 
 - YYYY-MM-DD · <agent> · <what is new, one line>. [<material>](<path>)
-
-## Menu
-
-| Phase | Material | Status |
-|---|---|---|
-| Product brief | [00-product-brief.md](A-Product-Brief/00-product-brief.md) | pending |
-| Trigger map | [00-trigger-map.md](B-Trigger-Map/00-trigger-map.md) | pending |
-| UX scenarios | `C-UX-Scenarios/` | pending |
-| UX design | `D-UX-Design/` | pending |
-| Development | `E-Development/` | pending |
-| Plan and log | [plan.md](_progress/plan.md) · [design log](_progress/00-design-log.md) | |
-
-## Material
-
-Presentations, analyses and other material made in the project, newest first: date, name and link.
 ```
 
 ---

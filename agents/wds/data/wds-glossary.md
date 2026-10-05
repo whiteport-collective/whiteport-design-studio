@@ -74,7 +74,7 @@ progress/
 - **Design Log** — `_progress/00-design-log.md`. Project-wide progress, updated each session.
 - **Project Outline** — `_progress/wds-project-outline.yaml`. Phase status, project metadata.
 - **Session State** — `progress/[agent].md`. Agent-specific session state. Loaded by `/start`, written by `/wrap`.
-- **Project Index:** `00-index.md` in the project folder. The project's front page: what is new, a menu per phase and the material made so far. Shared and committed, updated by wrap.
+- **Project Index:** `00-index.md` in the project folder. The project's front page and living documentation: why the project exists, the strategy for the next step, what has been made and what is new, with links down into the structure from the text. Shared and committed, updated by wrap after every session.
 
 ---
 
