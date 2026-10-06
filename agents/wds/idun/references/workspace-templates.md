@@ -196,7 +196,7 @@ Shared file. What actually got done, with date and link. Wrap adds rows, newest 
 
 ## projects/<project>/00-index.md
 
-The project's front page and its living documentation. Anyone can read what the project is for, what happens next and what has been made, and follow links down into the structure from the text itself. Shared and committed. Wrap updates it after every agent session (`agents/wds/shared/skills/wrap.md`, step 3), so it always reflects the latest conversations. Written in the organization's language.
+The project's front page and its living documentation. Anyone can read what the project is for, what happens next and what has been made, and follow links down into the structure from the text itself. Shared and committed. Wrap updates it after every agent session (`agents/wds/skills/wrap.md`, step 3), so it always reflects the latest conversations. Written in the organization's language.
 
 Three parts, in this order: why the project exists, the strategy for the next step, and what has been made. Write the headings in the project's own words, never "Why", "What" and "How". Link from the running text: every claim that has a source document links to it (a goal to the business goals, a persona to its file, a figure to the analysis it comes from), so the reader can go down into the structure without a menu.
 
