@@ -34,7 +34,8 @@ agents/<källa>/
 
 - **Alla agenter kan använda alla skills**, från alla källor i repot. `used_by:` i en skill säger vilka agenter som brukar köra den. Det är en beskrivning, inte en behörighet.
 - En källa utan agenter är ett rent skillbibliotek.
-- Exempel: `agents/wds/` (Idun, Saga, Freya, Mimir), `agents/visita/` (Vinka och Visitas skills), `agents/martenangner/` (Ivonne och Mårtens egna skills).
+- Exempel: `agents/wds/` (Idun, Saga, Freya, Mimir), `agents/taste/` (en extern designkälla utan agenter), `agents/visita/` (Vinka och Visitas skills), `agents/martenangner/` (Ivonne och Mårtens egna skills).
+- **En extern källa** kopieras oförändrad, med licens och `source.md` (ursprung, commit, granskning), och uppdateras bara genom en granskad diff.
 
 ## Märkning
 

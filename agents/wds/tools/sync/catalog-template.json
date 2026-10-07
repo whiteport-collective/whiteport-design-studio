@@ -10,8 +10,33 @@
       "governance_templates": "data/templates/governance",
       "governance": [],
       "why": "Kopierar agents/wds/ och adaptrarna in i alla WDS-repon på datorn, och governance/wds/ där governance är uppsatt. Ett WDS-repo har någon av markörerna eller agents/wds/.wds-sync. Utan .wds-sync krävs att repot ägs av någon i owners och har en commit inom active_days dagar.",
-      "markers": ["agents/wds", "design-process", "projects/*/design-process"],
-      "owners": ["<github-användaren>", "<organisationerna personen arbetar i>"],
+      "markers": [
+        "agents/wds",
+        "design-process",
+        "projects/*/design-process"
+      ],
+      "owners": [
+        "<github-användaren>",
+        "<organisationerna personen arbetar i>"
+      ],
+      "exclude": [],
+      "active_days": 180
+    },
+    {
+      "name": "taste (via whiteport-design-studio)",
+      "kind": "vendor-agents",
+      "repo": "<dev_root>/whiteport-collective/whiteport-design-studio",
+      "subdir": "agents/taste",
+      "why": "Taste, en extern designkälla (Leonxlnx/taste-skill, MIT) som granskats och ligger i WDS. Kopieras till samma repon som agents/wds, med adaptrar i .claude/skills och .agents/skills.",
+      "markers": [
+        "agents/wds",
+        "design-process",
+        "projects/*/design-process"
+      ],
+      "owners": [
+        "<github-användaren>",
+        "<organisationerna personen arbetar i>"
+      ],
       "exclude": [],
       "active_days": 180
     },
@@ -46,6 +71,9 @@
   "project_discovery": {
     "_doc": "Projektrepon med egen .claude/ hålls uppdaterade (git pull). Deras skills gäller bara i repot.",
     "max_depth": 2,
-    "markers": [".claude/skills", ".claude/commands"]
+    "markers": [
+      ".claude/skills",
+      ".claude/commands"
+    ]
   }
 }
