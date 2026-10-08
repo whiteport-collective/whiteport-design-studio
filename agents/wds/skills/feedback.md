@@ -101,7 +101,7 @@ Spec issues are never fixed in code during the round: mark them **Spec** and han
 
 | Complexity | Action |
 |-----------|--------|
-| One-line CSS/label change | Fix inline yourself, mark Fixed |
+| One-line CSS/label change | Fix inline yourself, mark Fixed. Visual fixes follow `../data/taste.md` |
 | Small component change (< 20 lines) | Fix inline yourself, mark Fixed |
 | Architectural change or multi-file | Assign to sub-agent (Mimir/Codex) |
 | Needs a design decision | Mark Open, discuss with user |
