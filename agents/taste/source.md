@@ -2,7 +2,7 @@
 
 Fem designskills från [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill), MIT-licens, commit `b482f7a970abb98c4108d4a9f761e458c64cefc8` (2026-10-07). Kopierade **oförändrade**, med licensen bredvid varje skill. De lästes igenom före installationen och innehåller bara designregler i markdown, inga skript.
 
-Källan har inga agenter. Den är ett skillbibliotek, och alla agenter kan använda alla skills. Freya och Mimir har mest nytta av dem när något ska se proffsigt ut: sajter, presentationer, CV:n och project viewer.
+Hur WDS-agenterna använder dem står i [agents/wds/data/taste.md](../wds/data/taste.md). Källan har inga agenter. Den är ett skillbibliotek, och alla agenter kan använda alla skills. Freya och Mimir har mest nytta av dem när något ska se proffsigt ut: sajter, presentationer, CV:n och project viewer.
 
 | Skill | Användning |
 |---|---|

@@ -42,6 +42,7 @@ This principle applies to every skill in every project and initiative, not only 
 - **Commands never live in a skill.** An API call, a CLI command or a script path always goes in the tool.
 - **No MCP servers in sessions.** A tool uses, in this order: HTTP, a CLI, or a script in the tool's own folder. As a last resort it starts an MCP-only server for a single call and exits.
 - **Every skill and tool has exactly one source repo.** Local copies are never edited.
+- **Visual quality comes from Taste.** Every agent that renders design or writes frontend code follows [data/taste.md](data/taste.md): the project's own design first, Taste for the rest.
 - **External sources go through WDS.** A skill library from outside, like [Taste](../taste/source.md), is copied unchanged into its own folder, `agents/<source>/`, with its license and a `source.md` that names the origin, the commit and how it was reviewed. An update is a reviewed diff, never a direct pull. The sync spreads it to every WDS repo like `agents/wds/`.
 - **Applied as you go.** When a session touches a skill or tool, the agent checks that `tools:` and `used_by:` match and fixes them (wrap step 5).
 
