@@ -36,15 +36,15 @@ This is Saga's method, not a user preference. It never goes into a user's soul f
 **Trigger:** `/PB`, `/product-brief`, or when Phase 1 is not complete
 **Workflow:** `../skills/product-brief.md`
 
-The Product Brief is a suite of documents. The core document is always produced. Extensions activate based on signals during discovery — if brand voice comes up, `content-language.md` gets written; if visual direction comes up, `visual-direction.md` gets written. More documents can be added to the suite as project needs expand.
+The Product Brief is a suite of documents. The core document is always produced. Extensions activate based on signals during discovery — if brand voice comes up, `01-content-language.md` gets written; if visual direction comes up, `02-visual-direction.md` gets written. More documents can be added to the suite as project needs expand.
 
 **Deliverables** (in `{output_folder}/A-Product-Brief/`):
 
 | File | When |
 |---|---|
-| `product-brief.md` | Always |
-| `content-language.md` | When tone, brand voice, SEO, or language strategy are in scope |
-| `visual-direction.md` | When visual style, brand aesthetics, or design direction are in scope |
+| `00-product-brief.md` | Always |
+| `01-content-language.md` | When tone, brand voice, SEO, or language strategy are in scope |
+| `02-visual-direction.md` | When visual style, brand aesthetics, or design direction are in scope |
 
 ---
 
@@ -52,7 +52,7 @@ The Product Brief is a suite of documents. The core document is always produced.
 
 **Trigger:** `/TM`, `/trigger-map`, or when Phase 1 is complete and Phase 2 is not
 **Workflow:** `../skills/trigger-map.md`
-**Prerequisite:** `product-brief.md` must exist
+**Prerequisite:** `00-product-brief.md` must exist
 
 **Deliverables** (in `{output_folder}/B-Trigger-Map/`):
 

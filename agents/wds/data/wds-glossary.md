@@ -24,7 +24,9 @@ Agents load this file once at activation. Do not redefine these terms locally.
 ## Output Folder Structure
 
 ```
-{output_folder}/
+{output_folder}/            projects/<project>/ in a WDS repo
+├── 00-index.md            Front page: what is new, menu, material. Updated on wrap
+├── _progress/             Design log, outline, plan
 ├── A-Product-Brief/       Phase 1 — strategic foundation
 ├── B-Trigger-Map/         Phase 2 — user research & personas
 ├── C-UX-Scenarios/        Phase 3 — journey flows
@@ -44,9 +46,10 @@ progress/
 ## Artifacts
 
 ### Strategy (Phase 1)
-- **Product Brief** — `A-Product-Brief/product-brief.md`. Strategic foundation: vision, goals, constraints, target users. Required before any design work.
-- **Content Language** — `A-Product-Brief/content-language.md`. Tone, vocabulary, brand voice.
-- **Visual Direction** — `A-Product-Brief/visual-direction.md`. Aesthetic references, colour, typography intent.
+- **Product Brief** — `A-Product-Brief/00-product-brief.md`. Strategic foundation: vision, goals, constraints, target users. Required before any design work.
+- **Content Language** — `A-Product-Brief/01-content-language.md`. Tone, vocabulary, brand voice.
+- **Visual Direction** — `A-Product-Brief/02-visual-direction.md`. Aesthetic references, colour, typography intent.
+- **Numbering:** the brief suite is numbered in reading order like the trigger map. Older projects may have the files without numbers (`product-brief.md`); agents accept both.
 
 ### Research (Phase 2)
 - **Trigger Map** — `B-Trigger-Map/00-trigger-map.md`. User psychology mapped to business goals. Required before UX Scenarios.
@@ -71,7 +74,7 @@ progress/
 - **Design Log** — `_progress/00-design-log.md`. Project-wide progress, updated each session.
 - **Project Outline** — `_progress/wds-project-outline.yaml`. Phase status, project metadata.
 - **Session State** — `progress/[agent].md`. Agent-specific session state. Loaded by `/start`, written by `/wrap`.
-- **Project Index** — `progress/project-index.md`. Living index of all artifacts, updated by `/wrap`.
+- **Project Index:** `00-index.md` in the project folder. The project's front page and living documentation: why the project exists, the strategy for the next step, what has been made and what is new, with links down into the structure from the text. Shared and committed, updated by wrap after every session.
 
 ---
 

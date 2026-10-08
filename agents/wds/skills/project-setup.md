@@ -35,7 +35,7 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
   <step id="1-scan">
     Read, don't ask:
     - Is this a WDS repo: `AGENTS.md` naming the WDS agents, `agents/wds/` installed, `projects/`?
-    - Which projects exist (`projects/*/design-process/_progress/wds-project-outline.yaml`), and the organization (`shared/<org>/org-profile.md`)?
+    - Which projects exist (`projects/*/_progress/wds-project-outline.yaml`, in older repos `projects/*/design-process/_progress/`), and the organization (`shared/<org>/org-profile.md`)?
     - Is there a qualification summary or an open handover to Idun with a project in `## Nästa`?
 
     No WDS workspace: route to `qualification.md` and stop here.
@@ -89,12 +89,13 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
   <step id="4-create">
     Show the file tree, then write after a yes. Templates: `../idun/references/workspace-templates.md`.
 
-    1. `projects/[slug]/design-process/` with `A-Product-Brief/` … `E-Development/` as the WDS agents expect them.
-    2. `projects/[slug]/design-process/_progress/wds-project-outline.yaml`: project, repo, org, scope, created, `output_folder`, `code:`, the phases (qualification and onboarding as they stand, the rest `pending`), governance as it stands in the repo, and the team.
-    3. `projects/[slug]/design-process/_progress/00-design-log.md`, first line: `YYYY-MM-DD · idun · Project set up from the intake. Next: /saga.`
-    4. A row in the project table in `AGENTS.md`: name, folder, status.
-    5. Material the project shares with others (brand, tone, contacts) goes to `shared/<org>/`, not into the project. Point to what is already there.
-    6. If `agents/wds/` is missing: install it with the sync tool, after the person's yes ("Installing in a project" in `agents/wds/README.md`).
+    1. `projects/[slug]/` with `A-Product-Brief/` … `E-Development/` as the WDS agents expect them. The project folder is the `output_folder`.
+    2. `projects/[slug]/00-index.md`, the project's front page: one line on what the project is, a first line under New, and the menu with every phase pending.
+    3. `projects/[slug]/_progress/wds-project-outline.yaml`: project, repo, org, scope, created, `output_folder`, `code:`, the phases (qualification and onboarding as they stand, the rest `pending`), governance as it stands in the repo, and the team.
+    4. `projects/[slug]/_progress/00-design-log.md`, first line: `YYYY-MM-DD · idun · Project set up from the intake. Next: /saga.`
+    5. A row in the project table in `AGENTS.md`: name, folder, status.
+    6. Material the project shares with others (brand, tone, contacts) goes to `shared/<org>/`, not into the project. Point to what is already there.
+    7. If `agents/wds/` is missing: install it with the sync tool, after the person's yes ("Installing in a project" in `agents/wds/README.md`).
 
     Commit: `projects: [slug] set up`, then push.
 
@@ -119,7 +120,7 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
 
 ## Quality rules
 
-- **One project, one folder.** Never two projects in one `design-process/`, never a project outside `projects/` unless `AGENTS.md` says the repo has a single project at its root.
+- **One project, one folder.** Never two projects in one project folder, never a project outside `projects/` unless `AGENTS.md` says the repo has a single project at its root.
 - **The intake is the source of truth** for the product brief's starting point. Saga confirms and deepens it; she does not repeat it.
 - **Code location is recorded once.** Mimir reads it from the project outline.
 - **WDS needs nothing else.** No installer, no external task system and no backend. Agent Space, if the client uses it, is optional and comes from qualification.

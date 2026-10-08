@@ -28,7 +28,8 @@ What a WDS workspace contains and the starting content of each file. Used by org
 │   ├── <org>/                    The org's policy. Edited only in its source repo; a copy elsewhere (has .source).
 │   └── <project>/                Optional tightenings for this repo.
 ├── shared/<org>/                 Shared across projects: org profile, brand, contacts
-├── projects/<project>/design-process/
+├── projects/<project>/            The project folder is the output_folder
+│   ├── 00-index.md               Front page: what is new, menu, material. Wrap updates it.
 │   ├── A-Product-Brief/ … E-Development/
 │   └── _progress/
 │       ├── wds-project-outline.yaml
@@ -36,7 +37,7 @@ What a WDS workspace contains and the starting content of each file. Used by org
 └── .wds/me.md                    Who sits at this machine. Gitignored, one per machine.
 ```
 
-A single-project repo may keep its `output_folder` at the root instead of under `projects/`. `AGENTS.md` says which.
+A single-project repo may keep its `output_folder` at the root instead of under `projects/`. An older repo may have a `design-process/` folder inside the project folder. `AGENTS.md` says which.
 
 ---
 
@@ -77,7 +78,7 @@ Run wrap: `agents/wds/skills/wrap.md`.
 
 ## Rules
 
-- One project = one folder under `projects/`, each a separate WDS structure. `output_folder` is `projects/<project>/design-process/`.
+- One project = one folder under `projects/`, each a separate WDS structure. `output_folder` is `projects/<project>/`, and `00-index.md` is its front page.
 - What several projects share lives in `shared/<org>/`, never copied into projects.
 - One folder per source in `agents/`. WDS agents are synced from whiteport-design-studio and never edited here.
 - Policy lives in `governance/`, one folder per source: `wds/`, `<org>/` and, optionally, `<project>/`. A folder with a `.source` file is a synced copy and is read-only; edit it in its source repo. `governance/policies.md` lists the files in reading order.
@@ -193,6 +194,49 @@ Shared file. What actually got done, with date and link. Wrap adds rows, newest 
 
 ---
 
+## projects/<project>/00-index.md
+
+The project's front page and its living documentation. Anyone can read what the project is for, what happens next and what has been made, and follow links down into the structure from the text itself. Shared and committed. Wrap updates it after every agent session (`agents/wds/skills/wrap.md`, step 3), so it always reflects the latest conversations. Written in the organization's language.
+
+Three parts, in this order: why the project exists, the strategy for the next step, and what has been made. Write the headings in the project's own words, never "Why", "What" and "How". Link from the running text: every claim that has a source document links to it (a goal to the business goals, a persona to its file, a figure to the analysis it comes from), so the reader can go down into the structure without a menu.
+
+```markdown
+# <Project name>
+
+<One or two lines: what the project is, for whom, and where it stands now.>
+
+## <Why the project exists, in its own words>
+
+- The need or problem, with the figure and its source linked.
+- What the product is for, and for whom. Link the product brief and the personas.
+- The goals and the first proof of success. Link the business goals.
+
+## <The strategy for the next step, in its own words>
+
+1. The step now, why it comes first, and how it serves the goals. Link the trigger map or feature impact.
+2. How the effect is measured. Link the baseline.
+3. What follows, in order. Order is priority, not rejection.
+4. Open questions and strategic decisions, with links.
+
+## <What has been made, in its own words>
+
+**The foundation, in reading order**
+- A. [Product brief](A-Product-Brief/00-product-brief.md): one line. Status.
+- B. [Trigger map](B-Trigger-Map/00-trigger-map.md): one line. Status.
+
+**Analyses and presentations**, newest first: date, name and link.
+
+**The work:** [plan](_progress/plan.md) · [design log](_progress/00-design-log.md). Phases not started yet: <list>.
+
+## <What is new>
+
+Newest first, at most five lines. The full timeline is in [the design log](_progress/00-design-log.md).
+
+- YYYY-MM-DD · <agent> · <what is new, one line>. [<material>](<path>)
+```
+
+---
+
 ## _progress/wds-project-outline.yaml
 
 ```yaml
@@ -201,7 +245,7 @@ repo: <folder>
 org: <org, or empty>
 scope: solo | team | organization
 created: YYYY-MM-DD
-output_folder: projects/<project>/design-process
+output_folder: projects/<project>
 code: <folder in this repo, such as app/ | another repo | undecided>
 agents: [idun, saga, freya, mimir]
 agent_space: none | <where it runs>

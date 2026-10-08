@@ -70,7 +70,7 @@ Inspirational, directional, durable. Not metrics.]
 ---
 
 _Produced by Saga — [date]_
-_Source: product-brief.md, Workshop 1_
+_Source: 00-product-brief.md, Workshop 1_
 ```
 
 ## Instructions

@@ -26,7 +26,7 @@ Produces the Product Brief document suite through structured discovery conversat
 
   <step id="init">
     Load:
-    - The project repo's `AGENTS.md` — resolve project_name, output_folder (the project's `design-process/` folder), communication_language, document_output_language. user_name comes from `.wds/me.md`.
+    - The project repo's `AGENTS.md` — resolve project_name, output_folder (the project folder, `projects/<project>/`), communication_language, document_output_language. user_name comes from `.wds/me.md`.
     - `_progress/00-design-log.md` — check Current for in-progress work
     - `_progress/wds-project-outline.yaml` — check existing_materials flag
 
@@ -239,9 +239,9 @@ Produces the Product Brief document suite through structured discovery conversat
     <subagent ref="agents/brief-writer.md">
       <input>All discovery data collected across categories</input>
       <output>
-        - `{output_folder}/A-Product-Brief/product-brief.md` (always)
-        - `{output_folder}/A-Product-Brief/content-language.md` (if content-language triggered)
-        - `{output_folder}/A-Product-Brief/visual-direction.md` (if visual-direction triggered)
+        - `{output_folder}/A-Product-Brief/00-product-brief.md` (always)
+        - `{output_folder}/A-Product-Brief/01-content-language.md` (if content-language triggered)
+        - `{output_folder}/A-Product-Brief/02-visual-direction.md` (if visual-direction triggered)
       </output>
     </subagent>
 
@@ -255,9 +255,9 @@ Produces the Product Brief document suite through structured discovery conversat
   <step id="review">
     Present what was written:
     "Product Brief suite written:
-    ✓ product-brief.md
-    [✓ content-language.md — if written]
-    [✓ visual-direction.md — if written]
+    ✓ 00-product-brief.md
+    [✓ 01-content-language.md — if written]
+    [✓ 02-visual-direction.md — if written]
 
     Read through it and let me know if anything needs adjusting."
 

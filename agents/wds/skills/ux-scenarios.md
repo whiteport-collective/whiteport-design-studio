@@ -2,7 +2,7 @@
 skill: ux-scenarios
 used_by: [freya]
 prerequisites:
-  - "{output_folder}/A-Product-Brief/product-brief.md"
+  - "{output_folder}/A-Product-Brief/00-product-brief.md"
   - "{output_folder}/B-Trigger-Map/00-trigger-map.md"
 output_folder: "{output_folder}/C-UX-Scenarios"
 ---
@@ -29,7 +29,7 @@ Transforms the Trigger Map into UX scenario outlines — linear sunshine paths t
 
   <step id="init">
     Load:
-    - `{output_folder}/A-Product-Brief/product-brief.md`
+    - `{output_folder}/A-Product-Brief/00-product-brief.md`
     - `{output_folder}/B-Trigger-Map/00-trigger-map.md`
     - `_progress/00-design-log.md`
     - `../freya/references/trigger-map-initiation.md`
