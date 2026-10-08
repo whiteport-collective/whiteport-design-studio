@@ -11,6 +11,8 @@ Generate a visual persona page for one archetype from the Trigger Map.
 
 Persona pages are reference documents — used by Freya when designing and by the team throughout the project. One page per archetype.
 
+The page's visual design follows `agents/wds/data/taste.md`: the project's brand first, Taste for the rest.
+
 ## Input
 
 From the persona file (`NN-persona-*.md`) for this archetype:
