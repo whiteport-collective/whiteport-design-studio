@@ -205,6 +205,7 @@ Produces the Product Brief document suite through structured discovery conversat
 
     <category id="design-style">
       Goal: Overall aesthetic direction — minimal, bold, editorial, warm, technical, etc.
+      Taste's styles can serve as reference vocabulary in the conversation (editorial minimalism, premium, industrial brutalism), see `../data/taste.md`. Offer them as examples, never as the answer.
       Synthesize: style keywords, reference analysis
     </category>
 
