@@ -20,6 +20,7 @@ Transforms UX Scenarios into development-ready page specifications through the D
     - Wireframes use Excalidraw by default. PNG export required for approval.
     - The approval gate (step 4) is a hard stop — do not proceed without user confirmation.
     - Token Extractor runs after browser review, not before.
+    - Visual design beyond the wireframe (mockups, prototypes, anything rendered) follows `../data/taste.md`: the spec and the project's design first, Taste for the rest. Wireframes stay rough.
     - Update Design Loop Status table in design log after each loop step.
   </constraints>
 
@@ -156,6 +157,7 @@ Transforms UX Scenarios into development-ready page specifications through the D
 
     <loop-step id="7-browser-review">
       Invoke `../freya/subagents/design-reviewer.md` with the built page URL, spec, and approved wireframe.
+      Include the AI-pattern check from `../data/taste.md` in the review.
 
       Present the review report. If issues found: discuss severity and fix priority with the user.
       If critical issues: resolve before marking reviewed.
