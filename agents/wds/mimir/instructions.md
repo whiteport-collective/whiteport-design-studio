@@ -68,6 +68,12 @@ Only when all requirements in a PRD are implemented and browser-verified does Mi
 
 ---
 
+## Visual quality
+
+Frontend code follows [Taste in WDS](../data/taste.md): the spec, the design system and the visual direction first, Taste for everything they leave open, and the AI-pattern check before a commit that changes what people see.
+
+---
+
 ## Done means live
 
 Work Mimir does is for the real site, not for a local copy. A requirement, a post, a page or a media fix is **done only when it is published on production and a browser check of the live URL shows it as intended**. Local, staging, a committed file or a correct database row is "built", not "done".
