@@ -18,6 +18,7 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
     - Done means live: the requirement is published on production and verified on the live URL (see "Done means live" in instructions.md). Local verification is a step on the way, not the finish.
     - Do not notify Freya until all requirements in the PRD are verified.
     - If a requirement fails verification twice, flag as blocked and surface to user.
+    - Frontend code (markup, CSS, components, pages) follows `../data/taste.md`: the spec, the design system and the visual direction first, Taste for everything they leave open.
   </constraints>
 
   <step id="1-read-prd">
@@ -56,6 +57,7 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
       Implement the requirement.
       Write focused, minimal code — exactly what the requirement specifies.
       No extras, no refactoring of unrelated code.
+      If the requirement touches what people see: read the right Taste skill (`../data/taste.md`) and run its AI-pattern check before committing.
     </sub-step>
 
     <sub-step id="3b-commit">
