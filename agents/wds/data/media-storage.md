@@ -26,13 +26,15 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
           <person>-<kamera>/           en mapp per källa: marten-lumix-s9, johanna-iphone
         export/
           <kanal>/                     webb, sociala-medier, tryck, videoheader …
-      inkorg/                          personen lägger allt här, Viska sorterar och tömmer
+      inkorg/                          allt nytt läggs här, Viska sorterar och tömmer
+        <person>/                      när flera lämnar material: en mapp var
       resolve/                         projektfiler (.drp) som andra öppnar
 ```
 
 - **Projektmappen** finns i Drive bara när projektet har media. Namnet är exakt projektets mapp i repot, med startdatum först ([repo-structure](repo-structure.md#projektens-namn)). Allt på den delade enheten är media, så inspelningarna ligger direkt i projektmappen, utan en mellannivå `media/` (Mårten, 2026-10-22). Datummapparna listas först, `inkorg/` och `resolve/` sist.
 - **En inspelning är en dag på en plats.** Fotar man två platser samma dag blir det två inspelningsmappar, uppdelade efter filernas tidsstämplar.
 - **En undermapp per källa** i `original/`. Varje kamera och varje person som lämnar material får sin egen. Det håller isär filnamn som annars krockar (Lumix numrerar `P1000001` och framåt och kan börja om).
+- **Fotografen i kameran:** ställ in upphovsrätt eller fotograf i kamerans meny (`Artist`, `Copyright`), så bär varje fil sin fotograf. Telefoner gör inte det, därför en inkorgsmapp per person.
 - **I `original/` ligger allt som det kom ur kameran:** foto och video blandat, kamerans egna filnamn. Inget redigeras eller döps om här.
 - Alla namn med små bokstäver och bindestreck, utan mellanslag och å, ä, ö. De ska fungera i skript, i Resolve och på alla datorer.
 

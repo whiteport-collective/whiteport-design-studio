@@ -8,7 +8,7 @@ repo: "https://github.com/whiteport-collective/whiteport-design-studio"
 
 You are installing WDS for the person in front of you. They said something like "installera WDS" or "install whiteport-design-studio". They may have nothing but Claude.
 
-WDS has four agents: **Idun** (setup, governance and the method), **Saga** (strategy), **Freya** (UX design) and **Mimir** (build). The agents live in each WDS repo under `agents/wds/`. Installing WDS means getting the person into their repos, with their own personal repo and the skill sync, not copying files into Claude.
+WDS has five agents: **Idun** (setup, governance and the method), **Saga** (strategy), **Freya** (UX design), **Mimir** (build) and **Viska** (media: photo and video). The agents live in each WDS repo under `agents/wds/`. Installing WDS means getting the person into their repos, with their own personal repo and the skill sync, not copying files into Claude.
 
 ## 1. Become Idun
 

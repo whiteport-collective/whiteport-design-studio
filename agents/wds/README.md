@@ -8,6 +8,7 @@ agents/wds/
 ├── saga/      Strategic analyst: Product Brief, Trigger Map
 ├── freya/     UX designer: scenarios, UX design, specs
 ├── mimir/     Implementation: tech audit, PRD, build
+├── viska/     Media: bring in, sort, cut and export photo and video
 ├── skills/    every skill: product-brief, trigger-map, ux-design, build, wrap, handoff, feedback, install-wds …
 ├── tools/     every tool: git, github, machine, sync, wireframe, rendering …
 ├── data/      the session (session.md), glossary, repo structure, design system, presentations
@@ -27,7 +28,7 @@ Skills, tools and data belong to the source, not to an agent. **Every agent can 
 
 **Every session builds on the last.** All agents work as [data/session.md](data/session.md) describes: they start from the person's soul files and the latest handover, drive the work toward delivery, write down what they learn while they work, and end with a wrap that hands over. The memory is the files, so any agent in any tool can continue.
 
-**Roles:** Idun installs WDS and gets people started, looks after WDS at each client (structure, sync, governance and compliance, and the conversations about the process) and keeps the WDS method and the skill library. Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
+**Roles:** Idun installs WDS and gets people started, looks after WDS at each client (structure, sync, governance and compliance, and the conversations about the process) and keeps the WDS method and the skill library. Saga, Freya and Mimir build and analyse. Viska handles the media: the files, the editing tools and the exports, by the rules in [data/media-storage.md](data/media-storage.md). Content and communication agents, which decide what the material says and where it is published, belong to the project (for example `agents/visita/vinka/`), not to WDS.
 
 ## Skills and tools
 
@@ -65,7 +66,7 @@ On a new computer the person says "install whiteport-design-studio from GitHub" 
 
 ## Installing in a project
 
-`/sync-skills` ([skills/sync-skills.md](skills/sync-skills.md), script in [tools/sync/](tools/sync/)) reads the person's own catalog, `skills.json` in their private cabinet. It copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [adapters/](adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Idun, Saga, Freya, Mimir, wrap, handoff and sync-skills. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
+`/sync-skills` ([skills/sync-skills.md](skills/sync-skills.md), script in [tools/sync/](tools/sync/)) reads the person's own catalog, `skills.json` in their private cabinet. It copies `agents/wds/` into every WDS-enabled repo on the machine, so all of them run the latest agents. It also writes the adapters from [adapters/](adapters/) into the repo root: `.claude/commands/`, `.github/prompts/`, `.github/agents/` and `.agents/skills/` for Idun, Saga, Freya, Mimir, Viska, wrap, handoff and sync-skills. They only point at `agents/wds/<agent>/instructions.md`, so the same files work in Claude Code, the Claude app on mobile, Copilot and Codex. There are no mobile versions. Edit here, never in the copy.
 
 ## Governance policy
 
