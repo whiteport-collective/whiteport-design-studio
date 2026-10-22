@@ -3,7 +3,7 @@ name: ffmpeg
 source: wds
 type: cli
 description: Läser av, konverterar, skalar och klipper video, ljud och bilder med ffmpeg och ffprobe.
-used_by: [media-export, video-edit]
+used_by: [media-catalog, media-export, video-edit]
 ---
 
 # Tool: ffmpeg

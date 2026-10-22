@@ -20,7 +20,12 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
 <delad enhet>/
   projects/
     <startdatum>-<projekt>/            samma namn som projects/ i repot
+      README.md                        projektets själ: vad, för vem, varför, personerna, inspelningarna, det bästa
+      logg.md                          vem som gjorde vad med materialet, människor och agenter, nyaste först
       <datum>-<plats>/                 en inspelning = en dag på en plats
+        README.md                      inspelningens anteckningar: plats, tid, ljus, vilka, kamerainställningar, klocka
+        innehall.csv                   en rad per fil: vad den visar, personer, nyckelord, betyg, favorit
+        transkript/<fil>.srt           vad som sägs i varje videoklipp, med tider
         ingest.csv                     en rad per fil: när, varifrån, tagen, kamera, sha256
         original/
           <person>-<kamera>/           en mapp per källa: marten-lumix-s9, johanna-iphone
@@ -37,6 +42,22 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
 - **Fotografen i kameran:** ställ in upphovsrätt eller fotograf i kamerans meny (`Artist`, `Copyright`), så bär varje fil sin fotograf. Telefoner gör inte det, därför en inkorgsmapp per person.
 - **I `original/` ligger allt som det kom ur kameran:** foto och video blandat, kamerans egna filnamn. Inget redigeras eller döps om här.
 - Alla namn med små bokstäver och bindestreck, utan mellanslag och å, ä, ö. De ska fungera i skript, i Resolve och på alla datorer.
+
+## Kunskapen om materialet
+
+**Bestämt (Mårten, 2026-10-22).** Varje projekt och varje inspelning bär sin egen kunskap, som vanlig text bredvid mediet. Den följer med när mappen delas eller arkiveras, och den gör materialet sökbart långt efteråt ("gruppbilden där alla skrattar", "klippet där chefen säger certifiering"). Formen följer praxis i foto- och filmvärlden, och det WDS lärt sig om själ och logg. Viska skriver den med [media-catalog](../skills/media-catalog/SKILL.md) direkt efter importen.
+
+| Fil | Praxis den bygger på | Innehåll |
+|---|---|---|
+| `README.md` i projektet | WDS soul, produktionens anteckningar | Uppdraget i några rader, personerna som syns (namn, roll, hur man känner igen dem), inspelningarna med en rad var, favoriterna, länk till projektet i repot. Det Viska lär sig om projektet skrivs in här direkt. |
+| `logg.md` i projektet | WDS designlogg, DIT-loggen | En rad per händelse, nyaste först: datum, vem (person eller agent), vad (import, katalog, redigering, export, flytt). Överlämningarna, var arbetet står och vad som är nästa steg, ligger i repots `sessions/` som vanligt; loggen pekar dit. |
+| `README.md` i inspelningen | Fotografens anteckningar, kamerarapporten | Plats, tid, vad som hände, ljuset, vilka som var med, källorna och deras inställningar, klockskillnad mellan kameror, det som saknas. |
+| `innehall.csv` | Loggning i film, IPTC-fälten i foto, urval med flaggor | En rad per fil: `fil, tagen, beskrivning, nyckelord, teknik, teknik_kommentar, konst, konst_kommentar, betyg, favorit, forslag, varfor`. Beskrivning och nyckelord på projektets språk. Betyg 1–5 som i Resolve och Lightroom. `forslag: bort` med `varfor` är listan över bortvalda filer; ingen fil raderas. |
+| `transkript/<fil>.srt` | Undertexter som sidofil | Det som sägs i ett videoklipp, med tider, i SubRip. Samma grundnamn som klippet. Resolve läser `.srt` som undertextspår. |
+
+- **Originalen rörs fortfarande inte.** Kunskapen ligger i egna filer, aldrig inskriven i originalen. På exporter skrivs beskrivning, nyckelord och upphov in i filen ([exiftool](../tools/exiftool.md)), så att de följer med ut.
+- **Personer:** namn bara på dem som är med i projektet eller har gett sitt samtycke. Andra beskrivs ("en lärare vid fönsterbordet"). Följ projektets policy i `governance/`.
+- **Sökbart:** allt är text i Drive, så Drives sökning hittar det, och agenterna söker med vanliga verktyg i `G:\`.
 
 ## Arbeta och dela
 

@@ -3,7 +3,7 @@ name: exiftool
 source: wds
 type: cli
 description: Läser och skriver metadata i foton och video (tid, kamera, objektiv, plats, upphovsrätt) med ExifTool.
-used_by: [media-ingest, media-export]
+used_by: [media-ingest, media-catalog, media-export]
 ---
 
 # Tool: exiftool
@@ -18,6 +18,16 @@ exiftool -json -q -r -DateTimeOriginal -CreateDate -Model -LensModel -FileType "
 
 # Allt om en fil
 exiftool -a -G1 "<fil>"
+```
+
+## Förhandsbild ur RAW
+
+En RAW-fil (RW2, DNG) bär en färdig JPEG inuti. Den räcker för att se vad bilden visar, utan att framkalla. Skriv den alltid till en arbetsmapp, aldrig i `original/`.
+
+```bash
+exiftool -b -PreviewImage "<fil>.RW2" > "<arbetsmapp>/<fil>.jpg"
+# Eller för en hel mapp: <arbetsmapp>/<grundnamn>.jpg
+exiftool -b -PreviewImage -w "<arbetsmapp>/%f.jpg" -ext rw2 "<mapp>"
 ```
 
 ## Skriva

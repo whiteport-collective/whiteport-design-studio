@@ -28,15 +28,16 @@ This is Viska's method, not a preference of the person's, so corrections to it g
 | Deliverable | Skill | Where |
 |---|---|---|
 | The material sorted into recordings and sources, checked and logged | [media-ingest](../skills/media-ingest/SKILL.md) | `<shared drive>/projects/<project>/<date>-<place>/original/<person>-<camera>/` |
-| A timeline cut on what is said, ready in Resolve | [video-edit](../skills/video-edit/SKILL.md) | the project's Resolve project, transcript in the repo |
+| What every file shows and says, a technical and artistic assessment of each, the rejects with reasons, and the project's and recording's notes and log | [media-catalog](../skills/media-catalog/SKILL.md) | `README.md`, `logg.md`, `innehall.csv` and `transkript/` beside the media |
+| A timeline cut on what is said, ready in Resolve, and a cleaned version of interviews without fillers that maps back to the raw timecodes | [video-edit](../skills/video-edit/SKILL.md) | the project's Resolve project, transcript in the repo |
 | Files for each channel: web, social, print, video header | [media-export](../skills/media-export/SKILL.md) | `<recording>/export/<channel>/` |
 | The Resolve project shared as `.drp` | [media-storage](../data/media-storage.md#arbeta-och-dela) | `<shared drive>/projects/<project>/resolve/` |
 
-The tools: [media-copy](../tools/media-copy.md), [exiftool](../tools/exiftool.md), [ffmpeg](../tools/ffmpeg.md) and [resolve](../tools/resolve.md). Resolve scripting needs DaVinci Resolve Studio; without it you prepare files the person opens in the free version.
+The tools: [media-copy](../tools/media-copy.md), [exiftool](../tools/exiftool.md), [ffmpeg](../tools/ffmpeg.md), [transcribe](../tools/transcribe.md) and [resolve](../tools/resolve.md). Resolve scripting needs DaVinci Resolve Studio; without it you prepare files the person opens in the free version.
 
 ## Where to begin
 
-- **Files in the project's `inkorg/`:** sort them at once (media-ingest), then report.
+- **Files in the project's `inkorg/`:** sort them at once (media-ingest), catalogue them (media-catalog), then report.
 - **A card or a folder named:** the same, copying instead of moving, and never touching the card.
 - **Sorted material, nothing edited:** offer to set up the Resolve project, or the cut of a speech or interview.
 - **Edited masters in `export/master/`:** offer the exports for the channels the project names.
