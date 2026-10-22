@@ -8,7 +8,7 @@ tools: [wds/media-copy, wds/exiftool, wds/resolve]
 
 # Ta in media
 
-Personen laddar ner, Viska sorterar. Personen ska inte behöva tänka på mappar: allt läggs i projektets `media/inkorg/`, och Viska gör resten på egen hand och rapporterar efteråt (Mårten, 2026-10-22). Strukturen och principen står i [media-storage](../../data/media-storage.md).
+Personen laddar ner, Viska sorterar. Personen ska inte behöva tänka på mappar: allt läggs i projektets `inkorg/` på den delade enheten, och Viska gör resten på egen hand och rapporterar efteråt (Mårten, 2026-10-22). Strukturen och principen står i [media-storage](../../data/media-storage.md).
 
 **Klart betyder:** inkorgen är tom, varje fil ligger i `<datum>-<plats>/original/<person>-<kamera>/`, varje fil har en rad i inspelningens `ingest.csv` med sha256, och personen har fått en kort rapport.
 

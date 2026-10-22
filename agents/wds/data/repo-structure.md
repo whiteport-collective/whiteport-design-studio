@@ -27,7 +27,7 @@ Tre regler:
 **Bestämt (Mårten, 2026-10-22).** Ett projekt heter `<startdatum>-<slug>`, till exempel `projects/2026-10-21-studiebesok-stockholm/`. Datumet först gör att projekten listas i tidsordning, så att äldre och nyare inte blandas.
 
 - **Startdatumet** är dagen projektet startar. Börjar projektet med en inspelning är det inspelningsdagen.
-- **Samma namn överallt.** Projektets mediamapp i kundens delade Google-enhet heter likadant: `projects/<samma namn>/media/`. Se [media-storage](media-storage.md).
+- **Samma namn överallt.** Projektets mediamapp i kundens delade Google-enhet heter likadant: `projects/<samma namn>/`. Se [media-storage](media-storage.md).
 - **Nya projekt får datum.** Ett befintligt projekt döps om bara när det är billigt, med alla länkar rättade i samma commit. Gör det inte medan en annan session arbetar i projektet.
 
 ## Delat material

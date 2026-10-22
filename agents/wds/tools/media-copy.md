@@ -22,7 +22,7 @@ Visar antal filer per typ, vilka kameror, och passen: en rad per sammanhängande
 
 ```bash
 # Torrkörning: visar vad som kopieras, vad som redan finns och vad som krockar
-python agents/wds/tools/media-copy/media_copy.py copy "E:/" "G:/Shared drives/<enhet>/projects/<projekt>/media/<datum>-<plats>/original/<person>-<kamera>" --from "2026-10-22 11:30" --to "2026-10-22 15:00"
+python agents/wds/tools/media-copy/media_copy.py copy "E:/" "G:/Shared drives/<enhet>/projects/<projekt>/<datum>-<plats>/original/<person>-<kamera>" --from "2026-10-22 11:30" --to "2026-10-22 15:00"
 
 # Samma kommando med --apply kopierar
 python agents/wds/tools/media-copy/media_copy.py copy … --apply

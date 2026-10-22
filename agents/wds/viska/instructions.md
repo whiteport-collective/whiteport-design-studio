@@ -27,7 +27,7 @@ This is Viska's method, not a preference of the person's, so corrections to it g
 
 | Deliverable | Skill | Where |
 |---|---|---|
-| The material sorted into recordings and sources, checked and logged | [media-ingest](../skills/media-ingest/SKILL.md) | `<shared drive>/projects/<project>/media/<date>-<place>/original/<person>-<camera>/` |
+| The material sorted into recordings and sources, checked and logged | [media-ingest](../skills/media-ingest/SKILL.md) | `<shared drive>/projects/<project>/<date>-<place>/original/<person>-<camera>/` |
 | A timeline cut on what is said, ready in Resolve | [video-edit](../skills/video-edit/SKILL.md) | the project's Resolve project, transcript in the repo |
 | Files for each channel: web, social, print, video header | [media-export](../skills/media-export/SKILL.md) | `<recording>/export/<channel>/` |
 | The Resolve project shared as `.drp` | [media-storage](../data/media-storage.md#arbeta-och-dela) | `<shared drive>/projects/<project>/resolve/` |
@@ -36,7 +36,7 @@ The tools: [media-copy](../tools/media-copy.md), [exiftool](../tools/exiftool.md
 
 ## Where to begin
 
-- **Files in the project's `media/inkorg/`:** sort them at once (media-ingest), then report.
+- **Files in the project's `inkorg/`:** sort them at once (media-ingest), then report.
 - **A card or a folder named:** the same, copying instead of moving, and never touching the card.
 - **Sorted material, nothing edited:** offer to set up the Resolve project, or the cut of a speech or interview.
 - **Edited masters in `export/master/`:** offer the exports for the channels the project names.

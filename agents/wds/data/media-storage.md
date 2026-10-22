@@ -7,7 +7,7 @@
 **En mediafil flyttar inte när den väl är sparad.** Den byter varken mapp eller namn, så att varje projekt som länkar till den hittar den, hos alla, så länge den finns. Allt annat i det här dokumentet följer av det.
 
 - Det som inte ändras är **sökvägen under mediaroten**. Roten får bytas: från den delade enheten i Google Drive till en arkivdisk när Drive rensas. Strukturen under roten följer med oförändrad.
-- Därför bestäms mapp och namn **när materialet kommer in**. Personen lägger allt i projektets `media/inkorg/`, och Viska sorterar det själv ([media-ingest](../skills/media-ingest/SKILL.md)). Att sortera bilder efter innehåll gör man i redigeringsprogrammet, aldrig i mapparna.
+- Därför bestäms mapp och namn **när materialet kommer in**. Personen lägger allt i projektets `inkorg/`, och Viska sorterar det själv ([media-ingest](../skills/media-ingest/SKILL.md)). Att sortera bilder efter innehåll gör man i redigeringsprogrammet, aldrig i mapparna.
 - **En fil som hamnat fel flyttas till rätt plats** (Mårten, 2026-10-22). Helst innan redigeringen börjar, eftersom en fil som ett projekt redan använder blir offline och måste länkas om. Varje flytt loggas.
 - **Original rörs aldrig.** Redigeringar och exporter är nya filer i egna mappar.
 - Media hör aldrig hemma i git. Repot har utskrifter, manus och beslut; mediet ligger i Drive.
@@ -20,18 +20,17 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
 <delad enhet>/
   projects/
     <startdatum>-<projekt>/            samma namn som projects/ i repot
-      media/
-        inkorg/                        personen lägger allt här, Viska sorterar och tömmer
-        <datum>-<plats>/               en inspelning = en dag på en plats
-          ingest.csv                   en rad per fil: när, varifrån, tagen, kamera, sha256
-          original/
-            <person>-<kamera>/         en mapp per källa: marten-lumix-s9, johanna-iphone
-          export/
-            <kanal>/                   webb, sociala-medier, tryck, videoheader …
+      <datum>-<plats>/                 en inspelning = en dag på en plats
+        ingest.csv                     en rad per fil: när, varifrån, tagen, kamera, sha256
+        original/
+          <person>-<kamera>/           en mapp per källa: marten-lumix-s9, johanna-iphone
+        export/
+          <kanal>/                     webb, sociala-medier, tryck, videoheader …
+      inkorg/                          personen lägger allt här, Viska sorterar och tömmer
       resolve/                         projektfiler (.drp) som andra öppnar
 ```
 
-- **Projektmappen** finns i Drive bara när projektet har media. Namnet är exakt projektets mapp i repot, med startdatum först ([repo-structure](repo-structure.md#projektens-namn)).
+- **Projektmappen** finns i Drive bara när projektet har media. Namnet är exakt projektets mapp i repot, med startdatum först ([repo-structure](repo-structure.md#projektens-namn)). Allt på den delade enheten är media, så inspelningarna ligger direkt i projektmappen, utan en mellannivå `media/` (Mårten, 2026-10-22). Datummapparna listas först, `inkorg/` och `resolve/` sist.
 - **En inspelning är en dag på en plats.** Fotar man två platser samma dag blir det två inspelningsmappar, uppdelade efter filernas tidsstämplar.
 - **En undermapp per källa** i `original/`. Varje kamera och varje person som lämnar material får sin egen. Det håller isär filnamn som annars krockar (Lumix numrerar `P1000001` och framåt och kan börja om).
 - **I `original/` ligger allt som det kom ur kameran:** foto och video blandat, kamerans egna filnamn. Inget redigeras eller döps om här.
