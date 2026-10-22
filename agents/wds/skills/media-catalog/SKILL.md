@@ -8,9 +8,9 @@ tools: [wds/transcribe, wds/exiftool, wds/ffmpeg, wds/media-worker]
 
 # Katalogisera media
 
-Materialet är bara värt något om det går att hitta. Viska skriver kunskapen om varje projekt och varje inspelning som vanlig text bredvid mediet, i den form som [media-storage](../../data/media-storage.md#kunskapen-om-materialet) beskriver: `README.md` och `logg.md` i projektet, `README.md`, `innehall.csv` och `transkript/` i varje inspelning.
+Materialet är bara värt något om det går att hitta. Viska skriver kunskapen om varje projekt och varje inspelning som vanlig text bredvid mediet, i den form som [media-storage](../../data/media-storage.md#kunskapen-om-materialet) beskriver: `<projekt>.md` och `logg.md` i projektet, `<datum>-<plats>.md`, `innehall.csv` och `transkript/` i varje inspelning.
 
-**Klart betyder:** varje fil i inspelningen har en rad i `innehall.csv` med en beskrivning man kan söka på, varje videoklipp med tal har en `.srt`, inspelningens `README.md` säger vad som hände och vad som finns, projektets `README.md` och `logg.md` är uppdaterade, och personen har fått de bästa bilderna och klippen i några rader.
+**Klart betyder:** varje fil i inspelningen har en rad i `innehall.csv` med en beskrivning man kan söka på, varje videoklipp med tal har en `.srt`, inspelningens `<datum>-<plats>.md` säger vad som hände och vad som finns, projektets `<projekt>.md` och `logg.md` är uppdaterade, och personen har fått de bästa bilderna och klippen i några rader.
 
 ## Ordningen: bilderna först
 
@@ -24,8 +24,8 @@ Materialet är bara värt något om det går att hitta. Viska skriver kunskapen 
 - **Bedömningen, teknisk och konstnärlig,** var för sig 1–5 med en kort kommentar. Tekniken: skärpa på motivet, rörelseoskärpa, exponering, brus, vitbalans, gärna med ett råd för nästa gång, eftersom fotografen lär sig av det. Det konstnärliga: komposition, ljus, ögonblicket, uttrycket, om bilden berättar något och bär projektets känsla.
 - **Betyg** 1–5 för hur användbar bilden är för uppdraget, sammanvägt. 5 och `favorit` sparas för de bästa, några procent. Betyget är ett förslag; personens eget betyg i Resolve gäller.
 - **Bortval med skäl.** Ingen bild tas bort. En bild som inte duger får `forslag: bort` och ett `varfor` (oskarp, dubblett av en bättre, slutna ögon, misstag). Raderna med `bort` är den fullständiga listan över bortvalda bilder och varför, och ett bortval ångras genom att ändra raden. Personen går igenom förslagen i ett granskningsblad med bilderna och förslagen förvalda, och en knapp som skickar valen tillbaka till chatten.
-- **Personer:** bara namn på dem projektets `README.md` känner igen. Övriga beskrivs.
-- Många bilder delas upp på flera parallella agenter, en del var, som skriver sina rader till var sin fil som slås ihop. Varje agent får projektets `README.md` så att beskrivningarna blir enhetliga.
+- **Personer:** bara namn på dem projektets `<projekt>.md` känner igen. Övriga beskrivs.
+- Många bilder delas upp på flera parallella agenter, en del var, som skriver sina rader till var sin fil som slås ihop. Varje agent får projektets `<projekt>.md` så att beskrivningarna blir enhetliga.
 
 ## Videoklippen
 
@@ -34,6 +34,6 @@ Materialet är bara värt något om det går att hitta. Viska skriver kunskapen 
 
 ## Anteckningarna
 
-- **Inspelningens `README.md`:** plats och tid ur `ingest.csv` och schemat, vad som hände i ordning, ljuset, källorna, klockskillnad, favoriterna med filnamn, och det som saknas för uppdraget (till exempel "ingen gruppbild").
-- **Projektets `README.md`:** skapas första gången från projektet i repot (`00-index.md`, briefen) och fylls på: uppdraget, personerna, en rad per inspelning, de bästa bilderna och citaten.
+- **Inspelningens `<datum>-<plats>.md`:** plats och tid ur `ingest.csv` och schemat, vad som hände i ordning, ljuset, källorna, klockskillnad, favoriterna med filnamn, och det som saknas för uppdraget (till exempel "ingen gruppbild").
+- **Projektets `<projekt>.md`:** skapas första gången från projektet i repot (`00-index.md`, briefen) och fylls på: uppdraget, personerna, en rad per inspelning, de bästa bilderna och citaten.
 - **`logg.md`:** en rad per gång: `2026-10-22 · viska (martenangner) · Katalog: 2026-10-21-middag, 380 filer, 41 klipp utskrivna`. Överlämningen skrivs som vanligt i repot vid wrap.
