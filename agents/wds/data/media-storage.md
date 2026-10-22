@@ -25,10 +25,11 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
       <datum>-<plats>/                 en inspelning = en dag på en plats
         <datum>-<plats>.md             inspelningens anteckningar: plats, tid, ljus, vilka, kamerainställningar, klocka
         innehall.csv                   en rad per fil: vad den visar, personer, nyckelord, betyg, favorit
-        transkript/<fil>.srt           vad som sägs i varje videoklipp, med tider
         ingest.csv                     en rad per fil: när, varifrån, tagen, kamera, sha256
         original/
           <person>-<kamera>/           en mapp per källa: marten-lumix-s9, johanna-iphone
+            <klipp>.srt, .words.json   utskriften bredvid varje videoklipp, samma grundnamn
+        klipp/                         tvättade versioner av tal och intervjuer: <klipp>-tvattad.mp4 + .srt + .csv + .xml
         export/
           <kanal>/                     webb, sociala-medier, tryck, videoheader …
       inkorg/                          allt nytt läggs här, Viska sorterar och tömmer
@@ -53,7 +54,7 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
 | `logg.md` i projektet | WDS designlogg, DIT-loggen | En rad per händelse, nyaste först: datum, vem (person eller agent), vad (import, katalog, redigering, export, flytt). Överlämningarna, var arbetet står och vad som är nästa steg, ligger i repots `sessions/` som vanligt; loggen pekar dit. |
 | `<datum>-<plats>.md` i inspelningen | Fotografens anteckningar, kamerarapporten | Plats, tid, vad som hände, ljuset, vilka som var med, källorna och deras inställningar, klockskillnad mellan kameror, det som saknas. |
 | `innehall.csv` | Loggning i film, IPTC-fälten i foto, urval med flaggor | En rad per fil: `fil, tagen, beskrivning, nyckelord, teknik, teknik_kommentar, konst, konst_kommentar, betyg, favorit, forslag, varfor`. Beskrivning och nyckelord på projektets språk. Betyg 1–5 som i Resolve och Lightroom. `forslag: bort` med `varfor` är listan över bortvalda filer; ingen fil raderas. |
-| `transkript/<fil>.srt` | Undertexter som sidofil | Det som sägs i ett videoklipp, med tider, i SubRip. Samma grundnamn som klippet. Resolve läser `.srt` som undertextspår. |
+| `<klipp>.srt` bredvid klippet | Undertexter som sidofil | Det som sägs i ett videoklipp, med tider, i SubRip, och `<klipp>.words.json` med tid per ord. Samma grundnamn och samma mapp som klippet, så att utskriften följer med när klippet kopieras eller sorteras om (Mårten, 2026-10-22). Resolve läser `.srt` som undertextspår. Originalet rörs inte; sidofilerna är egna filer. |
 
 - **Originalen rörs fortfarande inte.** Kunskapen ligger i egna filer, aldrig inskriven i originalen. På exporter skrivs beskrivning, nyckelord och upphov in i filen ([exiftool](../tools/exiftool.md)), så att de följer med ut.
 - **Personer:** namn bara på dem som är med i projektet eller har gett sitt samtycke. Andra beskrivs ("en lärare vid fönsterbordet"). Följ projektets policy i `governance/`.

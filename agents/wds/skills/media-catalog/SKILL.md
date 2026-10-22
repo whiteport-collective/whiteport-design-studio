@@ -8,7 +8,7 @@ tools: [wds/transcribe, wds/exiftool, wds/ffmpeg, wds/media-worker]
 
 # Katalogisera media
 
-Materialet är bara värt något om det går att hitta. Viska skriver kunskapen om varje projekt och varje inspelning som vanlig text bredvid mediet, i den form som [media-storage](../../data/media-storage.md#kunskapen-om-materialet) beskriver: `<projekt>.md` och `logg.md` i projektet, `<datum>-<plats>.md`, `innehall.csv` och `transkript/` i varje inspelning.
+Materialet är bara värt något om det går att hitta. Viska skriver kunskapen om varje projekt och varje inspelning som vanlig text bredvid mediet, i den form som [media-storage](../../data/media-storage.md#kunskapen-om-materialet) beskriver: `<projekt>.md` och `logg.md` i projektet, `<datum>-<plats>.md` och `innehall.csv` i varje inspelning, och utskriften bredvid varje klipp.
 
 **Klart betyder:** varje fil i inspelningen har en rad i `innehall.csv` med en beskrivning man kan söka på, varje videoklipp med tal har en `.srt`, inspelningens `<datum>-<plats>.md` säger vad som hände och vad som finns, projektets `<projekt>.md` och `logg.md` är uppdaterade, och personen har fått de bästa bilderna och klippen i några rader.
 
@@ -29,7 +29,7 @@ Materialet är bara värt något om det går att hitta. Viska skriver kunskapen 
 
 ## Videoklippen
 
-- **Utskriften:** [transcribe](../../tools/transcribe.md) på källmappen till inspelningens `transkript/`, i bakgrunden.
+- **Utskriften:** [transcribe](../../tools/transcribe.md) på källmappen, i bakgrunden. Utskriften läggs bredvid varje klipp (`<klipp>.srt` och `.words.json`), så att den följer med klippet. Klipp som mest är tal (intervjuer, tal) får också en tvättad version i `klipp/`, och den kontrolleras med `worker.py check` innan den lämnas över.
 - **Raden i `innehall.csv`:** vad klippet visar (en blick på en stillbild ur början och mitten) och vad som sägs i en mening, med de viktigaste citaten i nyckelorden.
 
 ## Anteckningarna

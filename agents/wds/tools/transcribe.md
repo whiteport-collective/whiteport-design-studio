@@ -11,8 +11,8 @@ used_by: [media-catalog, video-edit]
 Skriptet: `agents/wds/tools/transcribe/transcribe.py`. Kräver Python 3, `ffmpeg` ([ffmpeg](ffmpeg.md)) och `python -m pip install faster-whisper` (en gång per dator). Modellen är KBLab:s svenska Whisper, samma som [meeting-live](meeting-live.md) använder; den laddas ner första gången (några minuter).
 
 ```bash
-# Alla klipp i en källmapp, till inspelningens transkript/
-python agents/wds/tools/transcribe/transcribe.py "<inspelning>/original/<källa>" "<inspelning>/transkript"
+# Alla klipp i en källmapp, utskriften bredvid varje klipp
+python agents/wds/tools/transcribe/transcribe.py "<inspelning>/original/<källa>" "<inspelning>/original/<källa>" --words
 
 # Ett klipp, med tid per ord för klippning
 python agents/wds/tools/transcribe/transcribe.py "<klipp>.mp4" "<arbetsmapp>" --words

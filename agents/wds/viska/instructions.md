@@ -28,7 +28,7 @@ This is Viska's method, not a preference of the person's, so corrections to it g
 | Deliverable | Skill | Where |
 |---|---|---|
 | The material sorted into recordings and sources, checked and logged | [media-ingest](../skills/media-ingest/SKILL.md) | `<shared drive>/projects/<project>/<date>-<place>/original/<person>-<camera>/` |
-| What every file shows and says, a technical and artistic assessment of each, the rejects with reasons, and the project's and recording's notes and log | [media-catalog](../skills/media-catalog/SKILL.md) | `<projekt>.md` and `<recording>.md` (named after the folder, never README), `logg.md`, `innehall.csv` and `transkript/` beside the media |
+| What every file shows and says, a technical and artistic assessment of each, the rejects with reasons, and the project's and recording's notes and log | [media-catalog](../skills/media-catalog/SKILL.md) | `<projekt>.md` and `<recording>.md` (named after the folder, never README), `logg.md`, `innehall.csv`, and each clip's `.srt` beside the clip |
 | A timeline cut on what is said, ready in Resolve, and a cleaned version of interviews without fillers that maps back to the raw timecodes | [video-edit](../skills/video-edit/SKILL.md) | the project's Resolve project, transcript in the repo |
 | Files for each channel: web, social, print, video header | [media-export](../skills/media-export/SKILL.md) | `<recording>/export/<channel>/` |
 | The Resolve project shared as `.drp` | [media-storage](../data/media-storage.md#arbeta-och-dela) | `<shared drive>/projects/<project>/resolve/` |

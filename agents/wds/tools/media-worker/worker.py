@@ -6,7 +6,7 @@
     python worker.py batch  <klippmapp> <utmapp>
 
 run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två sorters jobb:
-        1. Utskrift: varje videoklipp utan <inspelning>/transkript/<grundnamn>.srt skrivs ut
+        1. Utskrift: varje videoklipp utan <grundnamn>.srt bredvid sig skrivs ut
            (transcribe-toolet, med tid per ord).
         2. Tvätt: varje jobbfil <projekt>/jobb/*.tvatta (en rad: klippets sökväg under projektet)
            tvättar ett klipp till. Varje klipp med tal tvättas också automatiskt. Den tvättade versionen
@@ -14,13 +14,14 @@ run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två
            upprepningar och långa pauser. Jobbfilen flyttas till jobb/klara/.
         Varje klart jobb blir en rad i projektets logg.md. --once kör ett varv och slutar.
 status  visar vad som väntar och vad som är klart, per projekt.
-wash    tvättar ett klipp direkt (kräver <grundnamn>.words.json i inspelningens transkript/).
-batch   skriver ut och tvättar alla klipp i en lokal mapp till <utmapp>/transkript/ och <utmapp>/klipp/,
+wash    tvättar ett klipp direkt (kräver <grundnamn>.words.json bredvid klippet).
+batch   skriver ut alla klipp i en lokal mapp (utskriften bredvid klippet) och tvättar talen till <utmapp>/klipp/,
         utan Drive och utan AI. Används i den lokala arbetsmappen innan resultatet läggs i Drive.
 
 Inget skrivs i original/. Jobb som avbryts görs om nästa varv; ett klart jobb görs aldrig om.
 """
 import argparse, csv, datetime as dt, json, os, re, subprocess, sys, time
+from collections import Counter
 from fractions import Fraction
 from pathlib import Path
 from urllib.parse import quote
@@ -32,7 +33,8 @@ HESITATIONS = {"eh", "ehm", "eeh", "öh", "öhm", "öhh", "äh", "ähm", "hm", "
 FILLERS = {"liksom", "typ", "alltså", "ba", "asså", "såhär", "ju"}
 PAUSE = 0.6      # längre tystnad än så kortas
 KEEP = 0.15      # så mycket luft som lämnas vid varje skarv
-MIN_WORDS = 15   # klipp med minst så många ord tvättas automatiskt
+MIN_WORDS = 15   # klipp med minst så många ord tvättas automatiskt ...
+MIN_WPM = 60     # ... och minst så många ord per minut (tal och intervjuer, inte klipp som mest visar något)
 NAME = "media-worker"
 
 
@@ -60,25 +62,46 @@ def log(project: Path, text: str):
     f.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def sidecar(clip: Path, ext: str):
+    """Utskriften ligger bredvid klippet med samma grundnamn (P1000617.srt), så att den följer med
+    när klippet kopieras. Det äldre läget <inspelning>/transkript/ läses fortfarande."""
+    beside = clip.with_suffix(ext)
+    if beside.exists():
+        return beside
+    for p in clip.parents:
+        if p.name == "original":
+            legacy = p.parent / "transkript" / (clip.stem + ext)
+            if legacy.exists():
+                return legacy
+    return beside
+
+
+def is_talk(clip: Path, words):
+    """Tvättas bara när klippet mest är tal (intervju, tal): minst MIN_WORDS ord och MIN_WPM ord per minut."""
+    if len(words) < MIN_WORDS:
+        return False
+    dur = probe(clip)["dur"] or 1
+    return len(words) / dur * 60 >= MIN_WPM
+
+
 def pending_transcripts(rec: Path):
-    out = rec / "transkript"
-    return [c for c in clips(rec) if not (out / (c.stem + ".srt")).exists()]
+    return [c for c in clips(rec) if not sidecar(c, ".srt").exists()]
 
 
 def pending_washes(rec: Path):
-    """Klipp med tal (minst MIN_WORDS ord) som saknar en tvättad version."""
+    """Klipp som mest är tal och saknar en tvättad version."""
     todo = []
     for c in clips(rec):
-        words_f = rec / "transkript" / (c.stem + ".words.json")
+        words_f = sidecar(c, ".words.json")
         if (rec / "klipp" / f"{c.stem}-tvattad.mp4").exists() or not words_f.exists():
             continue
-        if len(json.loads(words_f.read_text(encoding="utf-8"))) >= MIN_WORDS:
+        if is_talk(c, json.loads(words_f.read_text(encoding="utf-8"))):
             todo.append(c)
     return todo
 
 
 def transcribe(rec: Path, clip: Path):
-    r = subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(rec / "transkript"), "--words"])
+    r = subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(clip.parent), "--words"])
     return r.returncode == 0
 
 
@@ -106,7 +129,7 @@ def classify(word: str, prev: str):
 
 def wash(clip: Path, out: Path | None = None, words_f: Path | None = None, render: bool = True):
     rec = clip.parents[[p.name for p in clip.parents].index("original") + 1] if "original" in [p.name for p in clip.parents] else clip.parent
-    words_f = words_f or rec / "transkript" / (clip.stem + ".words.json")
+    words_f = words_f or sidecar(clip, ".words.json")
     words = json.loads(words_f.read_text(encoding="utf-8"))
     info = probe(clip)
     out = out or rec / "klipp"
@@ -251,25 +274,74 @@ def xmeml(clip: Path, info, keep, cuts):
             f"<track>{''.join(vid)}</track></video><audio><track>{''.join(aud)}</track></audio></media></sequence></xmeml>\n")
 
 
+# ---------- kontroll ----------
+
+def norm(w: str):
+    return re.sub(r"[^\wåäö]", "", w.lower())
+
+
+def check(washed: Path, words_f: Path, map_f: Path):
+    """Provlyssnar en tvättad version: skriver ut den igen och jämför med orden som skulle vara kvar,
+    och mäter ljudnivån vid varje skarv (högt på båda sidor = skarven ligger mitt i tal)."""
+    import difflib, tempfile, wave, array, math
+    words = json.loads(words_f.read_text(encoding="utf-8"))
+    rows = list(csv.DictReader(open(map_f, encoding="utf-8-sig")))
+    keep = [(float(r["start_ra"]), float(r["slut_ra"])) for r in rows if r["typ"] == "behall"]
+    removed = Counter(r["ord"].strip().lower() for r in rows if r["typ"] == "bort" and r["ord"].strip())
+    expected = [norm(w["word"]) for w in words if to_washed((w["start"] + w["end"]) / 2, keep) is not None]
+    expected = [w for w in expected if w]
+    with tempfile.TemporaryDirectory() as td:
+        subprocess.run([sys.executable, str(TRANSCRIBE), str(washed), td, "--words"], capture_output=True)
+        wf = Path(td) / (washed.stem + ".words.json")
+        heard = [norm(w["word"]) for w in json.loads(wf.read_text(encoding="utf-8"))] if wf.exists() else []
+        heard = [w for w in heard if w]
+        wav = Path(td) / "a.wav"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(washed), "-ac", "1", "-ar", "16000", str(wav)], check=True)
+        with wave.open(str(wav)) as w:
+            pcm = array.array("h", w.readframes(w.getnframes()))
+    sm = difflib.SequenceMatcher(a=expected, b=heard, autojunk=False)
+    lost = [" ".join(expected[i1:i2]) for op, i1, i2, j1, j2 in sm.get_opcodes() if op in ("delete", "replace")]
+
+    def db(t0, t1):
+        seg = pcm[max(0, int(t0 * 16000)):int(t1 * 16000)]
+        if not seg:
+            return -99.0
+        rms = math.sqrt(sum(x * x for x in seg) / len(seg)) or 1
+        return 20 * math.log10(rms / 32768)
+
+    speech = sorted(db(i * 0.5, i * 0.5 + 0.5) for i in range(int(len(pcm) / 16000 / 0.5)))
+    loud = speech[int(len(speech) * 0.7)] if speech else -20   # typisk talnivå i klippet
+    joints, pos, hot = [], 0.0, []
+    for a, b in keep[:-1]:
+        pos += b - a
+        before, after = db(pos - 0.06, pos - 0.01), db(pos + 0.01, pos + 0.06)
+        joints.append(pos)
+        if before > loud - 6 and after > loud - 6:
+            hot.append(round(pos, 2))
+    return {"klipp": washed.name, "ord_vantade": len(expected), "ord_horda": len(heard),
+            "likhet": round(sm.ratio(), 3), "ord_som_saknas": lost[:15], "skarvar": len(joints),
+            "skarvar_i_tal": hot, "bortklippta_ord": dict(removed.most_common())}
+
+
 # ---------- lokalt ----------
 
 def batch(src: Path, out: Path):
     """Skriver ut och tvättar alla videoklipp i en lokal mapp, utan Drive och utan AI.
 
-    Utskrift till <out>/transkript/, tvättade versioner till <out>/klipp/. Det som redan finns hoppas över."""
+    Utskriften bredvid varje klipp, tvättade versioner av talen till <out>/klipp/. Det som redan finns hoppas över."""
     todo = sorted(p for p in src.rglob("*") if p.suffix.lower() in VIDEO and not p.name.endswith(".part"))
-    tr, kl = out / "transkript", out / "klipp"
+    kl = out / "klipp"
     for n, clip in enumerate(todo, 1):
         t0 = time.time()
-        words_f = tr / (clip.stem + ".words.json")
+        words_f = sidecar(clip, ".words.json")
         if not words_f.exists():
-            subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(tr), "--words"], check=False)
+            subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(clip.parent), "--words"], check=False)
         if not words_f.exists():
             print(f"{n}/{len(todo)} {clip.name}: utskriften misslyckades", flush=True)
             continue
         words = json.loads(words_f.read_text(encoding="utf-8"))
-        if len(words) < MIN_WORDS:
-            print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, tvättas inte ({time.time() - t0:.0f} s)", flush=True)
+        if not is_talk(clip, words):
+            print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, inte tal, tvättas inte ({time.time() - t0:.0f} s)", flush=True)
             continue
         if not (kl / f"{clip.stem}-tvattad.mp4").exists():
             r = wash(clip, kl, words_f)
@@ -308,7 +380,7 @@ def run_once(root: Path):
             clip = project / job.read_text(encoding="utf-8").strip().replace("\\", "/")
             try:
                 rec = clip.parents[[p.name for p in clip.parents].index("original") + 1]
-                if not (rec / "transkript" / (clip.stem + ".words.json")).exists():
+                if not sidecar(clip, ".words.json").exists():
                     transcribe(rec, clip)
                 r = wash(clip)
             except Exception as e:  # jobbet ligger kvar och görs om nästa varv
@@ -341,8 +413,12 @@ if __name__ == "__main__":
     s = sub.add_parser("status"); s.add_argument("--root", default="G:/Shared drives", type=Path)
     w = sub.add_parser("wash"); w.add_argument("clip", type=Path); w.add_argument("--out", type=Path); w.add_argument("--words", type=Path)
     b = sub.add_parser("batch"); b.add_argument("src", type=Path); b.add_argument("out", type=Path)
+    c = sub.add_parser("check"); c.add_argument("washed", type=Path); c.add_argument("words", type=Path)
     a = ap.parse_args()
-    if a.cmd == "batch":
+    if a.cmd == "check":
+        m = a.washed.with_suffix(".csv")
+        print(json.dumps(check(a.washed, a.words, m), ensure_ascii=False, indent=1))
+    elif a.cmd == "batch":
         batch(a.src, a.out)
     elif a.cmd == "status":
         status(a.root)

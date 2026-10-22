@@ -15,7 +15,7 @@ kamera → card_watch.py (vilken dator som helst) → <projekt>/inkorg/<person>/
                                                        ↓  Viska sorterar (media-ingest)
                        <projekt>/<datum>-<plats>/original/<person>-<kamera>/
                                                        ↓  worker.py (datorn som alltid är på)
-                       transkript/<klipp>.srt + .words.json · klipp/<klipp>-tvattad.xml + .csv · logg.md
+                       <klipp>.srt + .words.json bredvid klippet · klipp/<klipp>-tvattad.mp4 + .srt + .csv + .xml · logg.md
 ```
 
 Kräver Python 3, [ffmpeg](ffmpeg.md), [exiftool](exiftool.md), [transcribe](transcribe.md) (faster-whisper) och Google Drive för datorn med de delade enheterna.
@@ -30,8 +30,10 @@ python agents/wds/tools/media-worker/worker.py wash "<klipp>"    # tvätta ett k
 ```
 
 - `--root` är mappen med de delade enheterna, som standard `G:/Shared drives`. Arbetaren går igenom `*/projects/*/<inspelning>/original/`.
-- **Utskrift:** varje videoklipp utan `<inspelning>/transkript/<grundnamn>.srt` skrivs ut, med tid per ord.
-- **Tvätt, två versioner av varje klipp med tal** (Mårten, 2026-10-22): råfilen i `original/` och en tvättad version utan hummanden, utfyllnadsord och pauser, som ett enda sammanhängande klipp. Den läggs i redigeringen och klipps efter innehåll, utan att tidslinjen fylls av småbitar. Varje klipp med minst 15 ord tvättas automatiskt efter utskriften. Arbetaren skriver i `<inspelning>/klipp/`:
+- **Utskrift:** varje videoklipp utan `<grundnamn>.srt` bredvid sig skrivs ut, med tid per ord. Utskriften läggs bredvid klippet så att den följer med när klippet kopieras (det äldre läget `<inspelning>/transkript/` läses fortfarande).
+- **Lokalt:** `worker.py batch <klippmapp> <utmapp>` gör utskrift och tvätt i en lokal arbetsmapp, utan Drive och utan AI.
+- **Kontroll av tvätten:** `worker.py check <klipp>-tvattad.mp4 <klipp>.words.json` skriver ut den tvättade versionen igen och jämför ord för ord med det som skulle vara kvar, mäter ljudnivån vid varje skarv (högt på båda sidor betyder att skarven ligger i tal) och listar de bortklippta orden. Kör den på varje tvättad version innan den lämnas över.
+- **Tvätt, två versioner av varje klipp med tal** (Mårten, 2026-10-22): råfilen i `original/` och en tvättad version utan hummanden, utfyllnadsord och pauser, som ett enda sammanhängande klipp. Den läggs i redigeringen och klipps efter innehåll, utan att tidslinjen fylls av småbitar. Klipp som mest är tal (minst 15 ord och minst 60 ord per minut) tvättas automatiskt efter utskriften; klipp som mest visar något i bild får bara utskrift. Arbetaren skriver i `<inspelning>/klipp/`:
   - `<klipp>-tvattad.mp4`: den tvättade versionen, i råfilens upplösning och bildfrekvens (HEVC 10-bit med Intel Quick Sync, annars libx265, cirka 50 Mbit/s), så att den färgsätts som råfilen.
   - `-tvattad.csv`: tidkodskartan, varje behållen och borttagen bit med tider i råfilen och i den tvättade versionen. Skarvarna ligger på hela bildrutor. Den används för att hitta tillbaka till råfilen.
   - `-tvattad.srt`: undertexten med den tvättade versionens tider.

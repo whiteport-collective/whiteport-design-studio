@@ -14,11 +14,11 @@ Ersätter det gamla `/edit-video`, som gjorde en tidslinje för Premiere med Dee
 
 ## Gången
 
-1. **Utskriften med ordtider:** [transcribe](../../tools/transcribe.md) med `--words`. Finns klippets `.srt` redan i inspelningens `transkript/` från katalogen, börja med att läsa den.
+1. **Utskriften med ordtider:** [transcribe](../../tools/transcribe.md) med `--words`. Finns klippets `.srt` redan bredvid klippet från katalogen, börja med att läsa den.
 2. **Visa utskriften** med tider, och markera tystnad över en sekund, upprepade meningar (troliga omtagningar), utfyllnadsord och korta felstarter.
 3. **Kom överens om klippen.** Snabbstädning (tystnad över två sekunder, utfyllnad, felstarter), personens egna val, eller bästa tagningen bland omtagningarna. Säg vad som tas bort innan tidslinjen skrivs.
 4. **Tidslinjen:** FCP 7 XML (`xmeml`) med källans bildfrekvens och upplösning ur `ffprobe`, ett klipp per behållen del, namn som säger vad delen är, och markörer för kapitel. Den sparas i projektets arbetsmapp, inte i `original/`. Med Studio importeras den direkt ([resolve](../../tools/resolve.md)); utan Studio öppnar personen den med File → Import → Timeline.
-5. **Utskriften** finns i inspelningens `transkript/`. Citat som används i manus eller texter förs in i projektet i repot med en länk dit.
+5. **Utskriften** ligger bredvid klippet (`<klipp>.srt`). Citat som används i manus eller texter förs in i projektet i repot med en länk dit.
 
 En ny version av klippen är en ny tidslinje. Den förra ligger kvar.
 
