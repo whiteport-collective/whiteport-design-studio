@@ -8,7 +8,8 @@ run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två
         1. Utskrift: varje videoklipp utan <inspelning>/transkript/<grundnamn>.srt skrivs ut
            (transcribe-toolet, med tid per ord).
         2. Tvätt: varje jobbfil <projekt>/jobb/*.tvatta (en rad: klippets sökväg under projektet)
-           ger en tvättad tidslinje i <inspelning>/klipp/: utan hummanden, utfyllnadsord,
+           tvättar ett klipp till. Varje klipp med tal tvättas också automatiskt. Den tvättade versionen
+           (<inspelning>/klipp/<klipp>-tvattad.mp4 + .csv + .srt + .xml) är utan hummanden, utfyllnadsord,
            upprepningar och långa pauser. Jobbfilen flyttas till jobb/klara/.
         Varje klart jobb blir en rad i projektets logg.md. --once kör ett varv och slutar.
 status  visar vad som väntar och vad som är klart, per projekt.
@@ -28,6 +29,7 @@ HESITATIONS = {"eh", "ehm", "eeh", "öh", "öhm", "öhh", "äh", "ähm", "hm", "
 FILLERS = {"liksom", "typ", "alltså", "ba", "asså", "såhär", "ju"}
 PAUSE = 0.6      # längre tystnad än så kortas
 KEEP = 0.15      # så mycket luft som lämnas vid varje skarv
+MIN_WORDS = 15   # klipp med minst så många ord tvättas automatiskt
 NAME = "media-worker"
 
 
@@ -60,6 +62,18 @@ def pending_transcripts(rec: Path):
     return [c for c in clips(rec) if not (out / (c.stem + ".srt")).exists()]
 
 
+def pending_washes(rec: Path):
+    """Klipp med tal (minst MIN_WORDS ord) som saknar en tvättad version."""
+    todo = []
+    for c in clips(rec):
+        words_f = rec / "transkript" / (c.stem + ".words.json")
+        if (rec / "klipp" / f"{c.stem}-tvattad.mp4").exists() or not words_f.exists():
+            continue
+        if len(json.loads(words_f.read_text(encoding="utf-8"))) >= MIN_WORDS:
+            todo.append(c)
+    return todo
+
+
 def transcribe(rec: Path, clip: Path):
     r = subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(rec / "transkript"), "--words"])
     return r.returncode == 0
@@ -87,7 +101,7 @@ def classify(word: str, prev: str):
     return None
 
 
-def wash(clip: Path, out: Path | None = None, words_f: Path | None = None):
+def wash(clip: Path, out: Path | None = None, words_f: Path | None = None, render: bool = True):
     rec = clip.parents[[p.name for p in clip.parents].index("original") + 1] if "original" in [p.name for p in clip.parents] else clip.parent
     words_f = words_f or rec / "transkript" / (clip.stem + ".words.json")
     words = json.loads(words_f.read_text(encoding="utf-8"))
@@ -116,6 +130,10 @@ def wash(clip: Path, out: Path | None = None, words_f: Path | None = None):
         t = w["end"]
     if seg_start is not None:
         keep.append((seg_start, min(info["dur"], t + KEEP)))
+    # skarvarna på hela bildrutor, så att bild, ljud och tidkodskartan stämmer exakt
+    fps = float(info["rate"])
+    snap = lambda s: round(s * fps) / fps
+    keep = [(snap(a), snap(b)) for a, b in keep if snap(b) > snap(a)]
 
     # tidkodskarta: rå tid <-> tvättad tid
     rows, pos = [], 0.0
@@ -132,9 +150,72 @@ def wash(clip: Path, out: Path | None = None, words_f: Path | None = None):
         wr = csv.DictWriter(f, fieldnames=["typ", "start_ra", "slut_ra", "start_tvattad", "slut_tvattad", "ord", "varfor"])
         wr.writeheader(); wr.writerows(rows)
     Path(f"{base}.xml").write_text(xmeml(clip, info, keep, cuts), encoding="utf-8")
+    Path(f"{base}.srt").write_text(washed_srt(words, keep), encoding="utf-8")
+    if render:
+        render_washed(clip, keep, Path(f"{base}.mp4"))
     removed = info["dur"] - pos
     return {"klipp": clip.name, "behallna": len(keep), "bort": len(cuts), "sekunder_bort": round(removed, 1),
-            "csv": f"{base}.csv", "xml": f"{base}.xml"}
+            "csv": f"{base}.csv", "xml": f"{base}.xml", "mp4": f"{base}.mp4" if render else ""}
+
+
+def to_washed(t: float, keep):
+    """Rå tid -> tid i den tvättade versionen, eller None om tiden är bortklippt."""
+    pos = 0.0
+    for a, b in keep:
+        if a <= t <= b:
+            return pos + t - a
+        pos += b - a
+    return None
+
+
+def washed_srt(words, keep, max_words=8, gap=0.6):
+    """Undertexter till den tvättade versionen: de behållna orden, med tvättade tider."""
+    lines, cur = [], []
+    for w in words:
+        s, e = to_washed(w["start"], keep), to_washed(w["end"], keep)
+        if s is None or e is None:
+            continue
+        if cur and (len(cur) >= max_words or s - cur[-1][1] > gap or cur[-1][2].rstrip().endswith((".", "?", "!"))):
+            lines.append(cur); cur = []
+        cur.append((s, e, w["word"]))
+    if cur:
+        lines.append(cur)
+    ts = lambda t: f"{int(t // 3600):02}:{int(t % 3600 // 60):02}:{int(t % 60):02},{int(round(t % 1 * 1000)) % 1000:03}"
+    return "".join(f"{n}\n{ts(l[0][0])} --> {ts(l[-1][1])}\n{''.join(x[2] for x in l).strip()}\n\n"
+                   for n, l in enumerate(lines, 1))
+
+
+def render_washed(clip: Path, keep, mp4: Path):
+    """Renderar den tvättade versionen som ett sammanhängande klipp, i råfilens upplösning och bildfrekvens.
+
+    En enda genomläsning med select/aselect (ingen buffring av bitarna), HEVC 10-bit med Intel Quick Sync
+    om det finns, annars libx265. Skrivs till .part och döps om när den är klar."""
+    expr = "+".join(f"between(t,{a:.4f},{b - 0.0005:.4f})" for a, b in keep)
+    graph = (f"[0:v]select='{expr}',setpts=N/FRAME_RATE/TB[v];"
+             f"[0:a]aselect='{expr}',asetpts=N/SR/TB[a]")
+    script = mp4.with_suffix(".filter.txt")
+    script.write_text(graph, encoding="utf-8")
+    part = mp4.with_name(mp4.stem + ".part.mp4")
+    enc = (["-c:v", "hevc_qsv", "-profile:v", "main10", "-pix_fmt", "p010le", "-b:v", "50M", "-maxrate", "60M", "-bufsize", "100M"]
+           if encoder_ok("hevc_qsv") else ["-c:v", "libx265", "-pix_fmt", "yuv420p10le", "-crf", "18", "-preset", "fast"])
+    cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", str(clip), "-/filter_complex", str(script),
+           "-map", "[v]", "-map", "[a]", *enc, "-tag:v", "hvc1", "-c:a", "aac", "-b:a", "320k",
+           "-map_metadata", "0", "-movflags", "+faststart", str(part)]
+    try:
+        subprocess.run(cmd, check=True)
+        os.replace(part, mp4)
+    finally:
+        script.unlink(missing_ok=True)
+        part.unlink(missing_ok=True)
+
+
+_enc = {}
+def encoder_ok(name: str):
+    if name not in _enc:
+        r = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-f", "lavfi", "-i", "testsrc2=s=256x256:d=0.2",
+                            "-c:v", name, "-pix_fmt", "p010le", "-f", "null", "-"], capture_output=True)
+        _enc[name] = r.returncode == 0
+    return _enc[name]
 
 
 def xmeml(clip: Path, info, keep, cuts):
@@ -183,6 +264,17 @@ def run_once(root: Path):
             if ok:
                 log(project, f"Utskrift: {rec.name}, {len(ok)} klipp ({', '.join(c.name for c in ok[:5])}{' …' if len(ok) > 5 else ''})")
                 done += len(ok)
+            washed = []
+            for clip in pending_washes(rec):
+                try:
+                    r = wash(clip)
+                except Exception as e:  # görs om nästa varv
+                    print(f"{clip.name}: {e}", flush=True)
+                    continue
+                washed.append(f"{r['klipp']} ({r['sekunder_bort']} s bort)")
+            if washed:
+                log(project, f"Tvätt: {rec.name}, {len(washed)} klipp med tal, tvättade versioner i klipp/ ({', '.join(washed[:5])}{' …' if len(washed) > 5 else ''})")
+                done += len(washed)
         for job in wash_jobs(project):
             clip = project / job.read_text(encoding="utf-8").strip().replace("\\", "/")
             try:

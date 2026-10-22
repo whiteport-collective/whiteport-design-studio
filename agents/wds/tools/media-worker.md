@@ -31,7 +31,12 @@ python agents/wds/tools/media-worker/worker.py wash "<klipp>"    # tvätta ett k
 
 - `--root` är mappen med de delade enheterna, som standard `G:/Shared drives`. Arbetaren går igenom `*/projects/*/<inspelning>/original/`.
 - **Utskrift:** varje videoklipp utan `<inspelning>/transkript/<grundnamn>.srt` skrivs ut, med tid per ord.
-- **Tvätt:** lägg en textfil `<projekt>/jobb/<namn>.tvatta` med klippets sökväg under projektet, till exempel `2026-10-22-linnesalen/original/marten-lumix-s9/P1000400.MP4`. Arbetaren skriver `<inspelning>/klipp/<klipp>-tvattad.xml` (FCP 7 XML: File → Import → Timeline i Resolve) och `-tvattad.csv` (tidkodskartan: varje behållen och borttagen bit, med tider i råfilen och i den tvättade versionen). Jobbfilen flyttas sedan till `jobb/klara/`.
+- **Tvätt, två versioner av varje klipp med tal** (Mårten, 2026-10-22): råfilen i `original/` och en tvättad version utan hummanden, utfyllnadsord och pauser, som ett enda sammanhängande klipp. Den läggs i redigeringen och klipps efter innehåll, utan att tidslinjen fylls av småbitar. Varje klipp med minst 15 ord tvättas automatiskt efter utskriften. Arbetaren skriver i `<inspelning>/klipp/`:
+  - `<klipp>-tvattad.mp4`: den tvättade versionen, i råfilens upplösning och bildfrekvens (HEVC 10-bit med Intel Quick Sync, annars libx265, cirka 50 Mbit/s), så att den färgsätts som råfilen.
+  - `-tvattad.csv`: tidkodskartan, varje behållen och borttagen bit med tider i råfilen och i den tvättade versionen. Skarvarna ligger på hela bildrutor. Den används för att hitta tillbaka till råfilen.
+  - `-tvattad.srt`: undertexten med den tvättade versionens tider.
+  - `-tvattad.xml`: samma tvätt som tidslinje mot råfilen (FCP 7 XML: File → Import → Timeline i Resolve), för den som vill dra ut en skarv.
+- **Tvätta ett klipp till:** lägg en textfil `<projekt>/jobb/<namn>.tvatta` med klippets sökväg under projektet, till exempel `2026-10-22-linnesalen/original/marten-lumix-s9/P1000400.MP4`. Jobbfilen flyttas sedan till `jobb/klara/`.
 - **Vad tvätten tar bort:** hummanden (eh, öh, hmm …), utfyllnadsord (liksom, typ, alltså …), ord som upprepas direkt och pauser över 0,6 s, med 0,15 s luft kvar vid varje skarv. Whisper skriver ofta inte ut hummanden alls, så de försvinner i stället som pauser. Kontrollera alltid den tvättade versionen i Resolve. Allt borttaget står i csv-filen och som en markör i tidslinjen, och kommer tillbaka genom att dra ut skarven.
 - **Loggen:** varje klart jobb blir en rad i projektets `logg.md`, `media-worker` som avsändare.
 - Inget skrivs i `original/`. Ett avbrutet jobb görs om nästa varv, och ett klart jobb görs aldrig om.
