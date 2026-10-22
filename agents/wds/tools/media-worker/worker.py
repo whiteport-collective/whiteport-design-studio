@@ -3,6 +3,7 @@
     python worker.py run    [--root "G:/Shared drives"] [--every 300] [--once]
     python worker.py status [--root "G:/Shared drives"]
     python worker.py wash   <klipp> [--out <mapp>]
+    python worker.py batch  <klippmapp> <utmapp>
 
 run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två sorters jobb:
         1. Utskrift: varje videoklipp utan <inspelning>/transkript/<grundnamn>.srt skrivs ut
@@ -14,6 +15,8 @@ run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två
         Varje klart jobb blir en rad i projektets logg.md. --once kör ett varv och slutar.
 status  visar vad som väntar och vad som är klart, per projekt.
 wash    tvättar ett klipp direkt (kräver <grundnamn>.words.json i inspelningens transkript/).
+batch   skriver ut och tvättar alla klipp i en lokal mapp till <utmapp>/transkript/ och <utmapp>/klipp/,
+        utan Drive och utan AI. Används i den lokala arbetsmappen innan resultatet läggs i Drive.
 
 Inget skrivs i original/. Jobb som avbryts görs om nästa varv; ett klart jobb görs aldrig om.
 """
@@ -248,6 +251,32 @@ def xmeml(clip: Path, info, keep, cuts):
             f"<track>{''.join(vid)}</track></video><audio><track>{''.join(aud)}</track></audio></media></sequence></xmeml>\n")
 
 
+# ---------- lokalt ----------
+
+def batch(src: Path, out: Path):
+    """Skriver ut och tvättar alla videoklipp i en lokal mapp, utan Drive och utan AI.
+
+    Utskrift till <out>/transkript/, tvättade versioner till <out>/klipp/. Det som redan finns hoppas över."""
+    todo = sorted(p for p in src.rglob("*") if p.suffix.lower() in VIDEO and not p.name.endswith(".part"))
+    tr, kl = out / "transkript", out / "klipp"
+    for n, clip in enumerate(todo, 1):
+        t0 = time.time()
+        words_f = tr / (clip.stem + ".words.json")
+        if not words_f.exists():
+            subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(tr), "--words"], check=False)
+        if not words_f.exists():
+            print(f"{n}/{len(todo)} {clip.name}: utskriften misslyckades", flush=True)
+            continue
+        words = json.loads(words_f.read_text(encoding="utf-8"))
+        if len(words) < MIN_WORDS:
+            print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, tvättas inte ({time.time() - t0:.0f} s)", flush=True)
+            continue
+        if not (kl / f"{clip.stem}-tvattad.mp4").exists():
+            r = wash(clip, kl, words_f)
+            print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, {r['sekunder_bort']} s bort ({time.time() - t0:.0f} s)", flush=True)
+    print(f"{now()} klart: {len(todo)} klipp i {src}", flush=True)
+
+
 # ---------- jobbkön ----------
 
 def wash_jobs(project: Path):
@@ -311,8 +340,11 @@ if __name__ == "__main__":
     r.add_argument("--every", type=int, default=300); r.add_argument("--once", action="store_true")
     s = sub.add_parser("status"); s.add_argument("--root", default="G:/Shared drives", type=Path)
     w = sub.add_parser("wash"); w.add_argument("clip", type=Path); w.add_argument("--out", type=Path); w.add_argument("--words", type=Path)
+    b = sub.add_parser("batch"); b.add_argument("src", type=Path); b.add_argument("out", type=Path)
     a = ap.parse_args()
-    if a.cmd == "status":
+    if a.cmd == "batch":
+        batch(a.src, a.out)
+    elif a.cmd == "status":
         status(a.root)
     elif a.cmd == "wash":
         print(json.dumps(wash(a.clip, a.out, a.words), ensure_ascii=False, indent=1))
