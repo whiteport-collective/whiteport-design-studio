@@ -39,7 +39,7 @@ python agents/wds/tools/media-worker/worker.py wash "<klipp>"    # tvätta ett k
   - `-tvattad.srt`: undertexten med den tvättade versionens tider.
   - `-tvattad.xml`: samma tvätt som tidslinje mot råfilen (FCP 7 XML: File → Import → Timeline i Resolve), för den som vill dra ut en skarv.
 - **Tvätta ett klipp till:** lägg en textfil `<projekt>/jobb/<namn>.tvatta` med klippets sökväg under projektet, till exempel `2026-10-22-linnesalen/original/marten-lumix-s9/P1000400.MP4`. Jobbfilen flyttas sedan till `jobb/klara/`.
-- **Vad tvätten tar bort:** hummanden (eh, öh, hmm …), utfyllnadsord (liksom, typ, alltså …), ord som upprepas direkt och pauser över 0,6 s, med 0,15 s luft kvar vid varje skarv. Whisper skriver ofta inte ut hummanden alls, så de försvinner i stället som pauser. Kontrollera alltid den tvättade versionen i Resolve. Allt borttaget står i csv-filen och som en markör i tidslinjen, och kommer tillbaka genom att dra ut skarven.
+- **Vad tvätten tar bort:** hummanden i alla längder (eh, ehhh, öhm, hmm, mhm …), rena utfyllnadsord (liksom, asså, ba; inte "ju", "alltså" eller "typ", som ofta bär betydelse), samma ord två gånger inom 0,3 s och pauser över 0,6 s, med 0,15 s luft kvar vid varje skarv. Whisper skriver ofta inte ut hummanden alls, så de försvinner i stället som pauser. Kontrollera alltid den tvättade versionen i Resolve. Allt borttaget står i csv-filen och som en markör i tidslinjen, och kommer tillbaka genom att dra ut skarven.
 - **Loggen:** varje klart jobb blir en rad i projektets `logg.md`, `media-worker` som avsändare.
 - Inget skrivs i `original/`. Ett avbrutet jobb görs om nästa varv, och ett klart jobb görs aldrig om.
 

@@ -29,8 +29,10 @@ from urllib.parse import quote
 HERE = Path(__file__).resolve().parent
 TRANSCRIBE = HERE.parent / "transcribe" / "transcribe.py"
 VIDEO = {".mp4", ".mov", ".mts", ".m2ts", ".mxf"}
-HESITATIONS = {"eh", "ehm", "eeh", "öh", "öhm", "öhh", "äh", "ähm", "hm", "hmm", "mm", "mhm", "um", "uh", "uhm", "ah"}
-FILLERS = {"liksom", "typ", "alltså", "ba", "asså", "såhär", "ju"}
+HESITATION = re.compile(r"^(e+h+m*|ö+h+m*|ä+h+m*|h+m+|m+h?m+|u+h+m*|u+m+|a+h+)$")   # eh, ehhh, öhm, hmm, mhm …
+# Bara rena utfyllnadsord. "ju", "alltså" och "typ" bär ofta betydelse och får vara kvar (Mårten, 2026-10-22).
+FILLERS = {"liksom", "asså", "ba"}
+REPEAT_GAP = 0.3  # ett ord räknas som upprepning bara om det kommer direkt efter samma ord
 PAUSE = 0.6      # längre tystnad än så kortas
 KEEP = 0.15      # så mycket luft som lämnas vid varje skarv
 MIN_WORDS = 15   # klipp med minst så många ord tvättas automatiskt ...
@@ -116,13 +118,13 @@ def probe(clip: Path):
     return {"rate": rate, "w": int(v["width"]), "h": int(v["height"]), "dur": float(info["format"]["duration"])}
 
 
-def classify(word: str, prev: str):
+def classify(word: str, prev: str, gap: float = 0.0):
     w = re.sub(r"[^\wåäö]", "", word.lower())
-    if w in HESITATIONS:
+    if HESITATION.match(w):
         return "humm"
     if w in FILLERS:
         return "utfyllnad"
-    if w and w == prev:
+    if w and w == prev and gap <= REPEAT_GAP:
         return "upprepning"
     return None
 
@@ -138,7 +140,7 @@ def wash(clip: Path, out: Path | None = None, words_f: Path | None = None, rende
     cuts, keep, prev, t = [], [], "", 0.0
     seg_start = None
     for w in words:
-        kind = classify(w["word"], prev)
+        kind = classify(w["word"], prev, w["start"] - t)
         prev = re.sub(r"[^\wåäö]", "", w["word"].lower())
         if kind:
             cuts.append((w["start"], w["end"], w["word"].strip(), kind))
