@@ -69,3 +69,13 @@ Hur mycket av Photo-sidan (album, RAW-inställningar, export av stillbilder) API
 
 - Resolve skriver aldrig över original. Rendering går till `export/<kanal>/`.
 - Projektets media ska ligga under projektmappen på den delade enheten. Viska lägger aldrig in en fil från någon annanstans.
+
+## Startfilen: alla bilder och klipp i Resolve utan Studio
+
+```bash
+python agents/wds/tools/resolve/timeline_xml.py "<delad enhet>/projects/<projekt>"
+```
+
+Skriver `<projekt>/resolve/<projekt>-start.xml` (FCP 7 XML) ur inspelningarnas `innehall.csv`: en tidslinje per inspelning i inspelningsordning (foton som JPEG, 4 s styck, och klipp, utan dem som föreslås bort), en tidslinje med favoriterna och en med de tvättade talen i `klipp/`. Varje fil får en markör med katalogens beskrivning och betyg. Mediet länkas där det ligger, så filen fungerar på varje dator där den delade enheten har samma sökväg; annars Path Mapping.
+
+I Resolve: **File → Import → Timeline**, välj filen. Klippen hamnar i Media Pool och tidslinjerna skapas. Utskrifterna (`<klipp>.srt` bredvid klippet) dras in som undertextspår. RAW-filerna (RW2) läggs in från `original/` när färgsättningen börjar. `--with-rejects` tar med även de bortvalda, `--still` ändrar fotonas längd.
