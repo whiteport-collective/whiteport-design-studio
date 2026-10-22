@@ -10,7 +10,7 @@ Roten består av mappar som går att droppa in. Varje toppmapp är en *sorts* sa
 |---|---|---|
 | `agents/` | källan | `agents/wds/`, `agents/web247/`, `agents/martenangner/` |
 | `governance/` | källan för policyn | `governance/wds/`, `governance/visita/` |
-| `projects/` | projektet | `projects/enkarriartack/` |
+| `projects/` | projektet | `projects/2026-10-21-studiebesok-stockholm/` |
 | `users/` | personen | `users/martenangner/` |
 | `sessions/` | personen och agenten | `sessions/martenangner/saga/` |
 
@@ -21,6 +21,14 @@ Tre regler:
 1. **En mapp har en ägare.** Den byts ut som en helhet och kan droppas in i ett annat repo.
 2. **Synken kopierar mappar, inte filer.** Den äger en synkad mapp helt och får därför också ta bort det som försvunnit i källan.
 3. **Man läser genom en platt vy**, inte genom mappträdet: `AGENTS.md`, policylistan i `governance/` och planens vyer. Lagringen följer ägaren, och vyn visar allt längs den dimension man behöver.
+
+## Projektens namn
+
+**Bestämt (Mårten, 2026-10-22).** Ett projekt heter `<startdatum>-<slug>`, till exempel `projects/2026-10-21-studiebesok-stockholm/`. Datumet först gör att projekten listas i tidsordning, så att äldre och nyare inte blandas.
+
+- **Startdatumet** är dagen projektet startar. Börjar projektet med en inspelning är det inspelningsdagen.
+- **Samma namn överallt.** Projektets mediamapp i kundens delade Google-enhet heter likadant: `projects/<samma namn>/media/`. Se [media-storage](media-storage.md).
+- **Nya projekt får datum.** Ett befintligt projekt döps om bara när det är billigt, med alla länkar rättade i samma commit. Gör det inte medan en annan session arbetar i projektet.
 
 ## Delat material
 

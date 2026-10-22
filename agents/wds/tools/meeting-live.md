@@ -3,7 +3,7 @@ name: meeting-live
 source: wds
 type: script
 description: Spelar in och skriver ut det som hörs (och visas) på datorn lokalt med Whisper, live och grundligt efteråt, och arkiverar mötet. Fireflies bara när personen uttryckligen ber om det. Allt körs på datorn, utan server och utan MCP. Skripten ligger i meeting-live/.
-used_by: [live-meeting, recording]
+used_by: [live-meeting, recording, video-edit]
 ---
 
 # Tool: meeting-live

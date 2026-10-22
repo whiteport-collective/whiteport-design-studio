@@ -46,7 +46,7 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
 
     **Required**
     1. **Client:** the organization's full name, and who commissions the project.
-    2. **Project name and slug:** the slug is short, lowercase, with hyphens (`acme-webshop`). It becomes the folder name.
+    2. **Project name, slug and start date:** the slug is short, lowercase, with hyphens (`acme-webshop`). The folder is `<start date>-<slug>` (`2026-10-21-acme-webshop`), so projects list in time order. The start date is the day the project starts; for a project that starts with a recording, the recording day. Its media folder on the client's shared drive gets the same name (`agents/wds/data/media-storage.md`).
     3. **What is being built:** website, web app, mobile app, e-commerce, a service, or something else.
     4. **Why:** the problem it solves or the goal, in one or two sentences.
     5. **Known constraints:** an existing brand (logo, colours, tone of voice), a platform that is already decided, accessibility or legal requirements.
@@ -61,7 +61,7 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
 
     ```
     Client:       [organization] (commissioner: [role or name])
-    Project:      [name] → projects/[slug]/
+    Project:      [name] → projects/[YYYY-MM-DD]-[slug]/
     Building:     [type]
     Goal:         [one sentence]
     Constraints:  [list, or "none stated"]
