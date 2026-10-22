@@ -3,7 +3,7 @@ name: video-edit
 description: Klipper video utifrån det som sägs. Viska skriver ut talet, föreslår klipp (bort med tystnad, omtagningar och felsägningar, eller det personen vill behålla) och lämnar en tidslinje som öppnas i DaVinci Resolve. Använd när personen vill klippa ett tal, en intervju eller ett föredrag, eller säger "klipp ihop", "ta bort pauserna" eller "gör en kort version".
 used_by: [viska]
 version: 1.0
-tools: [wds/ffmpeg, wds/transcribe, wds/resolve]
+tools: [wds/ffmpeg, wds/transcribe, wds/media-worker, wds/resolve]
 ---
 
 # Klippa video

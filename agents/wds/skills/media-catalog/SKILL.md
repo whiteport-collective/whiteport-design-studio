@@ -3,7 +3,7 @@ name: media-catalog
 description: Gör materialet sökbart. Viska tittar på varje bild och skriver vad den visar, skriver ut varje videoklipp, och för projektets och inspelningens anteckningar och logg bredvid mediet. Körs direkt efter media-ingest, och när personen säger "katalogisera", "vad finns i materialet" eller letar efter en viss bild eller ett citat.
 used_by: [viska]
 version: 1.0
-tools: [wds/transcribe, wds/exiftool, wds/ffmpeg]
+tools: [wds/transcribe, wds/exiftool, wds/ffmpeg, wds/media-worker]
 ---
 
 # Katalogisera media

@@ -15,7 +15,7 @@ copy  visar planen (torrkörning) och kopierar med --apply. Varje fil kopieras t
 
 Tidpunkten kommer från exiftool (DateTimeOriginal, annars CreateDate), annars filens ändringstid.
 """
-import argparse, csv, datetime as dt, hashlib, json, os, shutil, subprocess, sys
+import argparse, csv, datetime as dt, hashlib, json, os, shutil, subprocess, sys, tempfile
 from collections import Counter
 from pathlib import Path
 
@@ -34,8 +34,12 @@ def meta(paths):
     """Tidpunkt och kamera per fil, i en exiftool-körning."""
     out = {}
     if paths and shutil.which("exiftool"):
-        args = ["exiftool", "-json", "-q", "-DateTimeOriginal", "-CreateDate", "-Model", "-charset", "filename=utf8"]
-        r = subprocess.run(args + [str(p) for p in paths], capture_output=True, text=True, encoding="utf-8")
+        # Fillistan går via en argumentfil: många långa sökvägar spränger Windows kommandorad.
+        with tempfile.NamedTemporaryFile("w", suffix=".args", delete=False, encoding="utf-8") as f:
+            f.write("\n".join(str(p) for p in paths))
+        args = ["exiftool", "-json", "-q", "-DateTimeOriginal", "-CreateDate", "-Model", "-charset", "filename=utf8", "-@", f.name]
+        r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8")
+        os.unlink(f.name)
         for row in json.loads(r.stdout or "[]"):
             out[Path(row["SourceFile"]).resolve()] = row
     result = {}

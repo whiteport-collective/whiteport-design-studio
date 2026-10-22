@@ -3,7 +3,7 @@ name: media-ingest
 description: Sorterar foto, video och ljud från projektets inkorg (eller direkt från ett minneskort) in i rätt inspelning och källa i kundens delade Google-enhet, kontrollerat och loggat. Använd när personen har laddat ner material, säger "sortera materialet", "ta in bilderna" eller sätter i ett kort.
 used_by: [viska]
 version: 1.0
-tools: [wds/media-copy, wds/exiftool, wds/resolve]
+tools: [wds/media-copy, wds/media-worker, wds/exiftool, wds/resolve]
 ---
 
 # Ta in media
