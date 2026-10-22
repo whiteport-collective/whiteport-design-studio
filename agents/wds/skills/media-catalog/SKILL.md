@@ -12,6 +12,10 @@ Materialet är bara värt något om det går att hitta. Viska skriver kunskapen 
 
 **Klart betyder:** varje fil i inspelningen har en rad i `innehall.csv` med en beskrivning man kan söka på, varje videoklipp med tal har en `.srt`, inspelningens `README.md` säger vad som hände och vad som finns, projektets `README.md` och `logg.md` är uppdaterade, och personen har fått de bästa bilderna och klippen i några rader.
 
+## Ordningen: bilderna först
+
+**Bilderna katalogiseras först, och videon processas under tiden** (Mårten, 2026-10-22). Bilderna är mindre material och går snabbt att bedöma, och personen kan börja arbeta med dem för hand medan klippen skrivs ut och tvättas. Starta därför utskrift och tvätt i bakgrunden ([media-worker](../../tools/media-worker.md) `batch`, ett skript utan AI) i samma stund som materialet är kopierat till den lokala arbetsmappen, och gå sedan direkt till bilderna. Rapportera bilderna när de är klara, utan att vänta på videon.
+
 ## Bilderna
 
 - **Titta på en förhandsbild,** inte på originalet: JPEG-filen från kameran, eller förhandsbilden inuti RAW-filen ([exiftool](../../tools/exiftool.md)), nerskalad ([ffmpeg](../../tools/ffmpeg.md)) i en arbetsmapp utanför Drive. Är en RAW och en JPEG samma bild (samma grundnamn), beskriv den en gång och låt båda raderna ha samma text.
