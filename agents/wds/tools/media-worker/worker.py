@@ -15,7 +15,8 @@ run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två
         Varje klart jobb blir en rad i projektets logg.md. --once kör ett varv och slutar.
 status  visar vad som väntar och vad som är klart, per projekt.
 wash    tvättar ett klipp direkt (kräver <grundnamn>.words.json bredvid klippet).
-batch   skriver ut alla klipp i en lokal mapp (utskriften bredvid klippet) och tvättar talen till <utmapp>/klipp/,
+batch   skriver ut alla klipp i en lokal mapp (utskriften bredvid klippet), tvättar talen till <utmapp>/klipp/
+        och gör proxyfiler i Proxy/ bredvid klippen,
         utan Drive och utan AI. Används i den lokala arbetsmappen innan resultatet läggs i Drive.
 
 Inget skrivs i original/. Jobb som avbryts görs om nästa varv; ett klart jobb görs aldrig om.
@@ -240,8 +241,9 @@ def render_washed(clip: Path, keep, mp4: Path):
 _enc = {}
 def encoder_ok(name: str):
     if name not in _enc:
+        fmt = "p010le" if name.startswith("hevc") else "nv12"
         r = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-f", "lavfi", "-i", "testsrc2=s=256x256:d=0.2",
-                            "-c:v", name, "-pix_fmt", "p010le", "-f", "null", "-"], capture_output=True)
+                            "-c:v", name, "-pix_fmt", fmt, "-f", "null", "-"], capture_output=True)
         _enc[name] = r.returncode == 0
     return _enc[name]
 
@@ -348,7 +350,23 @@ def batch(src: Path, out: Path):
         if not (kl / f"{clip.stem}-tvattad.mp4").exists():
             r = wash(clip, kl, words_f)
             print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, {r['sekunder_bort']} s bort ({time.time() - t0:.0f} s)", flush=True)
-    print(f"{now()} klart: {len(todo)} klipp i {src}", flush=True)
+    # proxyfiler för redigeringen, bredvid klippen i en mapp Proxy/ (Resolve hittar dem där själv)
+    for clip in todo:
+        proxy(clip, clip.parent / "Proxy" / (clip.stem + ".mov"))
+    print(f"{now()} klart: {len(todo)} klipp i {src}, proxyfiler i Proxy/", flush=True)
+
+
+def proxy(clip: Path, dst: Path, height: int = 1080):
+    """H.264-proxy i 1080 (bildformatet bevaras), nyckelbild var tolfte ruta, Quick Sync om det finns."""
+    if dst.exists():
+        return
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    part = dst.with_name(dst.stem + ".part.mov")
+    enc = (["-c:v", "h264_qsv", "-global_quality", "23", "-g", "12"] if encoder_ok("h264_qsv")
+           else ["-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-g", "12"])
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(clip), "-vf", f"scale=-2:{height},format=nv12", *enc,
+                    "-c:a", "aac", "-b:a", "160k", "-map_metadata", "0", str(part)], check=True)
+    os.replace(part, dst)
 
 
 # ---------- jobbkön ----------

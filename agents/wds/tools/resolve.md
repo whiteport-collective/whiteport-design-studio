@@ -98,3 +98,14 @@ python agents/wds/tools/resolve/timeline_xml.py "<delad enhet>/projects/<projekt
 Skriver `<projekt>/resolve/<projekt>-start.xml` (FCP 7 XML) ur inspelningarnas `innehall.csv`: en tidslinje per inspelning i inspelningsordning (foton som JPEG, 4 s styck, och klipp, utan dem som föreslås bort), en tidslinje med favoriterna och en med de tvättade talen i `klipp/`. Varje fil får en markör med katalogens beskrivning och betyg. Mediet länkas där det ligger, så filen fungerar på varje dator där den delade enheten har samma sökväg; annars Path Mapping.
 
 I Resolve: **File → Import → Timeline**, välj filen. Klippen hamnar i Media Pool och tidslinjerna skapas. Utskrifterna (`<klipp>.srt` bredvid klippet) dras in som undertextspår. RAW-filerna (RW2) läggs in från `original/` när färgsättningen börjar. `--with-rejects` tar med även de bortvalda, `--still` ändrar fotonas längd.
+
+## Lägga in ett projekt med skript (Studio)
+
+```bash
+python agents/wds/tools/resolve/import_project.py "<delad enhet>/projects/<projekt>"   # bins, metadata, färger, tidslinjer
+python agents/wds/tools/resolve/proxies.py "<delad enhet>/projects/<projekt>"          # proxyfiler och koppling
+```
+
+`import_project.py` skapar eller öppnar projektet med mappens namn och lägger in varje inspelning som en bin med `video`, `foto`, `raw` och `tal-tvattade`. Katalogens beskrivning, nyckelord och bedömning blir metadata (Description, Keywords, Comments), favoriter blir gröna och bortval röda, och det blir en tidslinje per inspelning plus en med favoritklippen. Redan importerade filer hoppas över. Provat 2026-10-23 med Resolve Studio 21.1.1 på Surface Pro 7: importen tar flera minuter per inspelning när mediet strömmas från Drive.
+
+`proxies.py` gör proxyfiler för projekt som saknar dem och kopplar dem med `MediaPoolItem.LinkProxyMedia`. Nytt material får proxyfiler redan vid mottagningen (`worker.py batch`).

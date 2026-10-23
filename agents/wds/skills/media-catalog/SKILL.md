@@ -14,7 +14,7 @@ Materialet är bara värt något om det går att hitta. Viska skriver kunskapen 
 
 ## Ordningen: bilderna först
 
-**Bilderna katalogiseras först, och videon processas under tiden** (Mårten, 2026-10-22). Bilderna är mindre material och går snabbt att bedöma, och personen kan börja arbeta med dem för hand medan klippen skrivs ut och tvättas. Starta därför utskrift och tvätt i bakgrunden ([media-worker](../../tools/media-worker.md) `batch`, ett skript utan AI) i samma stund som materialet är kopierat till den lokala arbetsmappen, och gå sedan direkt till bilderna. Rapportera bilderna när de är klara, utan att vänta på videon.
+**Bilderna katalogiseras först, och videon processas under tiden** (Mårten, 2026-10-22). Bilderna är mindre material och går snabbt att bedöma, och personen kan börja arbeta med dem för hand medan klippen skrivs ut och tvättas. Starta därför utskrift, tvätt och proxyfiler i bakgrunden ([media-worker](../../tools/media-worker.md) `batch`, ett skript utan AI) i samma stund som materialet är kopierat till den lokala arbetsmappen, och gå sedan direkt till bilderna. Rapportera bilderna när de är klara, utan att vänta på videon.
 
 ## Bilderna
 

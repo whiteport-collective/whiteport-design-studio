@@ -29,6 +29,7 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
         original/
           <person>-<kamera>/           en mapp per källa: marten-lumix-s9, johanna-iphone
             <klipp>.srt, .words.json   utskriften bredvid varje videoklipp, samma grundnamn
+            Proxy/<klipp>.mov          lätt kopia för redigeringen (1080, H.264); Resolve hittar den själv
         klipp/                         tvättade versioner av tal och intervjuer: <klipp>-tvattad.mp4 + .srt + .csv + .xml
         export/
           <kanal>/                     webb, sociala-medier, tryck, videoheader …
@@ -63,6 +64,7 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
 ## Arbeta och dela
 
 - **Bearbetningen görs lokalt, Drive är transporten** (Mårten, 2026-10-22). Nytt material läses från kortet eller en lokal inkorg (`~/Pictures/wds-arbete/<projekt>/`), och all analys, utskrift och tvätt skrivs först dit. När arbetet är klart flyttas resultatet in i projektmappen på den delade enheten i en omgång, kontrollerat. Då spelar det ingen roll om Drive strömmar eller har filerna offline, och inget laddas upp och ner medan agenten arbetar. Sökvägen under projektmappen i Drive är fortfarande den som aldrig ändras.
+- **Proxyfiler görs vid mottagningen** (Mårten, 2026-10-22): varje videoklipp får en lätt kopia i `Proxy/` bredvid originalen, 1080 i höjd med bevarat bildformat, H.264. Det är Blackmagics konvention, så Resolve kopplar proxyn till klippet själv på varje dator. Klippning och uppspelning går mot proxyn, färgsättning och export mot originalet. Det gör att materialet går att redigera även på en dator utan grafikkort.
 - **Redigera:** Google Drive för datorn (`G:\Shared drives\…` i Windows). Markera projektmappen *tillgänglig offline* (högerklick → Offlineåtkomst, kan inte göras av en agent) på datorn där den redigeras, så att video inte strömmas. När projektet är klart tas den bort lokalt men ligger kvar i Drive.
 - **Redigeringsprogrammet pekar på filerna där de ligger**, det kopierar dem inte. I DaVinci Resolve blir källmapparna bins och album, och färgsättning, betyg och urval görs där.
 - **Dela ett Resolve-projekt:** exportera projektet som `.drp` till `resolve/` (eller använd ett gemensamt projektbibliotek i Blackmagic Cloud). Var och en sätter **Path Mapping** i projektinställningarna till sin egen sökväg till den delade enhetens rot, och Resolve översätter länkarna. Villkoret är att allt projektet använder ligger under projektmappen i Drive; en fil från skrivbordet blir offline hos de andra.
