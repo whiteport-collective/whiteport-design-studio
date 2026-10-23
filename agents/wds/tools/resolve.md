@@ -8,9 +8,28 @@ used_by: [media-ingest, video-edit, media-export]
 
 # Tool: resolve
 
-**Status: inte provat (2026-10-22).** Resolve 21.1 är installerat på Mårtens dator i gratisversionen. Skript-API:t kräver Studio från och med 21.1. Allt under Studio prövas första gången det behövs, och det som stämmer skrivs in här.
+**Status (2026-10-23):** Studio köpt. Skript-API:t (Python) kräver Studio från och med 21.1; i gratisversionen körs inga Python-skript, inte ens från Workspace-menyn. Skriptdelen nedan är inte provad än. Allt under Studio prövas första gången det behövs, och det som stämmer skrivs in här.
 
 Resolve 21.1 har också en inbyggd MCP-server (File → Setup AI Assistants). Den används inte: WDS kör inga MCP-servrar i sessioner, och samma åtkomst finns i Python-API:t.
+
+## Ladda ner och installera
+
+Whiteport har en licens för **DaVinci Resolve Studio** (köpt 2026-10-23 på Mårten, bokförd som utlägg i Whiteport AB). Licensnyckeln står i orderbekräftelsen från noreply@blackmagicdesign.com i Mårtens Gmail (ämne "Blackmagic Design Order", 2026-10-23) och ska ligga i Bitwarden; den skrivs aldrig in i en fil. En Studio-nyckel räcker till två datorer; flytta den med Help → Deactivate License på den dator som lämnar.
+
+- **Nedladdningssidan:** https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion (välj *DaVinci Resolve Studio* för Windows eller Mac; ingen inloggning, bara namn och e-post).
+- **Från skript**, utan webbläsare: Blackmagics support-API ger senaste versionen och en nedladdningslänk.
+
+```bash
+# Senaste versionerna och deras downloadId
+curl -s "https://www.blackmagicdesign.com/api/support/us/downloads.json" | python -c "import json,sys;[print(x['name'],x['urls'].get('Windows',[{}])[0].get('downloadId')) for x in json.load(sys.stdin)['downloads'] if x['name'].startswith('DaVinci Resolve Studio')][:3]"
+
+# Registrera och få länken (namn och e-post enligt users/<användare>/user.md)
+curl -s -X POST "https://www.blackmagicdesign.com/api/register/us/download/<downloadId>" \
+  -H "Content-Type: application/json;charset=UTF-8" -H "User-Agent: Mozilla/5.0" \
+  -d '{"firstname":"…","lastname":"…","email":"…","phone":"…","country":"se","city":"…","street":"…","state":"…","product":"DaVinci Resolve Studio"}'
+```
+
+Studio 21.1.1 för Windows är en zip på 10,3 GB och lika mycket uppackad: räkna med drygt 21 GB ledigt. Installationsfilen är signerad av Blackmagic Design Pty Ltd (kontrollera med `Get-AuthenticodeSignature`). Installationen kräver administratörsgodkännande; en tyst installation (`/i /q /noreboot`) avbryts när den inte får det, så personen startar den själv.
 
 ## Utan Studio: gratisversionen
 
