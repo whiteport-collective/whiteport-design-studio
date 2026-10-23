@@ -10,9 +10,11 @@ Steg 2, utseendet (LOOKS nedan), till exempel:
   frisk-varm  fräsch fast varm: rena vita, varm hud och mat, stål som går mot varmt, mer klarhet
 Båda stegen bakas ihop till en LUT per klipp: <projekt>/resolve/lut/<inspelning>/<klipp>.cube (33³).
 --preview  skriver en före/efter-bild per inspelning till <projekt>/resolve/lut/<inspelning>-fore-efter.jpg
---apply    lägger LUT:en på nod 1 för varje klipp i projektets tidslinjer i Resolve Studio (TimelineItem.SetLUT)
+--apply    lägger LUT:en på nod 1 för varje klipp i projektets tidslinjer i Resolve Studio (TimelineItem.SetLUT).
+           LUT:arna kopieras till Resolves LUT-mapp (<ProgramData>/.../Support/LUT/<projekt>/), annars vägrar SetLUT.
+--apply-only  lägger på befintliga LUT:ar utan att mäta om
 """
-import argparse, array, json, math, os, subprocess, sys
+import argparse, array, json, math, os, shutil, subprocess, sys
 from pathlib import Path
 
 VIDEO = {".mp4", ".mov", ".mxf", ".mts"}
@@ -128,14 +130,23 @@ def apply(project_dir: Path, luts: dict):
     import DaVinciResolveScript as dvr
     resolve = dvr.scriptapp("Resolve")
     project = resolve.GetProjectManager().LoadProject(project_dir.name)
+    # Resolve tar bara LUT:ar som ligger i dess LUT-mapp: kopiera dit och använd relativ sökväg
+    master = Path(os.environ.get("PROGRAMDATA", r"C:\ProgramData")) / "Blackmagic Design/DaVinci Resolve/Support/LUT" / project_dir.name
+    rel = {}
+    for name, lut in luts.items():
+        dst = master / lut.parent.name / lut.name
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(lut, dst)
+        rel[name] = f"{project_dir.name}/{lut.parent.name}/{lut.name}"
+    project.RefreshLUTList()
     done = 0
     for i in range(project.GetTimelineCount()):
         tl = project.GetTimelineByIndex(i + 1)
         for item in tl.GetItemListInTrack("video", 1) or []:
             mpi = item.GetMediaPoolItem()
             path = mpi.GetClipProperty("File Path") if mpi else ""
-            lut = luts.get(Path(path).name)
-            if lut and item.SetLUT(1, str(lut)):
+            lut = rel.get(Path(path).name)
+            if lut and item.SetLUT(1, lut):
                 done += 1
     resolve.GetProjectManager().SaveProject()
     print(f"LUT lagd på {done} klipp i tidslinjerna")
@@ -148,10 +159,18 @@ def main():
     ap.add_argument("--preview", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--only", help="bara dessa inspelningar, kommaseparerat")
+    ap.add_argument("--apply-only", action="store_true", help="lägg på befintliga LUT:ar utan att mäta om")
     a = ap.parse_args()
     mapping = dict(x.split("=") for x in a.map.split(","))
     lutdir = a.project / "resolve" / "lut"
     luts, log = {}, {}
+    if a.apply_only:
+        for lut in lutdir.glob("*/*.cube"):
+            for clip in (a.project / lut.parent.name / "original").rglob(lut.stem + ".*"):
+                if clip.suffix.lower() in VIDEO and ".proxy." not in clip.name:
+                    luts[clip.name] = lut
+        apply(a.project, luts)
+        return
     recs = [p for p in sorted(a.project.iterdir()) if p.is_dir() and (p / "original").is_dir()]
     if a.only:
         recs = [r for r in recs if r.name in a.only.split(",")]

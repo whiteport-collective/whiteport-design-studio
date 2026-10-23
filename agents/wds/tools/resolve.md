@@ -123,4 +123,4 @@ Två steg bakas ihop till en LUT per klipp i `<projekt>/resolve/lut/<inspelning>
 | `varm` | middagar, salar, utomhus | varm och härlig: gyllene ljus, vita dukar förblir vita, lätt lyfta skuggor (Mårten, 2026-10-23) |
 | `frisk-varm` | storkök, stål, lysrör | fräscht fast varmt: rena vita kockrockar, varm hud och mat, stål mot varmt i stället för blått, lite mer kontrast |
 
-Lärdom från första försöket: mycket varmt material (glödlampor) blev gräddgult när värme lades ovanpå utjämningen. Håll värmen låg och låt nästan vita ytor dras mot neutralt (`clean`).
+Resolve tar bara LUT:ar i sin egen LUT-mapp; `--apply` kopierar dit och använder relativ sökväg (provat 2026-10-23, 49 klipp). Lärdom från första försöket: mycket varmt material (glödlampor) blev gräddgult när värme lades ovanpå utjämningen. Håll värmen låg och låt nästan vita ytor dras mot neutralt (`clean`).
