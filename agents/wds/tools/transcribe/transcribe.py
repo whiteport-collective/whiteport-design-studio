@@ -30,7 +30,7 @@ def main():
     ap.add_argument("--words", action="store_true")
     a = ap.parse_args()
 
-    clips = [a.source] if a.source.is_file() else sorted(p for p in a.source.rglob("*") if p.suffix.lower() in VIDEO)
+    clips = [a.source] if a.source.is_file() else sorted(p for p in a.source.rglob("*") if p.suffix.lower() in VIDEO and ".proxy." not in p.name and "-tvattad" not in p.name)
     todo = [p for p in clips if not (a.out / (p.stem + ".srt")).exists()]
     print(f"{len(clips)} klipp, {len(clips) - len(todo)} redan utskrivna, {len(todo)} kvar", flush=True)
     if not todo:

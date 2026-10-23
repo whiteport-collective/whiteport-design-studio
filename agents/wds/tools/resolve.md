@@ -106,6 +106,6 @@ python agents/wds/tools/resolve/import_project.py "<delad enhet>/projects/<proje
 python agents/wds/tools/resolve/proxies.py "<delad enhet>/projects/<projekt>"          # proxyfiler och koppling
 ```
 
-`import_project.py` skapar eller öppnar projektet med mappens namn och lägger in varje inspelning som en bin med `video`, `foto`, `raw` och `tal-tvattade`. Katalogens beskrivning, nyckelord och bedömning blir metadata (Description, Keywords, Comments), favoriter blir gröna och bortval röda, och det blir en tidslinje per inspelning plus en med favoritklippen. Redan importerade filer hoppas över. Provat 2026-10-23 med Resolve Studio 21.1.1 på Surface Pro 7: importen tar flera minuter per inspelning när mediet strömmas från Drive.
+`import_project.py` skapar eller öppnar projektet med mappens namn och lägger in varje inspelning som en bin med `video`, `foto`, `raw` och `tal-tvattade`. Katalogens beskrivning, nyckelord och bedömning blir metadata (Description, Keywords, Comments), favoriter blir gröna och bortval röda, och det blir en tidslinje per inspelning plus en med favoritklippen. Redan importerade filer hoppas över, och `<klipp>.proxy.mov` bredvid ett klipp kopplas som proxy. Provat 2026-10-23 med Resolve Studio 21.1.1 på Surface Pro 7: importen tar flera minuter per inspelning när mediet strömmas från Drive.
 
-`proxies.py` gör proxyfiler för projekt som saknar dem och kopplar dem med `MediaPoolItem.LinkProxyMedia`. Nytt material får proxyfiler redan vid mottagningen (`worker.py batch`).
+`proxies.py` gör proxyfiler för projekt som saknar dem och kopplar dem med `MediaPoolItem.LinkProxyMedia`. Proxyfilen heter `<klipp>.proxy.mov` och ligger bredvid originalet. Nytt material får den redan vid mottagningen (`worker.py batch`).

@@ -27,7 +27,8 @@ GAP = dt.timedelta(minutes=45)
 
 
 def files(src: Path):
-    return sorted(p for p in src.rglob("*") if p.is_file() and p.suffix.lower() in MEDIA)
+    return sorted(p for p in src.rglob("*") if p.is_file() and p.suffix.lower() in MEDIA
+                  and ".proxy." not in p.name and "-tvattad" not in p.name)
 
 
 def meta(paths):

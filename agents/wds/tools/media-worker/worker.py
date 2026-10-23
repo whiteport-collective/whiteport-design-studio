@@ -16,7 +16,7 @@ run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två
 status  visar vad som väntar och vad som är klart, per projekt.
 wash    tvättar ett klipp direkt (kräver <grundnamn>.words.json bredvid klippet).
 batch   skriver ut alla klipp i en lokal mapp (utskriften bredvid klippet), tvättar talen till <utmapp>/klipp/
-        och gör proxyfiler i Proxy/ bredvid klippen,
+        och gör en proxyfil <klipp>.proxy.mov bredvid varje klipp,
         utan Drive och utan AI. Används i den lokala arbetsmappen innan resultatet läggs i Drive.
 
 Inget skrivs i original/. Jobb som avbryts görs om nästa varv; ett klart jobb görs aldrig om.
@@ -54,7 +54,7 @@ def recordings(project: Path):
 
 
 def clips(rec: Path):
-    return sorted(p for p in (rec / "original").rglob("*") if p.suffix.lower() in VIDEO)
+    return sorted(p for p in (rec / "original").rglob("*") if p.suffix.lower() in VIDEO and ".proxy." not in p.name)
 
 
 def log(project: Path, text: str):
@@ -333,7 +333,8 @@ def batch(src: Path, out: Path):
     """Skriver ut och tvättar alla videoklipp i en lokal mapp, utan Drive och utan AI.
 
     Utskriften bredvid varje klipp, tvättade versioner av talen till <out>/klipp/. Det som redan finns hoppas över."""
-    todo = sorted(p for p in src.rglob("*") if p.suffix.lower() in VIDEO and not p.name.endswith(".part"))
+    todo = sorted(p for p in src.rglob("*") if p.suffix.lower() in VIDEO and not p.name.endswith(".part")
+                  and ".proxy." not in p.name and "-tvattad" not in p.name)
     kl = out / "klipp"
     for n, clip in enumerate(todo, 1):
         t0 = time.time()
@@ -350,10 +351,10 @@ def batch(src: Path, out: Path):
         if not (kl / f"{clip.stem}-tvattad.mp4").exists():
             r = wash(clip, kl, words_f)
             print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, {r['sekunder_bort']} s bort ({time.time() - t0:.0f} s)", flush=True)
-    # proxyfiler för redigeringen, bredvid klippen i en mapp Proxy/ (Resolve hittar dem där själv)
+    # proxyfiler för redigeringen, bredvid klippet med samma grundnamn som utskriften: <klipp>.proxy.mov
     for clip in todo:
-        proxy(clip, clip.parent / "Proxy" / (clip.stem + ".mov"))
-    print(f"{now()} klart: {len(todo)} klipp i {src}, proxyfiler i Proxy/", flush=True)
+        proxy(clip, clip.with_name(clip.stem + ".proxy.mov"))
+    print(f"{now()} klart: {len(todo)} klipp i {src}, utskrift och proxy bredvid varje klipp", flush=True)
 
 
 def proxy(clip: Path, dst: Path, height: int = 1080):
@@ -361,7 +362,7 @@ def proxy(clip: Path, dst: Path, height: int = 1080):
     if dst.exists():
         return
     dst.parent.mkdir(parents=True, exist_ok=True)
-    part = dst.with_name(dst.stem + ".part.mov")
+    part = dst.with_name(dst.name + ".part.mov")
     enc = (["-c:v", "h264_qsv", "-global_quality", "23", "-g", "12"] if encoder_ok("h264_qsv")
            else ["-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-g", "12"])
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(clip), "-vf", f"scale=-2:{height},format=nv12", *enc,

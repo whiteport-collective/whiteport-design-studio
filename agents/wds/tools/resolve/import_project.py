@@ -7,6 +7,7 @@ Miljön sätts av skriptet själv (Windows-sökvägarna nedan).
 
 Skapar (eller öppnar) projektet med mappens namn och, per inspelning i inspelningsordning:
   bin <inspelning>/ med video, foto (JPEG), raw (RW2 m.fl.) och tal-tvattade (klipp/*-tvattad.mp4)
+Proxyfiler bredvid klippen (<klipp>.proxy.mov) kopplas automatiskt.
 Varje klipp får katalogens beskrivning, nyckelord och bedömning som metadata (Description, Keywords,
 Comments), favoriter blir gröna och de som föreslås bort röda. Tidslinjer: en per inspelning med
 videoklippen i tidsordning (utan bortvalda) och en med alla favoritklipp. Mediet länkas där det ligger.
@@ -90,7 +91,7 @@ def main():
     favs = []
     for rec in recs:
         cat = catalog(rec)
-        files = sorted((p for p in (rec / "original").rglob("*") if p.is_file()),
+        files = sorted((p for p in (rec / "original").rglob("*") if p.is_file() and ".proxy." not in p.name),
                        key=lambda p: (cat.get(p.name, {}).get("tagen", ""), p.name))
         b = sub(mp, root, rec.name)
         groups = {"video": [p for p in files if p.suffix.lower() in VIDEO],
@@ -102,6 +103,10 @@ def main():
                 continue
             clips = add(mp, storage, sub(mp, b, g), paths)
             annotate(clips, cat)
+            for path, clip in clips.items():           # proxyfilen ligger bredvid klippet: <klipp>.proxy.mov
+                px = Path(path).with_name(Path(path).stem + ".proxy.mov")
+                if px.exists() and not clip.GetClipProperty("Proxy Media Path"):
+                    clip.LinkProxyMedia(str(px))
             print(f"{rec.name}/{g}: {len(clips)} i Media Pool", flush=True)
             if g == "video":
                 keep = [clips[str(p)] for p in paths if str(p) in clips and cat.get(p.name, {}).get("forslag") != "bort"]
