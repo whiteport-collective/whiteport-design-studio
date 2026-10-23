@@ -124,3 +124,13 @@ Två steg bakas ihop till en LUT per klipp i `<projekt>/resolve/lut/<inspelning>
 | `frisk-varm` | storkök, stål, lysrör | fräscht fast varmt: rena vita kockrockar, varm hud och mat, stål mot varmt i stället för blått, lite mer kontrast |
 
 Resolve tar bara LUT:ar i sin egen LUT-mapp; `--apply` kopierar dit och använder relativ sökväg (provat 2026-10-23, 49 klipp). Lärdom från första försöket: mycket varmt material (glödlampor) blev gräddgult när värme lades ovanpå utjämningen. Håll värmen låg och låt nästan vita ytor dras mot neutralt (`clean`).
+
+## Reel med skript (Studio)
+
+```bash
+python agents/wds/tools/resolve/reel.py "<delad enhet>/projects/<projekt>" klipplista.json --name reel-9x16-v4 --replace --render "<projekt>/export/sociala-medier"
+```
+
+Egen tidslinje i 1080x1920 (eller `--size`), klippen i listans ordning med bara bild, Smart Reframe och klippets LUT på varje klipp, och rendering till H.264. `"reframe": false` på ett klipp behåller det breda utsnittet (rummet och publiken). Smart Reframe analyserar i en modal ruta, cirka 0,7 bildrutor per sekund på Surface Pro 7, och då svarar API:t `None`; skriptet väntar ut varje analys. Musik läggs på spår A1 med `MediaPool.AppendToTimeline` och `mediaType: 2`, och in- och uttoning görs efter renderingen med ffmpeg (`afade`). Provat 2026-10-23: reel-9x16-v4, 16 klipp, 30 s.
+
+Lärdomar från reelen till Visita (Mårten, 2026-10-23): fokus på människorna och de charmiga ögonblicken, aldrig tomrummet mellan dem; ta med en vinkel där publiken och rummet syns; kändisen (kocken) får två klipp; välj ögonblick ur utskrifterna (skratt, repliker) i stället för på måfå; musik under, klippljudet av.
