@@ -106,6 +106,21 @@ python agents/wds/tools/resolve/import_project.py "<delad enhet>/projects/<proje
 python agents/wds/tools/resolve/proxies.py "<delad enhet>/projects/<projekt>"          # proxyfiler och koppling
 ```
 
-`import_project.py` skapar eller öppnar projektet med mappens namn och lägger in varje inspelning som en bin med `video`, `foto`, `raw` och `tal-tvattade`. Katalogens beskrivning, nyckelord och bedömning blir metadata (Description, Keywords, Comments), favoriter blir gröna och bortval röda, och det blir en tidslinje per inspelning plus en med favoritklippen. Redan importerade filer hoppas över, och `<klipp>.proxy.mov` bredvid ett klipp kopplas som proxy. Provat 2026-10-23 med Resolve Studio 21.1.1 på Surface Pro 7: importen tar flera minuter per inspelning när mediet strömmas från Drive.
+`import_project.py` skapar eller öppnar projektet med mappens namn och lägger in varje inspelning som en bin med `video`, `foto`, `raw` och `tal-tvattade`. Katalogens beskrivning, nyckelord och bedömning blir metadata (Description, Keywords, Comments), favoriter blir gröna och bortval orange, och det blir en tidslinje per inspelning plus en med favoritklippen. Redan importerade filer hoppas över, och `<klipp>.proxy.mov` bredvid ett klipp kopplas som proxy. Provat 2026-10-23 med Resolve Studio 21.1.1 på Surface Pro 7: importen tar flera minuter per inspelning när mediet strömmas från Drive.
 
 `proxies.py` gör proxyfiler för projekt som saknar dem och kopplar dem med `MediaPoolItem.LinkProxyMedia`. Proxyfilen heter `<klipp>.proxy.mov` och ligger bredvid originalet. Nytt material får den redan vid mottagningen (`worker.py batch`).
+
+## Färgsättning med LUT per klipp
+
+```bash
+python agents/wds/tools/resolve/looks.py "<delad enhet>/projects/<projekt>" --map "2026-10-22-koket=frisk-varm,*=varm" --preview --apply
+```
+
+Två steg bakas ihop till en LUT per klipp i `<projekt>/resolve/lut/<inspelning>/<klipp>.cube`: utjämning (vitbalans och exponering mätta på klippet, helst via proxyn) och ett utseende. `--preview` skriver en före/efter-bild per inspelning, `--apply` lägger LUT:en på nod 1 för varje klipp i tidslinjerna. Mätningar och utseenden sparas i `looks.json`.
+
+| Utseende | För | Känsla |
+|---|---|---|
+| `varm` | middagar, salar, utomhus | varm och härlig: gyllene ljus, vita dukar förblir vita, lätt lyfta skuggor (Mårten, 2026-10-23) |
+| `frisk-varm` | storkök, stål, lysrör | fräscht fast varmt: rena vita kockrockar, varm hud och mat, stål mot varmt i stället för blått, lite mer kontrast |
+
+Lärdom från första försöket: mycket varmt material (glödlampor) blev gräddgult när värme lades ovanpå utjämningen. Håll värmen låg och låt nästan vita ytor dras mot neutralt (`clean`).

@@ -9,7 +9,7 @@ Skapar (eller öppnar) projektet med mappens namn och, per inspelning i inspelni
   bin <inspelning>/ med video, foto (JPEG), raw (RW2 m.fl.) och tal-tvattade (klipp/*-tvattad.mp4)
 Proxyfiler bredvid klippen (<klipp>.proxy.mov) kopplas automatiskt.
 Varje klipp får katalogens beskrivning, nyckelord och bedömning som metadata (Description, Keywords,
-Comments), favoriter blir gröna och de som föreslås bort röda. Tidslinjer: en per inspelning med
+Comments), favoriter blir gröna och de som föreslås bort orange. Tidslinjer: en per inspelning med
 videoklippen i tidsordning (utan bortvalda) och en med alla favoritklipp. Mediet länkas där det ligger.
 Redan importerade filer hoppas över, så skriptet kan köras igen när material tillkommer.
 """
@@ -64,7 +64,7 @@ def annotate(clips, cat):
         if r.get("favorit") == "ja":
             clip.SetClipColor("Green")
         elif r.get("forslag") == "bort":
-            clip.SetClipColor("Red")
+            clip.SetClipColor("Orange")   # Resolve har ingen "Red"; giltiga är bl.a. Orange, Green, Blue, Yellow
 
 
 def main():
