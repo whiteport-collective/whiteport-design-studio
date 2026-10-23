@@ -77,6 +77,7 @@ def main():
     ap.add_argument("--render", type=Path)
     ap.add_argument("--finish-only", action="store_true", help="bara LUT och Smart Reframe på en befintlig tidslinje")
     ap.add_argument("--replace", action="store_true", help="ta bort en tidigare tidslinje med samma namn (en avbruten omtagning)")
+    ap.add_argument("--per-clip", type=Path, help="rendera varje klipp för sig till mappen som segNN.mp4 (NN = platsen i klipplistan), för övertoningar efteråt")
     a = ap.parse_args()
     segs = json.loads(a.segments.read_text(encoding="utf-8"))
     resolve = dvr.scriptapp("Resolve")
@@ -86,9 +87,12 @@ def main():
     names = [project.GetTimelineByIndex(i + 1).GetName() for i in range(project.GetTimelineCount())]
     if a.finish_only:
         tl = next(project.GetTimelineByIndex(i + 1) for i in range(project.GetTimelineCount()) if project.GetTimelineByIndex(i + 1).GetName() == a.name)
-        r, l = finish(project, tl, a.project.name, segs)
+        r, l = finish(project, tl, a.project.name, [x for x in segs if not x.get("still")])
         pm.SaveProject()
         print(f"{a.name}: Smart Reframe på {r}, LUT på {l}")
+        if a.per_clip:
+            render_per_clip(project, tl, segs, a.per_clip, *a.size.split("x"))
+            return
         if not a.render:
             return
         w, h = a.size.split("x")
@@ -113,7 +117,8 @@ def main():
     project.SetCurrentTimeline(tl)
     pool = clips_by_path(mp)
     infos = []
-    for s in segs:
+    vsegs = [s for s in segs if not s.get("still")]
+    for s in vsegs:
         path = a.project / s["rec"] / "original" / s.get("source", "marten-lumix-s9") / f"{s['stem']}.MP4"
         clip = pool.get(os.path.normcase(str(path)))
         if not clip:
@@ -122,12 +127,32 @@ def main():
         end = start + int(round(s["dur"] * a.fps)) - 1
         infos.append({"mediaPoolItem": clip, "startFrame": start, "endFrame": end, "mediaType": 1})
     items = mp.AppendToTimeline(infos) or []
-    reframed, luts = finish(project, tl, a.project.name, segs)
+    reframed, luts = finish(project, tl, a.project.name, vsegs)
     pm.SaveProject()
     print(f"{a.name}: {len(items)} klipp, Smart Reframe på {reframed}, LUT på {luts}, "
           f"{sum(s['dur'] for s in segs):.1f} s, {w}x{h}")
-    if a.render:
+    if a.per_clip:
+        render_per_clip(project, tl, segs, a.per_clip, w, h)
+    elif a.render:
         render(project, a, w, h)
+
+
+def render_per_clip(project, tl, segs, out: Path, w, h):
+    """Ett renderjobb per klipp (in- och utpunkt på tidslinjen), namngivet efter platsen i hela klipplistan."""
+    out.mkdir(parents=True, exist_ok=True)
+    project.SetCurrentTimeline(tl)
+    project.SetCurrentRenderFormatAndCodec("mp4", "H264")
+    places = [i for i, s in enumerate(segs) if not s.get("still")]
+    jobs = []
+    for item, n in zip(tl.GetItemListInTrack("video", 1) or [], places):
+        project.SetRenderSettings({"SelectAllFrames": False, "MarkIn": item.GetStart(), "MarkOut": item.GetEnd() - 1,
+                                   "TargetDir": str(out), "CustomName": f"seg{n:02}", "FormatWidth": int(w),
+                                   "FormatHeight": int(h), "ExportVideo": True, "ExportAudio": False})
+        jobs.append(project.AddRenderJob())
+    project.StartRendering(jobs)
+    while project.IsRenderingInProgress():
+        time.sleep(5)
+    print(f"{len(jobs)} klipp renderade till {out}")
 
 
 def render(project, a, w, h):

@@ -133,4 +133,15 @@ python agents/wds/tools/resolve/reel.py "<delad enhet>/projects/<projekt>" klipp
 
 Egen tidslinje i 1080x1920 (eller `--size`), klippen i listans ordning med bara bild, Smart Reframe och klippets LUT på varje klipp, och rendering till H.264. `"reframe": false` på ett klipp behåller det breda utsnittet (rummet och publiken). Smart Reframe analyserar i en modal ruta, cirka 0,7 bildrutor per sekund på Surface Pro 7, och då svarar API:t `None`; skriptet väntar ut varje analys. Musik läggs på spår A1 med `MediaPool.AppendToTimeline` och `mediaType: 2`, och in- och uttoning görs efter renderingen med ffmpeg (`afade`). Provat 2026-10-23: reel-9x16-v4, 16 klipp, 30 s.
 
-Lärdomar från reelen till Visita (Mårten, 2026-10-23): fokus på människorna och de charmiga ögonblicken, aldrig tomrummet mellan dem; ta med en vinkel där publiken och rummet syns; kändisen (kocken) får två klipp; välj ögonblick ur utskrifterna (skratt, repliker) i stället för på måfå; musik under, klippljudet av.
+Lärdomar från reelen till Visita (Mårten, 2026-10-23): ingen Smart Reframe, följ varje klipp själv med mjuka nyckelpunkter (se nedan); fokus på människorna och de charmiga ögonblicken, aldrig tomrummet mellan dem; ta med en vinkel där publiken och rummet syns; kändisen (kocken) får två klipp; välj ögonblick ur utskrifterna (skratt, repliker) i stället för på måfå; musik under, klippljudet av.
+
+## Egen omformatering till 9:16 (utan Smart Reframe)
+
+```bash
+python agents/wds/tools/resolve/reframe.py "<delad enhet>/projects/<projekt>" klipplista.json <klippmapp> [--only 2,9]
+python agents/wds/tools/resolve/reel_assemble.py "<delad enhet>/projects/<projekt>" klipplista.json <klippmapp> <projekt>/export/sociala-medier/<datum>-reel-<namn>-vN.mp4 --music <spår> [--xfade 0.3]
+```
+
+Agenten följer varje klipp själv (Mårten, 2026-10-23: ingen Smart Reframe). Gör först en karta över varje klipp (början, en tredjedel, två tredjedelar, slutet, med ett rutnät 0–10 över bredden), läs var ansiktena och handlingen är och skriv rutans mittpunkt som `"x"`: ett tal ger fast utsnitt, en lista ger nyckelpunkter jämnt fördelade i klippet. Mellan nyckelpunkterna glider rutan med en mjuk kurva (smoothstep, som Ease In/Out i Premiere), så att ingen rörelse startar eller stannar ryckigt. `"speed": 1.7` spelar klippet snabbare, till exempel när människor kliver ur en buss. `reframe.py` lägger på klippets LUT och sparar varje klipp för sig som `segNN-<klipp>.mp4`; de kopieras till `<projekt>/resolve/reel-vN-klipp/` och läggs i en egen bin i Resolve, så att de går att använda och justera var för sig.
+
+`reel_assemble.py` sätter ihop klippen med övertoningar (`fade`, 0,3 s ger mjuka övergångar), gör stillbilder rörliga (`pan` över gruppbilder, `zoom` mot detaljer) och lägger musiken under med in- och uttoning och -14 LUFS. Varje del i listan ska vara `want` + övertoningen lång, så att slutlängden blir summan av `want`. Kontrollera resultatet med en bild ur mitten av varje del innan reelen lämnas. Provat 2026-10-23: reel v5 till Visita, 35 s, 20 delar.
