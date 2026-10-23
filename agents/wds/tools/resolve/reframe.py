@@ -6,11 +6,14 @@ mellan varandra, får sin LUT och sparas som ett eget klipp. Utan Smart Reframe 
 I klipplistan har varje videoklipp "x": en lista med rutans mittpunkt över bredden (0 = vänsterkant, 1 = högerkant),
 en per nyckelpunkt. Nyckelpunkterna ligger jämnt fördelade i klippet (första vid 0,1 s, sista 0,1 s före slutet), och
 utsnittet glider mellan dem med en mjuk kurva (smoothstep), som Ease In/Out i Premiere eller Resolve. Ett enda tal
-ger ett fast utsnitt. "speed": 1.7 spelar klippet 1,7 gånger snabbare (läser dur * speed sekunder av originalet). Rutan är alltid så hög som bilden (9:16 ur 3:2 är 37,5 % av bredden; ur en stående bild 84 %).
+ger ett fast utsnitt. "speed": 1.7 spelar klippet 1,7 gånger snabbare (läser dur * speed sekunder av originalet). "eq": "saturation=1.35:contrast=1.08" justerar
+ett klipp efter LUT:en (ffmpeg eq), när det ser urtvättat ut bredvid de andra. "ramp": [[0, 1], [1.2, 1], [3, 8],
+[23.5, 8], [26.2, 1], [29.4, 1]] är en fartkurva (sekunder från "start", fart): normal fart, upp till 8 gånger under färden
+och ner till normal igen, med mjuka övergångar. Klippets längd i reelen blir kurvans längd (ramp_duration), plus övertoningen. Rutan är alltid så hög som bilden (9:16 ur 3:2 är 37,5 % av bredden; ur en stående bild 84 %).
 LUT: <projekt>/resolve/lut/<inspelning>/<klipp>.cube om den finns (looks.py). Klippen sparas som
 <utmapp>/segNN-<klipp>.mp4, där NN är platsen i klipplistan, så att reel_assemble.py hittar dem.
 """
-import argparse, json, subprocess, sys
+import argparse, json, math, subprocess, sys
 from pathlib import Path
 
 
@@ -30,17 +33,54 @@ def x_expr(xs, dur):
     return expr
 
 
-def render(src: Path, start: float, dur: float, xs, lut: Path | None, out: Path, w: int, h: int, speed: float = 1.0):
-    """dur är klippets längd i reelen; med speed > 1 läses dur * speed sekunder av originalet och spelas upp snabbare."""
+def ramp_parts(ramp):
+    """Fartkurvan [[t, fart], ...] (t i sekunder från klippets start) som delar: (t0, t1, fart0, fart1, tid ut vid t0).
+    Mellan två punkter ändras farten linjärt, så att klippet mjukt accelererar och bromsar."""
+    parts, out = [], 0.0
+    for (t0, a), (t1, b) in zip(ramp, ramp[1:]):
+        parts.append((t0, t1, a, b, out))
+        out += (t1 - t0) / a if a == b else (t1 - t0) / (b - a) * math.log(b / a)
+    return parts, out
+
+
+def ramp_duration(ramp):
+    """Hur länge klippet blir i reelen med fartkurvan."""
+    return ramp_parts(ramp)[1]
+
+
+def ramp_setpts(ramp):
+    """setpts-uttryck som lägger varje bildruta på sin tid ut enligt fartkurvan (integralen av 1/fart)."""
+    parts, _ = ramp_parts(ramp)
+    u = "(T-STARTT)"
+    expr = None
+    for t0, t1, a, b, c in reversed(parts):
+        if a == b:
+            seg = f"({c:.4f}+({u}-{t0})/{a})"
+        else:
+            seg = f"({c:.4f}+{(t1 - t0) / (b - a):.5f}*log(({a}+{(b - a) / (t1 - t0):.5f}*({u}-{t0}))/{a}))"
+        expr = seg if expr is None else f"if(lt({u},{t1}),{seg},{expr})"
+    return f"({expr})/TB"
+
+
+def render(src: Path, start: float, dur: float, xs, lut: Path | None, out: Path, w: int, h: int, speed: float = 1.0, eq: str | None = None, ramp=None):
+    """dur är klippets längd i reelen; med speed > 1 läses dur * speed sekunder av originalet och spelas upp snabbare.
+    Med ramp (fartkurva) läses originalet till kurvans sista punkt; är dur längre än kurvan (övertoningen) fortsätter
+    klippet i kurvans sista fart."""
     src_dur = dur * speed
+    if ramp:
+        src_dur = ramp[-1][0] + max(0.0, dur - ramp_duration(ramp)) * ramp[-1][1]
     cx = x_expr(xs, src_dur)
     vf = []
     if lut and lut.exists():
         vf.append("lut3d='" + str(lut).replace("\\", "/").replace(":", "\\:") + "'")
+    if eq:
+        vf.append(f"eq={eq}")   # efterjustering för just det här klippet, till exempel mer färg
     # rutan: full höjd, 9:16 bred; mittpunkten följer nyckelpunkterna och hålls innanför bilden
     vf.append(f"crop=w=ih*9/16:h=ih:x='clip(({cx})*iw-ih*9/32,0,iw-ih*9/16)':y=0")
     vf.append(f"scale={w}:{h}:flags=lanczos")
-    if speed != 1.0:
+    if ramp:
+        vf.append(f"setpts='{ramp_setpts(ramp)}'")
+    elif speed != 1.0:
         vf.append(f"setpts=(PTS-STARTPTS)/{speed}")
     vf.append("fps=25,format=yuv420p")
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -67,7 +107,7 @@ def main():
         src = a.project / s["rec"] / "original" / s.get("source", "marten-lumix-s9") / f"{s['stem']}.MP4"
         lut = a.project / "resolve" / "lut" / s["rec"] / f"{s['stem']}.cube"
         out = a.out / f"seg{n:02}-{s['stem']}.mp4"
-        render(src, s["start"], s["dur"], s.get("x", 0.5), lut, out, w, h, s.get("speed", 1.0))
+        render(src, s["start"], s["dur"], s.get("x", 0.5), lut, out, w, h, s.get("speed", 1.0), s.get("eq"), s.get("ramp"))
         print(f"seg{n:02} {s['stem']} x={s.get('x', 0.5)}", flush=True)
 
 
