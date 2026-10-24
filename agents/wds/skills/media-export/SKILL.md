@@ -36,7 +36,7 @@ Sista steget i flödet för en fotografering. Det personen godkänt levereras f�
 - **Klippen:** varje färdigt klipp ur sitt eget dokument ([video-edit](../video-edit/SKILL.md)), både hela bilden och 9:16, som **MP4 (H.264) i full upplösning** (Mårten, 2026-10-24).
 - **En mapp per inspelning**, alla kameror och fotografer tillsammans: den som letar tänker på tillfället, inte på kameran.
 - **Namnen** säger inspelningen, motivet och originalet: `2026-10-22-linnesalen_servitris-bar-forratten_P1000708.mp4`, `..._9x16.mp4`, `2026-10-22-linnesalen_gruppbild_P1000604.jpg`. Små bokstäver och bindestreck.
-- **Metadata** i varje fil ([exiftool](../../tools/exiftool.md)): titel, beskrivning, nyckelord, fotograf och upphovsrätt ur kameraregistret (rätt även om kameran var felinställd), inspelning, originalets namn. Personer namnges bara om projektet säger att de får det.
+- **Metadata** i varje fil ([exiftool](../../tools/exiftool.md)): titel, beskrivning, nyckelord, fotograf och upphovsrätt ur fotografens själsfil (rätt även om kameran var felinställd), inspelning, originalets namn. Personer namnges bara om projektet säger att de får det.
 - **`mediabank.csv`:** en rad per fil, så att det går att söka och filtrera innan det finns en riktig mediebank.
 - **En ny version** av en fil ersätter den förra, som läggs i papperskorgen; den skrivs aldrig över.
 
