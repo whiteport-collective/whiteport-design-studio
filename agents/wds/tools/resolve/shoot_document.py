@@ -144,6 +144,12 @@ def main():
     project = pm.LoadProject(name) or pm.CreateProject(name)
     if not project:
         sys.exit(f"projektet {name} gick inte att skapa eller öppna i Resolve")
+    # cachen följer projektet, inte datorn: varje nytt projekt får datorns cachemapp (på Surface Pro 7 den externa disken)
+    cache = Path(os.environ.get("WDS_RESOLVE_CACHE", r"E:\DaVinci Resolve Cache"))
+    if cache.exists():
+        for k, sub_ in (("perfCacheClipsLocation", "CacheClip"), ("colorGalleryStillsLocation", "gallery"), ("projectMediaLocation", "media")):
+            (cache / sub_).mkdir(exist_ok=True)
+            project.SetSetting(k, str(cache / sub_))
     mp, storage = project.GetMediaPool(), r.GetMediaStorage()
     root = mp.GetRootFolder()
 
