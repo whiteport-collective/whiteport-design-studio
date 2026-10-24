@@ -13,9 +13,9 @@ Två skript, och Google Drive som kö mellan datorerna:
 ```
 kamera → card_watch.py (vilken dator som helst) → <projekt>/inkorg/<person>/
                                                        ↓  Viska sorterar (media-ingest)
-                       <projekt>/<datum>-<plats>/original/<person>-<kamera>/
-                                                       ↓  worker.py (datorn som alltid är på)
-                       <klipp>.srt + .words.json bredvid klippet · klipp/<klipp>-tvattad.mp4 + .srt + .csv + .xml · logg.md
+                       <projekt>/<datum>-<plats>/<person>/<kamera>/<klipp>.MP4
+                                                       ↓  worker.py
+                       <klipp>/<klipp>.srt, .words.json, .proxy.mov · <klipp>/<klipp>-tvattad.mp4 (valda klipp) · logg.md
 ```
 
 Kräver Python 3, [ffmpeg](ffmpeg.md), [exiftool](exiftool.md), [transcribe](transcribe.md) (faster-whisper) och Google Drive för datorn med de delade enheterna.
@@ -29,19 +29,20 @@ python agents/wds/tools/media-worker/worker.py run               # var femte min
 python agents/wds/tools/media-worker/worker.py wash "<klipp>"    # tvätta ett klipp direkt
 ```
 
-- `--root` är mappen med de delade enheterna, som standard `G:/Shared drives`. Arbetaren går igenom `*/projects/*/<inspelning>/original/`.
-- **Utskrift:** varje videoklipp utan `<grundnamn>.srt` bredvid sig skrivs ut, med tid per ord. Utskriften läggs bredvid klippet så att den följer med när klippet kopieras (det äldre läget `<inspelning>/transkript/` läses fortfarande).
-- **Lokalt:** `worker.py batch <klippmapp> <utmapp>` gör utskrift, tvätt och proxyfiler i en lokal arbetsmapp, utan Drive och utan AI. Proxyfilen (1080, H.264 med Quick Sync, nyckelbild var tolfte ruta) heter `<klipp>.proxy.mov` och ligger bredvid klippet, som utskriften, och följer med till `original/<källa>/` i Drive. Alla verktyg hoppar över `*.proxy.*` och `*-tvattad*` när de letar efter kameraklipp. För ett projekt som redan ligger i Drive: `agents/wds/tools/resolve/proxies.py`.
+- `--root` är mappen med de delade enheterna, som standard `G:/Shared drives`. Arbetaren går igenom inspelningarna (`*/projects/*/<datum>-<plats>/`).
+- **Allt som görs av ett klipp ligger i mappen med samma namn bredvid klippet** (Mårten, 2026-10-24): `P1000708/` bredvid `P1000708.MP4`. Den förra strukturen (`<inspelning>/original/<källa>/`, utskriften bredvid klippet, tvätten i `<inspelning>/klipp/`) läses fortfarande.
+- **Utskrift:** varje videoklipp utan utskrift skrivs ut, med tid per ord, till `<klipp>/<klipp>.srt` och `.words.json`.
+- **Mottagningen:** `worker.py batch <mapp>` skriver ut alla klipp i mappen och gör en proxy för varje, utan AI. Proxyn (1080, H.264 med Quick Sync, nyckelbild var tolfte ruta) heter `<klipp>/<klipp>.proxy.mov`. Provat 2026-10-24 med den nya strukturen. Alla verktyg hoppar över `*.proxy.*` och `*-tvattad*` när de letar efter kameraklipp. För ett projekt som redan ligger i Drive: `agents/wds/tools/resolve/proxies.py`.
 - **Kontroll av tvätten:** `worker.py check <klipp>-tvattad.mp4 <klipp>.words.json` skriver ut den tvättade versionen igen och jämför ord för ord med det som skulle vara kvar, mäter ljudnivån vid varje skarv (högt på båda sidor betyder att skarven ligger i tal) och listar de bortklippta orden. Kör den på varje tvättad version innan den lämnas över.
-- **Tvätt, två versioner av varje klipp med tal** (Mårten, 2026-10-22): råfilen i `original/` och en tvättad version utan hummanden, utfyllnadsord och pauser, som ett enda sammanhängande klipp. Den läggs i redigeringen och klipps efter innehåll, utan att tidslinjen fylls av småbitar. Klipp som mest är tal (minst 15 ord och minst 60 ord per minut) tvättas automatiskt efter utskriften; klipp som mest visar något i bild får bara utskrift. Arbetaren skriver i `<inspelning>/klipp/`:
+- **Tvätt av valda klipp med tal** (Mårten, 2026-10-22 och 24): råfilen och en tvättad version utan hummanden, utfyllnadsord och pauser, som ett enda sammanhängande klipp. Bara klipp som valts för leverans tvättas (`wash` eller en jobbfil), inte alla klipp med tal. Tvätten görs med ffmpeg, utan Resolve, och skrivs i klippets mapp `<klipp>/`:
   - `<klipp>-tvattad.mp4`: den tvättade versionen, i råfilens upplösning och bildfrekvens (HEVC 10-bit med Intel Quick Sync, annars libx265, cirka 50 Mbit/s), så att den färgsätts som råfilen.
   - `-tvattad.csv`: tidkodskartan, varje behållen och borttagen bit med tider i råfilen och i den tvättade versionen. Skarvarna ligger på hela bildrutor. Den används för att hitta tillbaka till råfilen.
   - `-tvattad.srt`: undertexten med den tvättade versionens tider.
   - `-tvattad.xml`: samma tvätt som tidslinje mot råfilen (FCP 7 XML: File → Import → Timeline i Resolve), för den som vill dra ut en skarv.
-- **Tvätta ett klipp till:** lägg en textfil `<projekt>/jobb/<namn>.tvatta` med klippets sökväg under projektet, till exempel `2026-10-22-linnesalen/original/marten-lumix-s9/P1000400.MP4`. Jobbfilen flyttas sedan till `jobb/klara/`.
+- **Tvätta ett klipp till:** lägg en textfil `<projekt>/jobb/<namn>.tvatta` med klippets sökväg under projektet, till exempel `2026-10-22-linnesalen/marten/lumix-s9/P1000400.MP4`. Jobbfilen flyttas sedan till `jobb/klara/`.
 - **Vad tvätten tar bort:** hummanden i alla längder (eh, ehhh, öhm, hmm, mhm …), rena utfyllnadsord (liksom, asså, ba; inte "ju", "alltså" eller "typ", som ofta bär betydelse), samma ord två gånger inom 0,3 s och pauser över 0,6 s, med 0,15 s luft kvar vid varje skarv. Whisper skriver ofta inte ut hummanden alls, så de försvinner i stället som pauser. Kontrollera alltid den tvättade versionen i Resolve. Allt borttaget står i csv-filen och som en markör i tidslinjen, och kommer tillbaka genom att dra ut skarven.
 - **Loggen:** varje klart jobb blir en rad i projektets `logg.md`, `media-worker` som avsändare.
-- Inget skrivs i `original/`. Ett avbrutet jobb görs om nästa varv, och ett klart jobb görs aldrig om.
+- Originalen rörs aldrig. Ett avbrutet jobb görs om nästa varv, och ett klart jobb görs aldrig om.
 
 ### Installera på datorn som alltid är på
 

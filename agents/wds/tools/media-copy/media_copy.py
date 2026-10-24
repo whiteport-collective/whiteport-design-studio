@@ -1,7 +1,11 @@
-"""Kopierar media från ett minneskort till en inspelningsmapp, utan att något någonsin skrivs över.
+"""Kopierar media från ett minneskort eller en inkorg till en inspelning, utan att något någonsin skrivs över.
 
     python media_copy.py scan <källa>
-    python media_copy.py copy <källa> <mål> [--from "YYYY-MM-DD HH:MM"] [--to "YYYY-MM-DD HH:MM"] [--model <kamera>] [--move] [--apply]
+    python media_copy.py cameras <källa> <kameror.md>
+    python media_copy.py check <källa> [--photographer "Mårten Angner"]
+    python media_copy.py register <kameror.md> --serial <nr> --make <märke> --model <modell> --person <person> --name <kamera>
+    python media_copy.py sort <källa> <projektmapp> <datum>-<plats> <kameror.md> [--from ...] [--to ...] [--move] [--apply]
+    python media_copy.py copy <källa> <mål> [--from "YYYY-MM-DD HH:MM"] [--to "YYYY-MM-DD HH:MM"] [--model <kamera>] [--serial <nr>] [--move] [--apply]
 
 scan  listar mediet i källan: antal per typ, kameror och tidsluckor, så att agenten kan föreslå
       hur dagen delas upp på platser och källor.
@@ -13,9 +17,19 @@ copy  visar planen (torrkörning) och kopierar med --apply. Varje fil kopieras t
       kontrolleras och tas bort ur källan. En fil som redan finns med samma innehåll tas bort ur källan.
       Använd aldrig --move mot ett minneskort.
 
+cameras   kamerorna i källan (märke, modell, serienummer, antal filer) mot kameraregistret: person och namn,
+          eller OKÄND. Slutar med kod 3 om någon kamera saknas i registret.
+check     kamerans metadata per kamera: fotograf och upphovsrätt (Artist, Copyright), ägare (OwnerName),
+          serienummer, tidszon (OffsetTimeOriginal) och klockan (en tid i framtiden eller långt bakåt).
+          Säger vad som saknas eller är fel, så att personen kan ställa in det i kameran.
+register  lägger till eller uppdaterar en kamera i registret (en tabell i kameror.md på den delade enheten).
+sort      kopierar en inspelning (en tidsram) till <projektmapp>/<datum>-<plats>/<person>/<kamera>/ för varje kamera,
+          med person och kamera ur registret. Kameror som saknas i registret hoppas över (kod 3).
+
 Tidpunkten kommer från exiftool (DateTimeOriginal, annars CreateDate), annars filens ändringstid.
+Kameran känns igen på SerialNumber (eller InternalSerialNumber); telefoner, som saknar serienummer, på märke och modell.
 """
-import argparse, csv, datetime as dt, hashlib, json, os, shutil, subprocess, sys, tempfile
+import argparse, csv, datetime as dt, hashlib, json, os, re, shutil, subprocess, sys, tempfile
 from collections import Counter
 from pathlib import Path
 
@@ -38,7 +52,9 @@ def meta(paths):
         # Fillistan går via en argumentfil: många långa sökvägar spränger Windows kommandorad.
         with tempfile.NamedTemporaryFile("w", suffix=".args", delete=False, encoding="utf-8") as f:
             f.write("\n".join(str(p) for p in paths))
-        args = ["exiftool", "-json", "-q", "-DateTimeOriginal", "-CreateDate", "-Model", "-charset", "filename=utf8", "-@", f.name]
+        args = ["exiftool", "-json", "-q", "-DateTimeOriginal", "-CreateDate", "-Make", "-Model", "-SerialNumber",
+                "-InternalSerialNumber", "-Artist", "-Copyright", "-OwnerName", "-OffsetTimeOriginal",
+                "-charset", "filename=utf8", "-@", f.name]
         r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8")
         os.unlink(f.name)
         for row in json.loads(r.stdout or "[]"):
@@ -57,7 +73,52 @@ def meta(paths):
         if when is None:
             when = dt.datetime.fromtimestamp(p.stat().st_mtime)
         result[p] = (when, row.get("Model", "okänd"))
+        TAGS[p] = row
     return result
+
+
+TAGS = {}   # alla exiftool-fält per fil, från senaste meta()
+
+
+def serial(row) -> str:
+    return str(row.get("SerialNumber") or row.get("InternalSerialNumber") or "").strip()
+
+
+def camera_key(row):
+    """(serienummer, märke, modell): kameran som skrivit filen."""
+    return serial(row), str(row.get("Make", "")).strip(), str(row.get("Model", "okänd")).strip()
+
+
+def read_register(path: Path):
+    """kameror.md: en markdowntabell | serienummer | märke | modell | person | kamera | kontrollerad | anteckning |"""
+    cols = ["serienummer", "märke", "modell", "person", "kamera", "kontrollerad", "anteckning"]
+    rows = []
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if not line.startswith("|"):
+                continue
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cells) < 5 or cells[0] == "serienummer" or set("".join(cells)) <= set("-: "):
+                continue
+            rows.append(dict(zip(cols, cells + [""] * len(cols))))
+    return rows
+
+
+def lookup(reg, key):
+    sn, make, model = key
+    if sn:
+        hit = [r for r in reg if r["serienummer"] == sn]
+        if hit:
+            return hit[0]
+    hit = [r for r in reg if not r["serienummer"] and r["modell"].lower() == model.lower()]
+    return hit[0] if len(hit) == 1 else None
+
+
+def groups(ps, m):
+    out = {}
+    for p in ps:
+        out.setdefault(camera_key(TAGS.get(p, {})), []).append(p)
+    return out
 
 
 def sha256(p: Path):
@@ -90,11 +151,12 @@ def scan(src: Path):
     return 0
 
 
-def copy(src: Path, dest: Path, t_from, t_to, model, move: bool, apply: bool):
-    ps = files(src)
-    m = meta(ps)
+def copy(src: Path, dest: Path, t_from, t_to, model, move: bool, apply: bool, sn=None, ps=None, m=None):
+    if ps is None:
+        ps = files(src)
+        m = meta(ps)
     chosen = [p for p in ps if (t_from is None or m[p][0] >= t_from) and (t_to is None or m[p][0] <= t_to)
-              and (model is None or m[p][1] == model)]
+              and (model is None or m[p][1] == model) and (sn is None or serial(TAGS.get(p, {})) == sn)]
     plan, same, clash = [], [], []
     for p in chosen:
         target = dest / p.name
@@ -156,6 +218,97 @@ def copy(src: Path, dest: Path, t_from, t_to, model, move: bool, apply: bool):
     return 2 if clash else 0
 
 
+def cameras(src: Path, register: Path):
+    ps = files(src)
+    m = meta(ps)
+    reg = read_register(register)
+    unknown = 0
+    for key, fs in sorted(groups(ps, m).items(), key=lambda kv: -len(kv[1])):
+        hit = lookup(reg, key)
+        who = f"{hit['person']}/{hit['kamera']}" if hit else "OKÄND, registreras först"
+        unknown += hit is None
+        when = sorted(m[p][0] for p in fs)
+        print(f"{key[1]} {key[2]} sn {key[0] or '-'}: {len(fs)} filer, {when[0]:%Y-%m-%d %H:%M} – {when[-1]:%Y-%m-%d %H:%M} → {who}")
+    return 3 if unknown else 0
+
+
+def check(src: Path, photographer=None):
+    """Kamerans metadata per kamera: det som saknas eller är fel, och vad personen ska ställa in."""
+    ps = files(src)
+    m = meta(ps)
+    now = dt.datetime.now()
+    problems = 0
+    for key, fs in groups(ps, m).items():
+        rows = [TAGS.get(p, {}) for p in fs]
+        imgs = [r for r, p in zip(rows, fs) if p.suffix.lower() not in (".mp4", ".mov", ".mts", ".m2ts", ".wav")] or rows
+        first = lambda tag: next((str(r[tag]).strip() for r in imgs if str(r.get(tag, "")).strip()), "")
+        notes = []
+        artist, copyright_, owner = first("Artist"), first("Copyright"), first("OwnerName")
+        if not artist:
+            notes.append("fotografen (Artist) är inte inställd")
+        elif photographer and photographer.lower() not in artist.lower():
+            notes.append(f"fotografen är '{artist}', inte {photographer}")
+        if not copyright_:
+            notes.append("upphovsrätten (Copyright) är inte inställd")
+        if not key[0] and key[1].lower() not in ("apple", "samsung", "google"):
+            notes.append("inget serienummer i filerna; kameran kan inte skiljas från en likadan")
+        if not first("OffsetTimeOriginal"):
+            notes.append("ingen tidszon i filerna (OffsetTimeOriginal); ställ in tidszon i kameran")
+        times = sorted(m[p][0] for p in fs)
+        if times[-1] > now + dt.timedelta(minutes=10):
+            notes.append(f"klockan går före: senaste bilden är tagen {times[-1]:%Y-%m-%d %H:%M}, i framtiden")
+        if times[0].year < 2015:
+            notes.append(f"klockan är troligen inte inställd: {times[0]:%Y-%m-%d}")
+        problems += bool(notes)
+        print(f"{key[1]} {key[2]} sn {key[0] or '-'} ({len(fs)} filer): fotograf '{artist or '-'}', upphovsrätt '{copyright_ or '-'}', ägare '{owner or '-'}'")
+        for n in notes:
+            print(f"  - {n}")
+        if not notes:
+            print("  metadata ser rätt ut")
+    return 4 if problems else 0
+
+
+def register_camera(path: Path, sn, make, model, person, name, note=""):
+    header = ("| serienummer | märke | modell | person | kamera | kontrollerad | anteckning |\n"
+              "|---|---|---|---|---|---|---|\n")
+    text = path.read_text(encoding="utf-8") if path.exists() else (
+        "# Kameraregistret\n\nEn rad per kamera. Viska känner igen kameran på serienumret i filerna (telefoner på modell) "
+        "och lägger materialet i `<datum>-<plats>/<person>/<kamera>/`. Se agents/wds/data/media-storage.md.\n\n" + header)
+    if "| serienummer |" not in text:
+        text = text.rstrip() + "\n\n" + header
+    row = f"| {sn} | {make} | {model} | {person} | {name} | {dt.date.today():%Y-%m-%d} | {note} |"
+    lines = text.rstrip().splitlines()
+    key = f"| {sn} |" if sn else None
+    replaced = False
+    for i, line in enumerate(lines):
+        if (key and line.startswith(key)) or (not sn and line.startswith("|  |") and f"| {model} |" in line):
+            lines[i], replaced = row, True
+    if not replaced:
+        lines.append(row)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(("uppdaterad: " if replaced else "registrerad: ") + row)
+    return 0
+
+
+def sort(src: Path, project: Path, shoot: str, register: Path, t_from, t_to, move: bool, apply: bool):
+    ps = files(src)
+    m = meta(ps)
+    reg = read_register(register)
+    worst = 0
+    for key, fs in groups(ps, m).items():
+        inside = [p for p in fs if (t_from is None or m[p][0] >= t_from) and (t_to is None or m[p][0] <= t_to)]
+        if not inside:
+            continue
+        hit = lookup(reg, key)
+        if not hit:
+            print(f"OKÄND kamera {key[1]} {key[2]} sn {key[0] or '-'}: {len(inside)} filer hoppas över; registrera den först")
+            worst = max(worst, 3)
+            continue
+        code = copy(src, project / shoot / hit["person"] / hit["kamera"], t_from, t_to, None, move, apply, None, inside, m)
+        worst = max(worst, code)
+    return worst
+
+
 def when_arg(s):
     return dt.datetime.strptime(s, "%Y-%m-%d %H:%M") if s else None
 
@@ -165,10 +318,27 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("scan"); s.add_argument("source", type=Path)
+    k = sub.add_parser("cameras"); k.add_argument("source", type=Path); k.add_argument("register", type=Path)
+    h = sub.add_parser("check"); h.add_argument("source", type=Path); h.add_argument("--photographer")
+    r = sub.add_parser("register"); r.add_argument("register", type=Path)
+    for f in ("--serial", "--make", "--model", "--person", "--name", "--note"):
+        r.add_argument(f, default="")
+    o = sub.add_parser("sort"); o.add_argument("source", type=Path); o.add_argument("project", type=Path)
+    o.add_argument("shoot"); o.add_argument("register", type=Path)
+    o.add_argument("--from", dest="t_from"); o.add_argument("--to", dest="t_to")
+    o.add_argument("--move", action="store_true"); o.add_argument("--apply", action="store_true")
     c = sub.add_parser("copy"); c.add_argument("source", type=Path); c.add_argument("dest", type=Path)
-    c.add_argument("--from", dest="t_from"); c.add_argument("--to", dest="t_to"); c.add_argument("--model")
+    c.add_argument("--from", dest="t_from"); c.add_argument("--to", dest="t_to"); c.add_argument("--model"); c.add_argument("--serial")
     c.add_argument("--move", action="store_true"); c.add_argument("--apply", action="store_true")
     a = ap.parse_args()
     if a.cmd == "scan":
         sys.exit(scan(a.source))
-    sys.exit(copy(a.source, a.dest, when_arg(a.t_from), when_arg(a.t_to), a.model, a.move, a.apply))
+    if a.cmd == "cameras":
+        sys.exit(cameras(a.source, a.register))
+    if a.cmd == "check":
+        sys.exit(check(a.source, a.photographer))
+    if a.cmd == "register":
+        sys.exit(register_camera(a.register, a.serial, a.make, a.model, a.person, a.name, a.note))
+    if a.cmd == "sort":
+        sys.exit(sort(a.source, a.project, a.shoot, a.register, when_arg(a.t_from), when_arg(a.t_to), a.move, a.apply))
+    sys.exit(copy(a.source, a.dest, when_arg(a.t_from), when_arg(a.t_to), a.model, a.move, a.apply, a.serial))

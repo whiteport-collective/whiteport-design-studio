@@ -5,21 +5,22 @@
     python worker.py wash   <klipp> [--out <mapp>]
     python worker.py batch  <klippmapp> <utmapp>
 
-run     söker igenom <root>/*/projects/*/<inspelning>/original/** och gör två sorters jobb:
-        1. Utskrift: varje videoklipp utan <grundnamn>.srt bredvid sig skrivs ut
-           (transcribe-toolet, med tid per ord).
+run     söker igenom inspelningarna i <root>/*/projects/*/ och gör två sorters jobb:
+        1. Utskrift: varje videoklipp utan utskrift skrivs ut (transcribe-toolet, med tid per ord).
         2. Tvätt: varje jobbfil <projekt>/jobb/*.tvatta (en rad: klippets sökväg under projektet)
-           tvättar ett klipp till. Varje klipp med tal tvättas också automatiskt. Den tvättade versionen
-           (<inspelning>/klipp/<klipp>-tvattad.mp4 + .csv + .srt + .xml) är utan hummanden, utfyllnadsord,
-           upprepningar och långa pauser. Jobbfilen flyttas till jobb/klara/.
+           tvättar ett valt klipp. Den tvättade versionen är utan hummanden, utfyllnadsord, upprepningar och
+           långa pauser. Jobbfilen flyttas till jobb/klara/. Bara valda klipp tvättas (Mårten, 2026-10-24).
         Varje klart jobb blir en rad i projektets logg.md. --once kör ett varv och slutar.
 status  visar vad som väntar och vad som är klart, per projekt.
-wash    tvättar ett klipp direkt (kräver <grundnamn>.words.json bredvid klippet).
-batch   skriver ut alla klipp i en lokal mapp (utskriften bredvid klippet), tvättar talen till <utmapp>/klipp/
-        och gör en proxyfil <klipp>.proxy.mov bredvid varje klipp,
-        utan Drive och utan AI. Används i den lokala arbetsmappen innan resultatet läggs i Drive.
+wash    tvättar ett klipp direkt (kräver utskriften med tid per ord).
+batch   skriver ut alla klipp i en mapp och gör en proxyfil för varje, utan AI.
 
-Inget skrivs i original/. Jobb som avbryts görs om nästa varv; ett klart jobb görs aldrig om.
+Allt som görs av ett klipp läggs i mappen med samma namn bredvid klippet (Mårten, 2026-10-24):
+    P1000708.MP4
+    P1000708/P1000708.srt, .words.json, .proxy.mov, P1000708-tvattad.mp4 (+ .csv, .srt, .xml)
+Inspelningarna ligger som <inspelning>/<person>/<kamera>/; den förra strukturen (<inspelning>/original/<källa>/,
+utskriften bredvid klippet, tvätten i <inspelning>/klipp/) läses fortfarande.
+Originalen rörs aldrig. Jobb som avbryts görs om nästa varv; ett klart jobb görs aldrig om.
 """
 import argparse, csv, datetime as dt, json, os, re, subprocess, sys, time
 from collections import Counter
@@ -49,12 +50,26 @@ def projects(root: Path):
     return sorted(p for p in root.glob("*/projects/*") if p.is_dir())
 
 
+NOT_RECORDINGS = {"inkorg", "mediabank", "export", "resolve", "jobb"}
+
+
 def recordings(project: Path):
-    return sorted(p for p in project.iterdir() if p.is_dir() and (p / "original").is_dir())
+    return sorted(p for p in project.iterdir() if p.is_dir() and p.name not in NOT_RECORDINGS and re.match(r"\d{4}-\d{2}-\d{2}", p.name))
+
+
+def is_original(p: Path) -> bool:
+    """Ett original: en videofil direkt i kameramappen, inte en proxy, en tvättad version eller något i ett klipps mapp."""
+    return (p.suffix.lower() in VIDEO and ".proxy." not in p.name and "-tvattad" not in p.name and not p.name.endswith(".part")
+            and not p.name.startswith(p.parent.name + ".") and not any(x.name in ("klipp", "export", "mediabank") for x in p.parents))
 
 
 def clips(rec: Path):
-    return sorted(p for p in (rec / "original").rglob("*") if p.suffix.lower() in VIDEO and ".proxy." not in p.name)
+    return sorted(p for p in rec.rglob("*") if p.is_file() and is_original(p))
+
+
+def clip_dir(clip: Path) -> Path:
+    """Mappen med samma namn bredvid klippet, där allt som görs av klippet ligger."""
+    return clip.parent / clip.stem
 
 
 def log(project: Path, text: str):
@@ -66,8 +81,11 @@ def log(project: Path, text: str):
 
 
 def sidecar(clip: Path, ext: str):
-    """Utskriften ligger bredvid klippet med samma grundnamn (P1000617.srt), så att den följer med
-    när klippet kopieras. Det äldre läget <inspelning>/transkript/ läses fortfarande."""
+    """Utskriften ligger i klippets mapp (P1000617/P1000617.srt). Bredvid klippet (P1000617.srt) och
+    <inspelning>/transkript/ från förra strukturen läses fortfarande."""
+    inside = clip_dir(clip) / (clip.stem + ext)
+    if inside.exists():
+        return inside
     beside = clip.with_suffix(ext)
     if beside.exists():
         return beside
@@ -76,7 +94,7 @@ def sidecar(clip: Path, ext: str):
             legacy = p.parent / "transkript" / (clip.stem + ext)
             if legacy.exists():
                 return legacy
-    return beside
+    return inside
 
 
 def is_talk(clip: Path, words):
@@ -91,20 +109,9 @@ def pending_transcripts(rec: Path):
     return [c for c in clips(rec) if not sidecar(c, ".srt").exists()]
 
 
-def pending_washes(rec: Path):
-    """Klipp som mest är tal och saknar en tvättad version."""
-    todo = []
-    for c in clips(rec):
-        words_f = sidecar(c, ".words.json")
-        if (rec / "klipp" / f"{c.stem}-tvattad.mp4").exists() or not words_f.exists():
-            continue
-        if is_talk(c, json.loads(words_f.read_text(encoding="utf-8"))):
-            todo.append(c)
-    return todo
-
-
 def transcribe(rec: Path, clip: Path):
-    r = subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(clip.parent), "--words"])
+    clip_dir(clip).mkdir(exist_ok=True)
+    r = subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(clip_dir(clip)), "--words"])
     return r.returncode == 0
 
 
@@ -131,11 +138,10 @@ def classify(word: str, prev: str, gap: float = 0.0):
 
 
 def wash(clip: Path, out: Path | None = None, words_f: Path | None = None, render: bool = True):
-    rec = clip.parents[[p.name for p in clip.parents].index("original") + 1] if "original" in [p.name for p in clip.parents] else clip.parent
     words_f = words_f or sidecar(clip, ".words.json")
     words = json.loads(words_f.read_text(encoding="utf-8"))
     info = probe(clip)
-    out = out or rec / "klipp"
+    out = out or clip_dir(clip)
     out.mkdir(parents=True, exist_ok=True)
 
     cuts, keep, prev, t = [], [], "", 0.0
@@ -329,32 +335,19 @@ def check(washed: Path, words_f: Path, map_f: Path):
 
 # ---------- lokalt ----------
 
-def batch(src: Path, out: Path):
-    """Skriver ut och tvättar alla videoklipp i en lokal mapp, utan Drive och utan AI.
-
-    Utskriften bredvid varje klipp, tvättade versioner av talen till <out>/klipp/. Det som redan finns hoppas över."""
-    todo = sorted(p for p in src.rglob("*") if p.suffix.lower() in VIDEO and not p.name.endswith(".part")
-                  and ".proxy." not in p.name and "-tvattad" not in p.name)
-    kl = out / "klipp"
+def batch(src: Path, out: Path | None = None):
+    """Skriver ut alla videoklipp i en mapp och gör en proxy för varje, i klippets mapp, utan AI.
+    Det som redan finns hoppas över. Tvätt görs bara för valda klipp (wash eller en jobbfil)."""
+    todo = sorted(p for p in src.rglob("*") if p.is_file() and is_original(p))
     for n, clip in enumerate(todo, 1):
         t0 = time.time()
-        words_f = sidecar(clip, ".words.json")
-        if not words_f.exists():
-            subprocess.run([sys.executable, str(TRANSCRIBE), str(clip), str(clip.parent), "--words"], check=False)
-        if not words_f.exists():
-            print(f"{n}/{len(todo)} {clip.name}: utskriften misslyckades", flush=True)
-            continue
-        words = json.loads(words_f.read_text(encoding="utf-8"))
-        if not is_talk(clip, words):
-            print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, inte tal, tvättas inte ({time.time() - t0:.0f} s)", flush=True)
-            continue
-        if not (kl / f"{clip.stem}-tvattad.mp4").exists():
-            r = wash(clip, kl, words_f)
-            print(f"{n}/{len(todo)} {clip.name}: {len(words)} ord, {r['sekunder_bort']} s bort ({time.time() - t0:.0f} s)", flush=True)
-    # proxyfiler för redigeringen, bredvid klippet med samma grundnamn som utskriften: <klipp>.proxy.mov
+        if not sidecar(clip, ".words.json").exists():
+            transcribe(None, clip)
+        ok = sidecar(clip, ".words.json").exists()
+        print(f"{n}/{len(todo)} {clip.name}: {'utskrivet' if ok else 'utskriften misslyckades'} ({time.time() - t0:.0f} s)", flush=True)
     for clip in todo:
-        proxy(clip, clip.with_name(clip.stem + ".proxy.mov"))
-    print(f"{now()} klart: {len(todo)} klipp i {src}, utskrift och proxy bredvid varje klipp", flush=True)
+        proxy(clip, clip_dir(clip) / (clip.stem + ".proxy.mov"))
+    print(f"{now()} klart: {len(todo)} klipp i {src}, utskrift och proxy i mappen bredvid varje klipp", flush=True)
 
 
 def proxy(clip: Path, dst: Path, height: int = 1080):
@@ -386,23 +379,11 @@ def run_once(root: Path):
             if ok:
                 log(project, f"Utskrift: {rec.name}, {len(ok)} klipp ({', '.join(c.name for c in ok[:5])}{' …' if len(ok) > 5 else ''})")
                 done += len(ok)
-            washed = []
-            for clip in pending_washes(rec):
-                try:
-                    r = wash(clip)
-                except Exception as e:  # görs om nästa varv
-                    print(f"{clip.name}: {e}", flush=True)
-                    continue
-                washed.append(f"{r['klipp']} ({r['sekunder_bort']} s bort)")
-            if washed:
-                log(project, f"Tvätt: {rec.name}, {len(washed)} klipp med tal, tvättade versioner i klipp/ ({', '.join(washed[:5])}{' …' if len(washed) > 5 else ''})")
-                done += len(washed)
         for job in wash_jobs(project):
             clip = project / job.read_text(encoding="utf-8").strip().replace("\\", "/")
             try:
-                rec = clip.parents[[p.name for p in clip.parents].index("original") + 1]
                 if not sidecar(clip, ".words.json").exists():
-                    transcribe(rec, clip)
+                    transcribe(None, clip)
                 r = wash(clip)
             except Exception as e:  # jobbet ligger kvar och görs om nästa varv
                 print(f"{job.name}: {e}", flush=True)
@@ -433,7 +414,7 @@ if __name__ == "__main__":
     r.add_argument("--every", type=int, default=300); r.add_argument("--once", action="store_true")
     s = sub.add_parser("status"); s.add_argument("--root", default="G:/Shared drives", type=Path)
     w = sub.add_parser("wash"); w.add_argument("clip", type=Path); w.add_argument("--out", type=Path); w.add_argument("--words", type=Path)
-    b = sub.add_parser("batch"); b.add_argument("src", type=Path); b.add_argument("out", type=Path)
+    b = sub.add_parser("batch"); b.add_argument("src", type=Path); b.add_argument("out", type=Path, nargs="?")
     c = sub.add_parser("check"); c.add_argument("washed", type=Path); c.add_argument("words", type=Path)
     a = ap.parse_args()
     if a.cmd == "check":
