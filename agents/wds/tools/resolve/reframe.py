@@ -9,11 +9,12 @@ utsnittet glider mellan dem med en mjuk kurva (smoothstep), som Ease In/Out i Pr
 ger ett fast utsnitt. "speed": 1.7 spelar klippet 1,7 gånger snabbare (läser dur * speed sekunder av originalet). "eq": "saturation=1.35:contrast=1.08" justerar
 ett klipp efter LUT:en (ffmpeg eq), när det ser urtvättat ut bredvid de andra. "ramp": [[0, 1], [1.2, 1], [3, 8],
 [23.5, 8], [26.2, 1], [29.4, 1]] är en fartkurva (sekunder från "start", fart): normal fart, upp till 8 gånger under färden
-och ner till normal igen, med mjuka övergångar. Klippets längd i reelen blir kurvans längd (ramp_duration), plus övertoningen. Rutan är alltid så hög som bilden (9:16 ur 3:2 är 37,5 % av bredden; ur en stående bild 84 %).
+och ner till normal igen, med mjuka övergångar. "rotate": 1.2 rätar upp en sned bild (grader medurs).
+Med Intel Quick Sync avkodas originalen och kodas klippen av grafikkretsen (h264_qsv); annars libx264 på processorn. Klippets längd i reelen blir kurvans längd (ramp_duration), plus övertoningen. Rutan är alltid så hög som bilden (9:16 ur 3:2 är 37,5 % av bredden; ur en stående bild 84 %).
 LUT: <projekt>/resolve/lut/<inspelning>/<klipp>.cube om den finns (looks.py). Klippen sparas som
 <utmapp>/segNN-<klipp>.mp4, där NN är platsen i klipplistan, så att reel_assemble.py hittar dem.
 """
-import argparse, json, math, subprocess, sys
+import argparse, json, math, os, subprocess, sys
 from pathlib import Path
 
 
@@ -31,6 +32,23 @@ def x_expr(xs, dur):
         seg = f"({a}+({b - a})*({u})*({u})*(3-2*({u})))"
         expr = f"if(lt(t,{t1:.3f}),{seg},{expr})"
     return expr
+
+
+_QSV = None
+
+
+def qsv() -> bool:
+    """Finns Intel Quick Sync? Då avkodar och kodar grafikkretsen; färg och beskärning görs fortfarande av processorn."""
+    global _QSV
+    if _QSV is None:
+        enc = subprocess.run(["ffmpeg", "-hide_banner", "-encoders"], capture_output=True, text=True).stdout
+        _QSV = "h264_qsv" in enc and not os.environ.get("WDS_NO_QSV")   # WDS_NO_QSV=1 tvingar processorn (jämförelse)
+    return _QSV
+
+
+def encoder():
+    return (["-c:v", "h264_qsv", "-global_quality", "18", "-preset", "slower"] if qsv()
+            else ["-c:v", "libx264", "-preset", "medium", "-crf", "17"])
 
 
 def ramp_parts(ramp):
@@ -62,7 +80,7 @@ def ramp_setpts(ramp):
     return f"({expr})/TB"
 
 
-def render(src: Path, start: float, dur: float, xs, lut: Path | None, out: Path, w: int, h: int, speed: float = 1.0, eq: str | None = None, ramp=None):
+def render(src: Path, start: float, dur: float, xs, lut: Path | None, out: Path, w: int, h: int, speed: float = 1.0, eq: str | None = None, ramp=None, rotate: float = 0.0):
     """dur är klippets längd i reelen; med speed > 1 läses dur * speed sekunder av originalet och spelas upp snabbare.
     Med ramp (fartkurva) läses originalet till kurvans sista punkt; är dur längre än kurvan (övertoningen) fortsätter
     klippet i kurvans sista fart."""
@@ -71,13 +89,19 @@ def render(src: Path, start: float, dur: float, xs, lut: Path | None, out: Path,
         src_dur = ramp[-1][0] + max(0.0, dur - ramp_duration(ramp)) * ramp[-1][1]
     cx = x_expr(xs, src_dur)
     vf = []
+    if rotate:
+        # räta upp en sned bild (grader, medurs); zooma in lite så att hörnen inte syns
+        z = 1 + abs(math.sin(math.radians(rotate))) * 1.2
+        vf.append(f"rotate={rotate}*PI/180:fillcolor=black,scale=trunc(iw*{z:.4f}/2)*2:trunc(ih*{z:.4f}/2)*2,"
+                  f"crop=trunc(iw/{z:.4f}/2)*2:trunc(ih/{z:.4f}/2)*2")
+    # rutan: full höjd, 9:16 bred; mittpunkten följer nyckelpunkterna och hålls innanför bilden
+    vf.append(f"crop=w=ih*9/16:h=ih:x='clip(({cx})*iw-ih*9/32,0,iw-ih*9/16)':y=0")
+    vf.append(f"scale={w}:{h}:flags=lanczos")
+    # färgen efter beskärningen: samma resultat, men på en femtedel så många bildpunkter som 4K-originalet
     if lut and lut.exists():
         vf.append("lut3d='" + str(lut).replace("\\", "/").replace(":", "\\:") + "'")
     if eq:
         vf.append(f"eq={eq}")   # efterjustering för just det här klippet, till exempel mer färg
-    # rutan: full höjd, 9:16 bred; mittpunkten följer nyckelpunkterna och hålls innanför bilden
-    vf.append(f"crop=w=ih*9/16:h=ih:x='clip(({cx})*iw-ih*9/32,0,iw-ih*9/16)':y=0")
-    vf.append(f"scale={w}:{h}:flags=lanczos")
     if ramp:
         vf.append(f"setpts='{ramp_setpts(ramp)}'")
     elif speed != 1.0:
@@ -85,8 +109,11 @@ def render(src: Path, start: float, dur: float, xs, lut: Path | None, out: Path,
     vf.append("fps=25,format=yuv420p")
     out.parent.mkdir(parents=True, exist_ok=True)
     part = out.with_name(out.stem + ".part.mp4")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{start}", "-t", f"{src_dur}", "-i", str(src), "-vf", ",".join(vf),
-                    "-t", f"{dur}", "-an", "-c:v", "libx264", "-preset", "medium", "-crf", "17", "-movflags", "+faststart", str(part)], check=True)
+    if qsv():
+        vf[-1] = vf[-1].replace("format=yuv420p", "format=nv12")   # Quick Sync kodar nv12
+    hw = ["-hwaccel", "d3d11va"] if qsv() else []                   # originalen (4K HEVC) avkodas av grafikkretsen och lämnas till processorn för färg och beskärning
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *hw, "-ss", f"{start}", "-t", f"{src_dur}", "-i", str(src), "-vf", ",".join(vf),
+                    "-t", f"{dur}", "-an", *encoder(), "-movflags", "+faststart", str(part)], check=True)
     part.replace(out)
 
 
@@ -107,7 +134,7 @@ def main():
         src = a.project / s["rec"] / "original" / s.get("source", "marten-lumix-s9") / f"{s['stem']}.MP4"
         lut = a.project / "resolve" / "lut" / s["rec"] / f"{s['stem']}.cube"
         out = a.out / f"seg{n:02}-{s['stem']}.mp4"
-        render(src, s["start"], s["dur"], s.get("x", 0.5), lut, out, w, h, s.get("speed", 1.0), s.get("eq"), s.get("ramp"))
+        render(src, s["start"], s["dur"], s.get("x", 0.5), lut, out, w, h, s.get("speed", 1.0), s.get("eq"), s.get("ramp"), s.get("rotate", 0.0))
         print(f"seg{n:02} {s['stem']} x={s.get('x', 0.5)}", flush=True)
 
 

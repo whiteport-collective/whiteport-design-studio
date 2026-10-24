@@ -135,6 +135,27 @@ Egen tidslinje i 1080x1920 (eller `--size`), klippen i listans ordning med bara 
 
 Lärdomar från reelen till Visita (Mårten, 2026-10-23): ingen Smart Reframe, följ varje klipp själv med mjuka nyckelpunkter (se nedan); fokus på människorna och de charmiga ögonblicken, aldrig tomrummet mellan dem; ta med en vinkel där publiken och rummet syns; kändisen (kocken) får två klipp; välj ögonblick ur utskrifterna (skratt, repliker) i stället för på måfå; musik under, klippljudet av.
 
+## Rendera bara det Resolve inte kan
+
+Regel (Mårten, 2026-10-24): **rendera aldrig om ett klipp för något som går att justera i Resolve.** Skript-API:t sätter fasta värden på ett klipp i tidslinjen, men inga nyckelpunkter:
+
+| Görs i Resolve (justerbart där) | Renderas med ffmpeg (går inte från skript) |
+|---|---|
+| Rotation, fast zoom och position: `TimelineItem.SetProperty("RotationAngle" / "ZoomX" / "ZoomY" / "Pan" / "Tilt", värde)` | Följning som glider mellan nyckelpunkter (`reframe.py`) |
+| Färgjustering per klipp: `TimelineItem.SetCDL(...)` eller i Color | Fartkurvor (`"ramp"`) och fast fart |
+| Klippets in- och utpunkt | Rörelse i stillbilder (`pan`, `zoom`, `push`) |
+| | Grundfärgen (LUT per klipp), som ändå bakas in |
+
+`reel_timeline.py` lägger reelen i Resolve och sätter `"resolve": {...}` ur klipplistan på varje klipp. `"rotate"` och `"eq"` i `reframe.py` finns kvar för leveranser utan Resolve.
+
+```bash
+python agents/wds/tools/resolve/reel_timeline.py "<delad enhet>/projects/<projekt>" v7
+```
+
+**Grafikkretsen (Intel Quick Sync).** `reframe.py` och `reel_assemble.py` avkodar originalen med grafikkretsen (`-hwaccel d3d11va`) och kodar med `h264_qsv`; LUT och färg läggs efter beskärningen. Mätt 2026-10-24 på Surface Pro 7, två klipp à 5 s ur 4K HEVC: 57 s på processorn med färg på 4K, 36 s med färg efter beskärningen, **17 s** med grafikkretsen och färg efter beskärningen. `WDS_NO_QSV=1` tvingar processorn. `-hwaccel qsv` fungerar inte här: bildrutorna stannar i grafikminnet och `lut3d` når dem inte.
+
+**Resolve på Surface Pro 7.** Grafikminnet räcker inte till Resolve och många videor samtidigt i webbläsaren: tumnaglar och visare blir svarta, och loggen (`%APPDATA%\Blackmagic Design\DaVinci Resolve\Support\logs\ResolveDebug.txt`) visar `CL_OUT_OF_RESOURCES`. Stäng sidor som spelar video, spara projektet och starta om Resolve. Kontrollera att ingen gammal `Resolve.exe` ligger kvar. Förhandsvisningssidor spelar klipp bara när musen är över dem. Hackar uppspelningen: Playback → Timeline Proxy Resolution → Quarter.
+
 ## Egen omformatering till 9:16 (utan Smart Reframe)
 
 ```bash

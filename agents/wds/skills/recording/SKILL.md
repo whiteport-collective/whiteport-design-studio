@@ -40,6 +40,8 @@ Alla i samtalet vet att det spelas in. Det är lagligt att spela in ett samtal m
 
 ## Under inspelningen
 
+**Lång tystnad under en feedbackrunda:** fråga kort om personen är kvar, i stället för att svara på varje statusrad (Mårten, 2026-10-24).
+
 Inspelningen går vidare tills personen säger stopp, också när ingen säger något och när ingen sitter vid datorn: ljudet är lika långt som inspelningen, och datorn hålls vaken. Locket ska vara öppet. Följ samtalet som i [live-meeting](../live-meeting.md): korta rader i chatten bara när någon frågar något eller något behöver sägas nu. Med skärmen igång finns en bild för varje gång skärmen ändrats (`== Bild … ==` i bevakningen). Titta på den när det som sägs hänger på det som visas: en siffra i en presentation, ett dokument, en sajt.
 
 ## Stoppa
@@ -50,6 +52,8 @@ När personen säger "stoppa":
 2. **Den grundliga utskriften:** kör `refine.py` på mappen. Säg ungefär hur lång tid den tar, och gör den i bakgrunden.
 3. **Utskriften till projektet:** avgör vilket projekt samtalet gällde, utifrån vad som sades och vilka som var med. Är det oklart, fråga en gång med ett förslag. Arkivera `final.jsonl` med `live.py archive` i det projektets repo, med en rad i registret som pekar på mediamappen, och committa.
 4. **Säg i en rad** var utskriften hamnade och att ljud och video ligger kvar i mediamappen.
+
+**Feedback på eget arbete:** när feedbacken är nedskriven som en lista som personen har sett, behövs inte inspelningen längre. Lägg mappen i papperskorgen i stället för att köra `refine.py` och arkivera (Mårten, 2026-10-24).
 
 Samtal som inte gäller något projekt får ingen utskrift i något repo; den ligger kvar i mediamappen tillsammans med ljudet.
 
