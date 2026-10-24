@@ -24,13 +24,13 @@ Första steget i Viskas flöde för en fotografering: in, sortera, bedöma och l
 ## Var materialet hör hemma
 
 - **Datum och plats:** filernas tidsstämplar mot projektets schema. Passen och tidsluckorna säger när personen bytte plats. En inspelning är en dag på en plats, med ett kort namn (`2026-10-22-linnesalen`). Är platsen okänd, använd schemat för den tiden och nämn det i rapporten.
-- **Person och kamera:** ur [kameraregistret](../../data/media-storage.md) på kamerans serienummer (`SerialNumber`). En kamera som inte finns där: se nedan. Telefoner skriver inget serienummer; personen avgörs av vem som lämnade materialet.
+- **Person och kamera:** ur utrustningen i personernas själsfiler (`## GEAR` i `users/<användare>/user.md`, se [media-storage](../../data/media-storage.md)) på kamerans serienummer (`SerialNumber`). En kamera som ingen har: se nedan. Telefoner skriver inget serienummer; personen avgörs av vem som lämnade materialet.
 - **Klockan:** jämför ett ögonblick två kameror fångat (ett tal, en gruppbild). Skiljer det mer än en minut: skriv det i inspelningens anteckningar och rapporten. Originalens tid ändras aldrig.
 - **Krockar** (samma filnamn, annat innehåll, samma kamera): den krockande omgången läggs i en undermapp efter kortets mapp (`101_pana`). Filnamnen ändras aldrig.
 
 ## En ny kamera
 
-En kamera som inte finns i registret registreras en gång (Mårten, 2026-10-24):
+En kamera som ingen har i sin själsfil registreras en gång (Mårten, 2026-10-24):
 
 1. **Fråga vems kameran är** och vad den ska heta i mapparna (`lumix-s9`, `iphone-15`).
 2. **Kontrollera kamerans metadata** i de nya filerna ([exiftool](../../tools/exiftool.md)):
@@ -38,7 +38,7 @@ En kamera som inte finns i registret registreras en gång (Mårten, 2026-10-24):
    - klockan och tidszonen: stämmer tiden i filerna med när de togs (kopieringen, schemat, en annan kamera)?
    - ägaren och serienumret (`OwnerName`, `SerialNumber`), där kameran har dem.
 3. **Påminn personen** om det som saknas eller är fel, och var i kamerans meny det ställs in (Lumix S9: Inställningar → Upphovsrättsinformation; Klockinställning och Tidszon). Originalen ändras inte i efterhand; rätt fotograf och upphovsrätt skrivs in i filerna som levereras till mediebanken.
-4. **Skriv in kameran** i `kameror.md`: serienummer, märke och modell, person, namn, och datumet då metadata kontrollerades.
+4. **Skriv in kameran i ägarens själsfil**, under `## GEAR` i `users/<användare>/user.md` (`media_copy.py register`): serienummer, märke, modell, person, namn, datumet då metadata kontrollerades och det som behöver ställas in. Når Viska inte ägarens privata fil: projektrepots `users/<person>/user.md`, och personen flyttar raden till sin egen själsfil.
 
 ## Gången
 

@@ -2,7 +2,7 @@
 name: media-copy
 source: wds
 type: script
-description: Läser av ett minneskort eller en inkorg, känner igen kamerorna mot kameraregistret, kontrollerar kamerornas metadata och kopierar eller flyttar media till <datum>-<plats>/<person>/<kamera>/, kontrollerat med sha256 och utan att något skrivs över. Skriptet ligger i media-copy/.
+description: Läser av ett minneskort eller en inkorg, känner igen kamerorna mot utrustningen i personernas själsfiler, kontrollerar kamerornas metadata och kopierar eller flyttar media till <datum>-<plats>/<person>/<kamera>/, kontrollerat med sha256 och utan att något skrivs över. Skriptet ligger i media-copy/.
 used_by: [media-ingest]
 ---
 
@@ -21,22 +21,22 @@ Visar antal filer per typ, vilka kameror, och passen: en rad per sammanhängande
 ## Kamerorna
 
 ```bash
-python agents/wds/tools/media-copy/media_copy.py cameras "E:/" "G:/Shared drives/<enhet>/kameror.md"
+python agents/wds/tools/media-copy/media_copy.py cameras "E:/" --gear "<privat själsskåp>/users/martenangner/user.md" "<…>/users/camilla/user.md"
 python agents/wds/tools/media-copy/media_copy.py check "E:/" --photographer "Mårten Angner"
-python agents/wds/tools/media-copy/media_copy.py register "G:/Shared drives/<enhet>/kameror.md" --serial WJ6CB002321 --make Panasonic --model DC-S9 --person marten --name lumix-s9
+python agents/wds/tools/media-copy/media_copy.py register "<privat själsskåp>/users/martenangner/user.md" --serial WJ6CB002321 --make Panasonic --model DC-S9 --person marten --name lumix-s9
 ```
 
 - `cameras` visar varje kamera i källan (märke, modell, serienummer, antal filer, tidsspann) och vem den tillhör enligt registret, eller `OKÄND`. Kod 3 om någon saknas.
 - `check` visar kamerans metadata och vad som saknas eller är fel: fotograf (`Artist`), upphovsrätt (`Copyright`), ägare (`OwnerName`), serienummer, tidszon (`OffsetTimeOriginal`) och klockan (tider i framtiden, eller ett år före 2015). Kod 4 när något behöver ställas in i kameran. Provat 2026-10-24: Mårtens Lumix S9 saknade fotograf och upphovsrätt.
-- `register` lägger till eller uppdaterar en kamera i `kameror.md` (en tabell: serienummer, märke, modell, person, kamera, kontrollerad, anteckning). En telefon registreras utan serienummer och känns igen på modell.
+- `register` lägger till eller uppdaterar en kamera i personens `user.md`, i tabellen under `## GEAR` (`| serial | make | model | person | camera | checked | notes |`), som skapas om den saknas. Resten av filen rörs inte. En telefon registreras utan serienummer och känns igen på modell.
 
 ## Sortera en inspelning
 
 ```bash
-python agents/wds/tools/media-copy/media_copy.py sort "E:/" "G:/Shared drives/<enhet>/projects/<projekt>" 2026-10-22-linnesalen "G:/Shared drives/<enhet>/kameror.md" --from "2026-10-22 11:30" --to "2026-10-22 15:00"
+python agents/wds/tools/media-copy/media_copy.py sort "E:/" "G:/Shared drives/<enhet>/projects/<projekt>" 2026-10-22-linnesalen --gear "<…>/users/martenangner/user.md" --from "2026-10-22 11:30" --to "2026-10-22 15:00"
 ```
 
-Kopierar varje kamera i tidsramen till `<projekt>/<datum>-<plats>/<person>/<kamera>/`, med person och kamera ur registret. Torrkörning utan `--apply`; `--move` från en inkorg. Kameror som saknas i registret hoppas över (kod 3).
+Kopierar varje kamera i tidsramen till `<projekt>/<datum>-<plats>/<person>/<kamera>/`, med person och kamera ur utrustningen. Torrkörning utan `--apply`; `--move` från en inkorg. Kameror som ingen har hoppas över (kod 3).
 
 ## Kopiera
 
@@ -66,5 +66,5 @@ En fil som hamnat i fel inspelning eller källa flyttas med samma skript, från 
 | 0 | Klart, eller torrkörning utan krockar |
 | 1 | En kopia stämde inte med originalet. Inget mer kopierades. |
 | 2 | Krockar finns |
-| 3 | En kamera saknas i registret |
+| 3 | En kamera finns inte i någons utrustning |
 | 4 | Kamerans metadata behöver ställas in (`check`) |

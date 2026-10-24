@@ -1,10 +1,10 @@
 """Kopierar media från ett minneskort eller en inkorg till en inspelning, utan att något någonsin skrivs över.
 
     python media_copy.py scan <källa>
-    python media_copy.py cameras <källa> <kameror.md>
+    python media_copy.py cameras <källa> --gear <user.md> [<user.md> ...]
     python media_copy.py check <källa> [--photographer "Mårten Angner"]
-    python media_copy.py register <kameror.md> --serial <nr> --make <märke> --model <modell> --person <person> --name <kamera>
-    python media_copy.py sort <källa> <projektmapp> <datum>-<plats> <kameror.md> [--from ...] [--to ...] [--move] [--apply]
+    python media_copy.py register <user.md> --serial <nr> --make <märke> --model <modell> --person <person> --name <kamera>
+    python media_copy.py sort <källa> <projektmapp> <datum>-<plats> --gear <user.md> [<user.md> ...] [--from ...] [--to ...] [--move] [--apply]
     python media_copy.py copy <källa> <mål> [--from "YYYY-MM-DD HH:MM"] [--to "YYYY-MM-DD HH:MM"] [--model <kamera>] [--serial <nr>] [--move] [--apply]
 
 scan  listar mediet i källan: antal per typ, kameror och tidsluckor, så att agenten kan föreslå
@@ -17,14 +17,14 @@ copy  visar planen (torrkörning) och kopierar med --apply. Varje fil kopieras t
       kontrolleras och tas bort ur källan. En fil som redan finns med samma innehåll tas bort ur källan.
       Använd aldrig --move mot ett minneskort.
 
-cameras   kamerorna i källan (märke, modell, serienummer, antal filer) mot kameraregistret: person och namn,
-          eller OKÄND. Slutar med kod 3 om någon kamera saknas i registret.
+cameras   kamerorna i källan (märke, modell, serienummer, antal filer) mot utrustningen i personernas själsfiler
+          (avsnittet GEAR i users/<användare>/user.md): person och namn, eller OKÄND. Kod 3 om någon kamera saknas.
 check     kamerans metadata per kamera: fotograf och upphovsrätt (Artist, Copyright), ägare (OwnerName),
           serienummer, tidszon (OffsetTimeOriginal) och klockan (en tid i framtiden eller långt bakåt).
           Säger vad som saknas eller är fel, så att personen kan ställa in det i kameran.
-register  lägger till eller uppdaterar en kamera i registret (en tabell i kameror.md på den delade enheten).
+register  lägger till eller uppdaterar en kamera i en persons user.md, i tabellen under ## GEAR (skapas om den saknas).
 sort      kopierar en inspelning (en tidsram) till <projektmapp>/<datum>-<plats>/<person>/<kamera>/ för varje kamera,
-          med person och kamera ur registret. Kameror som saknas i registret hoppas över (kod 3).
+          med person och kamera ur utrustningen. Kameror som ingen har hoppas över (kod 3).
 
 Tidpunkten kommer från exiftool (DateTimeOriginal, annars CreateDate), annars filens ändringstid.
 Kameran känns igen på SerialNumber (eller InternalSerialNumber); telefoner, som saknar serienummer, på märke och modell.
@@ -89,28 +89,38 @@ def camera_key(row):
     return serial(row), str(row.get("Make", "")).strip(), str(row.get("Model", "okänd")).strip()
 
 
-def read_register(path: Path):
-    """kameror.md: en markdowntabell | serienummer | märke | modell | person | kamera | kontrollerad | anteckning |"""
-    cols = ["serienummer", "märke", "modell", "person", "kamera", "kontrollerad", "anteckning"]
+COLS = ["serial", "make", "model", "person", "camera", "checked", "notes"]
+HEADER = "| serial | make | model | person | camera | checked | notes |"
+
+
+def read_register(paths):
+    """Utrustningen i personernas själsfiler: tabellen under ## GEAR i users/<användare>/user.md
+    (| serial | make | model | person | camera | checked | notes |). Flera filer läses ihop."""
     rows = []
-    if path.exists():
+    for path in ([paths] if isinstance(paths, Path) else paths):
+        if not path.exists():
+            continue
+        in_table = False
         for line in path.read_text(encoding="utf-8").splitlines():
-            if not line.startswith("|"):
+            cells = [c.strip() for c in line.strip().strip("|").split("|")] if line.startswith("|") else None
+            if cells and cells[0].lower() in ("serial", "serienummer"):
+                in_table = True
                 continue
-            cells = [c.strip() for c in line.strip().strip("|").split("|")]
-            if len(cells) < 5 or cells[0] == "serienummer" or set("".join(cells)) <= set("-: "):
+            if not cells:
+                in_table = False
                 continue
-            rows.append(dict(zip(cols, cells + [""] * len(cols))))
+            if in_table and len(cells) >= 5 and not set("".join(cells)) <= set("-: "):
+                rows.append(dict(zip(COLS, cells + [""] * len(COLS))))
     return rows
 
 
 def lookup(reg, key):
     sn, make, model = key
     if sn:
-        hit = [r for r in reg if r["serienummer"] == sn]
+        hit = [r for r in reg if r["serial"] == sn]
         if hit:
             return hit[0]
-    hit = [r for r in reg if not r["serienummer"] and r["modell"].lower() == model.lower()]
+    hit = [r for r in reg if not r["serial"] and r["model"].lower() == model.lower()]
     return hit[0] if len(hit) == 1 else None
 
 
@@ -218,14 +228,14 @@ def copy(src: Path, dest: Path, t_from, t_to, model, move: bool, apply: bool, sn
     return 2 if clash else 0
 
 
-def cameras(src: Path, register: Path):
+def cameras(src: Path, register):
     ps = files(src)
     m = meta(ps)
     reg = read_register(register)
     unknown = 0
     for key, fs in sorted(groups(ps, m).items(), key=lambda kv: -len(kv[1])):
         hit = lookup(reg, key)
-        who = f"{hit['person']}/{hit['kamera']}" if hit else "OKÄND, registreras först"
+        who = f"{hit['person']}/{hit['camera']}" if hit else "OKÄND, registreras först"
         unknown += hit is None
         when = sorted(m[p][0] for p in fs)
         print(f"{key[1]} {key[2]} sn {key[0] or '-'}: {len(fs)} filer, {when[0]:%Y-%m-%d %H:%M} – {when[-1]:%Y-%m-%d %H:%M} → {who}")
@@ -269,28 +279,31 @@ def check(src: Path, photographer=None):
 
 
 def register_camera(path: Path, sn, make, model, person, name, note=""):
-    header = ("| serienummer | märke | modell | person | kamera | kontrollerad | anteckning |\n"
-              "|---|---|---|---|---|---|---|\n")
-    text = path.read_text(encoding="utf-8") if path.exists() else (
-        "# Kameraregistret\n\nEn rad per kamera. Viska känner igen kameran på serienumret i filerna (telefoner på modell) "
-        "och lägger materialet i `<datum>-<plats>/<person>/<kamera>/`. Se agents/wds/data/media-storage.md.\n\n" + header)
-    if "| serienummer |" not in text:
-        text = text.rstrip() + "\n\n" + header
+    """Skriver kameran i personens user.md, i tabellen under ## GEAR. Resten av filen rörs inte."""
     row = f"| {sn} | {make} | {model} | {person} | {name} | {dt.date.today():%Y-%m-%d} | {note} |"
-    lines = text.rstrip().splitlines()
-    key = f"| {sn} |" if sn else None
+    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    head = next((i for i, l in enumerate(lines) if l.startswith("|") and l.strip("| ").lower().startswith(("serial", "serienummer"))), None)
+    if head is None:
+        lines += ["", "## GEAR: cameras and equipment",
+                  "Read by every WDS agent. Viska recognizes a camera by the serial number in its files "
+                  "(agents/wds/data/media-storage.md in the WDS repo).", "", HEADER, "|---|---|---|---|---|---|---|"]
+        head = len(lines) - 2
+    end = head + 2
+    while end < len(lines) and lines[end].startswith("|"):
+        end += 1
     replaced = False
-    for i, line in enumerate(lines):
-        if (key and line.startswith(key)) or (not sn and line.startswith("|  |") and f"| {model} |" in line):
+    for i in range(head + 2, end):
+        cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+        if (sn and cells[0] == sn) or (not sn and not cells[0] and len(cells) > 2 and cells[2].lower() == model.lower()):
             lines[i], replaced = row, True
     if not replaced:
-        lines.append(row)
+        lines.insert(end, row)
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(("uppdaterad: " if replaced else "registrerad: ") + row)
+    print(("uppdaterad i " if replaced else "registrerad i ") + f"{path}: {row}")
     return 0
 
 
-def sort(src: Path, project: Path, shoot: str, register: Path, t_from, t_to, move: bool, apply: bool):
+def sort(src: Path, project: Path, shoot: str, register, t_from, t_to, move: bool, apply: bool):
     ps = files(src)
     m = meta(ps)
     reg = read_register(register)
@@ -301,10 +314,10 @@ def sort(src: Path, project: Path, shoot: str, register: Path, t_from, t_to, mov
             continue
         hit = lookup(reg, key)
         if not hit:
-            print(f"OKÄND kamera {key[1]} {key[2]} sn {key[0] or '-'}: {len(inside)} filer hoppas över; registrera den först")
+            print(f"OKÄND kamera {key[1]} {key[2]} sn {key[0] or '-'}: {len(inside)} filer hoppas över; registrera den i ägarens user.md först")
             worst = max(worst, 3)
             continue
-        code = copy(src, project / shoot / hit["person"] / hit["kamera"], t_from, t_to, None, move, apply, None, inside, m)
+        code = copy(src, project / shoot / hit["person"] / hit["camera"], t_from, t_to, None, move, apply, None, inside, m)
         worst = max(worst, code)
     return worst
 
@@ -318,13 +331,13 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("scan"); s.add_argument("source", type=Path)
-    k = sub.add_parser("cameras"); k.add_argument("source", type=Path); k.add_argument("register", type=Path)
+    k = sub.add_parser("cameras"); k.add_argument("source", type=Path); k.add_argument("--gear", type=Path, nargs="+", required=True)
     h = sub.add_parser("check"); h.add_argument("source", type=Path); h.add_argument("--photographer")
-    r = sub.add_parser("register"); r.add_argument("register", type=Path)
+    r = sub.add_parser("register"); r.add_argument("user_md", type=Path)
     for f in ("--serial", "--make", "--model", "--person", "--name", "--note"):
         r.add_argument(f, default="")
     o = sub.add_parser("sort"); o.add_argument("source", type=Path); o.add_argument("project", type=Path)
-    o.add_argument("shoot"); o.add_argument("register", type=Path)
+    o.add_argument("shoot"); o.add_argument("--gear", type=Path, nargs="+", required=True)
     o.add_argument("--from", dest="t_from"); o.add_argument("--to", dest="t_to")
     o.add_argument("--move", action="store_true"); o.add_argument("--apply", action="store_true")
     c = sub.add_parser("copy"); c.add_argument("source", type=Path); c.add_argument("dest", type=Path)
@@ -334,11 +347,11 @@ if __name__ == "__main__":
     if a.cmd == "scan":
         sys.exit(scan(a.source))
     if a.cmd == "cameras":
-        sys.exit(cameras(a.source, a.register))
+        sys.exit(cameras(a.source, a.gear))
     if a.cmd == "check":
         sys.exit(check(a.source, a.photographer))
     if a.cmd == "register":
-        sys.exit(register_camera(a.register, a.serial, a.make, a.model, a.person, a.name, a.note))
+        sys.exit(register_camera(a.user_md, a.serial, a.make, a.model, a.person, a.name, a.note))
     if a.cmd == "sort":
-        sys.exit(sort(a.source, a.project, a.shoot, a.register, when_arg(a.t_from), when_arg(a.t_to), a.move, a.apply))
+        sys.exit(sort(a.source, a.project, a.shoot, a.gear, when_arg(a.t_from), when_arg(a.t_to), a.move, a.apply))
     sys.exit(copy(a.source, a.dest, when_arg(a.t_from), when_arg(a.t_to), a.model, a.move, a.apply, a.serial))

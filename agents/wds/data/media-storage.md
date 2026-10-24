@@ -18,7 +18,6 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
 
 ```
 <delad enhet>/
-  kameror.md                           kameraregistret: serienummer → person och kamera (se nedan)
   projects/
     <startdatum>-<projekt>/            samma namn som projects/ i repot
       <projekt>.md                     projektets själ: mål, leveranser, personerna, platserna, schemat, det bästa
@@ -42,7 +41,7 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
 
 - **Projektmappen** finns i Drive bara när projektet har media. Namnet är exakt projektets mapp i repot, med startdatum först ([repo-structure](repo-structure.md#projektens-namn)). Inspelningarna ligger direkt i projektmappen; `inkorg/` och `mediabank/` sist.
 - **En inspelning är en dag på en plats.** Fotar man två platser samma dag blir det två inspelningsmappar, uppdelade efter filernas tidsstämplar och projektets schema.
-- **Person och kamera, alltid två nivåer** (Mårten, 2026-10-24): `<person>/<kamera>/`, också när någon bara har en kamera. Det håller isär filnamn som annars krockar (Lumix numrerar `P1000001` och framåt och kan börja om) och fungerar när en person har flera kameror. Vem och vilken kamera avgörs av kameraregistret.
+- **Person och kamera, alltid två nivåer** (Mårten, 2026-10-24): `<person>/<kamera>/`, också när någon bara har en kamera. Det håller isär filnamn som annars krockar (Lumix numrerar `P1000001` och framåt och kan börja om) och fungerar när en person har flera kameror. Vem och vilken kamera avgörs av utrustningen i personernas själsfiler.
 - **Ingen `original/`-mapp** (Mårten, 2026-10-24): allt som ligger direkt i kameramappen är original, som det kom ur kameran. Inget redigeras eller döps om där.
 - **En mapp bredvid en fil, med samma namn, när något görs av den** (Mårten, 2026-10-24). `P1000708/` bredvid `P1000708.MP4` (och bredvid `P1000708.RW2`/`.JPG`, som delar namn). Ett foto som bara bedömts får ingen mapp; ett videoklipp som skrivits ut får det. I mappen:
 
@@ -55,7 +54,7 @@ Kundens **delade enhet** i Google Drive, en per kund (till exempel *Visita Kommu
   | `P1000708-tvattad.mp4`, `.srt`, `.csv` | tvättad version av tal och intervjuer, med tidkodskarta åt båda hållen |
   | `P1000708.drp` | klippets Resolve-dokument: en vågrät tidslinje per utvalt ögonblick och en stående 9:16 med den vågräta inbäddad |
 
-- **Kameraregistret** (`<delad enhet>/kameror.md`): en rad per kamera med serienummer (`SerialNumber` i metadata), märke och modell, person, kamerans namn i mapparna, och när metadata senast kontrollerades. En ny kamera registreras en gång; Viska frågar vem den tillhör och kontrollerar att kamerans metadata är rätt ([media-ingest](../skills/media-ingest/SKILL.md#en-ny-kamera)). Telefoner skriver inget serienummer; de skiljs åt på modell och person.
+- **Utrustningen bor i personens själsfil** (Mårten, 2026-10-24): avsnittet `## GEAR` i `users/<användare>/user.md` i personens privata själsskåp, som alla WDS-agenter läser. En rad per kamera: serienummer (`SerialNumber` i metadata), märke, modell, person och kamerans namn i mapparna, när metadata kontrollerades, anteckning. Viska läser utrustningen hos alla i projektet. En ny kamera skrivs in en gång, i ägarens fil; når Viska inte den filen (någon annans privata skåp) skrivs den i projektrepots `users/<person>/user.md`, och personen flyttar den till sin egen själsfil ([media-ingest](../skills/media-ingest/SKILL.md#en-ny-kamera)). Telefoner skriver inget serienummer; de skiljs åt på modell och person.
 - Alla namn med små bokstäver och bindestreck, utan mellanslag och å, ä, ö. De ska fungera i skript, i Resolve och på alla datorer.
 
 ## Kunskapen om materialet
