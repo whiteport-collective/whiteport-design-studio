@@ -6,8 +6,10 @@ för personens godkännande (grön flagga). Sparas som <datum>-<plats>.drp i ins
 Underlaget är inspelningens innehall.csv från katalogen (media-catalog): en rad per fil med betyg 1–5 och
 forslag "bort" för det uppenbart dåliga. Bortvalda filer läggs inte i Resolve.
 
-  - Ett Resolve-projekt med inspelningens namn (2026-10-22-linnesalen). Finns det öppnas det, och bara det som
-    saknas läggs till; --replace gör om det från början.
+  - Ett Resolve-projekt med inspelningens namn (2026-10-22-linnesalen), importerat ur mallen mallar/inspelning.drp
+    (binarna och fotoalbumet "foton"). Finns det öppnas det, och bara det som saknas läggs till; --replace gör om det.
+    Bilderna läggs i albumet i gränssnittet (markera dem i binen → högerklick → Add Photo(s) to Album), eftersom
+    API:t inte når album; sedan färgsätts de på fotosidan.
   - Binarna foto och video, med en underbin per person och kamera (marten-lumix-s9).
   - Bilderna: RAW när den finns (RW2, DNG, CR3, NEF, ARW), annars JPEG/HEIC. Klippen: alla som inte är bortvalda.
   - Metadata: beskrivning, nyckelord, bedömningen som kommentar, och betyget som stjärnor (Rating 1–5).
@@ -30,6 +32,8 @@ RAW = {".rw2", ".dng", ".cr3", ".cr2", ".nef", ".arw", ".raf", ".orf"}
 PHOTO = RAW | {".jpg", ".jpeg", ".heic", ".hif", ".png", ".tif", ".tiff"}
 VIDEO = {".mp4", ".mov", ".mts", ".m2ts", ".mxf"}
 SKIP_DIRS = {"klipp", "export", "mediabank", "inkorg", "resolve", "transkript"}
+# Mallprojektet: binarna foto och video och ett tomt fotoalbum "foton" i foto. Album kan inte skapas från skript.
+TEMPLATE = Path(__file__).parent / "mallar" / "inspelning.drp"
 
 
 def resolve_app():
@@ -141,7 +145,10 @@ def main():
     if a.replace and name in (pm.GetProjectListInCurrentFolder() or []):
         pm.CloseProject(pm.GetCurrentProject()) if cur and cur.GetName() == name else None
         pm.DeleteProject(name)
-    project = pm.LoadProject(name) or pm.CreateProject(name)
+    project = pm.LoadProject(name)
+    if not project and TEMPLATE.exists() and pm.ImportProject(str(TEMPLATE), name):
+        project = pm.LoadProject(name)                     # ur mallen: binarna foto och video och albumet "foton"
+    project = project or pm.CreateProject(name)
     if not project:
         sys.exit(f"projektet {name} gick inte att skapa eller öppna i Resolve")
     # cachen följer projektet, inte datorn: varje nytt projekt får datorns cachemapp (på Surface Pro 7 den externa disken)
