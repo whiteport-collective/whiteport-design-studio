@@ -146,6 +146,10 @@ Regel (Mårten, 2026-10-24): **rendera aldrig om ett klipp för något som går 
 | Klippets in- och utpunkt | Rörelse i stillbilder (`pan`, `zoom`, `push`) |
 | | Grundfärgen (LUT per klipp), som ändå bakas in |
 
+**Ingen förhandsvisning i webbläsaren** (Mårten, 2026-10-24): varje ny version läggs som tidslinje i Resolve, och personen granskar den där.
+
+**Rendering i Resolve**, mätt 2026-10-24 på Surface Pro 7: tidslinjen reel-9x16-v7 (61 s, 12 färdiga klipp och musik, H.264 1080x1920) renderades på 34 s.
+
 `reel_timeline.py` lägger reelen i Resolve och sätter `"resolve": {...}` ur klipplistan på varje klipp. `"rotate"` och `"eq"` i `reframe.py` finns kvar för leveranser utan Resolve.
 
 ```bash
