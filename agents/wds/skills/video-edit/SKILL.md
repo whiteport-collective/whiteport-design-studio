@@ -1,39 +1,44 @@
 ---
 name: video-edit
-description: Klipper video, utifrån det som sägs och utifrån bilden. Tal och intervjuer klipps på orden; en reel för sociala medier klipps ihop av ögonblicken, i 9:16 med egen följning och musik. Allt lämnas som tidslinje i DaVinci Resolve. Använd när personen vill klippa ett tal, en intervju eller ett föredrag, vill ha en reel eller highlights, eller säger "klipp ihop", "ta bort pauserna" eller "gör en kort version".
+description: Gör de godkända videoklippen färdiga, ett i taget: varje klipp får ett eget Resolve-dokument med klippets namn, en vågrät tidslinje per utvalt ögonblick (klippt, färgsatt i ljuszoner) och en stående 9:16 med den vågräta inbäddad och följd. Tal och intervjuer får en tvättad version utan pauser och utfyllnadsord. Reels klipps ihop av de färdiga klippen. Använd när klipp är godkända (grön flagga), när personen vill ha en stående version, en tvättad version av ett tal, en reel eller highlights.
 used_by: [viska]
-version: 1.1
+version: 2.0
 tools: [wds/ffmpeg, wds/transcribe, wds/media-worker, wds/resolve]
 ---
 
 # Klippa video
 
-Ersätter det gamla `/edit-video`, som gjorde en tidslinje för Premiere med Deepgram. Nu sker utskriften på datorn med Whisper, och tidslinjen öppnas i Resolve. Viska klipper på orden; bilden, rytmen och färgen bestämmer personen i Resolve.
+Tredje steget i flödet, efter [media-ingest](../media-ingest/SKILL.md) och [media-catalog](../media-catalog/SKILL.md). De klipp personen godkänt (grön flagga i inspelningens Resolve-dokument) görs färdiga **ett i taget**, som klippet med servitrisen och tallriken (Mårten, 2026-10-24). Sedan går de till mediebanken ([media-export](../media-export/SKILL.md)).
 
-**Klart betyder:** personen har en tidslinje i Resolve med de godkända klippen och markörer för kapitel, källfilerna ligger kvar orörda i `original/`, och utskriften finns i projektet.
+**Klart betyder:** för varje godkänt klipp ett Resolve-dokument med klippets namn, sparat som `<klipp>/<klipp>.drp` i mappen bredvid klippet, med de vågräta och stående tidslinjerna färdiga; tal och intervjuer har en tvättad version i samma mapp; och personen har fått en rad per klipp i chatten och i loggen.
 
-## Gången
+## Klippets dokument
 
-1. **Utskriften med ordtider:** [transcribe](../../tools/transcribe.md) med `--words`. Finns klippets `.srt` redan bredvid klippet från katalogen, börja med att läsa den.
-2. **Visa utskriften** med tider, och markera tystnad över en sekund, upprepade meningar (troliga omtagningar), utfyllnadsord och korta felstarter.
-3. **Kom överens om klippen.** Snabbstädning (tystnad över två sekunder, utfyllnad, felstarter), personens egna val, eller bästa tagningen bland omtagningarna. Säg vad som tas bort innan tidslinjen skrivs.
-4. **Tidslinjen:** FCP 7 XML (`xmeml`) med källans bildfrekvens och upplösning ur `ffprobe`, ett klipp per behållen del, namn som säger vad delen är, och markörer för kapitel. Den sparas i projektets arbetsmapp, inte i `original/`. Med Studio importeras den direkt ([resolve](../../tools/resolve.md)); utan Studio öppnar personen den med File → Import → Timeline.
-5. **Utskriften** ligger bredvid klippet (`<klipp>.srt`). Citat som används i manus eller texter förs in i projektet i repot med en länk dit.
+**Ett Resolve-dokument per klipp, med klippets namn** (`P1000708`), och bara det klippet i sig. Flera ögonblick ur samma klipp blir flera tidslinjer i samma dokument (Mårten, 2026-10-24).
 
-En ny version av klippen är en ny tidslinje. Den förra ligger kvar.
+| Tidslinje | Vad |
+|---|---|
+| `P1000708-01` | det utvalda ögonblicket i hela bilden: in- och utpunkt (bort med det onödiga), färgen i ljuszoner |
+| `P1000708-01 9x16` | stående 1440x2560 med tidslinjen `P1000708-01` **inbäddad** (nästlad), i mitten, så att den fyller rutan i full höjd, och följd med nyckelpunkter |
+
+1. **Ögonblicket:** in- och utpunkt ur klippets beskrivning (`<klipp>/<klipp>.md`). Börja när det händer, sluta när det är gjort (tallriken står på bordet).
+2. **Färgen:** balanserad med ljusets karaktär. Klippet mäts över tiden; där ljuset skiftar (kök med lysrör, sal med glödljus, en mörk dörröppning) delas det i zoner med var sin korrigering och en övertoning emellan, så att färgen glider utan hopp. Kök och dagsljus lite sterilt, restaurang tydligt varmt, mörka partier uppljusade.
+3. **Den stående versionen** ställs upp först: en ny 9:16-tidslinje med den vågräta tidslinjen inbäddad, i mitten. Rutan är alltid fylld, **aldrig svart** någonstans. Sedan följningen: nyckelpunkter som håller det viktiga (personen, tallriken) i bild och glider mjukt mellan varandra; rutan går aldrig utanför bilden. Där motivet blir litet zoomar den in något. Ändras den vågräta versionen följer den stående med, utan att göras om.
+4. **Kontrollera** bilder genom hela klippet, i båda versionerna, innan klippet lämnas: fylld ruta, motivet i bild, färgen jämn över zonerna.
+5. **Spara** dokumentet som `<klipp>/<klipp>.drp`. Feedback rättas i klippets dokument.
+
+Det som Resolve kan justera (rotation, fast zoom, position, färg) görs i Resolve och renderas aldrig om; bara det Resolve inte kan göra från skript renderas med ffmpeg ([resolve](../../tools/resolve.md), [ffmpeg](../../tools/ffmpeg.md)).
 
 ## Den tvättade versionen
 
-För en intervju eller en talande person gör Viska automatiskt en version utan "hmm", "eh", utfyllnadsord, felstarter och långa pauser (Mårten, 2026-10-22). Den är aldrig en ny videofil som ersätter råfilen, utan en tidslinje som pekar in i råfilen, så att allt borttaget går att få tillbaka.
+Valda klipp där någon pratar, presenterar eller intervjuas får en version utan "hmm", "eh", utfyllnadsord, felstarter och långa pauser (Mårten, 2026-10-22). Den görs **bara med ffmpeg på datorn**, utan Resolve (Mårten, 2026-10-24), och läggs i klippets mapp; råfilen rörs aldrig.
 
-- **Klipplistan** `<klipp>-tvattad.csv` bredvid tidslinjen: en rad per borttagen bit med `start_ra, slut_ra, ord, varfor` (tider i råfilen) och en rad per behållen bit med `start_ra, slut_ra, start_tvattad, slut_tvattad`. Det är kartan mellan råfilens tidkoder och den tvättade versionens, åt båda hållen.
-- **En markör för varje borttagen bit** i tidslinjen, vid skarven, med ordet som togs bort i markörens namn. I Resolve syns var varje "hmm" satt.
-- **Lägga tillbaka:** råfilen är orörd, så ett borttaget ord kommer tillbaka genom att dra ut skarven i Resolve till tiden i klipplistan, eller genom att Viska skriver en ny tidslinje utan just det bortvalet.
-- Viska klipper med marginal (en bit av andningen kvar) så att skarvarna inte låter hackiga, och säger i rapporten hur mycket som togs bort (antal och sekunder).
+- `<klipp>/<klipp>-tvattad.mp4` och `.srt`, och **klipplistan** `<klipp>-tvattad.csv`: en rad per borttagen bit med `start_ra, slut_ra, ord, varfor` och en rad per behållen bit med `start_ra, slut_ra, start_tvattad, slut_tvattad`. Det är kartan mellan råfilens tidkoder och den tvättade versionens, åt båda hållen, så att utskriften finns med båda.
+- Viska klipper med marginal (en bit av andningen kvar) så att skarvarna inte låter hackiga, kontrollerar med `worker.py check` ([media-worker](../../tools/media-worker.md)), och säger i rapporten hur mycket som togs bort (antal och sekunder).
 
 ## Reel för sociala medier
 
-En reel är ögonblicken från ett evenemang, i 9:16, med musik under och klippljudet av. Byggd och provad på Visitas studiebesök (v1–v7, Mårten, 2026-10-23 och 24).
+En reel är ögonblicken från ett evenemang, i 9:16, med musik under och klippljudet av. Den klipps ihop av de färdiga klippen i mediebanken, inte från råmaterialet (Mårten, 2026-10-24). Byggd och provad på Visitas studiebesök (v1–v7, Mårten, 2026-10-23 och 24).
 
 **Klart betyder:** en ny tidslinje `reel-9x16-vN` i Resolve, klippen var för sig i en egen bin, och en rad i projektets logg. Personen granskar i Resolve; ingen förhandsvisning i webbläsaren.
 

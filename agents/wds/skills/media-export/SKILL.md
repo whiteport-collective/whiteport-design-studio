@@ -1,6 +1,6 @@
 ---
 name: media-export
-description: Gör färdiga filer för varje kanal (webb, sociala medier, tryck, videoheader) av det personen har redigerat, med rätt storlek, format och metadata, i inspelningens export/. Använd när personen säger "exportera", "gör webbversioner", "gör klipp till Instagram" eller ett format behövs till en publicering.
+description: Gör färdiga filer av det personen har godkänt: kundens mediebank (grönflaggade bilder som JPG, färdiga klipp som MP4 i hela bilden och 9:16) och filer för varje kanal (webb, sociala medier, tryck, videoheader), med rätt storlek, format och metadata. Använd när personen säger "exportera", "gör webbversioner", "gör klipp till Instagram" eller ett format behövs till en publicering.
 used_by: [viska]
 version: 1.0
 tools: [wds/ffmpeg, wds/exiftool, wds/resolve]
@@ -10,12 +10,12 @@ tools: [wds/ffmpeg, wds/exiftool, wds/resolve]
 
 Redigeringen gör personen i Resolve: urval, färgsättning, beskärning, klipp. Viska tar det därifrån och gör en fil per kanal och format, så att den som publicerar bara behöver välja.
 
-**Klart betyder:** varje fil som ska ut finns i `export/<kanal>/` med ett namn som säger vad den är, i rätt storlek och format för kanalen, med upphov och utan plats om den ska publiceras, och personen har fått en lista.
+**Klart betyder:** varje fil som ska ut finns i `<projekt>/export/<kanal>/` med ett namn som säger vad den är, i rätt storlek och format för kanalen, med upphov och utan plats om den ska publiceras, och personen har fått en lista.
 
 ## Underlaget
 
-- **Foton:** Resolve exporterar de redigerade bilderna i full storlek (JPEG eller TIFF) till `export/master/`. RAW går aldrig direkt till en kanal.
-- **Video:** Resolve renderar tidslinjen i full kvalitet till `export/master/`. Viska gör kanalversionerna av den.
+- **Foton:** Resolve exporterar de redigerade bilderna i full storlek (JPEG eller TIFF) till `<projekt>/export/master/`. RAW går aldrig direkt till en kanal.
+- **Video:** Resolve renderar tidslinjen i full kvalitet till `<projekt>/export/master/`. Viska gör kanalversionerna av den.
 - **Kanalernas krav** står i projektet (produktbriefen eller en plan i `_progress/`). Saknas de: använd standarden i [ffmpeg-toolet](../../tools/ffmpeg.md) och skriv i rapporten vad som valdes, så att det kan stämmas av med den som publicerar.
 
 ## Namn
@@ -26,20 +26,18 @@ Redigeringen gör personen i Resolve: urval, färgsättning, beskärning, klipp.
 
 Upphov och kund läggs på varje export ([exiftool](../../tools/exiftool.md)). GPS tas bort från allt som publiceras. Bilder på personer publiceras bara enligt det som gäller i projektet (samtycke, policyn i `governance/`); är det oklart, säg det i rapporten.
 
-## Klipp till kundens mediebank
+## Kundens mediebank
 
-De värdefulla klippen ur varje inspelning levereras färdiga till kundens mediebank, i två versioner: hela bilden och stående 9:16. Råmaterialet stannar i Drive (Mårten, 2026-10-24).
+Sista steget i flödet för en fotografering. Det personen godkänt levereras färdigt till projektets mediebank, där det används till sociala medier och vad som helst (Mårten, 2026-10-24). Råmaterialet stannar i Drive. På sikt byggs en mediebank på kundens intranät; tills dess är det en mapp per projekt.
 
-**Gör mediebanksklippen först, reelen sedan.** De färdiga klippen (urval, följning, färg) är grunden för reels och annat; att göra reelen först betyder att samma arbete görs två gånger.
+**Klart betyder:** varje grönflaggad bild och varje färdigt klipp ligger i `<projekt>/mediabank/<datum>-<plats>/`, med titel, beskrivning, nyckelord, fotograf och upphovsrätt inskrivna, och har en rad i `<projekt>/mediabank/mediabank.csv`.
 
-**Klart betyder:** för varje utvalt klipp en tidslinje i Resolve med båda versionerna, en `.drt` bredvid råklippet (`<klipp>.mediabank-NN.drt`) så att allt om klippet följer med råklippet, och två filer i `export/mediabank/<inspelning>/` med titel, beskrivning och nyckelord inskrivna, och en rad i `export/mediabank/mediabank.csv`.
+- **Bilderna:** de som personen gett grön flagga i inspelningens Resolve-dokument, exporterade ur Resolve med sin färg som **JPG i full upplösning**.
+- **Klippen:** varje färdigt klipp ur sitt eget dokument ([video-edit](../video-edit/SKILL.md)), både hela bilden och 9:16, som **MP4 (H.264) i full upplösning** (Mårten, 2026-10-24).
+- **En mapp per inspelning**, alla kameror och fotografer tillsammans: den som letar tänker på tillfället, inte på kameran.
+- **Namnen** säger inspelningen, motivet och originalet: `2026-10-22-linnesalen_servitris-bar-forratten_P1000708.mp4`, `..._9x16.mp4`, `2026-10-22-linnesalen_gruppbild_P1000604.jpg`. Små bokstäver och bindestreck.
+- **Metadata** i varje fil ([exiftool](../../tools/exiftool.md)): titel, beskrivning, nyckelord, fotograf och upphovsrätt ur kameraregistret (rätt även om kameran var felinställd), inspelning, originalets namn. Personer namnges bara om projektet säger att de får det.
+- **`mediabank.csv`:** en rad per fil, så att det går att söka och filtrera innan det finns en riktig mediebank.
+- **En ny version** av en fil ersätter den förra, som läggs i papperskorgen; den skrivs aldrig över.
 
-### Gången
-
-1. **Urvalet** i `<projekt>/resolve/mediabank-urval.json`: klipp, in- och utpunkt (bort med det onödiga), titel, beskrivning, nyckelord. Viska föreslår ur katalogen och utskrifternas scensammanfattningar; personen bestämmer.
-2. **Följningen för 9:16:** kartan över klippet, nyckelpunkter för rutans mittpunkt. De blir riktiga nyckelpunkter i Resolve (via FCPXML), som går att flytta i Inspector.
-3. **Färgen:** balanserad, med karaktär efter ljuset men utan projektets utseende. Klippet mäts över tiden, och där ljuset skiftar (kök med lysrör, sal med glödljus) delas det i zoner med var sin korrigering och en övertoning emellan. Kök och dagsljus lite sterilt, restaurang tydligt varmt, mörka partier (en dörröppning) uppljusade.
-4. **Rendering** i Resolve: hela bilden i full upplösning och 9:16 i 1440x2560 (3:2 ur kameran), HEVC 10 bitar.
-5. **Feedback:** personen tittar på filerna och säger vad som ska ändras; Viska öppnar klippets tidslinje (eller `.drt`), rättar och renderar om. Förra renderingen läggs i papperskorgen.
-
-Hur det görs: [resolve](../../tools/resolve.md#mediebanken) (`mediabank.py`) och `looks.py` för färgen.
+Hur det görs: [resolve](../../tools/resolve.md#mediebanken) och [exiftool](../../tools/exiftool.md).
