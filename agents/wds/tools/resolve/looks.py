@@ -37,9 +37,9 @@ LOOKS = {
 
 
 def src_for(clip: Path):
-    px = clip.with_name(clip.stem + ".proxy.mov")
-    if px.exists():
-        return px
+    for px in (clip.parent / clip.stem / (clip.stem + ".proxy.mov"), clip.with_name(clip.stem + ".proxy.mov")):
+        if px.exists():                                    # i klippets mapp (ny struktur) eller bredvid klippet (förra)
+            return px
     local = Path.home() / "Pictures" / "wds-arbete" / clip.parents[2].parent.name / "proxy" / clip.parents[2].name
     for cand in (local / (clip.stem + ".proxy.mov"), local / (clip.stem + ".mov")):
         if cand.exists():

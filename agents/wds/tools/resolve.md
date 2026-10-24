@@ -181,3 +181,13 @@ Provat 2026-10-24 med P1000708 (30 s, 4K HEVC 10 bitar): båda versionerna rende
 **Ljuszoner** (`looks.light_segments`): log(R/B) och ljushet två gånger per sekund; en ny zon när färgtemperaturen hoppar mer än 0,18 eller när det blir mörkt (under 0,25). Mörka zoner breddas 0,4 s och får starkare exponering. Karaktär per zon (`looks.character`): log(R/B) under 0,15 `steril`, över 0,3 `restaurang`, däremellan `neutral`. `"look"` på ett klipp i urvalet tvingar ett utseende.
 
 **Disken:** renderingar och Drives cache behöver plats på C:. Med under en gigabyte ledigt hänger renderingen på 0 %. Resolves cache, galleri och projektmedia ligger på `E:\DaVinci Resolve Cache\` på Surface Pro 7 (`perfCacheClipsLocation`, `colorGalleryStillsLocation`, `projectMediaLocation`).
+
+## Inspelningens dokument
+
+```bash
+python agents/wds/tools/resolve/shoot_document.py "<delad enhet>/projects/<projekt>/<datum>-<plats>" [--limit N] [--replace]
+```
+
+Ett Resolve-projekt per inspelning, med inspelningens namn, för personens godkännande ([media-catalog](../skills/media-catalog/SKILL.md)). Underlaget är `innehall.csv`: filer med `forslag: bort` läggs inte in. Binarna `foto` och `video` med en underbin per person och kamera; beskrivning, nyckelord och bedömning som metadata, betyget som stjärnor (`MediaPoolItem.SetMetadata("Rating", "1"–"5")`). Klippen läggs på tidslinjen `video` med en balanserad färg per klipp på nod 1, mätt på proxyn och sparad som `<klipp>/<klipp>.cube`. Projektet exporteras som `<inspelning>/<inspelning>.drp` (`ProjectManager.ExportProject`). Personen godkänner med grön flagga.
+
+**Bilderna stannar i RAW** (Mårten, 2026-10-24): Resolve 21 läser Lumix S9:s RW2 (6000x4000, Still) men visar dem svarta på en tidslinje, så bilderna ligger bara i binen, utan tidslinje och färg. En bild som ska användas på en tidslinje exporteras först till ett format som fungerar där, och då balanseras färgen. Provat 2026-10-24 med fem bilder och tre klipp ur Linnésalen.
