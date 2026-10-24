@@ -47,3 +47,4 @@ exiftool -overwrite_original -gps:all= "<exportfil>"
 
 - `-overwrite_original` används bara på exporter, så att ingen `_original`-kopia blir liggande.
 - Klockskillnad mellan två kameror redovisas i `ingest.csv` och hanteras i redigeringsprogrammet. Tiden i originalen ändras aldrig.
+- **Å, ä, ö från PowerShell:** argumenten går in i Windows teckentabell och blir Latin-1 i filen ("M?rten"). Skriv argumenten till en fil i UTF-8 utan BOM, en per rad, och kör `exiftool -@ <fil>`, med `-charset exif=utf8` i filen (provat 2026-10-24).

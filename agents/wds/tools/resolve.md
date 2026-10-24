@@ -207,3 +207,17 @@ Utrett och provat 2026-10-24 med Resolve Studio 21.1.1 på Surface Pro 7 (Blackm
 - **Samma inställning på flera bilder:** markera referensbilden i albumet → Ctrl+C, markera de andra → Edit → Paste Attributes (Alt+V), kryssa ur det som ska vara per bild (Rating, Exposure) → Apply. RAW-inställningar följer bara med mellan filer i samma RAW-format.
 - **Recept, restaurang med glödljus** (Linnésalen, Mårten 2026-10-24: "varmare och mysigare", inte blekgrönt): Color Temp 3700 K, Tint +10, Highlights −40, Shadows +25, Color Boost +10, exponeringen mätt per bild på kamerans JPEG (+1,5 till +2,7 steg för bilder ungefär 1,5–2 steg under).
 - **Export:** Quick Export på fotosidan (hela albumet eller valda bilder, originalupplösning, med metadata) eller Deliver-sidan; JPEG, PNG, HEIC, TIFF. Bara aktuell version exporteras.
+
+## Stillbilder på en tidslinje: färg per bild och rendering
+
+För bilder som ska levereras färdiga, när kamerans JPEG räcker som underlag (Getinge, 2026-10-24: 14 gruppbilder i starkt orange glödljus).
+
+```bash
+python agents/wds/tools/resolve/stills_resolve.py "<delad enhet>/projects/<projekt>" <inspelning> --files P1000307,... [--strength 0.3]
+python agents/wds/tools/resolve/render_stills.py "<inspelning> foto" "<inspelning>/export/full=6000x4000:<inspelning>-<kund>-full-{nn}" "<inspelning>/export/epost=2400x1600:<inspelning>-<kund>-epost-{nn}"
+```
+
+- `stills_resolve.py` lägger JPEG-bilderna (och RW2 i en egen bin) i projektet med mappens namn, gör tidslinjen `<inspelning> foto` i 6000x4000 och sätter en uppmätt vitbalans som CDL-slope på nod 1 per bild (`TimelineItem.SetCDL`, fungerar på stillbilder). Mätningen: gråvärld på mellantonerna i linjärt ljus, styrka 0,3, ljusheten behålls. 0,3 gav varmt men naturlig hy; 0,4 blev gråaktigt och 0,6 kallt. Finjustera i Color.
+- `render_stills.py` renderar en ruta per klipp som JPEG (`SetCurrentRenderFormatAndCodec("jpg", "YUV444_8")`, ett jobb per bild med `MarkIn` = `MarkOut`, valfri storlek). Resolve lägger ett rutnummer på bildsekvenser; skriptet döper om filen efteråt. 28 jobb (14 bilder i två storlekar) tog ett par minuter på MARTEN-SURFACE-. Kör `--formats` för att se vilka format och codecs Resolve erbjuder.
+- `Project.ExportCurrentFrameAsStill` är inte pålitlig för kontroll: av 14 bilder sparades 2 när spelhuvudet flyttades i snabb följd. Rendera i stället och gör ett kontaktark av exporterna.
+- **Studio eller gratis:** märket nere till vänster säger "DaVinci Resolve Studio 21" eller bara "DaVinci Resolve 21". I gratisversionen ger `scriptapp("Resolve")` `None` och inställningen External scripting finns inte alls; i en ny Studio-installation står den redan på Local. Studio installeras inte över gratisversionen av samma version (installationen hoppar då över huvudprogrammet): avinstallera gratisversionen först (`msiexec /x <produktkod>`), projekten ligger kvar. Installationsguiden körs som administratör, och Windows släpper inte igenom agentens klick dit, så personen klickar igenom den och godkänner licensen.
