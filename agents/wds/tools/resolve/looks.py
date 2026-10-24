@@ -13,6 +13,8 @@ Båda stegen bakas ihop till en LUT per klipp: <projekt>/resolve/lut/<inspelning
 --apply    lägger LUT:en på nod 1 för varje klipp i projektets tidslinjer i Resolve Studio (TimelineItem.SetLUT).
            LUT:arna kopieras till Resolves LUT-mapp (<ProgramData>/.../Support/LUT/<projekt>/), annars vägrar SetLUT.
 --apply-only  lägger på befintliga LUT:ar utan att mäta om
+--neutral  bara utjämningen, inget utseende, och LUT:en läggs bredvid klippet som <klipp>.cube (mottagningen, mediebanken).
+           Utseendet läggs sedan ovanpå i Resolve eller som ett andra steg i ffmpeg.
 """
 import argparse, array, json, math, os, shutil, subprocess, sys
 from pathlib import Path
@@ -26,6 +28,11 @@ LOOKS = {
     # sat: mättnad; clean: hur mycket nästan vita ytor dras mot neutralt vitt (rena kockrockar)
     "varm": {"temp_hi": 0.03, "temp_mid": 0.03, "temp_lo": 0.01, "lift": 0.02, "contrast": 1.0, "sat": 1.08, "clean": 0.35, "roll": 0.98},
     "frisk-varm": {"temp_hi": 0.025, "temp_mid": 0.05, "temp_lo": 0.0, "lift": 0.02, "contrast": 1.06, "sat": 1.14, "clean": 0.6, "roll": 0.985},
+    # bara utjämningen, inget utseende: materialet i mottagningen och klippen till mediebanken (Mårten, 2026-10-24)
+    # karaktär efter ljuset i en zon (Mårten, 2026-10-24): kök med lysrör lite sterilt, restaurang med glödljus tydligt varmare
+    "steril": {"temp_hi": -0.01, "temp_mid": -0.005, "temp_lo": 0.0, "lift": 0.0, "contrast": 1.04, "sat": 1.0, "clean": 0.6, "roll": 0.99},
+    "restaurang": {"temp_hi": 0.05, "temp_mid": 0.07, "temp_lo": 0.025, "lift": 0.02, "contrast": 1.03, "sat": 1.12, "clean": 0.3, "roll": 0.98},
+    "neutral": {"temp_hi": 0.0, "temp_mid": 0.0, "temp_lo": 0.0, "lift": 0.0, "contrast": 1.0, "sat": 1.0, "clean": 0.0, "roll": 1.0},
 }
 
 
@@ -49,14 +56,14 @@ def measure(p: Path):
     return [sum(a[c::3]) / n / 255 for c in range(3)]
 
 
-def gains(rgb):
+def gains(rgb, max_expo=1.3):
     r, g, b = rgb
     gray = (r + g + b) / 3
     wb = [min(1.5, max(0.7, (gray / max(c, 1e-3)) ** STRENGTH)) for c in rgb]
     luma = lambda gs: 0.2126 * r * gs[0] + 0.7152 * g * gs[1] + 0.0722 * b * gs[2]
     keep = luma([1, 1, 1]) / max(luma(wb), 1e-3)
     wb = [x * keep for x in wb]
-    expo = min(1.3, max(0.9, (TARGET_Y / max(luma(wb), 1e-3)) ** 0.6))
+    expo = min(max_expo, max(0.9, (TARGET_Y / max(luma(wb), 1e-3)) ** 0.6))
     return [min(1.9, x * expo) for x in wb]
 
 
@@ -84,6 +91,67 @@ def look_fn(L):
             r, g, b = (c + (y2 - c) * k for c in (r, g, b))
         return [min(1.0, max(0.0, c)) for c in (r, g, b)]
     return f
+
+
+def character(rb: float) -> str:
+    """Karaktär efter ljusets färg i originalet (log R/B): lysrör och dagsljus blir sterilt, glödljus varmt."""
+    return "restaurang" if rb > 0.3 else "steril" if rb < 0.15 else "neutral"
+
+
+def light_segments(clip: Path, t_in: float, t_out: float, fps=2, jump=0.18, min_len=2.0, max_fade=4.0):
+    """Ljuszoner i klippet mellan t_in och t_out, när ljuset skiftar (kök med lysrör, sal med glödljus):
+    [(start, slut, gains)], där varje övergång är tiden mellan två zoner (en övertoning läggs där).
+    Färgtemperaturen följs som log(R/B) i två bilder per sekund. Mörka partier (en dörröppning) blir egna zoner
+    med kraftigare exponering, så att de lättas upp (Mårten, 2026-10-24)."""
+    src = src_for(clip)
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{t_in}", "-t", f"{t_out - t_in}", "-i", str(src),
+                          "-vf", f"fps={fps},scale=96:64", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True).stdout
+    fr, samples = 96 * 64 * 3, []
+    for k in range(len(raw) // fr):
+        a = array.array("B", raw[k * fr:(k + 1) * fr]); n = len(a) // 3
+        rgb = [sum(a[c::3]) / n / 255 for c in range(3)]
+        y = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
+        samples.append((t_in + k / fps, rgb, math.log(max(rgb[0], 1e-3) / max(rgb[2], 1e-3)), y > 0.25))
+    # en ny zon när färgtemperaturen hoppar eller när det blir mörkt (en dörröppning, en korridor) eller ljust igen
+    zones, cur = [], []
+    for s in samples:
+        ref = sorted(x[2] for x in cur if x[3])[len([x for x in cur if x[3]]) // 2] if any(x[3] for x in cur) else s[2]
+        if cur and (s[3] != cur[-1][3] or (s[3] and abs(s[2] - ref) > jump)):
+            zones.append(cur); cur = []
+        cur.append(s)
+    if cur:
+        zones.append(cur)
+    # korta ljusa zoner (övergångar) slås ihop med grannen; mörka zoner behålls från en halv sekund, för att lättas upp
+    keep = [z for z in zones if (z[-1][0] - z[0][0] + 1 / fps) >= (0.5 if not z[0][3] else min_len)]
+    zones = keep or [max(zones, key=len)]
+    out = []
+    for i, z in enumerate(zones):
+        rgb = [sum(s[1][c] for s in z) / len(z) for c in range(3)]
+        dark = not z[0][3]
+        pad = 0.4 if dark else 0.0                         # mörka zoner breddas, så att upplättningen går mjukt upp och ned
+        out.append([t_in if i == 0 else None, z[0][0] - pad, z[-1][0] + 1 / fps + pad, gains(rgb, 1.8 if dark else 1.3),
+                    sum(s[2] for s in z) / len(z), dark])
+    segs = []
+    for i, (start, first, last, gn, rb, dark) in enumerate(out):
+        if i:
+            gap = first - out[i - 1][2]                    # tiden mellan zonerna: där skiftar ljuset
+            cut = (first + out[i - 1][2]) / 2
+            prev_len = cut - segs[-1][0]
+            next_len = (out[i + 1][1] if i + 1 < len(out) else t_out) - cut
+            fade = min(max_fade, max(2.0, gap), 0.8 * prev_len, 0.8 * next_len)   # aldrig längre än zonerna själva
+            segs[-1][1] = cut
+            segs[-1][3] = round(fade, 2)
+            start = cut
+        segs.append([start, t_out, gn, 0.0, rb, dark])
+    return [tuple(s) for s in segs]          # (start, slut, gains, övertoning till nästa zon, log R/B, mörk)
+
+
+def neutral_cube(clip: Path) -> Path:
+    """Utjämningen för ett klipp, bredvid klippet: <klipp>.cube. Mäts och skrivs om den saknas."""
+    lut = clip.with_suffix(".cube")
+    if not lut.exists():
+        write_cube(lut, gains(measure(src_for(clip))), LOOKS["neutral"])
+    return lut
 
 
 def write_cube(path: Path, gn, L):
@@ -155,7 +223,8 @@ def apply(project_dir: Path, luts: dict):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("project", type=Path)
-    ap.add_argument("--map", required=True, help='"2026-10-22-koket=frisk-varm,*=varm"')
+    ap.add_argument("--map", default="*=neutral", help='"2026-10-22-koket=frisk-varm,*=varm"')
+    ap.add_argument("--neutral", action="store_true", help="bara utjämning, LUT:en bredvid klippet")
     ap.add_argument("--preview", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--only", help="bara dessa inspelningar, kommaseparerat")
@@ -175,13 +244,13 @@ def main():
     if a.only:
         recs = [r for r in recs if r.name in a.only.split(",")]
     for rec in recs:
-        look = mapping.get(rec.name, mapping.get("*", "varm"))
+        look = "neutral" if a.neutral else mapping.get(rec.name, mapping.get("*", "varm"))
         items = []
         for clip in sorted(p for p in (rec / "original").rglob("*") if p.suffix.lower() in VIDEO
                            and ".proxy." not in p.name and "-tvattad" not in p.name):
             rgb = measure(src_for(clip))
             gn = gains(rgb)
-            lut = lutdir / rec.name / f"{clip.stem}.cube"
+            lut = clip.with_suffix(".cube") if a.neutral else lutdir / rec.name / f"{clip.stem}.cube"
             write_cube(lut, gn, LOOKS[look])
             luts[clip.name] = lut
             items.append((clip, lut))

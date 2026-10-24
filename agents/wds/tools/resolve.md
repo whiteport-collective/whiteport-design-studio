@@ -164,3 +164,20 @@ python agents/wds/tools/resolve/reel.py "<delad enhet>/projects/<projekt>" klipp
 ```
 
 **Resolve på Surface Pro 7.** Grafikminnet räcker inte till Resolve och många videor samtidigt i webbläsaren: tumnaglar och visare blir svarta, och loggen (`%APPDATA%\Blackmagic Design\DaVinci Resolve\Support\logs\ResolveDebug.txt`) visar `CL_OUT_OF_RESOURCES`. Stäng sidor som spelar video, spara projektet (`ProjectManager.SaveProject`), avsluta (`Resolve.Quit`) och starta om. Kontrollera att ingen gammal `Resolve.exe` ligger kvar. Hackar uppspelningen: Playback → Timeline Proxy Resolution → Quarter.
+
+## Mediebanken
+
+```bash
+python agents/wds/tools/resolve/mediabank.py "<delad enhet>/projects/<projekt>" [--only P1000708-01] [--replace] [--render] [--out <mapp>]
+python agents/wds/tools/resolve/mediabank.py "<delad enhet>/projects/<projekt>" --open P1000708-01
+```
+
+Läser `<projekt>/resolve/mediabank-urval.json` (fälten står i skriptets hjälptext). För varje klipp: en FCPXML med båda versionerna i råklippets upplösning, importerad med `MediaPool.ImportTimelineFromFile` till binen `mediabank`, neutral färg per ljuszon på nod 1, `Timeline.Export(..., EXPORT_DRT)` bredvid råklippet och, med `--render`, två renderingsjobb ur samma tidslinje (hela bilden; 9:16 med `FormatWidth` 1440, centrerat utsnitt genom `scaleToCrop`). En tidslinje som redan finns rörs inte utan `--replace`.
+
+Provat 2026-10-24 med P1000708 (30 s, 4K HEVC 10 bitar): båda versionerna renderade på cirka 160 s på Surface Pro 7.
+
+**FCPXML i Resolve 21:** `adjust-transform` med `keyframeAnimation` på `position` blir riktiga nyckelpunkter (Pan); värdet är procent av bildens höjd (`-30` blev `-768` px i 3840x2560). `transition` med Cross Dissolve importeras som egna objekt på spåret: filtrera bort dem (`GetMediaPoolItem()` är `None`) innan LUT:ar läggs på klippen. Importen misslyckas medan Resolve renderar; ett jobb som hängt sig (full disk) kräver omstart av Resolve.
+
+**Ljuszoner** (`looks.light_segments`): log(R/B) och ljushet två gånger per sekund; en ny zon när färgtemperaturen hoppar mer än 0,18 eller när det blir mörkt (under 0,25). Mörka zoner breddas 0,4 s och får starkare exponering. Karaktär per zon (`looks.character`): log(R/B) under 0,15 `steril`, över 0,3 `restaurang`, däremellan `neutral`. `"look"` på ett klipp i urvalet tvingar ett utseende.
+
+**Disken:** renderingar och Drives cache behöver plats på C:. Med under en gigabyte ledigt hänger renderingen på 0 %. Resolves cache, galleri och projektmedia ligger på `E:\DaVinci Resolve Cache\` på Surface Pro 7 (`perfCacheClipsLocation`, `colorGalleryStillsLocation`, `projectMediaLocation`).
