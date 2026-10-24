@@ -20,7 +20,8 @@ copy  visar planen (torrkörning) och kopierar med --apply. Varje fil kopieras t
 cameras   kamerorna i källan (märke, modell, serienummer, antal filer) mot utrustningen i personernas själsfiler
           (avsnittet GEAR i users/<användare>/user.md): person och namn, eller OKÄND. Kod 3 om någon kamera saknas.
 check     kamerans metadata per kamera: fotograf och upphovsrätt (Artist, Copyright), ägare (OwnerName),
-          serienummer, tidszon (OffsetTimeOriginal) och klockan (en tid i framtiden eller långt bakåt).
+          serienummer, tidszon (OffsetTimeOriginal), klockan (en tid i framtiden eller långt bakåt) och vitbalansen
+          (låst på en förinställning som Daylight i stället för Auto).
           Säger vad som saknas eller är fel, så att personen kan ställa in det i kameran.
 register  lägger till eller uppdaterar en kamera i en persons user.md, i tabellen under ## GEAR (skapas om den saknas).
 sort      kopierar en inspelning (en tidsram) till <projektmapp>/<datum>-<plats>/<person>/<kamera>/ för varje kamera,
@@ -53,7 +54,7 @@ def meta(paths):
         with tempfile.NamedTemporaryFile("w", suffix=".args", delete=False, encoding="utf-8") as f:
             f.write("\n".join(str(p) for p in paths))
         args = ["exiftool", "-json", "-q", "-DateTimeOriginal", "-CreateDate", "-Make", "-Model", "-SerialNumber",
-                "-InternalSerialNumber", "-Artist", "-Copyright", "-OwnerName", "-OffsetTimeOriginal",
+                "-InternalSerialNumber", "-Artist", "-Copyright", "-OwnerName", "-OffsetTimeOriginal", "-WhiteBalance",
                 "-charset", "filename=utf8", "-@", f.name]
         r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8")
         os.unlink(f.name)
@@ -264,6 +265,11 @@ def check(src: Path, photographer=None):
             notes.append("inget serienummer i filerna; kameran kan inte skiljas från en likadan")
         if not first("OffsetTimeOriginal"):
             notes.append("ingen tidszon i filerna (OffsetTimeOriginal); ställ in tidszon i kameran")
+        wb = Counter(str(r.get("WhiteBalance", "")).strip() for r in imgs if str(r.get("WhiteBalance", "")).strip())
+        locked = {k: v for k, v in wb.items() if not k.lower().startswith("auto")}
+        if locked:
+            notes.append("vitbalansen var låst på " + ", ".join(f"{k} ({v} filer)" for k, v in locked.items())
+                         + "; välj Auto (AWB) om det inte var meningen. RAW-filerna går att rätta, JPEG-filerna har färgen inbakad")
         times = sorted(m[p][0] for p in fs)
         if times[-1] > now + dt.timedelta(minutes=10):
             notes.append(f"klockan går före: senaste bilden är tagen {times[-1]:%Y-%m-%d %H:%M}, i framtiden")
