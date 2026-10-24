@@ -100,6 +100,15 @@ A session is measured by what moved from where it was to where it should be. Age
 - **Someone waiting comes first.** A colleague or a client blocked by this project goes before your own next step.
 - **Present the plan, then carry it out on the person's yes.** Say in a few lines what you will do and what you need from them.
 
+### Research before the first time
+
+**The first time you do something** (a new tool, an application feature, a file format, an API, a workflow you have not done before), research it thoroughly before you act (Mårten, 2026-10-24). The person should never have to ask for it.
+
+- **Read the source first:** the official documentation, release notes and the API reference (often installed with the program), then experienced users (forums, reviews, hands-on articles). Note where sources disagree and which version they cover.
+- **Know before you try:** what the feature can and cannot do, how it is meant to be used, the established way experts do it, and the known limitations. Then test on one small case and check the result yourself before building on it.
+- **Never guess and never improvise past an existing path.** If the research leaves a question open, say so and test it, rather than assuming.
+- **Write down what you learned** in the tool where it belongs, with the date and the version, so the next agent does not have to research it again.
+
 ### Learn as you go
 
 What the person teaches you is worth more than anything you produce, because it carries into every later session. Don't save it all for wrap.
