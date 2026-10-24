@@ -125,48 +125,42 @@ Två steg bakas ihop till en LUT per klipp i `<projekt>/resolve/lut/<inspelning>
 
 Resolve tar bara LUT:ar i sin egen LUT-mapp; `--apply` kopierar dit och använder relativ sökväg (provat 2026-10-23, 49 klipp). Lärdom från första försöket: mycket varmt material (glödlampor) blev gräddgult när värme lades ovanpå utjämningen. Håll värmen låg och låt nästan vita ytor dras mot neutralt (`clean`).
 
-## Reel med skript (Studio)
+## Reel i Resolve
 
-```bash
-python agents/wds/tools/resolve/reel.py "<delad enhet>/projects/<projekt>" klipplista.json --name reel-9x16-v4 --replace --render "<projekt>/export/sociala-medier"
-```
+Vad som gör en bra reel och hur versionerna går till står i skillen [video-edit](../skills/video-edit/SKILL.md). Här står hur det görs i Resolve.
 
-Egen tidslinje i 1080x1920 (eller `--size`), klippen i listans ordning med bara bild, Smart Reframe och klippets LUT på varje klipp, och rendering till H.264. `"reframe": false` på ett klipp behåller det breda utsnittet (rummet och publiken). Smart Reframe analyserar i en modal ruta, cirka 0,7 bildrutor per sekund på Surface Pro 7, och då svarar API:t `None`; skriptet väntar ut varje analys. Musik läggs på spår A1 med `MediaPool.AppendToTimeline` och `mediaType: 2`, och in- och uttoning görs efter renderingen med ffmpeg (`afade`). Provat 2026-10-23: reel-9x16-v4, 16 klipp, 30 s.
-
-Lärdomar från reelen till Visita (Mårten, 2026-10-23): ingen Smart Reframe, följ varje klipp själv med mjuka nyckelpunkter (se nedan); fokus på människorna och de charmiga ögonblicken, aldrig tomrummet mellan dem; ta med en vinkel där publiken och rummet syns; kändisen (kocken) får två klipp; välj ögonblick ur utskrifterna (skratt, repliker) i stället för på måfå; musik under, klippljudet av.
-
-## Rendera bara det Resolve inte kan
-
-Regel (Mårten, 2026-10-24): **rendera aldrig om ett klipp för något som går att justera i Resolve.** Skript-API:t sätter fasta värden på ett klipp i tidslinjen, men inga nyckelpunkter:
-
-| Görs i Resolve (justerbart där) | Renderas med ffmpeg (går inte från skript) |
-|---|---|
-| Rotation, fast zoom och position: `TimelineItem.SetProperty("RotationAngle" / "ZoomX" / "ZoomY" / "Pan" / "Tilt", värde)` | Följning som glider mellan nyckelpunkter (`reframe.py`) |
-| Färgjustering per klipp: `TimelineItem.SetCDL(...)` eller i Color | Fartkurvor (`"ramp"`) och fast fart |
-| Klippets in- och utpunkt | Rörelse i stillbilder (`pan`, `zoom`, `push`) |
-| | Grundfärgen (LUT per klipp), som ändå bakas in |
-
-**Ingen förhandsvisning i webbläsaren** (Mårten, 2026-10-24): varje ny version läggs som tidslinje i Resolve, och personen granskar den där.
-
-**Rendering i Resolve**, mätt 2026-10-24 på Surface Pro 7: tidslinjen reel-9x16-v7 (61 s, 12 färdiga klipp och musik, H.264 1080x1920) renderades på 34 s.
-
-`reel_timeline.py` lägger reelen i Resolve och sätter `"resolve": {...}` ur klipplistan på varje klipp. `"rotate"` och `"eq"` i `reframe.py` finns kvar för leveranser utan Resolve.
+**Tidslinjen ur färdiga klipp** (renderade med [ffmpeg](ffmpeg.md#omformatering-till-916-och-reel)):
 
 ```bash
 python agents/wds/tools/resolve/reel_timeline.py "<delad enhet>/projects/<projekt>" v7
 ```
 
-**Grafikkretsen (Intel Quick Sync).** `reframe.py` och `reel_assemble.py` avkodar originalen med grafikkretsen (`-hwaccel d3d11va`) och kodar med `h264_qsv`; LUT och färg läggs efter beskärningen. Mätt 2026-10-24 på Surface Pro 7, två klipp à 5 s ur 4K HEVC: 57 s på processorn med färg på 4K, 36 s med färg efter beskärningen, **17 s** med grafikkretsen och färg efter beskärningen. `WDS_NO_QSV=1` tvingar processorn. `-hwaccel qsv` fungerar inte här: bildrutorna stannar i grafikminnet och `lut3d` når dem inte.
+Klippen hämtas ur `<projekt>/resolve/reel-<version>-klipp/segNN-*.mp4` (stillbilderna som rörliga klipp), läggs i binen `reel-<version>-klipp` och på tidslinjen `reel-9x16-<version>` i 1080x1920 med `scaleToCrop`, musiken på A1 (`AppendToTimeline` med `mediaType: 2`). Skriptet väntar på att Resolve startat och öppnar projektet med mappens namn.
 
-**Resolve på Surface Pro 7.** Grafikminnet räcker inte till Resolve och många videor samtidigt i webbläsaren: tumnaglar och visare blir svarta, och loggen (`%APPDATA%\Blackmagic Design\DaVinci Resolve\Support\logs\ResolveDebug.txt`) visar `CL_OUT_OF_RESOURCES`. Stäng sidor som spelar video, spara projektet och starta om Resolve. Kontrollera att ingen gammal `Resolve.exe` ligger kvar. Förhandsvisningssidor spelar klipp bara när musen är över dem. Hackar uppspelningen: Playback → Timeline Proxy Resolution → Quarter.
+**Det som går att sätta på ett klipp från skript**, och som därför sätts här i stället för att klippet renderas om (Mårten, 2026-10-24): `"resolve": {...}` på en del i klipplistan sätts med `TimelineItem.SetProperty`:
 
-## Egen omformatering till 9:16 (utan Smart Reframe)
+| Egenskap | Exempel |
+|---|---|
+| Rotation | `"RotationAngle": -1.5` |
+| Fast zoom och position | `"ZoomX": 1.05, "ZoomY": 1.05, "Pan": 20, "Tilt": -10` |
+| Färgjustering per klipp | `TimelineItem.SetCDL({...})`, eller i Color |
 
-```bash
-python agents/wds/tools/resolve/reframe.py "<delad enhet>/projects/<projekt>" klipplista.json <klippmapp> [--only 2,9]
-python agents/wds/tools/resolve/reel_assemble.py "<delad enhet>/projects/<projekt>" klipplista.json <klippmapp> <projekt>/export/sociala-medier/<datum>-reel-<namn>-vN.mp4 --music <spår> [--xfade 0.3]
+Nyckelpunkter (rörelse som ändras över tid), fartkurvor och övergångar går inte att skapa från skript. De renderas med ffmpeg.
+
+**Rendering**, mätt 2026-10-24 på Surface Pro 7: tidslinjen reel-9x16-v7 (61 s, 12 färdiga klipp och musik) som H.264 1080x1920 på 34 s:
+
+```python
+project.SetCurrentRenderFormatAndCodec("mp4", "H264")
+project.SetRenderSettings({"SelectAllFrames": True, "TargetDir": "<mapp>", "CustomName": "<namn>", "FormatWidth": 1080, "FormatHeight": 1920})
+job = project.AddRenderJob(); project.StartRendering(job)
+while project.IsRenderingInProgress(): time.sleep(1)
+project.GetRenderJobStatus(job)   # TimeTakenToRenderInMs
 ```
 
-Agenten följer varje klipp själv (Mårten, 2026-10-23: ingen Smart Reframe). Gör först en karta över varje klipp (början, en tredjedel, två tredjedelar, slutet, med ett rutnät 0–10 över bredden), läs var ansiktena och handlingen är och skriv rutans mittpunkt som `"x"`: ett tal ger fast utsnitt, en lista ger nyckelpunkter jämnt fördelade i klippet. Mellan nyckelpunkterna glider rutan med en mjuk kurva (smoothstep, som Ease In/Out i Premiere), så att ingen rörelse startar eller stannar ryckigt. `"speed": 1.7` spelar klippet snabbare, till exempel när människor kliver ur en buss. `reframe.py` lägger på klippets LUT och sparar varje klipp för sig som `segNN-<klipp>.mp4`; de kopieras till `<projekt>/resolve/reel-vN-klipp/` och läggs i en egen bin i Resolve, så att de går att använda och justera var för sig.
+**Smart Reframe** (`reel.py`, provat 2026-10-23) används inte längre: agenten följer varje klipp själv. Skriptet finns kvar: Smart Reframe analyserar i en modal ruta, cirka 0,7 bildrutor per sekund på Surface Pro 7, och då svarar API:t `None`; skriptet väntar ut varje analys. `"reframe": false` behåller det breda utsnittet.
 
-`reel_assemble.py` sätter ihop klippen med övertoningar (`fade`, 0,3 s ger mjuka övergångar), gör stillbilder rörliga (`pan` över gruppbilder, `zoom` mot detaljer) och lägger musiken under med in- och uttoning och -14 LUFS. Varje del i listan ska vara `want` + övertoningen lång, så att slutlängden blir summan av `want`. Kontrollera resultatet med en bild ur mitten av varje del innan reelen lämnas. Provat 2026-10-23: reel v5 till Visita, 35 s, 20 delar.
+```bash
+python agents/wds/tools/resolve/reel.py "<delad enhet>/projects/<projekt>" klipplista.json --name reel-9x16-v4 --replace --render "<projekt>/export/sociala-medier"
+```
+
+**Resolve på Surface Pro 7.** Grafikminnet räcker inte till Resolve och många videor samtidigt i webbläsaren: tumnaglar och visare blir svarta, och loggen (`%APPDATA%\Blackmagic Design\DaVinci Resolve\Support\logs\ResolveDebug.txt`) visar `CL_OUT_OF_RESOURCES`. Stäng sidor som spelar video, spara projektet (`ProjectManager.SaveProject`), avsluta (`Resolve.Quit`) och starta om. Kontrollera att ingen gammal `Resolve.exe` ligger kvar. Hackar uppspelningen: Playback → Timeline Proxy Resolution → Quarter.

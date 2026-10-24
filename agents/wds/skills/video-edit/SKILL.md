@@ -1,8 +1,8 @@
 ---
 name: video-edit
-description: Klipper video utifrån det som sägs. Viska skriver ut talet, föreslår klipp (bort med tystnad, omtagningar och felsägningar, eller det personen vill behålla) och lämnar en tidslinje som öppnas i DaVinci Resolve. Använd när personen vill klippa ett tal, en intervju eller ett föredrag, eller säger "klipp ihop", "ta bort pauserna" eller "gör en kort version".
+description: Klipper video, utifrån det som sägs och utifrån bilden. Tal och intervjuer klipps på orden; en reel för sociala medier klipps ihop av ögonblicken, i 9:16 med egen följning och musik. Allt lämnas som tidslinje i DaVinci Resolve. Använd när personen vill klippa ett tal, en intervju eller ett föredrag, vill ha en reel eller highlights, eller säger "klipp ihop", "ta bort pauserna" eller "gör en kort version".
 used_by: [viska]
-version: 1.0
+version: 1.1
 tools: [wds/ffmpeg, wds/transcribe, wds/media-worker, wds/resolve]
 ---
 
@@ -30,3 +30,27 @@ För en intervju eller en talande person gör Viska automatiskt en version utan 
 - **En markör för varje borttagen bit** i tidslinjen, vid skarven, med ordet som togs bort i markörens namn. I Resolve syns var varje "hmm" satt.
 - **Lägga tillbaka:** råfilen är orörd, så ett borttaget ord kommer tillbaka genom att dra ut skarven i Resolve till tiden i klipplistan, eller genom att Viska skriver en ny tidslinje utan just det bortvalet.
 - Viska klipper med marginal (en bit av andningen kvar) så att skarvarna inte låter hackiga, och säger i rapporten hur mycket som togs bort (antal och sekunder).
+
+## Reel för sociala medier
+
+En reel är ögonblicken från ett evenemang, i 9:16, med musik under och klippljudet av. Byggd och provad på Visitas studiebesök (v1–v7, Mårten, 2026-10-23 och 24).
+
+**Klart betyder:** en ny tidslinje `reel-9x16-vN` i Resolve, klippen var för sig i en egen bin, och en rad i projektets logg. Personen granskar i Resolve; ingen förhandsvisning i webbläsaren.
+
+### Vad som gör den bra
+
+- **Människorna och ögonblicken**, aldrig tomrummet mellan dem eller ett tomt bord. Välj ögonblick ur utskrifterna (skratt, repliker) och ur katalogen, inte på måfå.
+- **Hjältarna i bild**, de andra inte: den som berättar eller gör något. Någon som bara går förbi klipps bort eller ramas ut.
+- **Kändisen får två klipp**, talarna som betyder något för kunden är med, och en vinkel där publiken och rummet syns.
+- **Ungefär 5 sekunder per klipp.** Ett klipp med en resa (en tallrik från passet till bordet) får vara längre med en fartkurva: normal fart i början, snabbt under färden, normal när det viktiga händer, och klippet slutar när det är gjort.
+- **Egen följning i varje klipp**, ingen Smart Reframe: läs kartan och sätt nyckelpunkter som glider mjukt mellan varandra. Personen i centrum, rak i bilden.
+- **Gruppbilderna rör sig:** panorering över raden, eller inzoomning nära mot den som står i mitten.
+- **Kronologiskt**, mjuka övertoningar (0,3 s), musik under och uttoning till svart på slutet.
+
+### Gången
+
+1. **Klipplistan** med ögonblicken, i ordning, och en karta över varje klipp. Nyckelpunkter efter kartan.
+2. **Rendera bara det Resolve inte kan** (Mårten, 2026-10-24): följning, fartkurvor och rörliga stillbilder renderas med [ffmpeg](../../tools/ffmpeg.md#omformatering-till-916-och-reel); rotation, fast zoom, position och färgjustering sätts på klippet i [Resolve](../../tools/resolve.md#reel-i-resolve), där personen kan ändra dem. Ett klipp renderas aldrig om för något som går att justera i Resolve.
+3. **Kontrollera** en bild ur varje del, och bild för bild i klipp med fartkurva, innan versionen lämnas.
+4. **Ny version i Resolve:** klippen i `<projekt>/resolve/reel-vN-klipp/`, en ny tidslinje, en rad i loggen. Den förra versionen ligger kvar.
+5. **Feedback:** personen tittar i Resolve och pratar, gärna med [inspelning](../recording/SKILL.md) av skärm och ljud. Varje punkt skrivs ner direkt, och listan visas som en plan innan nästa version görs. Vid lång tystnad: fråga om personen är kvar. När listan är skriven läggs inspelningen i papperskorgen.
