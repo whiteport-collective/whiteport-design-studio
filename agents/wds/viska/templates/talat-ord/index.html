@@ -1,0 +1,108 @@
+<!doctype html>
+<!-- Viska-template talat-ord. Fylls av agents/wds/tools/hyperframes/film.py; ändra här, aldrig i en byggd film.
+     Looken kommer ur kundens brand/design-system/ (tokens.css och film.css, inlagda av film.py). Templaten har inga egna färger eller typsnitt. -->
+<html lang="sv" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=%%WIDTH%%, height=%%HEIGHT%%" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style id="brand">
+%%BRAND_CSS%%
+    </style>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: %%WIDTH%%px; height: %%HEIGHT%%px; overflow: hidden; background: %%PAGE_BG%%; }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--film-font); color: var(--film-ink); }
+      #plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+      /* Ord ur talet: en ruta i kundens formspråk, ritad fram och bortdragen, aldrig tonad */
+      .beat { position: absolute; inset: 0; z-index: 2; }
+      .box { position: absolute; left: var(--film-margin); max-width: calc(100% - 2 * var(--film-margin)); }
+      .box-shadow, .box-card { position: absolute; inset: 0; border-radius: var(--film-radius); }
+      .box-shadow { background: var(--film-accent); transform: translate(var(--film-shadow), var(--film-shadow)); }
+      .box-card { background: var(--film-card); }
+      .box-text { position: relative; padding: 0.22em 0.42em 0.26em; font-weight: var(--film-heavy); font-size: var(--film-size-word);
+        line-height: 1.02; letter-spacing: -0.02em; white-space: nowrap; color: var(--film-ink); }
+      .line { position: absolute; left: 0.42em; right: 0.42em; bottom: 0.14em; height: var(--film-line); background: var(--film-accent);
+        transform: scaleX(0); transform-origin: 0 50%; }
+      /* Det som sägs efter ordet: en lägre rad på samma kort (lös text på bild försvinner mot ljusa ytor) */
+      .then { position: relative; display: inline-block; margin-top: calc(var(--film-shadow) + 10px); padding: 0.16em 0.5em 0.2em 0.62em;
+        background: var(--film-card); border-radius: var(--film-radius); font-weight: var(--film-text); opacity: 0;
+        font-size: var(--film-size-then); letter-spacing: -0.01em; white-space: nowrap; color: var(--film-ink); }
+      .then .w { display: inline-block; margin-right: 0.24em; opacity: 0; }
+
+      /* Slutet: kundens mark, ett riktigt foto bredvid texten */
+      #end { position: absolute; inset: 0; z-index: 3; background: var(--film-ground); }
+      #end-line { position: absolute; left: 0; right: 0; top: 0; height: var(--film-line); background: var(--film-accent);
+        transform: scaleX(0); transform-origin: 0 50%; }
+      #end-photo-frame { position: absolute; left: var(--film-margin); right: var(--film-margin); top: 12%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: var(--film-radius); }
+      #end-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      #end-text { position: absolute; left: var(--film-margin); right: var(--film-margin); }
+      #end-title { text-wrap: balance; font-weight: var(--film-heavy);
+        font-size: var(--film-size-end); line-height: 1.05; letter-spacing: -0.02em; color: var(--film-ink); }
+      #end-sub { margin-top: 0.4em; font-weight: var(--film-text);
+        font-size: var(--film-size-then); color: var(--film-accent-ink); }
+      #end-title .w, #end-sub .w { display: inline-block; margin-right: 0.24em; opacity: 0; }
+      #end-logo { position: absolute; left: var(--film-margin); width: var(--film-logo); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="%%DURATION%%" data-width="%%WIDTH%%" data-height="%%HEIGHT%%">
+%%MARKUP%%
+    </div>
+    <script>
+      // Rörelsen i templaten. Tider i sekunder ur film.json, räknade av film.py från ordtiderna.
+      const FILM = %%FILM_JSON%%;
+      const fr = n => n / FILM.fps;
+      const LEAD = fr(2);                      // grafiken är på plats 2 bildrutor innan ordet hörs
+      const guard = f => t => (t <= 0 ? 0 : t >= 1 ? 1 : f(t));
+      const ease = {
+        land: guard(t => (1 - Math.exp(-3.4 * t)) / (1 - Math.exp(-3.4))),   // snabb början, lång landning
+        leave: guard(t => Math.pow(t, 2.6)),                                   // accelererar ut
+        draw: guard(t => 1 - Math.pow(1 - t, 1.3)),                            // en linje som ritas: nästan jämn takt
+        inout: guard(t => { const a = Math.pow(t, 1.5), b = Math.pow(1 - t, 1.5); return a / (a + b); }),
+        none: t => t,
+      };
+      const tl = gsap.timeline({ paused: true });
+      const on = (sel, t) => tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.001, ease: "none" }, t);
+
+      // Ord som landar på talet: hårt på, kort resa uppåt, ingen toning
+      const land = (sel, t, dy) => { on(sel, t); tl.fromTo(sel, { y: dy }, { y: 0, duration: fr(8), ease: ease.land }, t); };
+
+      // Rutan ritas fram från vänster (skuggan en bildruta efter), och dras bort åt höger in i klippet
+      const wipeIn = (sel, t, frames) => tl.fromTo(sel, { clipPath: "inset(-25% 100% -25% -5%)" },
+        { clipPath: "inset(-25% -5% -25% -5%)", duration: fr(frames), ease: ease.land }, t);
+      const wipeOut = (sel, t, frames) => tl.fromTo(sel, { clipPath: "inset(-25% -5% -25% -5%)" },
+        { clipPath: "inset(-25% -5% -25% 100%)", duration: fr(frames), ease: ease.leave, immediateRender: false }, t);
+
+      FILM.beats.forEach((b, i) => {
+        const id = `#b${i}`;
+        const inFrames = 8, outFrames = 6;
+        const tIn = b.word_start - LEAD - fr(inFrames);
+        wipeIn(`${id}-wrap`, tIn, inFrames);
+        wipeIn(`${id}-shadow`, tIn + fr(1), inFrames);          // skuggan en bildruta efter rutan
+        if (b.line) tl.fromTo(`${id}-line`, { scaleX: 0 }, { scaleX: 1, duration: b.line.end - b.line.start, ease: ease.draw }, b.line.start);
+        if (b.then) on(`${id}-then`, b.then[0].start - LEAD);
+        (b.then || []).forEach((w, k) => land(`${id}-t${k}`, w.start - LEAD, 26));
+        const tOut = b.until - fr(1) - fr(outFrames);
+        wipeOut(`${id}-box`, tOut, outFrames);
+      });
+
+      if (FILM.end) {
+        const e = FILM.end, t = e.at;
+        // Lämna över: linjen ritas över bildens nederkant, och kundens mark reser sig bakom den
+        tl.fromTo("#end-line", { scaleX: 0 }, { scaleX: 1, duration: fr(8), ease: ease.draw }, t - fr(20));
+        const linePx = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--film-line")) || 12;
+        tl.fromTo("#end", { y: FILM.height - linePx }, { y: 0, duration: fr(11), ease: ease.inout }, t - fr(11));
+        tl.fromTo("#end-photo-frame", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: fr(10), ease: ease.land }, t);
+        tl.fromTo("#end-photo", { scale: 1.12 }, { scale: 1.0, duration: FILM.duration - t, ease: ease.none }, t);   // jämn takt: fotot lever till sista bildrutan
+        e.title_words.forEach((w, k) => land(`#end-t${k}`, t + fr(8) + k * fr(3), 30));
+        e.sub_words.forEach((w, k) => land(`#end-s${k}`, t + fr(8) + e.title_words.length * fr(3) + fr(3) + k * fr(3), 20));   // sista raden står minst 2 s
+        land("#end-logo", t + fr(40), 20);   // märket sist: raden får sina 2 s, och bilden står still högst 1,4 s
+      }
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

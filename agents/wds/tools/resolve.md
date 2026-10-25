@@ -3,7 +3,7 @@ name: resolve
 source: wds
 type: script
 description: Styr DaVinci Resolve Studio med Python mot Resolves skript-API (projekt, bins, import, tidslinjer, LUT och rendering), och beskriver hur gratisversionen tar emot det agenten förbereder. Utan MCP.
-used_by: [media-ingest, video-edit, media-export]
+used_by: [media-ingest, video-edit, media-export, motion-graphics]
 ---
 
 # Tool: resolve
