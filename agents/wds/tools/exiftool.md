@@ -3,7 +3,7 @@ name: exiftool
 source: wds
 type: cli
 description: Läser och skriver metadata i foton och video (tid, kamera, objektiv, plats, upphovsrätt) med ExifTool.
-used_by: [media-ingest, media-catalog, media-export]
+used_by: [media-ingest, media-catalog, media-export, film-sourcing]
 ---
 
 # Tool: exiftool

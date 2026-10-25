@@ -3,7 +3,7 @@ name: ffmpeg
 source: wds
 type: cli
 description: Läser av, konverterar, skalar och klipper video, ljud och bilder med ffmpeg och ffprobe, och renderar det Resolve inte kan göra från skript: följning med nyckelpunkter till 9:16, fartkurvor, rörliga stillbilder och ihopsättning av en reel.
-used_by: [media-catalog, media-export, video-edit, motion-graphics]
+used_by: [media-catalog, media-export, video-edit, motion-graphics, film-sourcing, film-assembly]
 ---
 
 # Tool: ffmpeg

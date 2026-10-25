@@ -3,7 +3,7 @@ name: resolve
 source: wds
 type: script
 description: Styr DaVinci Resolve Studio med Python mot Resolves skript-API (projekt, bins, import, tidslinjer, LUT och rendering), och beskriver hur gratisversionen tar emot det agenten förbereder. Utan MCP.
-used_by: [media-ingest, video-edit, media-export, motion-graphics]
+used_by: [media-ingest, video-edit, media-export, motion-graphics, film-production, film-sourcing, film-assembly]
 ---
 
 # Tool: resolve
@@ -82,7 +82,29 @@ mp.ImportTimelineFromFile("<sökväg>.xml")
 pm.ExportProject("<projekt>", "<delad enhet>/projects/<projekt>/resolve/<projekt>.drp")
 ```
 
-Hur mycket av Photo-sidan (album, RAW-inställningar, export av stillbilder) API:t når är inte känt. Pröva och skriv in det här.
+Hur mycket av Photo-sidan API:t når står under [Fotosidan](#fotosidan-photo-page-i-resolve-21).
+
+### Nytt i 21.1, enligt Blackmagics egna filer, inte provat
+
+Ur `CHANGELOG.md`, `README.md` och typfilen `DaVinciResolveScript.pyi` i `$RESOLVE_SCRIPT_API` (21.1.1, kontrollerat 2026-10-25). Bakgrund och källor: [fran-brief-till-film](../viska/research/fran-brief-till-film.md#3-automated-assembly-in-davinci-resolve-studio-2021). Det som provas flyttas upp i rätt avsnitt med datum.
+
+| Anrop | Vad |
+|---|---|
+| `TimelineItem.AddTransition({...})` | Övergång i början eller slutet av ett klipp: typ (t.ex. "Cross Dissolve"), kategori (simple, fusion, ofx, audio), position, justering, längd i rutor |
+| `TimelineItem.SetSpeed({...})` | Fast fart i procent, med tonhöjdskorrigering; 0 ger frusen bild. Fartkurvor går fortfarande inte. |
+| `TimelineItem.SetFades({...})` | In- och uttoning i rutor, bild och ljud |
+| `MediaPoolItem.TranscribeAudio(useSpeakerDetection)`, `GetTranscription()` | Utskrift med tid per ord och talare. En användare rapporterar att Resolve hoppar över tal; jämför med [transcribe](transcribe.md) på svenska innan den används. |
+| `Timeline.CreateSubtitlesFromAudio({...})` | Undertexter ur ljudet, svenska ingår (`AUTO_CAPTION_SWEDISH`). De animerade undertextmallarna går inte att lägga på från skript. |
+| `Timeline.NormalizeAudioLevel(items, {...})` | Ljudnivå mot ett mål i LUFS |
+| `CreateMulticamClip`, `PerformMulticamSmartSwitch`, `Timeline.AutoAlignClips` | Flerkameraklipp och automatiskt vinkelval efter vem som talar |
+| `Timeline.InsertFusionTitleIntoTimeline(namn)` + `GetFusionCompByIndex(1)` | Titel vid spelhuvudet (`SetCurrentTimecode` först); texten i Text+ sätts med `SetInput("StyledText", …)`. Kundens titlar kan göras som `.setting`-mallar eller som OGraf (HTML, CSS och JavaScript, högst 20 parametrar), så att designsystemet styr dem direkt. |
+| `Project.GenerateSpeech({...})` | Tal ur text, högst 350 tecken per anrop; för animatik och tillfällig speakerröst |
+| `AnalyzeForIntellisearch`, `DetectSceneCuts`, `CreateMagicMask`, `Stabilize` | Sök på innehåll och ansikten, dela upp klipp vid klipp, mask, stabilisering |
+
+- **Fortfarande inte från skript:** nyckelpunkter på Edit-sidans egenskaper, fartkurvor, ljudautomation, IntelliScript, de animerade undertextmallarna, Audio Assistant, Music Editor och Music Remixer.
+- **Resolve har en egen Python** (`C:\Program Files\Blackmagic Design\DaVinci Resolve\ResolvePython\ResolvePython.exe`, 3.14) där `import DaVinciResolveScript` fungerar utan miljövariablerna, men utan pip.
+- **Anropen med flera signaturer är avvecklade.** Använd ordboksformerna: `AppendToTimeline([{...}])`, `SetProperties({...})`, `SetMetadata({...})`, `ImportMedia([{"FilePath": …}])`. Skripten här använder fortfarande `SetProperty` och `AddItemListToMediaPool`; byt när de ändå röras.
+- **Provordning:** `AddTransition`, Text+ från skript, en namnskylt i OGraf, `GetTranscription` på svenska, `CreateSubtitlesFromAudio` på svenska, `NormalizeAudioLevel`, import av FCPXML 1.10 och 1.11, import av OTIO med övergångar och fart.
 
 ## Regler
 
@@ -145,7 +167,7 @@ Klippen hämtas ur `<projekt>/resolve/reel-<version>-klipp/segNN-*.mp4` (stillbi
 | Fast zoom och position | `"ZoomX": 1.05, "ZoomY": 1.05, "Pan": 20, "Tilt": -10` |
 | Färgjustering per klipp | `TimelineItem.SetCDL({...})`, eller i Color |
 
-Nyckelpunkter (rörelse som ändras över tid), fartkurvor och övergångar går inte att skapa från skript. De renderas med ffmpeg.
+Nyckelpunkter (rörelse som ändras över tid) och fartkurvor går inte att skapa direkt från skript; de kommer in via FCPXML ([Mediebanken](#mediebanken)) eller Fusion, eller renderas med ffmpeg. Övergångar, fast fart och toningar går att sätta från skript sedan 21.1 ([nytt i 21.1](#nytt-i-211-enligt-blackmagics-egna-filer-inte-provat)).
 
 **Rendering**, mätt 2026-10-24 på Surface Pro 7: tidslinjen reel-9x16-v7 (61 s, 12 färdiga klipp och musik) som H.264 1080x1920 på 34 s:
 

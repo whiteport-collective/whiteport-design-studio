@@ -3,7 +3,7 @@ name: transcribe
 source: wds
 type: script
 description: Skriver ut talet i videoklipp och ljudfiler till .srt på datorn med KB-Whisper (faster-whisper), utan server och utan att något skrivs bredvid originalen. Skriptet ligger i transcribe/.
-used_by: [media-catalog, video-edit, motion-graphics]
+used_by: [media-catalog, video-edit, motion-graphics, film-production, film-assembly]
 ---
 
 # Tool: transcribe

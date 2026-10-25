@@ -2,7 +2,7 @@
 name: git
 source: wds
 description: Hur agenter använder git. Identifierar användaren, visar vad som ändrats, gör commit och push.
-used_by: [agent-space-install, folder-presentation, handoff, install-wds, librarian, live-meeting, org-onboarding, product-brief, project-setup, recording, trigger-map, user-onboarding, wrap]
+used_by: [agent-space-install, folder-presentation, handoff, install-wds, librarian, live-meeting, org-onboarding, product-brief, project-setup, recording, trigger-map, user-onboarding, wrap, film-production]
 ---
 
 # Tool: git

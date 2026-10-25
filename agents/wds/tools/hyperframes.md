@@ -3,7 +3,7 @@ name: hyperframes
 source: wds
 type: cli
 description: Renderar rörlig grafik skriven som HTML och GSAP till video med HyperFrames (npx, ingen global installation, ingen MCP), och bygger filmen ur en Viska-template med film.py. Skriptet ligger i hyperframes/.
-used_by: [motion-graphics]
+used_by: [motion-graphics, film-assembly]
 ---
 
 # Tool: hyperframes
