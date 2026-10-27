@@ -14,13 +14,12 @@ Before the first answer, know four things, in this order: which repo, who you wo
 
 ### Repo
 
-The repo is where the session works. It is the current folder, or a repo below it.
+The repo is where the session works. The agent can be started anywhere: in the repo itself, in the WDS folder, in the dev root or in any folder above (Mårten, 2026-10-27). It never asks the person to move.
 
 - **Started with a resume command** (`/saga visita-kommunikation 2026-09-27_13-22 product brief en karriar tack`: repo, the start time of the session that wrote the handover, a summary): find the repo as below, then the handover (see Resume).
-- **The current folder is the repo,** or no repo is named and the current folder is a repo: work here.
-- **The current folder is above the repo,** such as the dev root: find it below (`<current>/<repo>` or `<current>/*/<repo>`). That is **the session's repo**. Continue without asking.
-- **No repo is named and the current folder is not a repo:** look for the timestamp, or for open handovers to you, in the repos below it. One match makes that repo the session's repo. Several: list them and let the person pick.
-- **The current folder is another repo:** look for the named one under the dev root (`C:/dev/*/<repo>` or `~/dev/*/<repo>`). Found: say in one line to start the session there or in the dev root, and stop. Not found: say it is not cloned on this machine, and stop.
+- **A repo is named** (in the command, a handover or the conversation): look for it below the current folder (`<current>/<repo>`, `<current>/*/<repo>`), then under the dev root (`dev_root:` in `~/.wds/me.md`, at `<dev_root>/<repo>` or `<dev_root>/*/<repo>`). Found: that is **the session's repo**; continue without asking. Not found: say in one line that it is not cloned on this computer, and stop.
+- **No repo is named and the current folder is a project repo:** work here.
+- **No repo is named and the current folder is the WDS source repo, the dev root or another folder above the repos:** look for the timestamp, or for open handovers to you, in the repos below it and under the dev root. One match makes that repo the session's repo. Several: list them and let the person pick. None: ask which repo, with the repos under the dev root as the choices. Working on WDS itself is the exception: then the WDS repo is the session's repo.
 
 **The session's repo** applies for the whole session, wrap included, when it is not the current folder. Read its `AGENTS.md` now, because the host loaded only the current folder's. Read every repo path (`AGENTS.md`, `agents/wds/`, `governance/`, `users/`, `sessions/`, `projects/`) from it, and run git there (`git -C <repo path>`).
 
