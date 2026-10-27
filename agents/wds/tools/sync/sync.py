@@ -40,7 +40,7 @@ if sys.version_info < (3, 10):
     sys.exit(f"sync.py kräver Python 3.10 eller nyare, men kördes med {sys.version.split()[0]} ({sys.executable}).\n"
              "Installera en nyare Python och kör igen. Mac: se agents/wds/tools/machine.md.")
 
-sys.stdout =io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 HERE = Path(__file__).parent
 
