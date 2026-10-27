@@ -1,19 +1,19 @@
 ---
 name: project-setup
-description: Starts a new WDS project for a client. A short project intake, the project folder in the right repo, where the code lives, and a handover to Saga so the product brief starts from the intake.
-used_by: [idun]
+description: Starts a new WDS project. A short project intake, the project folder in the right repo, and where the code lives. Use when work starts on something that has no project yet; the agent that starts the work creates it, not Idun.
+used_by: [saga, freya, mimir, viska]
 version: 1.0
 tools: [wds/git, wds/sync, wds/github]
 ---
 
 # Project Setup
 
-Takes a new project from "we want to build X" to a project folder Saga can start in. Any client can run it, in any WDS repo. It is the project-level step of setup: qualification decides the scope, org onboarding builds the workspace, and this skill adds one project to it.
+Takes a new project from "we want to build X" to a project folder the work can start in. **The agent that starts the work creates the project itself** (Mårten, 2026-10-27): Saga for a product brief, Viska for a film, Freya or Mimir when that is where it begins. Idun sets up the repo and installs; she does not create projects.
 
 | Situation | Path |
 |---|---|
-| No WDS workspace yet | `qualification.md`, then `org-onboarding.md`. Org onboarding runs this skill for each project in its step 3. |
-| A workspace exists, a new project | This skill directly (`/idun project`) |
+| No WDS workspace yet | Idun sets up the repo first (`qualification.md`, then `org-onboarding.md`); then this skill |
+| A workspace exists, a new project | This skill directly, run by the agent that starts the work |
 | The project folder already exists | Show it and its status. Nothing is created. |
 
 The layout follows `agents/wds/data/repo-structure.md`: one project is one folder under `projects/`, a complete WDS structure of its own, and projects never share folders. What several projects share lives at the level it serves: the repo root (`brand/`, `people/`, `communication/`, `contacts.md`, `timeline.md`, `org-profile.md`), or the client's folder in an agency repo. `shared/` is a last resort.
@@ -36,9 +36,9 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
     Read, don't ask:
     - Is this a WDS repo: `AGENTS.md` naming the WDS agents, `agents/wds/` installed, `projects/`?
     - Which projects exist (`projects/*/_progress/wds-project-outline.yaml`, or `projects/*/design-process/_progress/` in older repos), and the organization (`org-profile.md` at the root or in the client's folder; older repos: `shared/<org>/org-profile.md`)?
-    - Is there a qualification summary or an open handover to Idun with a project in `## Nästa`?
+    - Is there a qualification summary or an open handover with a project in `## Nästa`?
 
-    No WDS workspace: route to `qualification.md` and stop here.
+    No WDS workspace: say in one line that Idun sets up the repo first (`/idun`), and stop here.
   </step>
 
   <step id="2-intake">
@@ -82,7 +82,7 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
     | **Shared** | A department or business repo with several projects, where someone else owns the code | `projects/[slug]/` in the business repo | Its own code repo |
     | **Combined** | A team that designs and builds, or a smaller project | `projects/[slug]/` in the same repo | A folder such as `app/` or `src/` |
 
-    - **The repo:** the current WDS repo, unless the person wants a new one. A new repo is created with the GitHub tool, private unless the person says otherwise, and cloned under the dev root the person uses. A new repo also needs the workspace: run `org-onboarding.md` step 3 for it first.
+    - **The repo:** the current WDS repo, unless the person wants a new one. A new repo is created with the GitHub tool, private unless the person says otherwise, and cloned under the dev root the person uses. A new repo also needs the workspace, which Idun sets up (`org-onboarding.md` step 3) before the project is created.
     - **The code:** ask only if it isn't clear. Record it once, in `code:` in the project outline (step 4), so Mimir knows where to build. Not decided yet: write `code: undecided`.
   </step>
 
@@ -91,26 +91,18 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
 
     1. `projects/[slug]/` with `A-Product-Brief/` … `E-Development/` directly inside it, as the WDS agents expect them. No `design-process/` level in between.
     2. `projects/[slug]/_progress/wds-project-outline.yaml`: project, repo, org, scope, created, `output_folder`, `code:`, the phases (qualification and onboarding as they stand, the rest `pending`), governance as it stands in the repo, and the team.
-    3. `projects/[slug]/_progress/00-design-log.md`, first line: `YYYY-MM-DD · idun · Project set up from the intake. Next: /saga.`
+    3. `projects/[slug]/_progress/00-design-log.md`, first line: `YYYY-MM-DD · <agent> · Project set up from the intake. Next: <the first step>.`
     4. A row in the project table in `AGENTS.md`: name, folder, status.
     5. Material the project shares with others (the brand, people, communication, contacts, timeline) stays at the level it serves, not in the project. Point to what is already there. The project's `D-Design-System/` holds only the components it alone uses; the tokens and shared components are in `brand/design-system/`. `A-Product-Brief/02-content-language.md` points to `brand/tone-of-voice.md` and `03-visual-direction.md` to `brand/visual-identity/`.
     6. If `agents/wds/` is missing: install it with the sync tool, after the person's yes ("Installing in a project" in `agents/wds/README.md`).
 
     Commit: `projects: [slug] set up`, then push.
 
-    **Gate:** `/saga` starts in the repo and finds the project.
+    **Gate:** the agents start in the repo and find the project.
   </step>
 
-  <step id="5-handover">
-    The product brief is Saga's. Hand over with the intake, so she starts from it and does not ask again.
-
-    Write the handover with wrap (`agents/wds/skills/wrap.md`) to Saga: `sessions/<user>/saga/`, or `sessions/all-users/saga/` if someone else on the team will run her. Put the confirmed intake under `## Gjort` and, under `## Nästa`: "Product brief for [project] in dialog with [commissioner]: goals, audience, scope, tone of voice, competitive context and success criteria, starting from the intake."
-
-    Say:
-
-    > [Project] is set up in `projects/[slug]/`. Next: run `/saga [repo] [timestamp]` and she starts the product brief from the intake.
-
-    End with the resume command from the wrap.
+  <step id="5-start">
+    Go straight on with the work the project was created for, starting from the intake, so the person does not answer the same questions again. When that work belongs to another agent (usually the product brief, which is Saga's), hand over with wrap (`agents/wds/skills/wrap.md`) to that agent: the confirmed intake under `## Gjort`, the first step under `## Nästa`, and the resume command at the end.
   </step>
 
 </workflow>
