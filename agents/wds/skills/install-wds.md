@@ -78,26 +78,33 @@ Installing WDS means getting the person into their repos. The agents, the adapte
     name: <Name>
     email: <email>
     private: <path to users/<user>/ in the personal repo, or to ~/wds-private/users/<user>/>
+    dev_root: <where the repos live on this computer, e.g. C:/dev or ~/dev>
+    recordings: <the private media folder for recordings, if the person records meetings>
     ```
+
+    `dev_root` belongs here and not in the catalog: the catalog is shared by all the person's computers, and the folders differ between them (`C:/dev` on Windows, `~/dev` on a Mac). The sync reads it here and maps the catalog's paths to it.
   </step>
 
   <step id="7-repos">
     Show pending invitations (GitHub tool). The person accepts the ones they expect.
     List the person's repos and organizations, and mark the WDS repos: those with `agents/wds/` or a design process.
     Clone the WDS repos the person works in, after their yes, into `<dev_root>/<owner>/<repo>`.
+    **The person's second computer:** the private cabinet already has the catalog and `skills.md`, which list every repo and where it lives. Clone each of them to the same place relative to `dev_root` as on the first computer, so that every agent and handover finds them. Do not create a new catalog.
     No WDS repo yet: say so. The person may be the first in their organization, and `/idun qualify` sets one up.
   </step>
 
   <step id="8-catalog">
     Create the skill catalog: copy `agents/wds/tools/sync/catalog-template.json` to `skills.json` in the private cabinet and fill it in:
-    - `dev_root` and the paths to the WDS clone and the personal repo
+    - the paths to the WDS clone and the personal repo, written as `<dev_root>/…` so they hold on every computer (the catalog's own `dev_root` is only the fallback)
     - `owners`: the person's GitHub username and the organizations they work in
     - the organizations' `governance` entries, if a cloned repo is an organization's policy source
     - no personal repo: remove that source
   </step>
 
   <step id="9-sync">
-    Run the sync as a dry run and show what it would do. After the person's yes, run it for real (`sync-skills`).
+    Run the sync as a dry run and show what it would do. Its first line says which folder it reads the repos from; it must be this computer's `dev_root`.
+    **Every WDS repo must be registered.** Compare the repos cloned in step 7 with the ones the dry run lists for `agents/wds`. A repo that is missing is skipped for a reason the dry run gives: its owner is not in `owners` (add the organization to the catalog), it is not on its default branch, it has uncommitted changes, or it has been inactive longer than `active_days`. Fix each one and run the dry run again until all are listed.
+    After the person's yes, run it for real (`sync-skills`).
     Check that `/idun`, `/saga`, `/freya`, `/mimir`, `/wrap`, `/handoff` and `/sync-skills` exist in `~/.claude/commands/`. They show up in the next session.
     Tell the person when to run `/sync-skills` from now on: after changing a skill, on a new computer, or when an agent says WDS has updates.
   </step>
