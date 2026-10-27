@@ -65,6 +65,41 @@ if not CATALOG.exists():
           f"kopiera {HERE / 'catalog-template.json'} till ditt privata skåp som skills.json och fyll i den.")
     sys.exit(1)
 SOURCES = json.loads(CATALOG.read_text(encoding="utf-8"))
+
+
+def machine_dev_root(catalog_root):
+    """Var repona ligger på just den här datorn. Katalogen delas mellan personens datorer, så dev_root: i
+    ~/.wds/me.md (en per dator) vinner; annars katalogens dev_root om den finns här, annars ~/dev."""
+    me = Path.home() / ".wds" / "me.md"
+    if me.exists():
+        m = re.search(r"^dev_root:\s*(\S.*?)\s*$", me.read_text(encoding="utf-8", errors="replace"), re.M)
+        if m:
+            return Path(m.group(1)).expanduser().as_posix()
+    if catalog_root and Path(catalog_root).exists():
+        return catalog_root
+    return (Path.home() / "dev").as_posix()
+
+
+CATALOG_ROOT = SOURCES.get("dev_root", "")
+DEV_ROOT = machine_dev_root(CATALOG_ROOT)
+
+
+def local_path(p):
+    """En sökväg ur katalogen på den här datorn: <dev_root>/…, eller en sökväg under katalogens dev_root
+    som skrevs på en annan dator (C:/dev/WDS/… blir ~/dev/WDS/… på en Mac)."""
+    if not isinstance(p, str):
+        return p
+    if p.startswith("<dev_root>"):
+        return DEV_ROOT + p[len("<dev_root>"):]
+    if CATALOG_ROOT and CATALOG_ROOT != DEV_ROOT and p.lower().startswith(CATALOG_ROOT.lower()):
+        return DEV_ROOT + p[len(CATALOG_ROOT):]
+    return p
+
+
+for _s in SOURCES.get("sources", []):
+    if "repo" in _s:
+        _s["repo"] = local_path(_s["repo"])
+SOURCES["dev_root"] = DEV_ROOT
 CLAUDE = Path.home() / ".claude"
 COMMANDS = CLAUDE / "commands"
 STATE = CLAUDE / ".sync-skills-state.json"
@@ -535,7 +570,9 @@ KINDS = {
 
 def main():
     COMMANDS.mkdir(parents=True, exist_ok=True)
-    print("=== /sync-skills" + (" (dry run)" if DRY else "") + " ===\n")
+    print("=== /sync-skills" + (" (dry run)" if DRY else "") + " ===")
+    where = "" if DEV_ROOT == CATALOG_ROOT else f" (katalogen säger {CATALOG_ROOT})"
+    print(f"Repona på den här datorn: {DEV_ROOT}{where}\n")
 
     edited = rescue_local_edits()
     if edited:
