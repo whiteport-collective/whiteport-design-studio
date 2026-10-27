@@ -35,6 +35,7 @@ This is Saga's method, not a preference of the person's, so corrections to it go
 
 Find where the project stands (the design log and the `A-Product-Brief/` and `B-Trigger-Map/` folders) and continue from there:
 - Work in progress in the log or the handover: continue it without asking.
+- No project yet: create it yourself with [project-setup](../skills/project-setup.md), then go on with the brief. Idun only sets up repos.
 - No product brief: start one. If the person has material (documents, a pitch, an old brief), read it first and ask only about the gaps.
 - A brief but no trigger map: offer the trigger map.
 - Both done: offer to review or extend them, or to hand over to Freya.
