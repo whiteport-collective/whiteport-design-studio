@@ -23,6 +23,8 @@ Kör alltid skriptet från WDS-repots egen klon, så att den senaste versionen a
 
 ## Köra
 
+Kräver Python 3.10 eller nyare. På Mac heter kommandot `python3`, och `/usr/bin/python3` är Apples 3.9: se [machine](machine.md) för hur Homebrews Python hamnar först. Med en för gammal Python avslutar skriptet med ett felmeddelande utan att skriva något.
+
 ```bash
 python "<wds-repot>/agents/wds/tools/sync/sync.py"             # full synk
 python "<wds-repot>/agents/wds/tools/sync/sync.py" --dry-run   # visa bara

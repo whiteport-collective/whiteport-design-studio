@@ -34,7 +34,13 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+# write_text(newline=...) kräver 3.10. Macens /usr/bin/python3 är Apples 3.9 och kommer före Homebrew i PATH
+# om brew shellenv saknas i ~/.zprofile (agents/wds/tools/machine.md).
+if sys.version_info < (3, 10):
+    sys.exit(f"sync.py kräver Python 3.10 eller nyare, men kördes med {sys.version.split()[0]} ({sys.executable}).\n"
+             "Installera en nyare Python och kör igen. Mac: se agents/wds/tools/machine.md.")
+
+sys.stdout =io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 HERE = Path(__file__).parent
 
