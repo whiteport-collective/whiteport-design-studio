@@ -63,9 +63,9 @@ Takes Idun from a confirmed scope to a repo where people can start working with 
        governance, access maps and org configuration. Create both here, before any governance is written in step 4;
        without it the governance documents end up scattered in a work repo. Guide the person through git setup if needed.
     2. **`AGENTS.md`** with the team, the rules, the project table and the `output_folder`. `CLAUDE.md` points to it.
-    3. **Projects.** One folder per project, each a separate WDS structure, made with `project-setup.md`
-       (intake, where the code lives, `projects/<project>/` with the WDS folders, its outline and design log directly inside).
-       Run its steps 2–4 for each project. The handover to Saga is written once, in step 8.
+    3. **Projects.** `projects/` and a project table in `AGENTS.md`, empty. The projects themselves are created by the agent
+       that starts the work, usually Saga, with `project-setup.md`; the handover to Saga in step 8 carries the projects
+       the qualification named.
     4. **People.** `users/_template/`, `users/README.md`, `sessions/`, and `.wds/` in `.gitignore`.
     5. **Shared org material.** The org profile from step 1, at the level it serves: the repo root, or `<client>/` in an agency repo.
        The brand (`brand/`: visual identity, tone of voice, design system), people, communication, contacts and timeline go at the same level when they come up. Org scope only. `shared/` is a last resort.
