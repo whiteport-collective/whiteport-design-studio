@@ -23,6 +23,8 @@ Kör alltid skriptet från WDS-repots egen klon, så att den senaste versionen a
 
 ## Köra
 
+**Var repona ligger** står i `dev_root:` i varje dators `~/.wds/me.md`. Katalogen delas av personens alla datorer, så dess sökvägar skrivs som `<dev_root>/…`; en sökväg skriven på en annan dator (`C:/dev/…`) räknas om efter den här datorns `dev_root`. Saknas `dev_root:` används katalogens om den finns på datorn, annars `~/dev`. Synkens första rad säger vilken mapp den läser.
+
 Kräver Python 3.10 eller nyare. På Mac heter kommandot `python3`, och `/usr/bin/python3` är Apples 3.9: se [machine](machine.md) för hur Homebrews Python hamnar först. Med en för gammal Python avslutar skriptet med ett felmeddelande utan att skriva något.
 
 ```bash

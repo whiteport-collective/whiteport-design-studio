@@ -1,6 +1,6 @@
 {
   "_doc": "Mall för en persons skillkatalog. Idun kopierar den till det privata skåpet som skills.json vid installationen och fyller i <...>. Källorna körs i ordning, och senare källa vinner vid namnkrock, så det personliga ligger sist.",
-  "dev_root": "<dev-mappen, t.ex. C:/dev eller ~/dev>",
+  "dev_root": "<reserv: dev-mappen på den första datorn, t.ex. C:/dev. Varje dator anger sin egen i dev_root: i ~/.wds/me.md, och sökvägarna nedan skrivs som <dev_root>/…>",
   "sources": [
     {
       "name": "whiteport-design-studio",
