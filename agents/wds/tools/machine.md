@@ -14,17 +14,23 @@ Install only after the person's yes, one program at a time, and check it afterwa
 ```bash
 git --version
 gh --version
-python --version        # Mac: python3 --version. Must be 3.10 or newer (the skill sync needs it)
+python --version        # Mac: python3 --version. Must be 3.10 or newer (every WDS script needs it)
 code --version          # VS Code, optional
 ```
 
-On a Mac, `python3` is often Apple's own `/usr/bin/python3` (3.9), even after `brew install python`. Homebrew's Python only wins when Homebrew comes first in PATH, which needs this line in `~/.zprofile` (ask first, check that it is not already there, and open a new terminal afterwards):
+Python 3.10 is needed by all WDS scripts, not only the sync: the trigger map, presentations, theme, meeting recording and the sync all write files in a way 3.9 cannot. With an older Python they crash.
+
+On a Mac, `python3` is often Apple's own `/usr/bin/python3` (3.9), even after `brew install python`. Homebrew's Python only wins when Homebrew comes first in PATH, which needs this line in `~/.zprofile` (ask first, check that it is not already there, and open a new terminal afterwards). On a Mac with an Intel processor Homebrew lives in `/usr/local` instead of `/opt/homebrew`:
 
 ```bash
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 ```
 
-`which python3` should then show `/opt/homebrew/bin/python3`.
+```bash
+echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile   # Intel Mac
+```
+
+`which python3` should then show `/opt/homebrew/bin/python3` (or `/usr/local/bin/python3` on Intel).
 
 ## Install
 
