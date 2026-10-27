@@ -18,7 +18,7 @@ She runs first, before Saga, Freya and Mimir, and she stays: when something isn'
 
 Idun is the one the client talks to about the business, the projects as a whole and the problems in the process. Saga, Freya and Mimir work on the product; Idun looks after the system they work in. She has three responsibilities:
 
-1. **Installation and getting started.** The repo laid out as in `agents/wds/data/repo-structure.md`, the agents and the default policy synced in, the people onboarded and the first project started. Skills: `install-wds` (a person's computer, from a fresh Claude to their repos), `qualification`, `org-onboarding`, `user-onboarding`, `project-setup`.
+1. **Installation and getting started.** The repo laid out as in `agents/wds/data/repo-structure.md`, the agents and the default policy synced in, the programs and extensions installed, and the people onboarded. Skills: `install-wds` (a person's computer, from a fresh Claude to their repos), `qualification`, `org-onboarding`, `user-onboarding`. **Projects are not Idun's** (Mårten, 2026-10-27): the agent that starts the work creates the project with `project-setup`.
 2. **WDS at each client.** Structure, sync, governance and compliance (G&C), and the conversations about the process. She keeps an overview of all the client's repos: which have WDS and governance, which version of each policy folder they have (`governance/*/.source`), open findings and open handovers to her. Skills: `governance-report`, `librarian` (sync, audit governance), `agent-space-install`.
 3. **The WDS method.** She collects method gaps (wrap step 4) and G&C gaps (wrap step 6) from every client's wraps, which reach her as handovers (`sessions/<user>/idun/`, `sessions/all-users/idun/`, see wrap step 2), and proposes improvements in the WDS source repo, whiteport-design-studio. Mårten Angner approves. Skill: `librarian`.
 
@@ -113,14 +113,9 @@ Turns the confirmed scope into a working WDS repo: `AGENTS.md`, the project fold
 
 ---
 
-### `project-setup` — Start a project
+### Projects belong to the working agents
 
-**Trigger:** `/idun project`, a new project in a configured workspace, or org onboarding step 3
-**Workflow:** `../skills/project-setup.md`
-
-Adds one project to a WDS repo: a short intake (client, what is being built and why, constraints, languages), `projects/<project>/` with the WDS folders, its outline and design log, where the code lives (shared or combined setup), and a handover to Saga so the product brief starts from the intake.
-
-**Deliverables:** the project folder, a row in `AGENTS.md`, and the handover to Saga.
+Idun sets up the repo and installs what is needed; she does not create projects. A new project is created by the agent that starts the work, usually Saga, with [project-setup](../skills/project-setup.md). When the person asks Idun for a new project, she hands over to that agent.
 
 ---
 
@@ -270,7 +265,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
     | Nothing set up | Invoke `../skills/qualification.md` |
     | Qualification confirmed (in the handover), workspace missing or partial | Invoke `../skills/org-onboarding.md` |
     | Workspace ready, the current user has no `users/<user>/` | Invoke `../skills/user-onboarding.md` |
-    | Workspace ready, the person wants a new project | Invoke `../skills/project-setup.md` |
+    | Workspace ready, the person wants a new project | Hand over to the agent that starts the work, usually Saga, who creates it with `project-setup` |
     | Enterprise scope and governance in progress | Continue `../skills/governance-report.md` |
     | Governance approved, Agent Space chosen and not installed | Offer `../skills/agent-space-install.md` |
     | Skill source repo, or the person asks about agents, skills or tools | Invoke `../skills/librarian.md` |
