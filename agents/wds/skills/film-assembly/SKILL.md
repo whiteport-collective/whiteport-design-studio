@@ -18,6 +18,8 @@ Varje klipp väljs efter Walter Murchs ordning: **känsla** först, sedan berät
 
 ## Gången
 
+**Dokumentet bygger filmen.** Varje klipp, varje övergång och varje nivå skrivs som en händelse i slaget i `film.yaml` (`spar`, `kalla`, `in`, `ut`, `pa`), och tidslinjen byggs med `film_build.py bygg` ([resolve](../../tools/resolve.md#filmens-dokument-blir-filmen)). En ändring görs i dokumentet och byggs som en ny version, aldrig bara i Resolve, så att dokumentet alltid är filmen. Det personen ändrar själv i Resolve läses tillbaka in i dokumentet.
+
 ### 1. Radioklippet
 
 Berättelsen byggs först **med ljud enbart**: det som sägs, i manusets ordning, tills det fungerar som radio. Bild, musik, färg och grafik kommer efter.
