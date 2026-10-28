@@ -84,9 +84,25 @@ pm.ExportProject("<projekt>", "<delad enhet>/projects/<projekt>/resolve/<projekt
 
 Hur mycket av Photo-sidan API:t når står under [Fotosidan](#fotosidan-photo-page-i-resolve-21).
 
-### Nytt i 21.1, enligt Blackmagics egna filer, inte provat
+### Provat i 21.1.1 (2026-10-27, MARTEN-SURFACE-)
 
-Ur `CHANGELOG.md`, `README.md` och typfilen `DaVinciResolveScript.pyi` i `$RESOLVE_SCRIPT_API` (21.1.1, kontrollerat 2026-10-25). Bakgrund och källor: [fran-brief-till-film](../viska/research/fran-brief-till-film.md#3-automated-assembly-in-davinci-resolve-studio-2021). Det som provas flyttas upp i rätt avsnitt med datum.
+Fyra provomgångar i ett eget provprojekt, med reelklippen från Visitas studiebesök (1080x1920, 25 bilder/s):
+
+| Anrop | Resultat |
+|---|---|
+| `MediaPool.ImportMedia([{"FilePath": …}])` | **Gav `None`.** Listan med sökvägar, `ImportMedia([sökväg, …])`, fungerar. |
+| `MediaPool.AppendToTimeline([{mediaPoolItem, startFrame, endFrame, mediaType, trackIndex, recordFrame}])` | Fungerar för bild, ljud och spår 2 och uppåt. `endFrame` är exklusiv: 10–90 ger 80 rutor. Utan `mediaType` läggs bild och ljud på samma spårnummer. |
+| `TimelineItem.AddTransition({type, category, position, alignment, duration})` | Fungerar. Längden begränsas av klippens handtag: utan material före eller efter blev 12 rutor 2. Ger ett eget objekt av typen `transition` på spåret. En andra övergång på samma skarv ger `None`. |
+| `TimelineItem.SetSpeed({"Percentage": 50, "RippleTimeline": True})` | Fungerar; med `RippleTimeline` blir klippet dubbelt så långt och resten flyttas. |
+| `TimelineItem.SetFades({"FadeIn": 12})` | Fungerar för bild och ljud. |
+| `Timeline.AddMarker(ruta, färg, namn, text, längd, customData)` | Fungerar. Rutan räknas från tidslinjens början, och `customData` kommer tillbaka i `GetMarkers()`: slagets id följer med markören. |
+| `Timeline.NormalizeAudioLevel(items, {...})` | **Kräver `normalizationMode`** (t.ex. `"EBU R128"`), annars `False`. Med läget och `targetLoudness` fungerar den. Lägena: `Timeline.GetNormalizeAudioModes()`. |
+| `Timeline.InsertFusionTitleIntoTimeline("Text+")` | **Duger inte till grafik över bild.** Titeln läggs alltid på V1 vid spelhuvudet som en infogning: klippet delas och resten av tidslinjen flyttas. Med V1 låst blir det `None`, med V1 avstängt hamnar den ändå på V1. Texten går att sätta (`SetInput("StyledText", …)` svarar `None` men verkar), men att byta typsnitt (`SetInput("Font", "Arial")`) fick renderingen att misslyckas på den titeln. |
+| Grafik som fil med alfakanal på V2 | **Så görs titlar och kort.** En PNG eller en ProRes 4444 med alfa, lagd med `AppendToTimeline` på spår 2, läggs ovanpå bilden med genomskinligheten bevarad. Grafiken görs med [hyperframes](hyperframes.md) eller som bild. |
+
+### Nytt i 21.1, enligt Blackmagics egna filer
+
+Ur `CHANGELOG.md`, `README.md` och typfilen `DaVinciResolveScript.pyi` i `$RESOLVE_SCRIPT_API` (21.1.1, kontrollerat 2026-10-25). Bakgrund och källor: [fran-brief-till-film](../viska/research/fran-brief-till-film.md#3-automated-assembly-in-davinci-resolve-studio-2021). Det som är provat står i tabellen ovan.
 
 | Anrop | Vad |
 |---|---|
@@ -103,8 +119,17 @@ Ur `CHANGELOG.md`, `README.md` och typfilen `DaVinciResolveScript.pyi` i `$RESOL
 
 - **Fortfarande inte från skript:** nyckelpunkter på Edit-sidans egenskaper, fartkurvor, ljudautomation, IntelliScript, de animerade undertextmallarna, Audio Assistant, Music Editor och Music Remixer.
 - **Resolve har en egen Python** (`C:\Program Files\Blackmagic Design\DaVinci Resolve\ResolvePython\ResolvePython.exe`, 3.14) där `import DaVinciResolveScript` fungerar utan miljövariablerna, men utan pip.
-- **Anropen med flera signaturer är avvecklade.** Använd ordboksformerna: `AppendToTimeline([{...}])`, `SetProperties({...})`, `SetMetadata({...})`, `ImportMedia([{"FilePath": …}])`. Skripten här använder fortfarande `SetProperty` och `AddItemListToMediaPool`; byt när de ändå röras.
-- **Provordning:** `AddTransition`, Text+ från skript, en namnskylt i OGraf, `GetTranscription` på svenska, `CreateSubtitlesFromAudio` på svenska, `NormalizeAudioLevel`, import av FCPXML 1.10 och 1.11, import av OTIO med övergångar och fart.
+- **Anropen med flera signaturer är avvecklade.** Använd ordboksformerna: `AppendToTimeline([{...}])`, `SetProperties({...})`, `SetMetadata({...})`. Undantag: `ImportMedia` med ordbok gav `None` (se ovan). Skripten här använder fortfarande `SetProperty` och `AddItemListToMediaPool`; byt när de ändå röras.
+- **Kvar att prova:** en namnskylt i OGraf, `GetTranscription` på svenska, `CreateSubtitlesFromAudio` på svenska, import av FCPXML 1.10 och 1.11, import av OTIO med övergångar och fart.
+
+## Filmens dokument blir filmen
+
+```bash
+python agents/wds/tools/resolve/film_build.py manus "projects/<projekt>/film/<film>"
+python agents/wds/tools/resolve/film_build.py bygg "projects/<projekt>/film/<film>" [--ersatt] [--render <fil.mp4> --bredd 960]
+```
+
+`film.yaml` ([film-production](../skills/film-production/SKILL.md)) är både manus och klipplista. `manus` skriver ut `manus.md`; `bygg` gör det också och bygger sedan tidslinjen: källorna i binen `film/<film>` med proxyfilerna kopplade, varje händelse på sitt spår (`V1`–`V3`, `A1`–`A3`, `AV1` för bild och ljud ihop) med `in`, `ut` och `pa` i sekunder, övergångar, fart, toningar och egenskaper, talet på A1 nivåsatt till `tal_lufs`, musik och annat med `lufs` nivåsatt för sig, och en markör per slag med slagets id i `customData`. Efteråt räknas de regler i [film-assembly](../skills/film-assembly/SKILL.md#8-kontrollen) som går att räkna (längd, bildlängdernas variation, övergångar per minut, J- och L-klipp, musikens slut, ljudlager) och skrivs i `bygg.json` bredvid dokumentet.
 
 ## Regler
 
