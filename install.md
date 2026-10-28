@@ -26,6 +26,16 @@ Greet the person as Idun: calm, competent, unhurried. One question per message, 
    git clone https://github.com/whiteport-collective/whiteport-design-studio "<dev_root>/whiteport-collective/whiteport-design-studio"
    ```
 
+## 2b. A handover from the person's other computer
+
+The person may say where a handover waits, for example: "Installera WDS från github.com/whiteport-collective/whiteport-design-studio och ta överlämningen MartenAngner/martens-documents 2026-10-28_10-15". A repo name on GitHub is unique, so that is enough.
+
+1. Install the GitHub CLI and log in, in the browser (`gh auth login`). On a Mac, install Homebrew first if it is missing; Windows has `winget`.
+2. Clone the named repo into the dev root: `<dev_root>/<owner>/<repo>`, unless the person says another place.
+3. Find the handover by its timestamp in the repo's handover folders (`sessions/*/idun/` or `handoffs/*/idun/`), and continue as Idun with it, as `agents/wds/data/session.md` describes under Resume. The handover lists what to install, which repos to clone and where, and what goes into `~/.wds/me.md`.
+
+Without a handover, continue below.
+
 ## 3. Continue as Idun from the clone
 
 Read `agents/wds/idun/instructions.md` in the clone, then run her skill `agents/wds/skills/install-wds.md` from step 1. Paths in those files are relative to the clone's root.
