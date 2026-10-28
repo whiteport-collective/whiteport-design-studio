@@ -78,7 +78,7 @@ Ett slag som inte svarar mot någon kraft stryks eller tas upp med personen.
 
 **Intervjufilmer skrivs två gånger.** Före inspelningen är manuset en plan med frågor: för varje kraft filmen ska bära, en fråga om en händelse ("Berätta om senaste gången …"), en om känslan ("Vad oroade dig mest när …") och en om belägget ("Vad blev annorlunda efteråt, konkret?"). Be den intervjuade upprepa frågan i svaret. Efter inspelningen skrivs manuset om som ett **pappersklipp** av det som faktiskt sades, med tidkoder ([film-assembly](../film-assembly/SKILL.md#1-radioklippet)). Ingen mening får sättas ihop av bitar så att den säger något personen inte sa.
 
-Skriv ut `manus.md` ur `film.yaml`: bild till vänster, ljud till höger, en rad per slag, och summan av sekunderna mot målet.
+Skriv ut `manus.md` ur `film.yaml` med `film_build.py manus` ([resolve](../../tools/resolve.md#filmens-dokument-blir-filmen)): bild och ljud bredvid varandra, en rad per slag, och summan av sekunderna mot målet. Samma fil blir sedan klipplistan som bygger tidslinjen, så dokumentet är prompten för nästa steg: det som står i det är det som klipps.
 
 ### 4. Storyboard
 
