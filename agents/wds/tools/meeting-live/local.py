@@ -321,11 +321,13 @@ def main():
     ap.add_argument("--dir", help="inspelningens mapp: utskrift, ljud per kanal, skärmvideo och bilder")
     ap.add_argument("--screen", action="store_true", help="spela in skärmen som video och spara en bild när den ändras")
     ap.add_argument("--monitor", type=int, help="vilken skärm (nummer från --list-screens); utan den alla skärmar")
+    ap.add_argument("--region", help="bara en del av skärmen, som andelar av den: vänster,topp,bredd,höjd, till exempel 0,0,0.5,0.5 för övre vänstra fjärdedelen")
     ap.add_argument("--list-screens", action="store_true", help="lista skärmarna och avsluta")
     ap.add_argument("--them", default="De andra")
     ap.add_argument("--me", default="Jag")
     ap.add_argument("--lang", default="sv", help="sv, en … eller auto: språket upptäcks för varje yttrande")
     ap.add_argument("--no-mic", action="store_true", help="bara datorns ljud, till exempel en video eller ett webbinarium")
+    ap.add_argument("--mic", help="mikrofon vars namn innehåller texten, till exempel Surface; utan den Windows standardmikrofon")
     ap.add_argument("--pause", type=float, default=0.5, help="sekunder tystnad som avslutar ett yttrande")
     ap.add_argument("--max", type=float, default=8.0, help="längsta yttrande innan det klipps")
     ap.add_argument("--threshold", type=float, default=0.006, help="ljudnivå som räknas som tal")
@@ -344,6 +346,12 @@ def main():
         monitor = next((m for m in screens() if m["n"] == a.monitor), None)
         if not monitor:
             ap.error(f"skärm {a.monitor} finns inte; se --list-screens")
+        if a.region:
+            # En mindre video: bara den del av skärmen som visar det samtalet handlar om. Jämna mått för x264.
+            fx, fy, fw, fh = (float(v) for v in a.region.split(","))
+            w, h = monitor["width"], monitor["height"]
+            monitor = dict(monitor, x=monitor["x"] + round(fx * w), y=monitor["y"] + round(fy * h),
+                           width=round(fw * w) // 2 * 2, height=round(fh * h) // 2 * 2)
     from pathlib import Path
     folder = Path(a.dir) if a.dir else None
     if folder:
@@ -373,7 +381,15 @@ def main():
     pa = pyaudio.PyAudio()
     sources = [(a.them, "them", pa.get_default_wasapi_loopback())]
     if not a.no_mic:
-        sources.append((a.me, "me", pa.get_default_input_device_info()))
+        mic = pa.get_default_input_device_info()
+        if a.mic:
+            wasapi = pa.get_host_api_info_by_type(pyaudio.paWASAPI)["index"]
+            mic = next((d for d in (pa.get_device_info_by_index(i) for i in range(pa.get_device_count()))
+                        if d["hostApi"] == wasapi and d["maxInputChannels"] > 0 and not d.get("isLoopbackDevice")
+                        and a.mic.lower() in d["name"].lower()), None)
+            if not mic:
+                ap.error(f"ingen mikrofon heter något med {a.mic!r}")
+        sources.append((a.me, "me", mic))
     incoming = {name: [] for name, _, _ in sources}
     dropped = {name: 0 for name, _, _ in sources}  # block som ljudkortet tappade för att vi inte hann hämta dem
     tracks = {name: Track(Segmenter(a.threshold, a.pause, a.max), folder / f"{role}.wav" if folder else None)

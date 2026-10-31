@@ -145,6 +145,10 @@ python agents/wds/tools/meeting-live/local.py --dir "<inspelningens mapp>" [--mo
 
 **Välja skärm.** `--list-screens` listar de anslutna skärmarna i riktiga bildpunkter, till exempel `1. Surface Panel (\\.\DISPLAY1): 2736x1824 (huvudskärm), position 0,0`. Använd det när skillen frågar vilken skärm som ska spelas in. `--monitor <n>` spelar in bara den skärmen, både video och bilder (och slår på `--screen`). `--screen` utan `--monitor` tar alla skärmar som en bild. Ingen skärm: varken `--screen` eller `--monitor`.
 
+**Bara en del av skärmen** (Mårten, 2026-10-31: mindre film): `--region vänster,topp,bredd,höjd` som andelar av skärmen, till exempel `--monitor 2 --region 0,0,0.5,0.5` för övre vänstra fjärdedelen. Gäller både video och bilder.
+
+**Välja mikrofon:** `--mic <del av namnet>`, till exempel `--mic Surface`, annars Windows standardmikrofon. Visar statusraden -90 dB för mikrofonen är den tyst eller avstängd: byt (2026-10-31: kameramikrofonen i skärmen gav inget ljud).
+
 | Fil | Innehåll |
 |---|---|
 | `transcript.jsonl` | Liveutskriften, med en rad `{"event": "frame", "file": …}` för varje ny bild och en statusrad varje minut |
