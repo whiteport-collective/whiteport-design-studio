@@ -17,7 +17,7 @@ What a WDS workspace contains and the starting content of each file. Used by org
 │   └── <org>/                    The organization's own agents, skills and tools (if any)
 ├── users/
 │   ├── README.md
-│   ├── _template/                user.md soul.md objectives.md achievements.md
+│   ├── _template/                user.md soul.md objectives.md
 │   └── <user>/
 ├── sessions/                     Handovers. Folder = receiving agent.
 │   ├── <user>/<agent>/
@@ -149,9 +149,10 @@ agent_space_bitwarden:  # optional, the Bitwarden item that holds the key
 One folder per person, named after the GitHub username in lowercase. Shared and professional: the team, partners and the client may read it.
 
 - `user.md` — role in this project, and `private:` (where the person's private cabinet is)
-- `soul.md` — how agents work with the person in this repo, built from their corrections
+- `soul.md` — how we work together in this repo: roles, agreements, conventions with the team and the agents
 - `objectives.md` — what the person wants to achieve here
-- `achievements.md` — what has been delivered, newest first
+
+The person's own working style and what they have delivered live in their private cabinet, which travels with them. Nothing here points to it except the `private:` line.
 
 New person: the agent creates the folder from `_template/` on the first session. Wrap fills it in.
 Never write in someone else's folder.
@@ -179,18 +180,16 @@ Shared file. Describes only the role in this repo.
 ## users/_template/soul.md
 
 ```markdown
-# First: how agents work with them in this repo
+# First: how we work together in this repo
 
-Shared file. The behavioral contract, built from the person's own corrections. Follow it.
-Complements the person's private soul file. If they conflict, this one wins.
+Shared file. The agreements for working with First here, with the team and the agents. Follow it.
+The person's own style (tone, pace, format) lives in their private soul file. If they conflict, this one wins.
 
-## How they want agents to work
+## Agreements
 
 ## Corrections
 
-Date, what the agent did wrong and how it should be.
-
-## Appreciated / rejected
+Date, what the agent did wrong in this repo and how it should be.
 ```
 
 ## users/_template/objectives.md
@@ -199,14 +198,6 @@ Date, what the agent did wrong and how it should be.
 # First: goals in this project
 
 Shared file. What the person wants to achieve here. Agents prioritize by it.
-```
-
-## users/_template/achievements.md
-
-```markdown
-# First: delivered in this project
-
-Shared file. What actually got done, with date and link. Wrap adds rows, newest first.
 ```
 
 ---

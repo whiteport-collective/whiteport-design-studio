@@ -48,7 +48,7 @@ your-project-repo/
 │   ├── wds/                       Saga, Freya, Mimir + shared skills and tools
 │   └── <your-source>/<agent>/     your own agents
 ├── governance/                    policy: policies.md (reading order) · wds/ (default) · <org>/ (organization) · <project>/
-├── users/<github-username>/       who each person is: role, soul, objectives, achievements
+├── users/<github-username>/       each person's role, how we work together, objectives
 ├── sessions/                      handovers — every wrap is one
 │   ├── <user>/<agent>/<session-id>-<from>-<summary>.md
 │   └── all-users/<agent>/         for whoever runs that agent next

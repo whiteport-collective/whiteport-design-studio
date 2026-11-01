@@ -80,8 +80,10 @@ A correction ("don't do X, do Y"), a rejected proposal, a fact mentioned in pass
 
 | Cabinet | Where | Files |
 |---|---|---|
-| **Repo:** what you work on here | `users/<user>/` in the project repo, shared with the team | `user.md` (role in the project), `soul.md` (how agents work with you *in this repo*), `objectives.md`, `achievements.md` |
-| **Private:** who you are | a local folder or a repo you own, pointed to by `private:` in `users/<user>/user.md`, with a copy in `.wds/me.md` | `user.md` (professional profile), `soul.md` (how agents work with you *everywhere*), `identity.md` (values, drivers, ways of thinking), `objectives.md`, `heartbeat.md` (current state: workplace, role, manager, colleagues, what has happened), `log.md` (one line per session), `skills.md` + `skills.json` (the skills catalog: every source repo, and the sync to run before each session). Private handovers go in `sessions/` in the same repo |
+| **Repo:** what you work on here, and how we work together | `users/<user>/` in the project repo, shared with the team | `user.md` (role in the project), `soul.md` (how the team and its agents work together with you *in this repo*), `objectives.md` |
+| **Private:** who you are | a local folder or a repo you own, pointed to by `private:` in `users/<user>/user.md`, with a copy in `.wds/me.md` | `user.md` (professional profile), `soul.md` (your own style: how agents work with you *everywhere*), `identity.md` (values, drivers, ways of thinking), `objectives.md`, `achievements.md` (what you delivered, at the level of a CV), `heartbeat.md` (current state: workplace, role, manager, colleagues, what has happened), `log.md` (one line per session), `skills.md` + `skills.json` (the skills catalog: every source repo, and the sync to run before each session). The personal part of every handover goes in `sessions/` in the same repo |
+
+**The work stays with the work, the person stays with the person** (principle P2 in the WDS default policy). The private cabinet links to the work and never copies it: no figures, client data, strategy or code from an organization's repo. When you leave a job, you keep your own story and your achievements, and the organization keeps its work.
 
 `<user>` is the GitHub username in lowercase. `.wds/me.md` is local to each machine and never committed. The location of the private cabinet can be stored openly in the repo's `user.md`, because a path reveals nothing. The contents stay private.
 
@@ -104,13 +106,13 @@ Wrap step 4 compares the whole session with the baseline and sorts every new ite
 | New information | File | Cabinet |
 |---|---|---|
 | Current state: workplace, role, manager, colleagues, clients, what has happened | `heartbeat.md` | private |
-| How agents should work with the person everywhere | `soul.md` | private |
-| How agents should work with the person in this repo | `soul.md` | repo |
+| The person's own style: how agents should work with them everywhere | `soul.md` | private |
+| How we work together in this repo: roles, agreements, conventions | `soul.md` | repo |
 | Who the person is: values, drivers, ways of thinking | `identity.md` | private |
 | Professional profile: skills, experience, working style | `user.md` | private |
 | Role in this project | `user.md` | repo |
 | Goals | `objectives.md` | private or repo |
-| Delivered in the project | `achievements.md` | repo |
+| Delivered, at the level of a CV | `achievements.md` | private, with a link to the work part of the handover |
 | Finances, health, family, relationships | a handover to the person's private agent in `sessions/` | private, never in the soul files or the project repo |
 
 **Rules:**
@@ -138,7 +140,7 @@ WDS notices a new user and builds the cabinets from the first session on:
 
 **Wrap.** The agent writes the handover, runs the soul review and shows you the receipt:
 
-> *soul.md (private): merged two rules on brevity into one. heartbeat.md (private): new client added, old manager removed. achievements.md (repo): product brief delivered.*
+> *soul.md (private): merged two rules on brevity into one. heartbeat.md (private): new client added, old manager removed. achievements.md (private): product brief delivered for the client.*
 
 **Next session.** It starts from the improved baseline. Over weeks, the files become a more accurate picture than any interview could give, and they stay yours when you change tools, employers or machines.
 
@@ -164,7 +166,8 @@ WDS notices a new user and builds the cabinets from the first session on:
 | **Wrap** | Soul review: compare, route, update, optimize |
 | **Handovers** (`sessions/`) | The raw record of each session, where the soul review gets its material |
 | **New user** | Detected at start. Asked at wrap where the private cabinet should live |
-| **Team repos** | Repo cabinet shared, private cabinet never copied in |
+| **Team repos** | Repo cabinet shared, private cabinet never copied in, and nothing of the organization's copied out |
+| **Storage audit** | Monthly and before access is removed: what landed in the wrong cabinet moves (`/idun audit storage`) |
 | **Agent instructions** | Method corrections go upstream, never into a soul |
 | **Skills catalog** | Synced before every session. Wrap moves skill changes to their source repo and updates the catalog |
 

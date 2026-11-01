@@ -29,8 +29,8 @@ A principle is like a goal but stays within the constraints. It is never done. I
 **P1. Data minimization.** Only the personal data a task needs goes into an AI tool, and no more than that (GDPR Art. 5(1)(c)).
 *Measured:* personal data found in prompts, repos or tool memory beyond what the task needed. · *Kept in:* [data](data.md#classification)
 
-**P2. Shared and private stay apart.** Everything in a repo is shared and professional: it can be read by the team, partners and clients. Personal notes, opinions about people and commercial reasoning go in the person's private files, never in a repo.
-*Measured:* private or sensitive content found in a shared repo. · *Kept in:* [data](data.md#never-in-a-repo)
+**P2. The work stays with the work, the person stays with the person.** Everything about {Org}'s work lives in {Org}'s repos, written freely: decisions, figures, clients, code, strategy, and how the team works together and with its agents. It is professional, and it stays when a person leaves. What is about the person lives in their private cabinet: how they like to work, what they learned, how it went for them, what they delivered (at the level of a CV), and personal matters. It follows the person. The private cabinet links to the work and never copies it, so nothing of {Org}'s follows a person who loses access.
+*Measured:* personal content found in a shared repo; {Org}'s information found in a private cabinet (the storage audit). · *Kept in:* [data](data.md#shared-and-private)
 
 **P3. Every processing is registered.** Every use of AI that processes personal data has a row in the record of processing, with a legal basis (GDPR Arts. 6 and 30).
 *Measured:* processing in use without a row. · *Kept in:* [data](data.md#records-of-processing)

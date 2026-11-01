@@ -19,7 +19,7 @@ She runs first, before Saga, Freya and Mimir, and she stays: when something isn'
 Idun is the one the client talks to about the business, the projects as a whole and the problems in the process. Saga, Freya and Mimir work on the product; Idun looks after the system they work in. She has three responsibilities:
 
 1. **Installation and getting started.** The repo laid out as in `agents/wds/data/repo-structure.md`, the agents and the default policy synced in, the programs and extensions installed, and the people onboarded. Skills: `install-wds` (a person's computer, from a fresh Claude to their repos), `qualification`, `org-onboarding`, `user-onboarding`. **Projects are not Idun's** (Mårten, 2026-10-27): the agent that starts the work creates the project with `project-setup`.
-2. **WDS at each client.** Structure, sync, governance and compliance (G&C), and the conversations about the process. She keeps an overview of all the client's repos: which have WDS and governance, which version of each policy folder they have (`governance/*/.source`), open findings and open handovers to her. Skills: `governance-report`, `librarian` (sync, audit governance), `agent-space-install`.
+2. **WDS at each client.** Structure, sync, governance and compliance (G&C), and the conversations about the process. She keeps an overview of all the client's repos: which have WDS and governance, which version of each policy folder they have (`governance/*/.source`), open findings and open handovers to her. Skills: `governance-report`, `librarian` (sync, audit governance), `storage-audit`, `agent-space-install`.
 3. **The WDS method.** She collects method gaps (wrap step 4) and G&C gaps (wrap step 6) from every client's wraps, which reach her as handovers (`sessions/<user>/idun/`, `sessions/all-users/idun/`, see wrap step 2), and proposes improvements in the WDS source repo, whiteport-design-studio. Mårten Angner approves. Skill: `librarian`.
 
 WDS is fully independent of BMad. Everything at WDS level is approved by Mårten Angner.
@@ -172,6 +172,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
 | `/idun catalog [agent]` | Show the library |
 | `/idun audit [agent \| all]` | Audit an agent's skills and tools |
 | `/idun audit governance` | Conflict check: compare the organization's policy with the WDS default |
+| `/idun audit storage [user]` | Storage audit: move what landed in the wrong cabinet, repo or private (`../skills/storage-audit.md`) |
 | `/idun create-skill` · `create-agent` · `create-tool` | Create in the source repo |
 | `/idun register [path]` | Bring a stray skill or tool into its source repo |
 | `/idun sync` | Sync the library to every repo that uses it (asks first) |

@@ -31,11 +31,42 @@ Every piece of information has one tier. When in doubt, use the higher one.
 
 ## Shared and private
 
-Two cabinets. The **repo** is shared: everything in it can be read by the team, by partners and, in time, by the client. It is professional and shows people in a fair light. The **private cabinet** belongs to one person and lives outside every shared repo: personal notes, feedback, opinions about people, clients and vendors, commercial reasoning and anything unprofessional or controversial.
+Two cabinets, each with its own kind of content (principle P2).
 
-Handovers between sessions and agents contain only what everyone on the project may read. Private context goes in the private cabinet.
+The **repo** belongs to {Org}. It holds everything about the work, written freely: decisions, figures, clients, code, strategy, what is left and what comes next, and how the team works together and with its agents. Everything in it can be read by the team, by partners and, in time, by the client, so it is professional and shows people in a fair light. It stays when a person leaves.
+
+The **private cabinet** belongs to one person and lives outside every repo {Org} owns: how the person likes to work, what they learned, how a session went for them, what they delivered, and personal matters. It follows the person.
+
+| What | Where |
+|---|---|
+| Decisions, figures, client material, code, strategy, plans | Repo |
+| What is left and what comes next, so that anyone can continue | Repo: the handover |
+| How the team works together, and with agents, in this repo: roles, agreements, conventions | Repo: `users/<user>/` |
+| How the person likes agents to work with them, everywhere: tone, pace, format, what annoys them | Private: `soul.md` |
+| What the person learned, and how it went for them | Private: the personal part of the handover |
+| What the person delivered, at the level of a CV ("built the open glass for Visita") | Private: `achievements.md` |
+| Personal finances, health, family, relationships | Private, with the person's own agent, never in the soul files |
+
+**The private cabinet links to the work and never copies it.** It may name the client, the project and what was delivered. It never holds {Org}'s Internal, Confidential or Restricted information ([classification](#classification)): figures, client material, contracts, strategy, code, or copies of handovers, design logs and documents. A person who loses access to a repo keeps their own story and nothing of {Org}'s. Their links simply stop working.
+
+**The repo never points to the private cabinet.** No links to it and no mention that a personal part exists.
+
+**A handover has two parts with the same session id:** the work part in the repo, complete enough for anyone to continue from it alone, and the personal part in the private cabinet. When in doubt, ask whether someone else needs it to continue. If so, it belongs in the repo.
 
 Never write in someone else's folder.
+
+## Storage audit
+
+Things land in the wrong cabinet. The storage audit finds them and cleans up, with an agent (Idun, `/idun audit storage`), one person at a time.
+
+**When:** monthly (recommended, confirmed in step 14), and always before a person's access to a repo is removed, so that their own story leaves with them and {Org}'s information stays.
+
+**What it checks:**
+1. **The repo:** `users/<user>/`, the person's handovers and the design logs. Personal content (personal working style, how it went for them, achievements, personal matters) moves to the private cabinet and is removed from the repo. Personal matters in the git history are an incident ([incidents](incidents.md)).
+2. **The private cabinet:** {Org}'s information moves to the repo it belongs to, or is deleted. A copy becomes a link.
+3. **The soul files:** personal working style in the repo's `soul.md` moves to the private one; agreements about how the team works, found in the private one, move to the repo.
+
+The agent proposes each move and the person approves, because the private cabinet is theirs. The result goes in the handover: what moved, from where to where, and any incident.
 
 ## Never in a repo
 

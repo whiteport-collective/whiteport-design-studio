@@ -1,7 +1,7 @@
 ---
 name: wrap
 source: wds
-description: Avsluta en session. Skriver överlämningen (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, för skill-ändringar till källrepot och katalogen, rapporterar incidenter och föreslår G&C-punkter, uppdaterar projektloggen och delar arbetet.
+description: Avsluta en session. Skriver överlämningen i två delar, projektdelen i repot och den personliga delen i det privata skåpet (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, för skill-ändringar till källrepot och katalogen, rapporterar incidenter och föreslår G&C-punkter, uppdaterar projektloggen och delar arbetet.
 used_by: [idun, saga, freya, mimir]
 tools: [wds/git]
 ---
@@ -12,6 +12,8 @@ Agentoberoende. Skillen beskriver *vad* som ska göras. Hur git används står i
 
 **Wrap frågar inte vad som hände.** Agenten var med i samtalet och tar vad som gjordes, vad som återstår och nästa steg ur samtalet och git. De enda frågorna är var sessionerna och det privata skåpet ska ligga, och bara när svaret saknas (steg 1 och 4).
 
+**Arbetet stannar hos arbetet, personen stannar hos personen** (principen P2 i `governance/wds/principles.md`, Mårten 2026-11-01). Allt om arbetet skrivs fritt i repot: beslut, siffror, kunder, kod, vad som är kvar och hur teamet jobbar tillsammans. Allt om personen skrivs fritt i det privata skåpet: hur hen vill jobba, vad hen lärde sig, hur det gick och vad hen levererade. Ingen av delarna behöver censureras, och ingen kopierar från den andra. Det privata länkar till arbetet, så att inget av organisationens följer med en person som stängs av från ett repo.
+
 ## 1. Vem, vilken session, till vem
 
 - **Användare:** identifiera enligt git-toolet. Det ger `<användare>`, alltså GitHub-användarnamnet med små bokstäver.
@@ -21,12 +23,22 @@ Agentoberoende. Skillen beskriver *vad* som ska göras. Hur git används står i
 - **Vad:** ta reda på vad som ändrats enligt git-toolet. Med det och samtalet framför dig: vilka projekt rördes, vad blev klart och vad återstår?
 - **Projektrot:** mappen där projektet bor. Det är repots rot, utom när repot har flera projekt. Då är det projektets egen mapp, till exempel `projects/<projekt>/`, och repots `AGENTS.md` säger vilken. Rörde sessionen inget enskilt projekt: repots rot.
 - **Sessionsmapp:** där överlämningarna sparas. Normalt `<projektrot>/sessions/`. Repot kan bestämma annat i `<projektrot>/sessions/README.md`:
-  - `sessions: private` betyder att ingen sparar sessioner i repot, vilket passar ett publikt repo som många arbetar i. Varje person väljer själv en plats i sitt privata skåp. Platsen står i skåpets `projects/<repo>.md` på raden `sessions:`, som en länk relativt den filen.
+  - `sessions: private` betyder att ingen sparar sessioner i repot, vilket passar ett publikt repo som många arbetar i. Varje person väljer själv en plats i sitt privata skåp. Platsen står i skåpets `projects/<repo>.md` på raden `sessions:`, som en länk relativt den filen. Det gäller bara repon vars innehåll redan är publikt; ett repo med en organisations interna material behåller projektdelen i repot.
   - Saknas raden, fråga personen en gång var sessionerna för det här repot ska ligga, och skriv svaret där. Saknas skåpet, eller avstår personen, visas överlämningen bara i chatten och sparas inte.
+- **Privat sessionsmapp:** där den personliga delen sparas, `sessions/` i roten av det repo eller den lokala mapp där det privata skåpet (`private:`) ligger.
 
-## 2. Överlämningen
+## 2. Överlämningen, i två delar
 
-Varje wrap är en överlämning. Mappen är **mottagarens**. Filnamnet är `<session-id>-<från>-<sammandrag>.md`:
+Varje wrap är en överlämning i två delar med samma session-id:
+
+- **Projektdelen** i repot: allt om arbetet, så fullständigt att vem som helst kan fortsätta från den ensam. Den nämner aldrig att det finns en personlig del och länkar aldrig dit.
+- **Den personliga delen** i den privata sessionsmappen (steg 1): det som bara rör personen, och en länk till varje projektdel. Den kopierar inget ur projektdelen.
+
+Testet för varje rad: behöver någon annan det här för att fortsätta? Då hör det till projektdelen. Finns inget privat skåp skrivs bara projektdelen.
+
+### Projektdelen
+
+Mappen är **mottagarens**. Filnamnet är `<session-id>-<från>-<sammandrag>.md`:
 
 - `<session-id>` = `YYYY-MM-DD_HH-MM-<användare>`, alltså tidsstämpel och vem som körde.
 - `<från>` = agenten som skrev.
@@ -83,6 +95,36 @@ Konkreta steg i ordning för mottagaren.
 - **Överlämningar raderas aldrig.** `sessions/all-users/` är neutral och har inget användar-id. Vem som körde framgår av sessionen när den tas (`tagen_av: <session-id>`).
 - **Skriva i någon annans mapp:** det enda som är tillåtet är att lägga en *ny* fil i deras `sessions/<person>/<agent>/`.
 
+### Den personliga delen
+
+I `<privat sessionsmapp>/<användare>/<till>/`, med samma filnamn som projektdelen. Rörde sessionen flera repon får den ett sammandrag för hela sessionen. En personlig del per session, hur många repon den än rörde.
+
+```markdown
+---
+session: YYYY-MM-DD_HH-MM-<användare>
+user: <användare>
+från: <agent eller modell>
+till: <agent eller modell>
+del: personlig
+repos: [<repo>, ...]
+status: öppen
+tagen_av:
+---
+
+## Projektdelar
+- <repo>: `sessions/<användare>/<till>/<filnamn>.md`
+
+## För dig
+Hur det gick, vad som skavde, vad du lärde dig, hur du lät och vad som gav energi. Fritt och utan censur, men aldrig organisationens information.
+
+## Nästa
+Bara det som är ditt, utöver projektdelarnas Nästa: trådar i andra repon, sådant du själv vill göra.
+```
+
+- **Vad som får stå:** kundens och projektets namn, vad som levererades, hur det kändes och vad du lärde dig. **Inte:** siffror, kunddata, strategi, kod, beslut eller kopior ur projektdelen (`governance/wds/data.md`, Shared and private).
+- **Ekonomi, hälsa och familj** går fortfarande till personens egen agent (steg 4), inte hit.
+- Ingenting nytt för personen: skriv ändå delen med länkarna, så att sessionen finns i personens historia.
+
 ## 3. Projektloggen: teamets gemensamma tidslinje
 
 För varje projekt som rördes: lägg en post i projektets designlogg. Den ligger i projektroten, eller i mappen ovanför sessionsmappen när sessionerna sparas privat. Ta den som finns av `_progress/00-design-log.md`, `design-process/_progress/00-design-log.md`, `00-design-log.md` och `design-log.md`. Har loggen en `## Log`-rubrik läggs posten överst under den, annars överst i filen, med samma rubriknivå som posterna som redan finns. Saknas loggen: hoppa över steget.
@@ -114,15 +156,16 @@ Varje nyhet sorteras till rätt fil:
 | Nytt | Fil | Skåp |
 |---|---|---|
 | Nuläge: arbetsplats, roll, chef, kollegor, kunder, vad som har hänt | `heartbeat.md` | privat |
-| Hur agenter ska jobba med personen, överallt | `soul.md` | privat |
-| Hur agenter ska jobba med personen, i det här repot | `soul.md` | repo |
+| Personens egen stil: hur agenter ska jobba med hen, överallt (ton, tempo, format, vad som irriterar), också när det lärdes i det här repot | `soul.md` | privat |
+| Hur vi jobbar tillsammans i det här repot: roller, överenskommelser, arbetssätt i teamet och med agenterna | `soul.md` | repo |
 | Vem personen är: värderingar, drivkrafter, sätt att tänka | `identity.md` | privat |
 | Professionell profil: kompetens, erfarenhet, arbetssätt | `user.md` | privat |
 | Bestående fakta: adresser, bolag med organisationsnummer, hem, kontaktvägar | `user.md`, avsnittet Fakta | privat |
 | Människor: kollegor, kunder, partner, familj och vänner. Vem, relationen, historik med datum och källa. Kontaktuppgifter står i personens adressbok (till exempel Google Contacts) och filen hänvisar dit, aldrig en kopia | `people/<namn>.md`, och en rad i `people/README.md` | privat |
 | Roll i det här projektet | `user.md` | repo |
-| Mål, personliga eller i projektet | `objectives.md` | privat eller repo |
-| Levererat i projektet | `achievements.md` | repo, överst, med länk till överlämningen |
+| Personliga mål | `objectives.md` | privat |
+| Projektets mål och personens mål i projektet | `objectives.md` | repo |
+| Levererat, på CV-nivå: vad, för vem och när ("byggde det öppna glaset för Visita"), aldrig hur det gjordes inne hos kunden | `achievements.md` | privat, överst, med länk till projektdelen. Projektets egen tidslinje är designloggen (steg 3) |
 | Ekonomi, hälsa och känsliga detaljer om relationer (konflikter, privatliv) | en överlämning till personens privata agent i `sessions/<användare>/<agent>/` i det privata skåpets repo (eller i den lokala mappen) | privat, aldrig i soul-filerna och aldrig i projektrepot |
 
 Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` pekar.
@@ -131,6 +174,7 @@ Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` p
 - **Uppdatera och optimera, lägg inte bara till nya rader.** Skriv in det nya där det hör hemma, slå ihop dubbletter, ersätt det som inte längre gäller och stryk det inaktuella. Håll varje fil kort och lätt att läsa. Rättelser och händelser får datum.
 - **Agentens metod hör inte hemma i soul.** Rättar personen hur agenten följer sin egen metod, till exempel samtalsguiden eller en mall, är det en brist i agentinstruktionerna. Föreslå en ändring uppströms i stället för att skriva i någons soul. Gäller det WDS-agenterna blir förslaget en överlämning till Idun hos den som förvaltar WDS (steg 2, Förslag till WDS-metoden).
 - **Repots filer delas med teamet.** Skriv aldrig något privat där, och ändra aldrig i någon annans mapp.
+- **De privata filerna håller aldrig organisationens information.** En lärdom skrivs som personens egen ("vill ha siffran före resonemanget"), inte som kundens sak ("Visitas budget är …").
 - **Privata filer skrivs direkt.** Är skåpet ett repo görs commit och push enligt git-toolet. Är det en lokal mapp sparas filerna bara. Kvittensen visar vad som ändrades.
 - Rör bara de filer där något nytt faktiskt har hänt. `heartbeat.md` skapas första gången det finns något att skriva.
 
@@ -172,18 +216,18 @@ Inget fynd: hoppa över steget.
 
 ## 7. Dela
 
-Spara och dela överlämningen, projektloggarna och repots användarfiler enligt git-toolet. De privata filerna delas i sitt eget repo. Commit-meddelandet ska vara `wrap: <session-id> — <en rad>`.
+Spara och dela projektdelen, projektloggarna och repots användarfiler enligt git-toolet. Den personliga delen och de privata filerna delas i sitt eget repo. Commit-meddelandet ska vara `wrap: <session-id> — <en rad>`.
 
 ## 8. Andra repon och personlig logg
 
-- **Andra repon i samma session:** skriv en överlämning med **samma session-id** i deras `<sessionsmapp>/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Tack vare samma id kan man hitta sessionen i alla repon.
-- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo> (<från> → <till>): en rad · sessions/<användare>/<till>/<fil>.md`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
+- **Andra repon i samma session:** skriv en projektdel med **samma session-id** i deras `<sessionsmapp>/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Den personliga delen länkar till dem alla. Tack vare samma id kan man hitta sessionen i alla repon.
+- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo, …> (<från> → <till>): en rad · <den personliga delens sökväg>`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
 
 ## 9. Kvittens
 
 Visa användaren:
-- session-id, mottagare och sökväg till överlämningen
-- överlämningen i sin helhet, så att personen ser att fokus stämmer innan nästa session börjar från den
+- session-id, mottagare och sökvägar till projektdelen eller projektdelarna och till den personliga delen
+- båda delarna i sin helhet, så att personen ser att fokus stämmer och att inget av organisationens hamnade i den personliga
 - vad som ändrades i soul-filerna, per fil och skåp (repo eller privat), eller "inget nytt"
 - den privata överlämningen, om något om ekonomi, hälsa eller familj kom upp
 - skills som ändrades: var de ligger nu och att katalogen är uppdaterad

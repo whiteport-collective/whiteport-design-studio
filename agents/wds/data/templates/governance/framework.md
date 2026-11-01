@@ -109,6 +109,7 @@ Cadences are recommendations. Who and how often is confirmed in step 14. (NIST A
 |---|---|---|
 | Each working day | Agent owners | Pending approvals. Any kill switch or circuit breaker trip. |
 | Monthly | Idun, reported to the policy owner | Skill audit, override rate, deviations table, unregistered tools. |
+| Monthly, and before a person's access is removed | Each person, with Idun | Storage audit: what landed in the wrong cabinet ([data](data.md#storage-audit)). |
 | Quarterly | Policy owner, access owner | Tool and vendor review, access review, risk register, open deviations. |
 | Yearly | Approver | Full review of the policy, AI Act re-classification, GDPR safeguards, new version. |
 
