@@ -12,6 +12,7 @@ och agenten bevakar filen med watch.
     python live.py transcript <fil>              # hela mötet som läsbar text
     python live.py archive <fil> [<fil> …] [--out communication/meetings] [--lang sv] [--media <mediamappen>]
                                                  # hela mötet till repots mötesarkiv, med registret
+                                                 # (--out är mappen; slutar den på .md är det filen)
 
 join återansluter själv om Fireflies tappar anslutningen, i samma fil, och fyller luckan ur
 Fireflies sparade transkript. archive hämtar Fireflies färdiga transkript när det finns.
@@ -475,6 +476,10 @@ def cmd_archive():
 
     speakers = sorted({s for _, _, ls in parts for _, s, _ in ls if s})
     name = f"{day}-{slug(title)}.md"
+    # --out är mappen. Ett filnamn på .md gav förut en mapp med det namnet och ett register bredvid den
+    # (<fil>.md.md); nu blir det utskriftens namn i den mappen.
+    if out.suffix == ".md":
+        out, name = out.parent, out.name
     doc = [f"# {title}, {day}", ""]
     doc.append(" · ".join(x for x in (span, f"{L['speakers']}: {', '.join(speakers)}" if speakers else "",
                                       ", ".join(f"Fireflies `{m}`" for m in meeting_ids)) if x))

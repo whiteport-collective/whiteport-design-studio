@@ -210,7 +210,7 @@ Efter mötet: hela mötet till repots mötesarkiv, sammanfogat från alla filer 
 FIREFLIES_API_KEY="$(bw get password 'Fireflies API Key')" python agents/wds/tools/meeting-live/live.py archive .wds/live/<fil>.jsonl [<fil>.jsonl …] --out communication/meetings --lang sv --title "<mötets namn>"
 ```
 
-`--media <mediamappen>` skriver var ljud och video ligger i utskriftens huvud och i registret. Det skriver `communication/meetings/<datum>-<titel>.md` och lägger till en rad i `communication/meetings.md` (datum, möte, längd, Fireflies-id, transkript, sammanfattning). Sammanfattningskolumnen fylls i när sammanfattningen är skriven. Fireflies färdiga transkript kan dröja några minuter efter mötet; `--no-fetch` arkiverar liveutskriften direkt.
+`--media <mediamappen>` skriver var ljud och video ligger i utskriftens huvud och i registret. Det skriver `communication/meetings/<datum>-<titel>.md` och lägger till en rad i `communication/meetings.md` (datum, möte, längd, Fireflies-id, transkript, sammanfattning). Sammanfattningskolumnen fylls i när sammanfattningen är skriven. `--out` är mappen, och registret ligger bredvid den med mappens namn. Slutar `--out` på `.md` är det utskriftens filnamn, och registret hör till filens mapp. Fireflies färdiga transkript kan dröja några minuter efter mötet; `--no-fetch` arkiverar liveutskriften direkt.
 
 ### Avsluta
 
