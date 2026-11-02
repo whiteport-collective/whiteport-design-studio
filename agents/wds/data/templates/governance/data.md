@@ -45,6 +45,9 @@ The **private cabinet** belongs to one person and lives outside every repo {Org}
 | How the person likes agents to work with them, everywhere: tone, pace, format, what annoys them | Private: `soul.md` |
 | What the person learned, and how it went for them | Private: the personal part of the handover |
 | What the person delivered, at the level of a CV ("built the open glass for Visita") | Private: `achievements.md` |
+| Recordings: audio, screen video, images | Private: the person's media folder, on their computer or a network drive such as Google Drive. Never in git: too large. |
+| The transcript of an official meeting, with everything private removed | Repo: the project's meeting archive |
+| The transcript of any other conversation | Private: next to the recording |
 | Personal finances, health, family, relationships | Private, with the person's own agent, never in the soul files |
 
 **The private cabinet links to the work and never copies it.** It may name the client, the project and what was delivered. It never holds {Org}'s Internal, Confidential or Restricted information ([classification](#classification)): figures, client material, contracts, strategy, code, or copies of handovers, design logs and documents. A person who loses access to a repo keeps their own story and nothing of {Org}'s. Their links simply stop working.

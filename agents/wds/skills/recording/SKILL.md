@@ -1,6 +1,6 @@
 ---
 name: recording
-description: Spelar in allt som hörs, och på begäran det som syns, på personens dator, skriver ut det live och grundligt efteråt. Media stannar i personens privata mediamapp; utskriften hamnar i rätt projekt. Använd när personen vill att agenten är med i ett möte eller samtal, med vilka ord som helst ("spela in", "ta del av mötet", "delta i mötet", "gå med", "join", "lyssna", "livetolka"), vill ha ett samtal, en video eller ett webbinarium utskrivet, eller vill att agenten följer det som visas på skärmen. Fireflies bara när personen säger Fireflies.
+description: Spelar in allt som hörs, och på begäran det som syns, på personens dator, skriver ut det live och grundligt efteråt. Media stannar i personens privata mediamapp; utskriften av ett officiellt möte hamnar i rätt projekt, tvättad från det privata. Använd när personen vill att agenten är med i ett möte eller samtal, med vilka ord som helst ("spela in", "ta del av mötet", "delta i mötet", "gå med", "join", "lyssna", "livetolka"), vill ha ett samtal, en video eller ett webbinarium utskrivet, eller vill att agenten följer det som visas på skärmen. Fireflies bara när personen säger Fireflies.
 used_by: [idun, saga, freya, mimir]
 version: 1.0
 tools: [wds/meeting-live, wds/git]
@@ -10,9 +10,9 @@ tools: [wds/meeting-live, wds/git]
 
 Ett samtal är värt mest när allt finns kvar: vad som sades, vad som visades och vad som bestämdes. Inspelningen sker på personens egen dator, utan bot i mötet, så den fungerar i alla samtal och på alla plattformar (Meet, Teams, Zoom, Messenger, telefon via datorn) och för allt annat ljud, som videor och webbinarier. Ljudet tolkas på datorn.
 
-Två regler, utan att fråga varje gång (Mårten, 2026-10-17):
-- **Media stannar privat.** Ljud, skärmvideo och bilder sparas i personens privata mediamapp och flyttas inte. Personen bestämmer själv senare vad som görs med dem.
-- **Utskriften hamnar i projektet.** Den grundliga utskriften arkiveras i mötesarkivet i det projekt samtalet gäller.
+Två regler, utan att fråga varje gång (Mårten, 2026-10-17, skärpt 2026-11-02):
+- **Media stannar privat.** Ljud, skärmvideo och bilder är för stora för git. De sparas i personens privata mediamapp, lokalt på datorn eller på en nätdisk som Google Drive, och flyttas inte. Personen bestämmer själv senare vad som görs med dem.
+- **Utskriften hamnar i projektet när mötet var officiellt.** Den grundliga utskriften av ett möte i projektets namn arkiveras i mötesarkivet i det projektet, och det privata tvättas bort först: det som sades om annat än arbetet, före, efter och mellan. Andra samtal är privata, och utskriften ligger kvar i mediamappen.
 
 Hur det görs står i [meeting-live-toolet](../../tools/meeting-live.md): `local.py --dir` för inspelningen, `refine.py` för den grundliga utskriften och `live.py archive` för arkivet.
 
@@ -48,9 +48,9 @@ När personen säger "stoppa":
 
 1. **Stoppa ordentligt** genom att lägga filen `STOP` i inspelningens mapp, så att ljud och video avslutas hela.
 2. **Den grundliga utskriften:** kör `refine.py` på mappen. Säg ungefär hur lång tid den tar, och gör den i bakgrunden.
-3. **Utskriften till projektet:** avgör vilket projekt samtalet gällde, utifrån vad som sades och vilka som var med. Är det oklart, fråga en gång med ett förslag. Arkivera `final.jsonl` med `live.py archive` i det projektets repo, med en rad i registret som pekar på mediamappen, och committa.
+3. **Utskriften till projektet:** avgör om mötet var officiellt och vilket projekt det gällde, utifrån vad som sades och vilka som var med. Är det oklart, fråga en gång med ett förslag. Tvätta bort det privata, arkivera `final.jsonl` med `live.py archive` i det projektets repo, med en rad i registret som pekar på mediamappen, och committa.
 4. **Säg i en rad** var utskriften hamnade och att ljud och video ligger kvar i mediamappen.
 
-Samtal som inte gäller något projekt får ingen utskrift i något repo; den ligger kvar i mediamappen tillsammans med ljudet.
+Samtal som inte var officiella möten får ingen utskrift i något repo; den ligger kvar i mediamappen tillsammans med ljudet.
 
 Media hör aldrig hemma i git: ljud och video ligger i Drive, utskrift och sammanfattning i repot.
