@@ -29,6 +29,25 @@ Skills, tools and data belong to the source, not to an agent. **Every agent can 
 
 **Roles:** Idun installs WDS and gets people started, looks after WDS at each client (structure, sync, governance and compliance, and the conversations about the process) and keeps the WDS method and the skill library. Saga, Freya and Mimir build and analyse. Content and communication agents belong to the project (for example `agents/visita/vinka/`), not to WDS.
 
+## Capabilities
+
+What we build is agent capabilities. A capability has six parts, and designing one means designing all six (Mårten, 2026-11-04):
+
+| Part | Answers | Lives in |
+|---|---|---|
+| **Agent persona** | Who | `<agent>/instructions.md` |
+| **Open Glass** | How it looks and feels: the face the person sees and works in, beside the conversation | The repo's local app (an idea, first built as Viska Studio in visita-kommunikation) |
+| **Skill** | What and why | `skills/` |
+| **Tools** | How | `tools/` |
+| **Templates** | What good looks like | `data/templates/` |
+| **Guardrails** | What the agent should, may and must not do | The skill and the persona; in a repo with governance set up, also `governance/` |
+
+**Apps are what we connect.** A tool connects to apps: programs and services on the computer or online, such as Gmail, Fortnox, DaVinci Resolve, ffmpeg or VS Code. What an app needs to be installed and set up belongs with the app, so a tool points at its apps instead of repeating it.
+
+**Guardrails are for everyone; governance and compliance is the deeper layer.** Every capability has guardrails a person understands at a glance. The full policy in `governance/` (data classification, DPIA, processor agreements, audits) is for organizations that need it.
+
+A template is one file with `used_by: [<skill>, …]`, and a skill lists its templates in `templates:` the way it lists its tools. Existing templates get the field when a session touches them.
+
 ## Skills and tools
 
 This principle applies to every skill in every project and initiative, not only WDS.
@@ -56,7 +75,8 @@ name: <skill>                         name: <tool>
 description: What it does, and when.   description: One sentence.
 used_by: [<agent>, <agent>]           type: http | cli | script
 tools: [<source>/<tool>]              used_by: [<skill>, <skill>]
----                                   ---
+templates: [<source>/<template>]      ---
+---
 ```
 
 ## Installing

@@ -11,7 +11,7 @@ WDS is its own framework, fully independent of BMad. Mårten Angner approves eve
 ## Rules
 
 - **All folder and file names in lowercase.**
-- **Skill = what, tool = how, instructions = who.** Commands and API calls belong in a tool, never in a skill or instructions file.
+- **A capability has six parts:** agent persona (who), Open Glass (how it looks and feels), skill (what and why), tools (how), templates (what good looks like) and guardrails (what the agent should, may and must not do). Tools connect to apps, the programs and services we link together. Commands and API calls belong in a tool, never in a skill or instructions file. See [agents/wds/README.md](agents/wds/README.md#capabilities).
 - **No secrets in any file.** All keys live in Bitwarden and are fetched at runtime with `bw get password "<item>"`. Files may name the Bitwarden item, never the value.
 - **Paths are relative to the repo root** (`agents/wds/skills/...`), so they work unchanged in project repos.
 - **Policy lives in `governance/`**, one folder per source: `governance/wds/` (the default, a copy of `agents/wds/data/templates/governance/`), `governance/<org>/` (the organization's policy, edited only in its source repo) and, optionally, `governance/<project>/` (tightenings). `governance/policies.md` lists the files in reading order, and agents follow it at session start. A folder with a `.source` file is a synced copy and is never edited. Repos where Idun has not set up governance have no `governance/` folder. See [agents/wds/README.md](agents/wds/README.md#governance-policy).
