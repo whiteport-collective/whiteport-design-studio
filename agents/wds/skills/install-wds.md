@@ -38,8 +38,8 @@ Installing WDS means getting the person into their repos. The agents, the adapte
   </step>
 
   <step id="3-wds">
-    Clone whiteport-design-studio into `<dev_root>/whiteport-collective/whiteport-design-studio`. It is public, so no login is needed yet.
-    From now on, read Idun and her skills from this clone.
+    **One repo and a private repo are enough** (Mårten, 2026-11-04). Everything from WDS (the agents, the skills and the sync) is in every WDS repo, kept in step by the sync. When the person's organization has a WDS repo, Idun and her skills are read from it, the sync runs from its copy, and the WDS repo is not cloned. That is the normal case: the person starts from the organization's repo (its `install.md`, or a start sentence that names it).
+    Clone whiteport-design-studio into `<dev_root>/whiteport-collective/whiteport-design-studio` only when the person has no WDS repo yet (the first in their organization), or maintains WDS and distributes it to repos (the vendor-agents sources in step 8). It is public, so no login is needed. Then read Idun and her skills from this clone.
   </step>
 
   <step id="4-github">
@@ -94,16 +94,18 @@ Installing WDS means getting the person into their repos. The agents, the adapte
   </step>
 
   <step id="8-catalog">
-    Create the skill catalog: copy `agents/wds/tools/sync/catalog-template.json` to `skills.json` in the private cabinet and fill it in:
-    - the paths to the WDS clone and the personal repo, written as `<dev_root>/…` so they hold on every computer (the catalog's own `dev_root` is only the fallback)
+    Create the skill catalog: copy the organization's catalog template if its repo has one (for example `agents/<org>/data/katalog.json`), otherwise `agents/wds/tools/sync/catalog-template.json`, to `skills.json` in the private cabinet and fill it in:
+    - the WDS commands (`/idun`, `/saga`, `/wrap` …) point at `agents/wds/` in the person's main WDS repo, the organization's repo, unless the WDS repo is cloned (step 3)
+    - the vendor-agents sources (whiteport-design-studio, taste) are only for someone who distributes WDS from the WDS clone: remove them otherwise
+    - the paths to the repos and the personal repo, written as `<dev_root>/…` so they hold on every computer (the catalog's own `dev_root` is only the fallback)
     - `owners`: the person's GitHub username and the organizations they work in
     - the organizations' `governance` entries, if a cloned repo is an organization's policy source
     - no personal repo: remove that source
   </step>
 
   <step id="9-sync">
-    Run the sync as a dry run and show what it would do. Its first line says which folder it reads the repos from; it must be this computer's `dev_root`.
-    **Every WDS repo must be registered.** Compare the repos cloned in step 7 with the ones the dry run lists for `agents/wds`. A repo that is missing is skipped for a reason the dry run gives: its owner is not in `owners` (add the organization to the catalog), it is not on its default branch, it has uncommitted changes, or it has been inactive longer than `active_days`. Fix each one and run the dry run again until all are listed.
+    Run the sync as a dry run and show what it would do: from the copy in the person's main WDS repo (`<repo>/agents/wds/tools/sync/sync.py`), or from the WDS clone if there is one. Its first line says which folder it reads the repos from; it must be this computer's `dev_root`.
+    **With vendor-agents sources, every WDS repo must be registered.** Compare the repos cloned in step 7 with the ones the dry run lists for `agents/wds`. A repo that is missing is skipped for a reason the dry run gives: its owner is not in `owners` (add the organization to the catalog), it is not on its default branch, it has uncommitted changes, or it has been inactive longer than `active_days`. Fix each one and run the dry run again until all are listed.
     After the person's yes, run it for real (`sync-skills`).
     Check that `/idun`, `/saga`, `/freya`, `/mimir`, `/wrap`, `/handoff` and `/sync-skills` exist in `~/.claude/commands/`. They show up in the next session.
     Tell the person when to run `/sync-skills` from now on: after changing a skill, on a new computer, or when an agent says WDS has updates.

@@ -16,7 +16,11 @@ You need to run commands on this computer. If you cannot (for example in the Cla
 
 Greet the person as Idun: calm, competent, unhurried. One question per message, plain words.
 
-## 2. Get git, and the WDS repo
+## 2. The organization's repo first
+
+**One repo and a private repo are enough** (Mårten, 2026-11-04). Everything from WDS is in every WDS repo, so a person whose organization already has one installs from it, not from here: the organization's repo has its own `install.md`, and the start sentence names it ("Installera <organisationen> från github.com/<org>/<repo>"). If the person names their organization or its repo, log in to GitHub (step 3b), clone that repo, and follow its `install.md`. Clone WDS below only for someone who is the first in their organization, or who maintains WDS.
+
+## 3. Get git, and the WDS repo
 
 1. Check `git --version`. If git is missing, ask for a yes and install it (Windows: `winget install --id Git.Git -e`, Mac: `brew install git`).
 2. Agree on the dev root, where all repos live: `C:/dev` on Windows, `~/dev` on Mac and Linux.
@@ -26,7 +30,7 @@ Greet the person as Idun: calm, competent, unhurried. One question per message, 
    git clone https://github.com/whiteport-collective/whiteport-design-studio "<dev_root>/whiteport-collective/whiteport-design-studio"
    ```
 
-## 2b. A handover from the person's other computer
+## 3b. A handover from the person's other computer
 
 The person may say where a handover waits, for example: "Installera WDS från github.com/whiteport-collective/whiteport-design-studio och ta överlämningen MartenAngner/martens-documents 2026-10-28_10-15". A repo name on GitHub is unique, so that is enough.
 
@@ -36,7 +40,7 @@ The person may say where a handover waits, for example: "Installera WDS från gi
 
 Without a handover, continue below.
 
-## 3. Continue as Idun from the clone
+## 4. Continue as Idun from the clone
 
 Read `agents/wds/idun/instructions.md` in the clone, then run her skill `agents/wds/skills/install-wds.md` from step 1. Paths in those files are relative to the clone's root.
 

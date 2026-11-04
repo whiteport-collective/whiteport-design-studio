@@ -19,7 +19,7 @@ Hur synken körs. Vad den är till för och när den körs står i skillen [sync
 | Mall för katalogen | `agents/wds/tools/sync/catalog-template.json` |
 | Tillstånd och undansparade lokala ändringar | `~/.claude/.sync-skills-state.json` och `~/.claude/commands-local-edits/` |
 
-Kör alltid skriptet från WDS-repots egen klon, så att den senaste versionen används. Ligger den på standardplatsen är sökvägen `<dev_root>/whiteport-collective/whiteport-design-studio`.
+**Ett repo och ett privat repo räcker** (Mårten, 2026-11-04): skriptet finns i varje WDS-repo, i kopian av `agents/wds/`, och hålls i takt av synken. Den som inte sprider WDS kör det därifrån, ur sitt huvudrepo (organisationens repo): `<repo>/agents/wds/tools/sync/sync.py`. Den som sprider WDS till repona (vendor-agents-källorna) kör det från WDS-repots egen klon, så att den senaste versionen används; på standardplatsen `<dev_root>/whiteport-collective/whiteport-design-studio`.
 
 ## Köra
 
