@@ -32,7 +32,8 @@ Personen ska kunna säga det med vilka ord som helst: **"spela in"**, "ta del av
 3. **Kontrollera ljudet själv** inom en minut:
    - Vilka enheter lyssnar inspelningen på (första raderna i utskriften: `Lyssnar: … <- <enhet>`)? Är det de enheter personen faktiskt använder (headset, Bluetooth-hörlurar, högtalare)? Fel enhet: stoppa och starta om med rätt, direkt.
    - Visar statusraden (`== Status 00:15: … ==`, efter 15 sekunder och sedan varje minut) ljudnivå för båda kanalerna, och ligger texten bara några sekunder efter talet? Står det att sekunder hoppades över, säg det: ljudet spelas in ändå.
-   - Kommer det repliker från **båda** kanalerna? Tills den första repliken kommit från en kanal: be personen säga något kort, och kontrollera att det dyker upp. Laddas taligenkänningen första gången (några minuter), säg det i en rad; ljudet spelas in ändå.
+   - **Mikrofonen är datorns egen eller headsetet,** aldrig en mikrofon i en extern enhet (skärm, kamera): `--mic "Headset Microphone"`, annars datorns inbyggda. Skärmens mikrofon spelade in tystnad två gånger (Mårten, 2026-11-05).
+   - Kommer det repliker från **båda** kanalerna? Tills den första repliken kommit från en kanal: **visa ett slumpat tvåsiffrigt nummer** i chatten och be personen säga det, och kontrollera att just det numret dyker upp i utskriften (Mårten, 2026-11-01 och 2026-11-05). Laddas taligenkänningen första gången (några minuter), säg det i en rad; ljudet spelas in ändå.
    - Säg sedan i **en** rad: "Inspelningen är igång: ditt ljud ✓, datorns ljud ✓, skärmen ✓." Eller vad som inte fungerar och vad du gör åt det.
 4. **Fråga sedan, i ett meddelande:** vad handlar det om, vilket projekt gäller det, och vilka är med? Svaret styr kommentarerna under mötet och var utskriften arkiveras.
 
