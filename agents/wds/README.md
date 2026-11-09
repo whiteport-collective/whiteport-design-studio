@@ -100,8 +100,6 @@ A repo where governance is set up has a folder `governance/` at its root, with o
 
 A synced folder is a mirror of its source, and its `.source` file (`source: <repo>@<sha>`) shows the version. A folder with `.source` is never edited. Precedence: WDS default < organization < project. A lower level may tighten a rule, never loosen it, and the stricter rule wins. Every agent reads `governance/policies.md` at session start and follows the files in that order ([data/session.md](data/session.md), Which policy applies). A repo without `governance/` has no governance set up, and agents continue without it. How the copies are made: [tools/sync.md](tools/sync.md). How Idun tailors the policy: [skills/governance-report.md](skills/governance-report.md).
 
-**Policy and soul.** The soul files hold a person's own style, preferences and exceptions; the policy holds what applies to everyone in the business. A rule lives in one place only. In a repo with governance, the business's policy takes precedence over a person's style: the soul applies where the policy is silent, and where they conflict the policy wins. A person's private repo (their private Heim) has no governance, because it is only them; there the soul files are the rules, and personal goals are not a business framework (Mårten Angner, 2026-11-09).
-
 How a WDS repo is laid out, folders with one owner each, is described in [data/repo-structure.md](data/repo-structure.md).
 
 ## Secrets
