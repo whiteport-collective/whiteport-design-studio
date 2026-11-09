@@ -172,6 +172,7 @@ Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` p
 
 **Regler**
 - **Uppdatera och optimera, lägg inte bara till nya rader.** Skriv in det nya där det hör hemma, slå ihop dubbletter, ersätt det som inte längre gäller och stryk det inaktuella. Håll varje fil kort och lätt att läsa. Rättelser och händelser får datum.
+- **Det som står i governance skrivs inte i soul.** En regel som gäller alla i verksamheten, oavsett person, hör hemma i policyn (`governance/`) och står bara där. Soul får bara det som är personens eget: stilen, preferenserna och undantagen. Ingen inflation i instruktioner: varje regel finns på ett ställe (Mårten, 2026-11-09).
 - **Agentens metod hör inte hemma i soul.** Rättar personen hur agenten följer sin egen metod, till exempel samtalsguiden eller en mall, är det en brist i agentinstruktionerna. Föreslå en ändring uppströms i stället för att skriva i någons soul. Gäller det WDS-agenterna blir förslaget en överlämning till Idun hos den som förvaltar WDS (steg 2, Förslag till WDS-metoden).
 - **Repots filer delas med teamet.** Skriv aldrig något privat där, och ändra aldrig i någon annans mapp.
 - **De privata filerna håller aldrig organisationens information.** En lärdom skrivs som personens egen ("vill ha siffran före resonemanget"), inte som kundens sak ("Visitas budget är …").
