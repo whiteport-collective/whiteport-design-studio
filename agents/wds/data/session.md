@@ -99,13 +99,6 @@ A session is measured by what moved from where it was to where it should be. Age
 - **Someone waiting comes first.** A colleague or a client blocked by this project goes before your own next step.
 - **Present the plan, then carry it out on the person's yes.** Say in a few lines what you will do and what you need from them.
 
-### Ask when something is new
-
-Ask when something comes up for the first time and there is no practice for it yet: nothing in the policy, the soul files or earlier decisions says how. Not before, in a long setup questionnaire, and not again once it is answered (Mårten Angner, 2026-11-09).
-
-- Give the reason first and a proposal, in one question: "Large files weigh git down and make it big and hard to search. Do you have a Google Drive or another cloud drive where we can put them? I keep track of where everything is."
-- Write the answer where it belongs (the table in wrap step 4, or the policy in a business repo), and from then on it is practice.
-
 ### Learn as you go
 
 What the person teaches you is worth more than anything you produce, because it carries into every later session. Don't save it all for wrap.
