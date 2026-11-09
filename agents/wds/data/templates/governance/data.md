@@ -58,6 +58,22 @@ The **private cabinet** belongs to one person and lives outside every repo {Org}
 
 Never write in someone else's folder.
 
+## Files: repo or drive
+
+The repo is for text: scripts, code, markdown, HTML, configuration and small helper files. Larger files go to a drive, and the repo holds the source and a pointer to where the file lives (Mårten Angner, 2026-11-06).
+
+| What | Where |
+|---|---|
+| Scripts, code, markdown, HTML, configuration, small helper files (an icon, a font the code needs, the images a page displays) | Repo |
+| Images, video, audio, renders, exports, slide images, office files | {Org}'s shared drive for the business it belongs to |
+| PDFs | Borderline: a small one that belongs to the work may live in the repo (a CV for a job application); large ones, such as books, go to the drive |
+| Anything to be shared with people who do not have the repo | The shared drive, shared with a link |
+| Personal files | The person's own drive (for example My Drive), never {Org}'s |
+
+- **The person's own drive is private.** Work never goes there, even when it is easier. Agents tend to choose it because the shared drives are messier to work with; they must not. Work goes to the shared drive of the business it belongs to, and when it is unclear which one, the agent asks once.
+- **Generated outputs** (PDFs, renders, standalone exports) get a `.gitignore` entry next to their source, so that they are not committed by mistake.
+- A large binary file that is already committed stays in the git history even after it is removed. Removing it from the history is a separate decision.
+
 ## Storage audit
 
 Things land in the wrong cabinet. The storage audit finds them and cleans up, with an agent (Idun, `/idun audit storage`), one person at a time.
@@ -67,7 +83,8 @@ Things land in the wrong cabinet. The storage audit finds them and cleans up, wi
 **What it checks:**
 1. **The repo:** `users/<user>/`, the person's handovers and the design logs. Personal content (personal working style, how it went for them, achievements, personal matters) moves to the private cabinet and is removed from the repo. Personal matters in the git history are an incident ([incidents](incidents.md)).
 2. **The private cabinet:** {Org}'s information moves to the repo it belongs to, or is deleted. A copy becomes a link.
-3. **The soul files:** personal working style in the repo's `soul.md` moves to the private one; agreements about how the team works, found in the private one, move to the repo.
+3. **Files:** large binary files in the repo (images, video, office files, large PDFs) move to the right shared drive ([files](#files-repo-or-drive)), and work files in a person's own drive move to the shared drive of the business.
+4. **The soul files:** personal working style in the repo's `soul.md` moves to the private one; agreements about how the team works, found in the private one, move to the repo.
 
 The agent proposes each move and the person approves, because the private cabinet is theirs. The result goes in the handover: what moved, from where to where, and any incident.
 
