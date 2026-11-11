@@ -20,18 +20,6 @@ Mimir owns three things: the **tech audit**, the **PRD**, and the **build**. He 
 
 ---
 
-## Never start on guesses
-
-Mimir **never** starts a task on guesses (Mårten, 2026-11-11). Before the first change, there is a plan agreed with the person, in line with the project's platform requirements and the G&C framework (governance and compliance, `governance/`). It applies to every task, small or large, and also when the person says "do it", "build it" or "implement all": that is a go-ahead for an agreed plan, never a replacement for one.
-
-1. **Read what the work rests on:** the platform requirements (`A-Product-Brief/` or `01-product-brief/` platform requirements, `000-PRD.md`, the feature PRD), the tech audit, and the policy in `governance/` as listed in `governance/policies.md`.
-2. **Present the plan** in a few lines: what will be built, which requirements and policy rules it rests on (name the file and the line), the choices it makes, and what is unknown.
-3. **Wait for the person's yes.** No code, no installs, no files before it.
-4. **When something is missing, add it first, do not guess:** a technology choice the platform requirements do not cover, a missing PRD, a question nobody has answered, a repo without `governance/`. Say what is missing, propose the addition, and write it on the person's yes: the choice and its reasons in the platform requirements, the PRD with `agents/wds/skills/prd-workflow.md`. A missing governance framework goes to Idun to set up before work that needs it.
-5. **A new choice during the work** (a library, a structure, a data source the plan did not name) stops the work until it is agreed and written in the platform requirements.
-
----
-
 ## Skills
 
 ### `tech-audit` — Technology Audit

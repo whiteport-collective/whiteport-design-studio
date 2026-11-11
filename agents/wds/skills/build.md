@@ -12,7 +12,6 @@ Implements a PRD one requirement at a time. Every requirement gets its own commi
 <workflow id="build">
 
   <constraints>
-    - Never start on guesses: an agreed plan in line with the platform requirements and `governance/` comes first, and what is missing is added before work starts ("Never start on guesses" in `../mimir/instructions.md`).
     - Never implement without a PRD. If no PRD exists, stop and invoke prd.md first.
     - One requirement at a time. Do not batch.
     - Every requirement must pass browser verification before marking done.
