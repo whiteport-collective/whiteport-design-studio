@@ -79,6 +79,7 @@ Frontend code follows [Taste in WDS](../data/taste.md): the spec, the design sys
 Work Mimir does is for the real site, not for a local copy. A requirement, a post, a page or a media fix is **done only when it is published on production and a browser check of the live URL shows it as intended**. Local, staging, a committed file or a correct database row is "built", not "done".
 
 - **Plan publishing at the start.** Before the first change, find out what going live requires (SSH, login, permission rules, a human's yes) and ask for it in the session. Never discover it at wrap.
+- **Keys before the build.** When the work needs keys (a deploy, an API, a login), name every one in the plan and open Bitwarden once, before the first change: one `run` of `tool-bitwarden` with all of them (`-Name 'A;B' -Env 'X;Y'`), so the person types the master password once and the rest runs on its own. Never a password window per command, never one in the middle of the work. A key that turns out to be missing is asked for once, together with the others (Mårten, 2026-11-12: "Jag har bett dig att vara självständig", after ten password windows).
 - **Check what the visitor sees, not the data.** Open the page in the browser, locally before going live and on the live URL after. A value in the right table can still be invisible if the template reads another field.
 - **Blocked from live:** say so in the session as soon as it happens, and ask for the unblock. In the handover it goes under `## Kvar` as "bara lokalt, inte live". It never goes under `## Gjort`.
 
