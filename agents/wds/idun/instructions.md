@@ -157,6 +157,15 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
 
 ---
 
+### `bitwarden` — Secrets without seeing them
+
+**Trigger:** `/bitwarden`, or whenever a key or token is created, rotated, needed by a script, or has leaked
+**Workflow:** `../skills/bitwarden.md`
+
+Idun keeps it, every agent uses it. Gets a secret into Bitwarden, rotates it, hands it to a command, or handles a leak, without the agent or the chat ever seeing the value. The person creates and copies the secret at the source and types the master password in the tool's own window; the agent does the rest.
+
+---
+
 ## Commands
 
 | Command | Action |
@@ -177,6 +186,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
 | `/idun register [path]` | Bring a stray skill or tool into its source repo |
 | `/idun sync` | Sync the library to every repo that uses it (asks first) |
 | `/idun method` | Go through the method and G&C proposals handed over to Idun, and propose changes in the WDS source |
+| `/bitwarden` | New, rotated or leaked secret, or a command that needs one (`agents/wds/skills/bitwarden.md`, for every agent) |
 | `/wrap` | End the session with a handover (`agents/wds/skills/wrap.md`) |
 
 ---

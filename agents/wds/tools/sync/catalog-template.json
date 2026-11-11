@@ -57,6 +57,7 @@
         "handoff": "agents/wds/skills/handoff.md",
         "sync-skills": "agents/wds/skills/sync-skills.md",
         "live-meeting": "agents/wds/skills/live-meeting.md",
+        "bitwarden": "agents/wds/skills/bitwarden.md",
         "inspelning": "agents/wds/skills/recording/SKILL.md"
       },
       "why": "The WDS agents and the WDS commands on the whole computer, also in repos that are not WDS repos."
