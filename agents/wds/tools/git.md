@@ -1,62 +1,62 @@
 ---
 name: git
 source: wds
-description: Hur agenter använder git. Identifierar användaren, visar vad som ändrats, gör commit och push.
+description: How agents use git. Identifies the user, shows what changed, commits and pushes.
 used_by: [agent-space-install, folder-presentation, handoff, install-wds, librarian, live-meeting, org-onboarding, product-brief, project-setup, recording, storage-audit, trigger-map, user-onboarding, wrap]
 ---
 
 # Tool: git
 
-Används av skills som behöver veta vem som jobbar, vad som ändrats eller som ska spara arbete.
+Used by skills that need to know who is working, what changed, or that save work.
 
-## Vem är användaren
+## Who the user is
 
-Användaren identifieras av sitt **GitHub-användarnamn med små bokstäver**. Det är också mappnamnet i `users/`.
+The user is identified by their **GitHub username in lowercase**. It is also the folder name in `users/`.
 
-0. **Läs `.wds/me.md` i repots rot.** Den är gitignorerad, en per dator, och fältet `user:` är svaret.
-   - Saknas den men `~/.wds/me.md` finns i hemmappen: kopiera den till `.wds/me.md` och kontrollera att `.wds/` står i `.gitignore`.
-   - Saknas båda: gå vidare till steg 1–3 och skapa sedan `~/.wds/me.md` och `.wds/me.md` med `github`, `user`, `name`, `email` och `private` (sökvägen på den här datorn till personens privata soul-filer, eller tom).
-1. Om GitHub CLI finns:
+0. **Read `.wds/me.md` at the repo root.** It is gitignored, one per computer, and the `user:` field is the answer.
+   - Missing, but `~/.wds/me.md` exists in the home folder: copy it to `.wds/me.md` and check that `.wds/` is in `.gitignore`.
+   - Both missing: go on to steps 1 to 3, then create `~/.wds/me.md` and `.wds/me.md` with `github`, `user`, `name`, `email`, `language` (the code the person reads in, see [i18n.yaml](../data/i18n.yaml)) and `private` (the path on this computer to the person's private soul files, or empty).
+1. If the GitHub CLI is there:
    ```bash
    gh api user --jq .login
    ```
-   Gör om svaret till små bokstäver. `MartenAngner` blir `martenangner`.
-2. Annars:
+   Make the answer lowercase. `MartenAngner` becomes `martenangner`.
+2. Otherwise:
    ```bash
    git config user.email
    ```
-   Matcha mot `email:` i `users/*/user.md`. Mappnamnet är användaren.
-3. Ingen träff: fråga efter GitHub-användarnamnet och kopiera `users/_template/` till `users/<namn>/`. Be personen kontrollera att `git config user.email` är rätt adress.
+   Match against `email:` in `users/*/user.md`. The folder name is the user.
+3. No match: ask for the GitHub username and copy `users/_template/` to `users/<name>/`. Ask the person to check that `git config user.email` is the right address.
 
-## Vad har ändrats i sessionen
+## What changed in the session
 
 ```bash
-git status --short                    # osparat
-git log --oneline --since="8 hours"   # sessionens commits
-git diff --stat HEAD                  # omfattning
+git status --short                    # unsaved
+git log --oneline --since="8 hours"   # the session's commits
+git diff --stat HEAD                  # extent
 ```
 
-## Spara och dela
+## Save and share
 
 ```bash
-git add <sökvägar>
-git commit -m "<typ>: <session-id> — <en rad>"
+git add <paths>
+git commit -m "<type>: <session-id> — <one line>"
 git pull --rebase
 git push
 ```
 
-- `<typ>` är till exempel `wrap`, `brief`, `design` eller `fix`.
-- En skill eller ett tool committas alltid för sig: `skill(<namn>): <vad och varför>` eller `tool(<namn>): <vad och varför>`, med bara den filen och dess skript.
-- Lägg till specifika sökvägar, inte `git add -A` i blindo. Kolla `git status` först.
-- **Räkna med parallella sessioner.** Flera agenter jobbar ofta i samma repo samtidigt, särskilt där det finns en `sessions/`-mapp eller en öppen överlämning. Kolla `git reflog -5` och `git log --oneline -5` efter färska commits från en annan session innan du gör commit.
-- **Laga framåt.** Ett eget misstag rättas med en ny commit. Aldrig `reset`, `commit --amend`, kedjor av `revert` eller `checkout -- <fil>` för att ångra: en annan sessions commit eller osparade ändring kan landa sekunder före och försvinna. Fråga innan något kommando som skriver om historik.
-- **Om `pull --rebase` krockar:** stanna och visa konflikten för användaren. Lös den inte på egen hand i någon annans filer.
-- **Om `push` misslyckas:** säg det rakt ut med felmeddelandet. Påstå aldrig att något är pushat utan att ha sett det gå igenom.
-- Kvittera med commit-hash: `git log --oneline -1`.
-- **Före en granskning:** gör commit och push innan du ber en annan agent (Codex, en annan session) granska eller ta över. Den läser repot och ser inte det som bara finns lokalt.
+- `<type>` is for example `wrap`, `brief`, `design` or `fix`.
+- A skill or a tool is always committed on its own: `skill(<name>): <what and why>` or `tool(<name>): <what and why>`, with only that file and its scripts.
+- Add specific paths, never `git add -A` blindly. Check `git status` first.
+- **Expect parallel sessions.** Several agents often work in the same repo at once, especially where there is a `sessions/` folder or an open handover. Check `git reflog -5` and `git log --oneline -5` for fresh commits from another session before committing.
+- **Fix forward.** Your own mistake is corrected with a new commit. Never `reset`, `commit --amend`, chains of `revert` or `checkout -- <file>` to undo: another session's commit or unsaved change may land seconds before and be lost. Ask before any command that rewrites history.
+- **If `pull --rebase` conflicts:** stop and show the conflict to the user. Never resolve it on your own in someone else's files.
+- **If `push` fails:** say so plainly with the error message. Never claim something is pushed without having seen it go through.
+- Confirm with the commit hash: `git log --oneline -1`.
+- **Before a review:** commit and push before asking another agent (Codex, another session) to review or take over. It reads the repo and cannot see what exists only locally.
 
-## Aldrig
+## Never
 
-- `git push --force`, `git reset --hard` eller att skriva om historik som redan är pushad
-- `reset`, `commit --amend` eller `checkout -- <fil>` i ett repo där en annan session kan vara igång
-- Commit av hemligheter som `.env`, nycklar eller lösenord
+- `git push --force`, `git reset --hard` or rewriting history that is already pushed
+- `reset`, `commit --amend` or `checkout -- <file>` in a repo where another session may be running
+- Committing secrets such as `.env`, keys or passwords
