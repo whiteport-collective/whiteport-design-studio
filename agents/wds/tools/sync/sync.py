@@ -211,17 +211,17 @@ def src_pointer_skills(s):
             # WDS: sökvägar i filerna utgår från repots rot, men arbetet sker i det repo man står i
             sub = s.get("subdir", "agents")
             body = (
-                f"# {name} (från {repo.name})\n"
-                f"Läs filen {f.as_posix()} och följ instruktionerna exakt.\n"
-                f"Sökvägar som börjar med `{sub}/` läses från det repo du arbetar i om det har mappen, annars från {repo.as_posix()}. "
-                f"Relativa länkar utgår från filens mapp. Allt annat, som sessions/, users/ och projektmappar, gäller det repo du arbetar i.\n"
+                f"# {name} (from {repo.name})\n"
+                f"Read the file {f.as_posix()} and follow the instructions exactly.\n"
+                f"Paths that start with `{sub}/` are read from the repo you work in if it has the folder, else from {repo.as_posix()}. "
+                f"Relative links start from the file's folder. Everything else, such as sessions/, users/ and project folders, belongs to the repo you work in.\n"
             )
         else:
             body = (
-                f"# {name} (från {repo.name})\n"
-                f"Bas: {f.parent.as_posix()}\n"
-                f"Läs filen {f.as_posix()} och följ instruktionerna exakt. "
-                f"Lös alla relativa filreferenser mot basmappen ovan.\n"
+                f"# {name} (from {repo.name})\n"
+                f"Base: {f.parent.as_posix()}\n"
+                f"Read the file {f.as_posix()} and follow the instructions exactly. "
+                f"Resolve every relative file reference against the base folder above.\n"
             )
         if not DRY:
             (COMMANDS / f"{name}.md").write_text(body, encoding="utf-8")
