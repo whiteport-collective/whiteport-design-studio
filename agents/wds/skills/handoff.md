@@ -1,49 +1,51 @@
 ---
 name: handoff
 source: wds
-description: Lämna över en avgränsad uppgift till en annan agent eller person mitt i sessionen. Samma överlämningsfil och återupptagningskommando som wrap, men sessionen fortsätter.
+description: Hand a bounded task to another agent or person in the middle of a session. The same handover file and resume command as wrap, but the session goes on.
 used_by: [idun, saga, freya, mimir]
 tools: [wds/git]
 ---
 
-# Handoff: lämna över en uppgift
+# Handoff: hand over a task
 
-En handoff är en överlämning utan wrap. Den lämnar **en** uppgift till någon annan, och sessionen fortsätter. Allt annat följer [wrap](wrap.md), så att mottagaren tar en handoff på samma sätt som en wrap: med återupptagningskommandot.
+A handoff is a handover without a wrap. It hands **one** task to someone else, and the session goes on. Everything else follows [wrap](wrap.md), so the recipient takes a handoff the same way as a wrap: with the resume command.
 
-**Användning:** `/handoff <till> [person]`, till exempel `/handoff mimir` eller `/handoff wera camilla`.
+**Usage:** `/handoff <to> [person]`, for example `/handoff mimir` or `/handoff wera camilla`.
 
-Fråga ingenting. Ta allt ur samtalet.
+Ask nothing. Take everything from the conversation.
 
-## 1. Vem, vilken session, till vem
+## 1. Who, which session, to whom
 
-Som [wrap steg 1](wrap.md#1-vem-vilken-session-till-vem): användare, session-id, från, projektrot och sessionsmapp.
+As [wrap step 1](wrap.md#1-who-which-session-to-whom): user, session id, from, project root and sessions folder.
 
-- **Till:** agenten i argumentet. Saknas det: strategi → saga, design → freya, bygge → mimir.
-- **Person:** samma person som standard. En annan person om argumentet säger det, och `all-users` om vi inte vet vem som kör.
+- **To:** the agent in the argument. Missing: strategy → saga, design → freya, build → mimir.
+- **Person:** the same person by default. Another person when the argument says so, and `all-users` when we don't know who runs it.
 
-## 2. Överlämningen
+## 2. The handover
 
-Samma filnamn, mapp och format som [wrap steg 2](wrap.md#2-överlämningen), med `status: öppen`. `<sammandrag>` beskriver uppgiften, inte sessionen.
+The same filename, folder and format as [wrap step 2](wrap.md#the-project-part), with `status: open`. `<summary>` describes the task, not the session. The words in the file are the English ones in [i18n.yaml](../data/i18n.yaml).
 
-Innehållet gäller bara uppgiften:
+The content concerns the task alone:
 
-- **Gjort:** det som redan är klart av uppgiften, och de beslut den vilar på.
-- **Kvar:** det som återstår.
-- **Nästa:** konkreta steg i ordning, så att mottagaren kan börja direkt.
-- **Filer:** relativa länkar till allt mottagaren behöver.
+- **Done:** what is already finished of the task, and the decisions it rests on.
+- **Left:** what remains.
+- **Next:** concrete steps in order, so the recipient can start at once.
+- **Files:** relative links to everything the recipient needs.
 
-## 3. Dela
+If the task came from the session file's `## In progress`, note there that it was handed over, with a link.
 
-Spara och dela bara överlämningsfilen enligt git-toolet. Commit-meddelandet är `handoff: <session-id> → <till> — <en rad>`. Soul-filer, projektlogg och skills lämnas till wrap.
+## 3. Share
 
-## 4. Kvittens
+Save and share only the handover file per the git tool. The commit message is `handoff: <session-id> → <to> — <one line>`. Soul files, project log and skills are left to wrap.
 
-Visa mottagare och sökväg. Avsluta med återupptagningskommandot som ett eget kodblock, i samma format som [wrap steg 9](wrap.md#9-kvittens):
+## 4. Receipt
+
+Show the recipient and the path. End with the resume command as its own code block, in the same format as [wrap step 9](wrap.md#9-receipt):
 
 ````
 ```
-/<till> <repo> YYYY-MM-DD_HH-MM <sammandrag>
+/<to> <repo> YYYY-MM-DD_HH-MM <summary>
 ```
 ````
 
-Fortsätt sedan sessionen där den var.
+Then continue the session where it was.
