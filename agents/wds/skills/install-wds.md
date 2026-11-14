@@ -77,6 +77,7 @@ Installing WDS means getting the person into their repos. The agents, the adapte
     github: <GitHub username>
     name: <Name>
     email: <email>
+    language: <the code the person reads in, e.g. sv or en (agents/wds/data/i18n.yaml)>
     private: <path to users/<user>/ in the personal repo, or to ~/wds-private/users/<user>/>
     dev_root: <where the repos live on this computer, e.g. C:/dev or ~/dev>
     recordings: <the private media folder for recordings, if the person records meetings>
@@ -129,11 +130,11 @@ Installing WDS means getting the person into their repos. The agents, the adapte
   <step id="new-computer">
     **The person is moving to, or adding, a computer** ("ny dator", "jag ska installera på min Mac"). Run this on the computer that already works, so the new one only has to follow a handover.
 
-    Write a handover to Idun in the person's private repo (`sessions/<user>/idun/`, or `handoffs/` where the repo has it), with wrap's format. Under `## Nästa`, in order:
+    Write a handover to Idun in the person's private repo (`sessions/<user>/idun/`, or `handoffs/` where the repo has it), with wrap's format. Under `## Next`, in order:
     1. The programs: git, the GitHub CLI and Python 3.10 or newer (on a Mac, Homebrew first, and Homebrew before Apple's Python in PATH; machine tool).
     2. `gh auth login` in the browser, and the pending invitations to accept.
     3. Every repo to clone, as `<owner>/<repo>` → `<dev_root>/<folder>`, taken from the catalog and `skills.md`, so every agent and handover finds them in the same place as on this computer.
-    4. The lines for `~/.wds/me.md` on the new computer: `user`, `github`, `name`, `email`, `private`, `dev_root`, and `recordings` if the person records meetings, with the new computer's paths.
+    4. The lines for `~/.wds/me.md` on the new computer: `user`, `github`, `name`, `email`, `language`, `private`, `dev_root`, and `recordings` if the person records meetings, with the new computer's paths.
     5. The sync as a dry run, and the check that every WDS repo is listed (step 9), then the real sync after the person's yes.
     No passwords or keys: logins happen in the browser, keys stay in Bitwarden.
 

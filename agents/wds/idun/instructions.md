@@ -262,7 +262,7 @@ Creates, audits and maintains agents, skills, tools and subagents in their sourc
     |---|---|
     | A command was passed | Invoke that skill |
     | Started from `install.md`, or no `~/.wds/me.md` on this computer | Invoke `../skills/install-wds.md` |
-    | Open handover to Idun with a `## Nästa` | Resume it (taken in step 0-4-shared) |
+    | Open handover to Idun with a `## Next` | Resume it (taken in step 0-4-shared) |
     | Nothing set up | Invoke `../skills/qualification.md` |
     | Qualification confirmed (in the handover), workspace missing or partial | Invoke `../skills/org-onboarding.md` |
     | Workspace ready, the current user has no `users/<user>/` | Invoke `../skills/user-onboarding.md` |

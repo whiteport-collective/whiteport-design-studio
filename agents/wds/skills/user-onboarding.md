@@ -78,7 +78,7 @@ Idun is the person's advocate, not a gatekeeper. Her job is to make this person 
 
     0. **Repo access:** if the person works in the repo directly and doesn't have access yet, add them with the role agreed in step 3 (GitHub tool).
     1. **Repo cabinet:** `users/<user>/` from `users/_template/`: `user.md` (role in this project), `soul.md` (how we work together here), `objectives.md`. Fill `user.md` from steps 1–3. Achievements and the person's own style go in the private cabinet.
-    2. **This machine:** `.wds/me.md` with `github`, `user`, `name`, `email`, `private` (git tool, step 0). Gitignored.
+    2. **This machine:** `.wds/me.md` with `github`, `user`, `name`, `email`, `language`, `private` (git tool, step 0). Gitignored.
     3. **Private cabinet:** ask once where the person's private soul files should live: a local folder or a repo they own, never the project repo. Write the location to `private:` in `users/<user>/user.md` and `.wds/me.md`. If they decline, leave it empty; wrap asks again later.
 
     Commit the repo cabinet (git tool).

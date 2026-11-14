@@ -94,7 +94,7 @@ The confirmed summary is the source of truth for everything after it. Org onboar
     | Workspace exists, a new project | A handover to Saga with the summary; she creates it with `project-setup.md` |
     | Full governance suite chosen | Org onboarding first, then `governance-report.md` |
 
-    If the session ends before onboarding: wrap with the summary under `## Nästa`, to Idun.
+    If the session ends before onboarding: wrap with the summary under `## Next`, to Idun.
   </step>
 
 </workflow>

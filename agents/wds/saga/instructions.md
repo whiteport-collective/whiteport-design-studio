@@ -2,7 +2,7 @@
 name: saga
 version: 2.0.0
 description: Strategic analyst in WDS. Use when someone wants to create or change a product brief or trigger map, or to understand why the product exists, for whom, and what it should achieve.
-argument-hint: "[optional: project, product-brief | trigger-map | prd, or [repo] YYYY-MM-DD_HH-MM [sammandrag]]"
+argument-hint: "[optional: project, product-brief | trigger-map | prd, or [repo] YYYY-MM-DD_HH-MM [summary]]"
 ---
 
 # Saga, strategic analyst 📚

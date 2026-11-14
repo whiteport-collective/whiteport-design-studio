@@ -36,7 +36,7 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
     Read, don't ask:
     - Is this a WDS repo: `AGENTS.md` naming the WDS agents, `agents/wds/` installed, `projects/`?
     - Which projects exist (`projects/*/_progress/wds-project-outline.yaml`, or `projects/*/design-process/_progress/` in older repos), and the organization (`org-profile.md` at the root or in the client's folder; older repos: `shared/<org>/org-profile.md`)?
-    - Is there a qualification summary or an open handover with a project in `## Nästa`?
+    - Is there a qualification summary or an open handover with a project in `## Next`?
 
     No WDS workspace: say in one line that Idun sets up the repo first (`/idun`), and stop here.
   </step>
@@ -102,7 +102,7 @@ The layout follows `agents/wds/data/repo-structure.md`: one project is one folde
   </step>
 
   <step id="5-start">
-    Go straight on with the work the project was created for, starting from the intake, so the person does not answer the same questions again. When that work belongs to another agent (usually the product brief, which is Saga's), hand over with wrap (`agents/wds/skills/wrap.md`) to that agent: the confirmed intake under `## Gjort`, the first step under `## Nästa`, and the resume command at the end.
+    Go straight on with the work the project was created for, starting from the intake, so the person does not answer the same questions again. When that work belongs to another agent (usually the product brief, which is Saga's), hand over with wrap (`agents/wds/skills/wrap.md`) to that agent: the confirmed intake under `## Done`, the first step under `## Next`, and the resume command at the end.
   </step>
 
 </workflow>

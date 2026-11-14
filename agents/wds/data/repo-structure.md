@@ -83,7 +83,7 @@ governance/
 - Där Idun inte har satt upp governance finns ingen `governance/`-mapp.
 
 - Säger två nivåer olika gäller den strängare. En lägre nivå får skärpa men aldrig mildra en högre.
-- Agenter rapporterar incidenter och föreslår nya punkter vid varje wrap ([wrap steg 6](../skills/wrap.md#6-gc-incidenter-och-förslag)). De får skärpa men aldrig mildra eller vidga sitt eget mandat.
+- Agenter rapporterar incidenter och föreslår nya punkter vid varje wrap ([wrap steg 6](../skills/wrap.md#6-gc-incidents-and-proposals)). De får skärpa men aldrig mildra eller vidga sitt eget mandat.
 
 ## Uppgifter
 

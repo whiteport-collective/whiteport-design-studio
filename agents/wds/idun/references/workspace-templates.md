@@ -134,6 +134,7 @@ github: <GitHubUsername>
 user: <githubusername in lowercase>
 name: <Full Name>
 email: <email>
+language: <the code the person reads in, e.g. sv or en (agents/wds/data/i18n.yaml)>
 private: <path on this machine to the private cabinet, or empty>
 agent_space_url:        # optional, only if the workspace uses Agent Space
 agent_space_bitwarden:  # optional, the Bitwarden item that holds the key

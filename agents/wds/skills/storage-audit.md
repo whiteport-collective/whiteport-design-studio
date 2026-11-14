@@ -34,7 +34,7 @@ Read, don't guess. For each repo: `users/<user>/`, `sessions/<user>/`, and the d
 **The wraps follow the standard** (wrap step 2). For every session since the last audit:
 - the work part in each repo the session touched, complete enough to continue from alone, with no link to or mention of the personal part
 - the personal part in the private cabinet, with the same session id, linking to every work part and copying nothing from them
-- the handover statuses: a handover that is `tagen` with no later session, or `öppen` for weeks, is a thread that stopped
+- the handover statuses: a handover that is `taken` with no later session, or `open` for weeks (or the older `tagen` and `öppen`, see `agents/wds/data/i18n.yaml`), is a thread that stopped
 
 A session that is missing a part, or has the wrong content in one, is split or completed the same way as above.
 

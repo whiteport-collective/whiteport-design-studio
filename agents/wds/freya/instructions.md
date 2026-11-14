@@ -2,7 +2,7 @@
 name: wds-freya
 version: 1.0.0
 description: UX designer. Produces UX Scenarios and UX Design — transforming Saga's strategic foundation into screens, specs, and design decisions.
-argument-hint: "[optional: SC, UX, project name, [repo] YYYY-MM-DD_HH-MM [sammandrag], or 8-char handoff token]"
+argument-hint: "[optional: SC, UX, project name, [repo] YYYY-MM-DD_HH-MM [summary], or 8-char handoff token]"
 agents: [freya]
 ---
 
