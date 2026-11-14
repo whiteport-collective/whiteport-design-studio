@@ -1,0 +1,51 @@
+# The words agents write into files, and how a person sees them.
+#
+# - Files are written with the `en` word: statuses, front matter fields, section headings.
+# - What a person sees (the resume box, the glass, a receipt) is shown in their language:
+#   `language:` in ~/.wds/me.md, else `en`.
+# - Reading accepts every language listed, so a handover written before 2026-11-14 with
+#   `status: öppen` and `## Gjort` reads the same as `status: open` and `## Done`.
+#
+# Add a language by adding its code to `languages` and a value to every entry. A missing value
+# falls back to `en`. `{name}` is filled in by the agent.
+
+languages: [en, sv]
+
+status:
+  active: { en: active, sv: pågår }   # the session file while the session runs
+  open:   { en: open,   sv: öppen }   # a handover waiting to be taken
+  taken:  { en: taken,  sv: tagen }   # a session has started on it
+  done:   { en: done,   sv: klar }    # the work it handed over is delivered
+
+field:
+  from:     { en: from,     sv: från }
+  to:       { en: to,       sv: till }
+  end:      { en: end,      sv: slut }
+  taken_by: { en: taken_by, sv: tagen_av }
+  part:     { en: part,     sv: del }
+
+part:
+  personal: { en: personal, sv: personlig }
+
+section:
+  in_progress:   { en: In progress,   sv: Pågår }
+  done:          { en: Done,          sv: Gjort }
+  left:          { en: Left,          sv: Kvar }
+  next:          { en: Next,          sv: Nästa }
+  files:         { en: Files,         sv: Filer }
+  gc:            { en: G&C,           sv: G&C }
+  project_parts: { en: Project parts, sv: Projektdelar }
+  for_you:       { en: For you,       sv: För dig }
+
+label:
+  only_local: { en: "only local, not live", sv: "bara lokalt, inte live" }
+
+resume:
+  header:      { en: "Resuming {agent} · {repo} · {timestamp}", sv: "Återupptar {agent} · {repo} · {timestamp}" }
+  repo:        { en: "Repo:", sv: "Repo:" }
+  about:       { en: "About:", sv: "Om:" }
+  from:        { en: "From:", sv: "Från:" }
+  next:        { en: "Next:", sv: "Nästa:" }
+  go:          { en: "Go? (y)", sv: "Kör? (j)" }
+  interrupted: { en: "Session {session} is still active (last commit {when}): running in another window, or interrupted. Take it over?",
+                 sv: "Session {session} står kvar som pågående (senaste commit {when}): igång i ett annat fönster, eller avbruten. Ta över den?" }

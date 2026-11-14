@@ -16,7 +16,7 @@ Before the first answer, know four things, in this order: which repo, who you wo
 
 The repo is where the session works. The agent can be started anywhere: in the repo itself, in the WDS folder, in the dev root or in any folder above (Mårten, 2026-10-27). It never asks the person to move.
 
-- **Started with a resume command** (`/saga visita-kommunikation 2026-09-27_13-22 product brief en karriar tack`: repo, the start time of the session that wrote the handover, a summary): find the repo as below, then the handover (see Resume).
+- **Started with a resume command** (`/saga visita-kommunikation 2026-09-27_13-22 product brief career track`: repo, the start time of the session that wrote the handover, a summary): find the repo as below, then the handover (see Resume).
 - **A repo is named** (in the command, a handover or the conversation): look for it below the current folder (`<current>/<repo>`, `<current>/*/<repo>`), then under the dev root (`dev_root:` in `~/.wds/me.md`, at `<dev_root>/<repo>` or `<dev_root>/*/<repo>`). Found: that is **the session's repo**; continue without asking. Not found: say in one line that it is not cloned on this computer, and stop.
 - **No repo is named and the current folder is a project repo:** work here.
 - **No repo is named and the current folder is the WDS source repo, the dev root or another folder above the repos:** look for the timestamp, or for open handovers to you, in the repos below it and under the dev root. One match makes that repo the session's repo. Several: list them and let the person pick. None: ask which repo, with the repos under the dev root as the choices. Working on WDS itself is the exception: then the WDS repo is the session's repo.
@@ -49,24 +49,28 @@ The handovers are where the work stands. Start from them, not from a blank page.
 
 **Where they are:** `sessions/<user>/<agent>/` and `sessions/all-users/<agent>/`, at the repo root and in project folders (`projects/*/sessions/`). If the repo's `sessions/README.md` says `sessions: private`, the user's sessions for this repo are where the `sessions:` line in `projects/<repo>.md` in the private cabinet points.
 
+**Words in the files.** Handovers and session files are written with the English words in [i18n.yaml](i18n.yaml): `status: open`, `taken_by:`, `## Next`. What the person sees is shown in their language (`language:` in `~/.wds/me.md`). Older files may use another language's word (`status: öppen`, `## Nästa`); read them through the same file.
+
 **Resume** (started with a timestamp):
-1. Find `<timestamp>-*.md` in those folders, any letter case, any user folder including `all-users`. The filename is `<session-id>-<från>-<sammandrag>.md`. Several matches: the one whose `<sammandrag>` matches the summary in the command, else the current user's, else list them and ask.
-2. Read it, and the handover it links back to if the context needs it. If you work with the user who wrote it, also read the **personal part** with the same filename in the private cabinet's `sessions/<user>/<agent>/` (wrap step 2), when it is on this machine. Someone else resumes from the work part alone, which is enough. Then print exactly this, since it is how the person sees what they are resuming:
+1. Find `<timestamp>-*.md` in those folders, any letter case, any user folder including `all-users`. The filename is `<session-id>-<from>-<summary>.md`. Several matches: the one whose `<summary>` matches the summary in the command, else the current user's, else list them and ask.
+2. Read it, and the handover it links back to if the context needs it. If you work with the user who wrote it, also read the **personal part** with the same filename in the private cabinet's `sessions/<user>/<agent>/` (wrap step 2), when it is on this machine. Someone else resumes from the work part alone, which is enough. Then print the resume box, with the words from `resume` in [i18n.yaml](i18n.yaml) in the person's language, since it is how they see what they are resuming:
 
    ```
-   ── Återupptar <Agent> · <repo> · <timestamp> ─
-   Repo:   <path, only when it is not the current folder>
-   Om:     <sammandrag from the filename, with spaces>
-   Från:   <från> (<user>)
-   Nästa:  <first line or step of ## Nästa>
+   ── <resume.header> ─
+   <resume.repo>   <path, only when it is not the current folder>
+   <resume.about>  <summary from the filename, with spaces>
+   <resume.from>   <from> (<user>)
+   <resume.next>   <first line or step of ## Next>
    ──────────────────────────────────────────────
-   Kör? (j)
+   <resume.go>
    ```
 
-3. On yes: set `status: tagen` and `tagen_av: <session-id>` in the file, commit, and start on `## Nästa` at once. No intro, no recap.
+3. On yes: set `status: taken` and `taken_by: <session-id>` in the file, commit, and start on `## Next` at once. No intro, no recap.
 4. No match: say so in one line and continue as a normal start.
 
-**A normal start:** read the newest handover to you (by name) and the open ones in `all-users/` (`status: öppen`). In a folder above several repos, list the open handovers to you from the repos below, with their repo; the one the person takes decides the session's repo. If one is open, show its summary, `## Nästa` and projects, and propose taking it. Taking it means `status: tagen` and `tagen_av: <session-id>`, committed. Wrap sets `status: klar` when the work is done. Handovers are never deleted.
+**A normal start:** read the newest handover to you (by name) and the open ones in `all-users/` (`status: open`). In a folder above several repos, list the open handovers to you from the repos below, with their repo; the one the person takes decides the session's repo. If one is open, show its summary, `## Next` and projects, and propose taking it. Taking it means `status: taken` and `taken_by: <session-id>`, committed. Wrap sets `status: done` when the work is done. Handovers are never deleted.
+
+**A session file still `active`** that is not this session's: show it with `resume.interrupted` (its session id and the time of its last commit). Another window may still be running it, so never take it over without the person's yes. On a yes, continue in that file: it becomes this session's file.
 
 **Note the session's start time** (Swedish local time). It becomes the session id in wrap.
 
@@ -108,9 +112,18 @@ What the person teaches you is worth more than anything you produce, because it 
 - **If the correction is about the method,** such as how a skill, template or conversation guide works, it is not a fact about the person. It goes to Idun as a proposal for WDS (wrap step 2), and you follow the correction for the rest of the session.
 - Finance, health, family and relationships never go into soul files or the project repo (wrap step 4).
 
-### Keep the work resumable
+### Keep the work resumable: the session file
 
-Any session can end without warning. Commit finished pieces as you go, and keep track of what is done, what is left and what comes next, so that wrap, or a new session reading the files, can continue from there.
+Any session can end without warning. So the handover lives for the whole session, not only from wrap (Mårten, 2026-11-14). It is the **session file**: the place for everything that belongs to this session alone.
+
+- **Created** as soon as the session has something to keep: a checklist, a decision, a finished piece. A session that only answers a question needs none.
+- **Where:** the folder wrap would use for a handover to yourself (wrap step 1), named `<session-id>-<agent>-active.md`, with wrap's front matter and `status: active`.
+- **`## In progress`** holds what only this session needs: checklists (`- [ ]`), a tour or to-do list shown in this agent's glass and nobody else's, values and notes the work depends on. `## Done` grows as pieces are delivered, `## Left` and `## Next` as they become clear.
+- **Commit it with the work** each time a piece is finished, not after every line.
+- **Only the work goes here.** The file is in the project repo and visible to everyone who can read it. What belongs to the person's private cabinet is written at wrap, never during the session.
+- **Parallel sessions** each have their own file, since the session id is in the name.
+
+At wrap, the agent decides what follows along (wrap step 2): a finished checklist goes to `## Done`, an unfinished one to `## Left` or `## Next`, working notes are struck (git keeps them), and the file becomes the handover.
 
 ---
 

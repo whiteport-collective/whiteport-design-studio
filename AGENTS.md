@@ -11,6 +11,7 @@ WDS is its own framework, fully independent of BMad. Mårten Angner approves eve
 ## Rules
 
 - **All folder and file names in lowercase.**
+- **Agent files are written in English**: instructions, skills, tools, templates, adapters, and the words agents write into handovers (statuses, fields, headings). What a person sees is shown in their language through [agents/wds/data/i18n.yaml](agents/wds/data/i18n.yaml), with `language:` in `~/.wds/me.md`. Text written for a person (a handover's summary for them, a quote) follows that person's language (Mårten, 2026-11-14).
 - **A capability has six parts:** agent persona (who), Open Glass (how it looks and feels), skill (what and why), tools (how), templates (what good looks like) and guardrails (what the agent should, may and must not do). Tools connect to apps, the programs and services we link together. Commands and API calls belong in a tool, never in a skill or instructions file. See [agents/wds/README.md](agents/wds/README.md#capabilities).
 - **No secrets in any file.** All keys live in Bitwarden and are fetched at runtime with `bw get password "<item>"`. Files may name the Bitwarden item, never the value.
 - **Paths are relative to the repo root** (`agents/wds/skills/...`), so they work unchanged in project repos.
