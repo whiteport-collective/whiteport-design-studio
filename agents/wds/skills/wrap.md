@@ -1,245 +1,255 @@
 ---
 name: wrap
 source: wds
-description: Avsluta en session. Skriver överlämningen i två delar, projektdelen i repot och den personliga delen i det privata skåpet (till samma eller en annan agent), jämför sessionen med alla soul-filer och uppdaterar dem i repot och privat, för skill-ändringar till källrepot och katalogen, rapporterar incidenter och föreslår G&C-punkter, uppdaterar projektloggen och delar arbetet.
+description: End a session. Turns the session file into the handover, in two parts (the project part in the repo, the personal part in the private cabinet), to the same or another agent; compares the session with every soul file and updates them in the repo and privately; moves skill changes to their source repo and the catalog; reports incidents and proposes G&C points; updates the project log and shares the work.
 used_by: [idun, saga, freya, mimir]
 tools: [wds/git]
 ---
 
-# Wrap: avsluta sessionen
+# Wrap: end the session
 
-Agentoberoende. Skillen beskriver *vad* som ska göras. Hur git används står i [git-toolet](../tools/git.md).
+Agent-independent. The skill says *what* to do. How git is used is in the [git tool](../tools/git.md). The words written into files (statuses, fields, headings) are the English ones in [i18n.yaml](../data/i18n.yaml); the text written for the person follows their language.
 
-**Wrap frågar inte vad som hände.** Agenten var med i samtalet och tar vad som gjordes, vad som återstår och nästa steg ur samtalet och git. De enda frågorna är var sessionerna och det privata skåpet ska ligga, och bara när svaret saknas (steg 1 och 4).
+**Wrap does not ask what happened.** The agent was in the conversation and takes what was done, what is left and the next step from the conversation, the session file and git. The only questions are where the sessions and the private cabinet should live, and only when the answer is missing (steps 1 and 4).
 
-**Arbetet stannar hos arbetet, personen stannar hos personen** (principen P2 i `governance/wds/principles.md`, Mårten 2026-11-01). Allt om arbetet skrivs fritt i repot: beslut, siffror, kunder, kod, vad som är kvar och hur teamet jobbar tillsammans. Allt om personen skrivs fritt i det privata skåpet: hur hen vill jobba, vad hen lärde sig, hur det gick och vad hen levererade. Ingen av delarna behöver censureras, och ingen kopierar från den andra. Det privata länkar till arbetet, så att inget av organisationens följer med en person som stängs av från ett repo.
+**The work stays with the work, the person stays with the person** (principle P2 in `governance/wds/principles.md`, Mårten 2026-11-01). Everything about the work is written freely in the repo: decisions, figures, clients, code, what is left and how the team works together. Everything about the person is written freely in the private cabinet: how they like to work, what they learned, how it went and what they delivered. Neither part needs censoring, and neither copies from the other. The private part links to the work, so nothing of the organisation's follows a person who is removed from a repo.
 
-## 1. Vem, vilken session, till vem
+## 1. Who, which session, to whom
 
-- **Användare:** identifiera enligt git-toolet. Det ger `<användare>`, alltså GitHub-användarnamnet med små bokstäver.
-- **Session-id:** `YYYY-MM-DD_HH-MM-<användare>`, med svensk lokaltid vid **sessionens start**. Agenten noterade tiden vid start (se AGENTS.md). Om den inte gjorde det: använd tiden för sessionens första commit, och annars tiden nu.
-- **Från:** den agent som var aktiv (saga, freya, mimir, ivonne …), oavsett modell. Utan agent: modellnamnet med små bokstäver och bindestreck, till exempel `claude-opus-5-5`.
-- **Till:** vem som ska ta nästa steg. Oftast samma agent, och då är wrapen en överlämning till sig själv. Hör nästa steg till en annan agent blir det den agenten.
-- **Vad:** ta reda på vad som ändrats enligt git-toolet. Med det och samtalet framför dig: vilka projekt rördes, vad blev klart och vad återstår?
-- **Projektrot:** mappen där projektet bor. Det är repots rot, utom när repot har flera projekt. Då är det projektets egen mapp, till exempel `projects/<projekt>/`, och repots `AGENTS.md` säger vilken. Rörde sessionen inget enskilt projekt: repots rot.
-- **Sessionsmapp:** där överlämningarna sparas. Normalt `<projektrot>/sessions/`. Repot kan bestämma annat i `<projektrot>/sessions/README.md`:
-  - `sessions: private` betyder att ingen sparar sessioner i repot, vilket passar ett publikt repo som många arbetar i. Varje person väljer själv en plats i sitt privata skåp. Platsen står i skåpets `projects/<repo>.md` på raden `sessions:`, som en länk relativt den filen. Det gäller bara repon vars innehåll redan är publikt; ett repo med en organisations interna material behåller projektdelen i repot.
-  - Saknas raden, fråga personen en gång var sessionerna för det här repot ska ligga, och skriv svaret där. Saknas skåpet, eller avstår personen, visas överlämningen bara i chatten och sparas inte.
-- **Privat sessionsmapp:** där den personliga delen sparas, `sessions/` i roten av det repo eller den lokala mapp där det privata skåpet (`private:`) ligger.
+- **User:** identify per the git tool. That gives `<user>`, the GitHub username in lowercase.
+- **Session id:** `YYYY-MM-DD_HH-MM-<user>`, in Swedish local time at the **start of the session**. The agent noted the time at start ([session.md](../data/session.md)). If it did not: the time of the session's first commit, else the time now.
+- **From:** the agent that was active (saga, freya, mimir, ivonne …), whatever the model. Without an agent: the model name in lowercase with hyphens, for example `claude-opus-5-5`.
+- **To:** who takes the next step. Usually the same agent, and then the wrap is a handover to itself. When the next step belongs to another agent, it is that agent.
+- **What:** find what changed per the git tool. With that, the session file and the conversation: which projects were touched, what got done and what is left?
+- **Project root:** the folder where the project lives. The repo root, except when the repo has several projects. Then it is the project's own folder, for example `projects/<project>/`, and the repo's `AGENTS.md` says which. A session that touched no single project: the repo root.
+- **Sessions folder:** where the handovers are kept. Normally `<project root>/sessions/`. The repo can decide otherwise in `<project root>/sessions/README.md`:
+  - `sessions: private` means nobody keeps sessions in the repo, which suits a public repo many work in. Each person picks a place in their private cabinet. The place is in the cabinet's `projects/<repo>.md` on the line `sessions:`, as a link relative to that file. It applies only to repos whose content is already public; a repo with an organisation's internal material keeps the project part in the repo.
+  - The line is missing: ask the person once where the sessions for this repo should live, and write the answer there. No cabinet, or the person declines: the handover is shown in the chat only and not saved.
+- **Private sessions folder:** where the personal part is kept, `sessions/` at the root of the repo or local folder where the private cabinet (`private:`) lives.
 
-## 2. Överlämningen, i två delar
+## 2. The handover, in two parts
 
-Varje wrap är en överlämning i två delar med samma session-id:
+Every wrap is a handover in two parts with the same session id:
 
-- **Projektdelen** i repot: allt om arbetet, så fullständigt att vem som helst kan fortsätta från den ensam. Den nämner aldrig att det finns en personlig del och länkar aldrig dit.
-- **Den personliga delen** i den privata sessionsmappen (steg 1): det som bara rör personen, och en länk till varje projektdel. Den kopierar inget ur projektdelen.
+- **The project part** in the repo: everything about the work, complete enough for anyone to continue from it alone. It never mentions that a personal part exists and never links to it.
+- **The personal part** in the private sessions folder (step 1): what concerns only the person, and a link to each project part. It copies nothing from the project part.
 
-Testet för varje rad: behöver någon annan det här för att fortsätta? Då hör det till projektdelen. Finns inget privat skåp skrivs bara projektdelen.
+The test for each line: does someone else need this to continue? Then it belongs in the project part. Without a private cabinet only the project part is written.
 
-### Projektdelen
+### From the session file
 
-Mappen är **mottagarens**. Filnamnet är `<session-id>-<från>-<sammandrag>.md`:
+The session file (`<session-id>-<agent>-active.md`, [session.md](../data/session.md), Keep the work resumable) becomes the project part. No session file: write the project part from scratch in the format below.
 
-- `<session-id>` = `YYYY-MM-DD_HH-MM-<användare>`, alltså tidsstämpel och vem som körde.
-- `<från>` = agenten som skrev.
-- `<sammandrag>` = vad sessionen gjorde, 3–6 ord, små bokstäver, bindestreck, å/ä → a och ö → o. Exempel: `2026-09-27_13-22-martenangner-ivonne-product-brief-en-karriar-tack.md`.
+Go through `## In progress` and decide what follows along:
+- **Finished** (a checklist all ticked, a tour walked through): one line under `## Done`.
+- **To continue** (an unfinished checklist, an open tour, a value the next session needs): under `## Left` or `## Next`, the checklist itself when the next session works from it.
+- **Working notes** that served only this session: struck. Git keeps them.
 
-Filnamnet börjar med tidsstämpeln och slutar med sammandraget. Återupptagningskommandot (steg 9) hittar filen på tidsstämpeln och visar sammandraget, så att man ser vad överlämningen handlar om innan man kör den.
+Then remove `## In progress`, set `status: open`, and rename the file (`git mv`) to the name below. When the next step belongs to another agent, it moves to that agent's folder.
 
-| Mottagare | Sökväg |
+### The project part
+
+The folder is the **recipient's**. The filename is `<session-id>-<from>-<summary>.md`:
+
+- `<session-id>` = `YYYY-MM-DD_HH-MM-<user>`: the timestamp and who ran it.
+- `<from>` = the agent that wrote it.
+- `<summary>` = what the session did, 3 to 6 words, lowercase, hyphens, å/ä → a and ö → o. Example: `2026-09-27_13-22-martenangner-ivonne-product-brief-career-track.md`.
+
+The filename starts with the timestamp and ends with the summary. The resume command (step 9) finds the file by its timestamp and shows the summary, so the person sees what the handover is about before running it.
+
+| Recipient | Path |
 |---|---|
-| Samma person, samma agent (vanlig wrap) | `<sessionsmapp>/<användare>/<från>/<session-id>-<från>-<sammandrag>.md` |
-| Samma person, annan agent | `<sessionsmapp>/<användare>/<till>/<session-id>-<från>-<sammandrag>.md` |
-| Känd annan person | `<sessionsmapp>/<person>/<till>/<session-id>-<från>-<sammandrag>.md` |
-| Vi vet inte vem som kör | `<sessionsmapp>/all-users/<till>/<session-id>-<från>-<sammandrag>.md` |
-| Förslag till WDS-metoden (steg 4 och 6) | Idun hos den som förvaltar WDS, se nedan |
+| Same person, same agent (a usual wrap) | `<sessions folder>/<user>/<from>/<session-id>-<from>-<summary>.md` |
+| Same person, another agent | `<sessions folder>/<user>/<to>/<session-id>-<from>-<summary>.md` |
+| Another known person | `<sessions folder>/<person>/<to>/<session-id>-<from>-<summary>.md` |
+| We don't know who runs it | `<sessions folder>/all-users/<to>/<session-id>-<from>-<summary>.md` |
+| A proposal for the WDS method (steps 4 and 6) | Idun at whoever maintains WDS, see below |
 
-**Förslag till WDS-metoden** gäller agenterna, deras skills och tools och WDS standardpolicy. De ändras bara i WDS källrepo, whiteport-design-studio, och Mårten Angner godkänner. Förslaget blir en egen överlämning till Idun, som samlar in förslagen från alla kunders wraps och för dem vidare till källrepot:
-- **Den som förvaltar WDS kör wrapen:** i den egna sessionsmappen för WDS källrepo, `<sessionsmapp>/<användare>/idun/`. Källrepots `sessions/README.md` avgör var mappen ligger; säger den `sessions: private` är det personens privata sessionsmapp för whiteport-design-studio.
-- **Någon annan kör wrapen:** i WDS källrepo `sessions/all-users/idun/` om repot sparar sessioner och agenten får skriva där. Annars i det här repots `<sessionsmapp>/all-users/idun/`, där Idun hämtar den när hon går igenom kundens repon.
-- Skriv bara det som tål att läsas av alla i projektet: bristen, vad som hände och förslaget, med länk till incidenten om det finns en.
+**Proposals for the WDS method** concern the agents, their skills and tools, and the WDS default policy. They change only in the WDS source repo, whiteport-design-studio, and Mårten Angner approves. The proposal becomes its own handover to Idun, who gathers the proposals from every client's wraps and takes them to the source repo:
+- **Whoever maintains WDS runs the wrap:** in their own sessions folder for the WDS source repo, `<sessions folder>/<user>/idun/`. The source repo's `sessions/README.md` decides where it is; if it says `sessions: private`, it is the person's private sessions folder for whiteport-design-studio.
+- **Someone else runs the wrap:** in the WDS source repo's `sessions/all-users/idun/` if the repo keeps sessions and the agent may write there. Otherwise in this repo's `<sessions folder>/all-users/idun/`, where Idun picks it up when she goes through the client's repos.
+- Write only what everyone in the project can read: the gap, what happened and the proposal, with a link to the incident if there is one.
 
 ```markdown
 ---
-session: YYYY-MM-DD_HH-MM-<användare>
-start: YYYY-MM-DDTHH:MM+02:00
-slut: YYYY-MM-DDTHH:MM+02:00
-user: <användare>
-från: <agent eller modell>
-till: <agent eller modell>
-model: <modell-id>
+session: YYYY-MM-DD_HH-MM-<user>
+start: YYYY-MM-DDTHH:MM+01:00
+end: YYYY-MM-DDTHH:MM+01:00
+user: <user>
+from: <agent or model>
+to: <agent or model>
+model: <model id>
 tool: <claude|copilot|codex|...>
-projects: [<projekt>, ...]
+projects: [<project>, ...]
 repos: [<repo>, ...]
-status: öppen
-tagen_av:
+status: open
+taken_by:
 ---
 
-## Gjort
+## Done
 - ...
 
-## Kvar
+## Left
 - ...
 
-## Nästa
-Konkreta steg i ordning för mottagaren.
+## Next
+Concrete steps in order for the recipient.
 
-## Filer
-- [relativ/sökväg](../../../relativ/sökväg)
+## Files
+- [relative/path](../../../relative/path)
 ```
 
-- Håll den kort. Den ska kunna läsas på en minut. `projects: []` om sessionen inte rörde något specifikt projekt.
-- **Gjort betyder levererat.** Under `## Gjort` står bara det som mottagaren faktiskt har fått: publicerat på live och kontrollerat i webbläsaren, skickat eller godkänt. Det som bara finns lokalt, i ett utkast eller i en databas som ingen ser, hör till `## Kvar` och märks "bara lokalt, inte live" med vad som stoppar det. Ett uppdrag med sådant kvar får inte `status: klar`.
-- **Till en annan agent:** skriv även en kort wrap till dig själv om du har egna trådar kvar, och länka överlämningen därifrån.
-- **Status:** mottagaren sätter `status: tagen` och `tagen_av: <session-id>` när hen börjar (se AGENTS.md, sessionsstart). Tog den här sessionen en överlämning: sätt `status: klar` i den filen om uppdraget är gjort.
-- **Överlämningar raderas aldrig.** `sessions/all-users/` är neutral och har inget användar-id. Vem som körde framgår av sessionen när den tas (`tagen_av: <session-id>`).
-- **Skriva i någon annans mapp:** det enda som är tillåtet är att lägga en *ny* fil i deras `sessions/<person>/<agent>/`.
+- Keep it short. It should read in a minute. `projects: []` when the session touched no specific project.
+- **Done means delivered.** Under `## Done` goes only what the recipient actually has: published live and checked in the browser, sent or approved. What exists only locally, in a draft or in a database nobody sees, goes under `## Left`, marked with `label.only_local` and what stops it. An assignment with such things left never gets `status: done`.
+- **To another agent:** also write a short wrap to yourself if you have threads of your own left, and link the handover from there.
+- **Status:** the recipient sets `status: taken` and `taken_by: <session-id>` when they start ([session.md](../data/session.md), What is waiting). If this session took a handover: set `status: done` in that file when the assignment is done.
+- **Handovers are never deleted.** `sessions/all-users/` is neutral and has no user id. Who ran it shows from the session that takes it (`taken_by: <session-id>`).
+- **Writing in someone else's folder:** the only thing allowed is adding a *new* file in their `sessions/<person>/<agent>/`.
 
-### Den personliga delen
+### The personal part
 
-I `<privat sessionsmapp>/<användare>/<till>/`, med samma filnamn som projektdelen. Rörde sessionen flera repon får den ett sammandrag för hela sessionen. En personlig del per session, hur många repon den än rörde.
+In `<private sessions folder>/<user>/<to>/`, with the same filename as the project part. When the session touched several repos it gets one summary for the whole session. One personal part per session, however many repos it touched.
 
 ```markdown
 ---
-session: YYYY-MM-DD_HH-MM-<användare>
-user: <användare>
-från: <agent eller modell>
-till: <agent eller modell>
-del: personlig
+session: YYYY-MM-DD_HH-MM-<user>
+user: <user>
+from: <agent or model>
+to: <agent or model>
+part: personal
 repos: [<repo>, ...]
-status: öppen
-tagen_av:
+status: open
+taken_by:
 ---
 
-## Projektdelar
-- <repo>: `sessions/<användare>/<till>/<filnamn>.md`
+## Project parts
+- <repo>: `sessions/<user>/<to>/<filename>.md`
 
-## För dig
-Hur det gick, vad som skavde, vad du lärde dig, hur du lät och vad som gav energi. Fritt och utan censur, men aldrig organisationens information.
+## For you
+How it went, what chafed, what you learned, how you sounded and what gave energy. Free and uncensored, but never the organisation's information.
 
-## Nästa
-Bara det som är ditt, utöver projektdelarnas Nästa: trådar i andra repon, sådant du själv vill göra.
+## Next
+Only what is yours, beyond the project parts' Next: threads in other repos, things you want to do yourself.
 ```
 
-- **Vad som får stå:** kundens och projektets namn, vad som levererades, hur det kändes och vad du lärde dig. **Inte:** siffror, kunddata, strategi, kod, beslut eller kopior ur projektdelen (`governance/wds/data.md`, Shared and private).
-- **Ekonomi, hälsa och familj** går fortfarande till personens egen agent (steg 4), inte hit.
-- Ingenting nytt för personen: skriv ändå delen med länkarna, så att sessionen finns i personens historia.
+- **What may be written:** the client's and project's name, what was delivered, how it felt and what you learned. **Not:** figures, client data, strategy, code, decisions or copies from the project part (`governance/wds/data.md`, Shared and private).
+- **Finance, health and family** still go to the person's own agent (step 4), not here.
+- Nothing new for the person: still write the part with the links, so the session is in the person's history.
 
-## 3. Projektloggen: teamets gemensamma tidslinje
+## 3. The project log: the team's shared timeline
 
-För varje projekt som rördes: lägg en post i projektets designlogg. Den ligger i projektroten, eller i mappen ovanför sessionsmappen när sessionerna sparas privat. Ta den som finns av `_progress/00-design-log.md`, `design-process/_progress/00-design-log.md`, `00-design-log.md` och `design-log.md`. Har loggen en `## Log`-rubrik läggs posten överst under den, annars överst i filen, med samma rubriknivå som posterna som redan finns. Saknas loggen: hoppa över steget.
+For each project touched: add an entry to the project's design log. It is in the project root, or in the folder above the sessions folder when sessions are kept privately. Take whichever exists of `_progress/00-design-log.md`, `design-process/_progress/00-design-log.md`, `00-design-log.md` and `design-log.md`. If the log has a `## Log` heading the entry goes at the top under it, else at the top of the file, at the same heading level as the entries already there. No log: skip the step.
 
 ```markdown
-### YYYY-MM-DD_HH-MM-<användare> (<från> → <till>)
-- En till tre punkter om vad som hände i projektet. [Överlämning](<relativ sökväg till överlämningen>)
+### YYYY-MM-DD_HH-MM-<user> (<from> → <to>)
+- One to three points on what happened in the project. [Handover](<relative path to the handover>)
 ```
 
-**Mappresentationerna.** För varje WDS-mapp i projektet som sessionen ändrade (`A-Product-Brief/` till `E-Development/`): uppdatera mappens `presentation.md` så att den visar mappen som den står efter sessionen, rendera den och ta med den i commiten. Hur och vad: [folder-presentation](folder-presentation/SKILL.md). Har mappen ingen presentation än men fick sitt första riktiga innehåll: skapa den.
+**The folder presentations.** For each WDS folder in the project the session changed (`A-Product-Brief/` to `E-Development/`): update the folder's `presentation.md` so it shows the folder as it stands after the session, render it and include it in the commit. How and what: [folder-presentation](folder-presentation/SKILL.md). A folder without a presentation that got its first real content: create it.
 
-## 4. Soul-genomgång: jämför och uppdatera
+## 4. Soul review: compare and update
 
-**Var ligger det privata skåpet?** Platsen står i `private:` i `users/<användare>/user.md`, och en kopia står i `.wds/me.md`. Det kan vara en lokal mapp eller ett repo.
-- **Saknas `private:`, eller finns mappen inte på den här datorn:** fråga personen var de privata soul-filerna ska sparas. Föreslå en mapp i ett repo som personen själv äger, eller en lokal mapp, men aldrig projektrepot. Skriv svaret i `private:` i `user.md` och i `.wds/me.md`, och skapa mappen och de filer som behövs.
-- **Personen avstår:** skriv bara i repots skåp. Visa i kvittensen vad som skulle ha sparats privat, och fråga igen vid nästa wrap.
+**Where is the private cabinet?** In `private:` in `users/<user>/user.md`, with a copy in `.wds/me.md`. It can be a local folder or a repo.
+- **`private:` is missing, or the folder is not on this computer:** ask the person where the private soul files should be kept. Suggest a folder in a repo the person owns, or a local folder, never the project repo. Write the answer in `private:` in `user.md` and in `.wds/me.md`, and create the folder and the files needed.
+- **The person declines:** write only in the repo's cabinet. Show in the receipt what would have been saved privately, and ask again at the next wrap.
 
-Agenten läste soul-filerna vid start och skrev in det som skulle bestå redan under sessionen ([session.md](../data/session.md), Start och During the session). Wrap är skyddsnätet: gå igenom hela samtalet, jämför det med vad filerna säger nu och skriv in det som ännu inte står där. Leta efter allt som är nytt eller har ändrats:
+The agent read the soul files at start and wrote in what should last already during the session ([session.md](../data/session.md), Start and During the session). Wrap is the safety net: go through the whole conversation, compare it with what the files say now and write in what is not there yet. Look for everything new or changed:
 
-- **Fakta om personen:** var hen jobbar, roll, chef och kollegor, kunder, vad som har hänt, adresser, bolag
-- **Människor i personens liv:** vem någon är, relationen och vad ni har gjort tillsammans
-- **Rättelser** av agenten, och vad personen uppskattade eller avvisade
-- **Insikter** om hur personen tänker, beslutar och vad hen värdesätter
-- **Mål** som tillkom, ändrades eller nåddes
-- Sådant som **levererades**
+- **Facts about the person:** where they work, role, manager and colleagues, clients, what has happened, addresses, companies
+- **People in the person's life:** who someone is, the relationship and what you have done together
+- **Corrections** of the agent, and what the person appreciated or rejected
+- **Insights** into how the person thinks, decides and what they value
+- **Goals** added, changed or reached
+- Things **delivered**
 
-Varje nyhet sorteras till rätt fil:
+Each new thing goes to the right file:
 
-| Nytt | Fil | Skåp |
+| New | File | Cabinet |
 |---|---|---|
-| Nuläge: arbetsplats, roll, chef, kollegor, kunder, vad som har hänt | `heartbeat.md` | privat |
-| Personens egen stil: hur agenter ska jobba med hen, överallt (ton, tempo, format, vad som irriterar), också när det lärdes i det här repot | `soul.md` | privat |
-| Hur vi jobbar tillsammans i det här repot: roller, överenskommelser, arbetssätt i teamet och med agenterna | `soul.md` | repo |
-| Vem personen är: värderingar, drivkrafter, sätt att tänka | `identity.md` | privat |
-| Professionell profil: kompetens, erfarenhet, arbetssätt | `user.md` | privat |
-| Bestående fakta: adresser, bolag med organisationsnummer, hem, kontaktvägar | `user.md`, avsnittet Fakta | privat |
-| Människor: kollegor, kunder, partner, familj och vänner. Vem, relationen, historik med datum och källa. Kontaktuppgifter står i personens adressbok (till exempel Google Contacts) och filen hänvisar dit, aldrig en kopia | `people/<namn>.md`, och en rad i `people/README.md` | privat |
-| Roll i det här projektet | `user.md` | repo |
-| Personliga mål | `objectives.md` | privat |
-| Projektets mål och personens mål i projektet | `objectives.md` | repo |
-| Levererat, på CV-nivå: vad, för vem och när ("byggde det öppna glaset för Visita"), aldrig hur det gjordes inne hos kunden | `achievements.md` | privat, överst, med länk till projektdelen. Projektets egen tidslinje är designloggen (steg 3) |
-| Ekonomi, hälsa och känsliga detaljer om relationer (konflikter, privatliv) | en överlämning till personens privata agent i `sessions/<användare>/<agent>/` i det privata skåpets repo (eller i den lokala mappen) | privat, aldrig i soul-filerna och aldrig i projektrepot |
+| Current situation: workplace, role, manager, colleagues, clients, what has happened | `heartbeat.md` | private |
+| The person's own style: how agents should work with them everywhere (tone, pace, format, what irritates), also when learned in this repo | `soul.md` | private |
+| How we work together in this repo: roles, agreements, ways of working in the team and with the agents | `soul.md` | repo |
+| Who the person is: values, drives, ways of thinking | `identity.md` | private |
+| Professional profile: skills, experience, way of working | `user.md` | private |
+| Lasting facts: addresses, companies with registration numbers, homes, contact channels | `user.md`, the Facts section | private |
+| People: colleagues, clients, partners, family and friends. Who, the relationship, history with dates and sources. Contact details stay in the person's address book (for example Google Contacts) and the file refers there, never a copy | `people/<name>.md`, and a line in `people/README.md` | private |
+| Role in this project | `user.md` | repo |
+| Personal goals | `objectives.md` | private |
+| The project's goals and the person's goals in the project | `objectives.md` | repo |
+| Delivered, at CV level: what, for whom and when ("built the open glass for Visita"), never how it was done inside the client | `achievements.md` | private, at the top, with a link to the project part. The project's own timeline is the design log (step 3) |
+| Finance, health and sensitive details about relationships (conflicts, private life) | a handover to the person's private agent in `sessions/<user>/<agent>/` in the private cabinet's repo (or local folder) | private, never in the soul files and never in the project repo |
 
-Repots filer ligger i `users/<användare>/`. De privata ligger där `private:` pekar.
+The repo's files are in `users/<user>/`. The private ones are where `private:` points.
 
-**Regler**
-- **Uppdatera och optimera, lägg inte bara till nya rader.** Skriv in det nya där det hör hemma, slå ihop dubbletter, ersätt det som inte längre gäller och stryk det inaktuella. Håll varje fil kort och lätt att läsa. Rättelser och händelser får datum.
-- **Agentens metod hör inte hemma i soul.** Rättar personen hur agenten följer sin egen metod, till exempel samtalsguiden eller en mall, är det en brist i agentinstruktionerna. Föreslå en ändring uppströms i stället för att skriva i någons soul. Gäller det WDS-agenterna blir förslaget en överlämning till Idun hos den som förvaltar WDS (steg 2, Förslag till WDS-metoden).
-- **Repots filer delas med teamet.** Skriv aldrig något privat där, och ändra aldrig i någon annans mapp.
-- **De privata filerna håller aldrig organisationens information.** En lärdom skrivs som personens egen ("vill ha siffran före resonemanget"), inte som kundens sak ("Visitas budget är …").
-- **Privata filer skrivs direkt.** Är skåpet ett repo görs commit och push enligt git-toolet. Är det en lokal mapp sparas filerna bara. Kvittensen visar vad som ändrades.
-- Rör bara de filer där något nytt faktiskt har hänt. `heartbeat.md` skapas första gången det finns något att skriva.
+**Rules**
+- **Update and optimise; don't just add lines.** Write the new where it belongs, merge duplicates, replace what no longer holds and strike what is out of date. Keep each file short and easy to read. Corrections and events get dates.
+- **The agent's method does not belong in soul.** When the person corrects how the agent follows its own method, for example the conversation guide or a template, it is a gap in the agent instructions. Propose a change upstream instead of writing in anyone's soul. For the WDS agents the proposal becomes a handover to Idun at whoever maintains WDS (step 2, Proposals for the WDS method).
+- **The repo's files are shared with the team.** Never write anything private there, and never change anything in someone else's folder.
+- **The private files never hold the organisation's information.** A lesson is written as the person's own ("wants the figure before the reasoning"), not as the client's business ("Visita's budget is …").
+- **Private files are written directly.** If the cabinet is a repo, commit and push per the git tool. If it is a local folder, the files are just saved. The receipt shows what changed.
+- Touch only the files where something new actually happened. `heartbeat.md` is created the first time there is something to write.
 
-## 5. Skills: katalogen och källrepona
+## 5. Skills: the catalog and the source repos
 
-Skills ligger i repot för det projekt, initiativ eller företag de gäller. Personens katalog (`skills.md` och `skills.json` i det privata skåpet) listar personens egna skills och alla repon personen jobbar i.
+Skills live in the repo of the project, initiative or company they serve. The person's catalog (`skills.md` and `skills.json` in the private cabinet) lists the person's own skills and every repo the person works in.
 
-- **Nytt projekt:** finns det här repot inte i katalogen, lägg till det med sökväg, GitHub-adress och vad det innehåller. Från och med nu synkas det vid varje wrap.
+- **New project:** if this repo is not in the catalog, add it with its path, GitHub address and what it holds. From now on it is synced at every wrap.
 
-Resten gäller när sessionen skapade, ändrade, flyttade eller tog bort en skill, ett tool eller ett skript.
+The rest applies when the session created, changed, moved or removed a skill, a tool or a script.
 
-- **Inget som fungerar blir kvar i en temporär mapp.** Gå igenom sessionens arbetsmapp (scratchpad, `%TEMP%`, sessionsmappar) och miljöer utanför repona (till exempel `~/.venvs`). Ett skript, en installation eller en inställning som fungerade flyttas till källrepot för det tool det hör till, med sökvägar och mätningar i toolets beskrivning. OpenVINO-utskriften från 2026-10-14 låg bara i en temporär mapp och byggdes om nio dagar senare (2026-10-23).
+- **Nothing that works stays in a temporary folder.** Go through the session's working folder (scratchpad, `%TEMP%`, session folders) and environments outside the repos (for example `~/.venvs`). A script, an install or a setting that worked moves to the source repo of the tool it belongs to, with paths and measurements in the tool's description. The OpenVINO transcription from 2026-10-14 lived only in a temporary folder and was rebuilt nine days later (2026-10-23).
+- **The change lives in the source.** Every skill has exactly one source repo. A change made in a local copy, for example `~/.claude/commands`, an adapter folder or a synced `agents/wds/`, moves to the source repo. Commit and push there. External sources are changed upstream.
+- **One commit per skill or tool.** Each changed skill or tool gets its own commit with only that file and its scripts, never other work. The message is `skill(<name>): <what changed and why>` or `tool(<name>): …`. Then `git log -- <file>` shows how the skill has developed.
+- **The catalog is updated.** If the person has a skills catalog in their private cabinet (`skills.md`, and `skills.json` if it exists), add new skills and sources, and change the line for what was moved or removed. Overwrite nothing. Update the line where the skill stands.
+- **Spread the version.** Run the sync per the catalog, so every repo and this computer get the new version.
+- **Confirmation:** a sync, a new line in the catalog, and commit and push in the person's own repos are done without asking, and the receipt shows what happened. The person confirms only when the change goes to a public repo, lands in someone else's repo, or removes or moves a skill.
+- **Skill and tool are kept apart** per `agents/wds/README.md` (Skills and tools). Check that the skill lists its tools in `tools:` and that each tool lists its skills in `used_by:`. Commands that ended up in a skill move to a tool.
 
-- **Ändringen ska ligga i källan.** Varje skill har exakt ett källrepo. En ändring som gjordes i en lokal kopia, till exempel `~/.claude/commands`, en adaptermapp eller en synkad `agents/wds/`, flyttas till källrepot. Där görs commit och push. Externa källor ändras uppströms.
-- **En commit per skill eller tool.** Varje ändrad skill eller tool får en egen commit med bara den filen och dess skript, aldrig annat arbete. Meddelandet ska vara `skill(<namn>): <vad som ändrades och varför>` eller `tool(<namn>): …`. Då visar `git log -- <fil>` hur skillen har utvecklats.
-- **Katalogen uppdateras.** Har personen en skillskatalog i sitt privata skåp (`skills.md`, och `skills.json` om den finns), lägg in nya skills och källor, och ändra raden för det som flyttats eller tagits bort. Skriv över inget. Uppdatera raden där skillen står.
-- **Sprid versionen.** Kör synken enligt katalogen, så att alla repon och den här datorn får den nya versionen.
-- **Bekräftelse:** synk, en ny rad i katalogen samt commit och push i personens egna repon görs utan att fråga, och kvittensen visar vad som hände. Personen bekräftar bara när ändringen går till ett publikt repo, hamnar i någon annans repo, eller tar bort eller flyttar en skill.
-- **Skill och tool hålls isär** enligt `agents/wds/README.md` (Skills and tools). Kontrollera att skillen listar sina tools i `tools:` och att varje tool listar sina skills i `used_by:`. Kommandon som hamnat i en skill flyttas till ett tool.
+## 6. G&C: incidents and proposals
 
-## 6. G&C: incidenter och förslag
+Governance says *what* applies and why: the principles, the policies and who decides. Compliance is *how* we keep to them: routines, checks, deviations and incidents. Any session can show that the framework lacks something, and wrap is the safety net that catches it.
 
-Governance säger *vad* som gäller och varför: principerna, policyerna och vem som beslutar. Compliance är *hur* vi håller oss till dem: rutiner, kontroller, avvikelser och incidenter. Varje session kan visa att ramverket saknar något, och wrap är skyddsnätet som fångar det.
+Go through the session and look for:
+- **Incident:** something happened that breaks a principle, or nearly did. Example: a password the project uses is in a public database after a leak.
+- **Deviation:** something in the repo or the way of working does not follow a principle right now.
+- **Gap:** a case the framework does not cover, so the agent had to improvise.
 
-Gå igenom sessionen och leta efter:
-- **Incident:** något hände som bryter mot en princip, eller nästan gjorde det. Exempel: ett lösenord som projektet använder finns i en publik databas efter en läcka.
-- **Avvikelse:** något i repot eller arbetssättet följer inte en princip just nu.
-- **Lucka:** ett fall som ramverket inte täcker, så att agenten fick improvisera.
+For each finding:
+1. **Urgent first.** If a secret is exposed or damage is ongoing, say so in the session when it is found, not at wrap. The human acts, for example changes the password.
+2. **Incident report** in the incident log `governance/policies.md` points to for the right level: the organisation's (`governance/<org>/incidents.md`, or the local name, for example `governance/visita/incidenter.md`) or the project's. If the organisation's folder has a `.source` file it is a copy: write the report in the source repo `.source` names, and if the agent cannot write there the report becomes a handover to the policy's owner. Write the date, what happened, the impact, what was done and who knows. **Never write the secret itself**, only where it was and whether it has been changed.
+3. **Proposed new point:** a routine for how we act (compliance), or a new principle when the case shows one is missing (governance). Mark it `proposal`, with a date and a link to the incident.
+4. **The mandate:** the agent may report, propose and tighten. It may never itself loosen or remove a principle, or widen what agents may do. That takes the human's explicit yes. The policy's owner approves the proposals. That goes for Idun too.
+5. **The WDS default policy** changes in the source, whiteport-design-studio, never in the synced copy `governance/wds/`. The proposal becomes a handover to Idun at whoever maintains WDS (step 2, Proposals for the WDS method).
+6. **No `governance/` or incident log** in the repo: write the finding under `## G&C` in the handover.
 
-För varje fynd:
-1. **Akut först.** Står en hemlighet öppen eller pågår skada, säg det direkt i sessionen när det upptäcks, inte vid wrap. Människan agerar, till exempel byter lösenordet.
-2. **Incidentrapport** i incidentloggen som `governance/policies.md` pekar ut för rätt nivå: organisationens (`governance/<org>/incidents.md`, eller det lokala namnet, till exempel `governance/visita/incidenter.md`) eller projektets. Har organisationens mapp en `.source`-fil är den en kopia: skriv rapporten i källrepot som `.source` anger, och kan agenten inte skriva där blir rapporten en överlämning till policyns ägare. Skriv datum, vad som hände, påverkan, vad som gjordes och vem som vet. **Skriv aldrig själva hemligheten**, bara var den fanns och om den är bytt.
-3. **Förslag på ny punkt:** en rutin för hur vi agerar (compliance), eller en ny princip om fallet visar att den saknas (governance). Märk den `förslag`, med datum och länk till incidenten.
-4. **Mandatet:** agenten får rapportera, föreslå och skärpa. Den får aldrig själv mildra eller ta bort en princip, eller vidga vad agenter får göra. Det kräver människans uttryckliga ja. Policyns ägare godkänner förslagen. Det gäller Idun också.
-5. **WDS standardpolicy** ändras i källan, whiteport-design-studio, aldrig i den synkade kopian `governance/wds/`. Förslaget blir en överlämning till Idun hos den som förvaltar WDS (steg 2, Förslag till WDS-metoden).
-6. **Saknas `governance/` eller en incidentlogg** i repot: skriv fyndet under `## G&C` i överlämningen.
+No finding: skip the step.
 
-Inget fynd: hoppa över steget.
+## 7. Share
 
-## 7. Dela
+Save and share the project part, the project logs and the repo's user files per the git tool. The personal part and the private files are shared in their own repo. The commit message is `wrap: <session-id> — <one line>`.
 
-Spara och dela projektdelen, projektloggarna och repots användarfiler enligt git-toolet. Den personliga delen och de privata filerna delas i sitt eget repo. Commit-meddelandet ska vara `wrap: <session-id> — <en rad>`.
+## 8. Other repos and the personal log
 
-## 8. Andra repon och personlig logg
+- **Other repos in the same session:** write a project part with **the same session id** in their `<sessions folder>/<user>/<to>/`, or run their own wrap. Each repo gets only its own part. The personal part links to them all. With the same id, the session can be found in every repo.
+- **Private log:** if `private:` points to a folder on this computer, add a line at the top of `log.md` there: `- <session-id> <repo, …> (<from> → <to>): one line · <the personal part's path>`. Create the file if it is missing. If the cabinet is a repo it is shared there.
 
-- **Andra repon i samma session:** skriv en projektdel med **samma session-id** i deras `<sessionsmapp>/<användare>/<till>/`, eller kör deras egen wrap. Varje repo får bara sin egen del. Den personliga delen länkar till dem alla. Tack vare samma id kan man hitta sessionen i alla repon.
-- **Privat logg:** om `private:` pekar på en mapp på den här datorn, lägg en rad överst i `log.md` där: `- <session-id> <repo, …> (<från> → <till>): en rad · <den personliga delens sökväg>`. Skapa filen om den saknas. Är skåpet ett repo delas den där.
+## 9. Receipt
 
-## 9. Kvittens
+Show the user:
+- the session id, the recipient and the paths to the project part or parts and to the personal part
+- both parts in full, so the person sees that the focus is right and that nothing of the organisation's ended up in the personal one
+- what changed in the soul files, per file and cabinet (repo or private), or "nothing new"
+- the private handover, if anything about finance, health or family came up
+- skills that changed: where they live now and that the catalog is updated
+- G&C: incidents reported and points proposed, or "nothing new"
+- the commit hash and that the push went through
 
-Visa användaren:
-- session-id, mottagare och sökvägar till projektdelen eller projektdelarna och till den personliga delen
-- båda delarna i sin helhet, så att personen ser att fokus stämmer och att inget av organisationens hamnade i den personliga
-- vad som ändrades i soul-filerna, per fil och skåp (repo eller privat), eller "inget nytt"
-- den privata överlämningen, om något om ekonomi, hälsa eller familj kom upp
-- skills som ändrades: var de ligger nu och att katalogen är uppdaterad
-- G&C: incidenter som rapporterades och punkter som föreslogs, eller "inget nytt"
-- commit-hash och att push gick igenom
-
-Avsluta med återupptagningskommandot som ett eget kodblock, så att det går att kopiera med ett klick. `<till>` är mottagande agent, `<repo>` är repots mappnamn, tidsstämpeln är sessionens start och `<sammandrag>` är samma ord som i filnamnet, med mellanslag i stället för bindestreck:
+End with the resume command as its own code block, so it copies with one click. `<to>` is the receiving agent, `<repo>` is the repo's folder name, the timestamp is the session's start and `<summary>` is the same words as in the filename, with spaces instead of hyphens:
 
 ````
 ```
-/<till> <repo> YYYY-MM-DD_HH-MM <sammandrag>
+/<to> <repo> YYYY-MM-DD_HH-MM <summary>
 ```
 ````
 
-Exempel: `/ivonne martens-documents 2026-09-27_13-22 product brief en karriar tack`. Utan sammandraget vet man inte vad kommandot gäller när det ligger bland andra.
+Example: `/ivonne martens-documents 2026-09-27_13-22 product brief career track`. Without the summary nobody knows what the command is about when it sits among others.
