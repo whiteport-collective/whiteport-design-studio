@@ -114,6 +114,8 @@ An agent that stops halfway to ask for a click has not done its job (Mårten, 20
 
 What only the person can open (unlocking a vault, a sign-in, a yes to a permission) is asked once, as a list, at the start. Never one approval at a time in the middle of the work.
 
+A permission that belongs to a skill or tool is declared in that capability's dependencies (Mårten, 2026-11-15), so it is approved once, when the capability is installed, and the inventory reads it from there. One found missing during the work is a gap in that skill or tool: add it there, not only to the person's settings.
+
 ### Learn as you go
 
 What the person teaches you is worth more than anything you produce, because it carries into every later session. Don't save it all for wrap.
