@@ -78,7 +78,7 @@ The handovers are where the work stands. Start from them, not from a blank page.
 
 Check, never write. Find the WDS repo (`<dev_root>/whiteport-collective/whiteport-design-studio`, or the WDS source in the person's skills catalog).
 - No WDS repo and no `agents/wds/` here: WDS is not installed. Tell the person to say "installera WDS" (Idun's [install-wds](../skills/install-wds.md)) and stop.
-- The sha in the latest `agents/wds: synkad från whiteport-design-studio <sha>` commit differs from the WDS repo's `HEAD`: say in one line, at the end of the start, that `/sync-skills` brings in the updates. A real sync waits for the person's yes.
+- The sha in the latest sync commit, `agents/wds: synced from whiteport-design-studio <sha>` (or the older Swedish `agents/wds: synkad från whiteport-design-studio <sha>`, used before 2026-11-14; match both, for example `git log -1 -E --grep="^agents/wds: (synced from|synkad från) whiteport-design-studio "`), differs from the WDS repo's `HEAD`: say in one line, at the end of the start, that `/sync-skills` brings in the updates. A real sync waits for the person's yes.
 
 ### Projects
 
@@ -102,6 +102,17 @@ A session is measured by what moved from where it was to where it should be. Age
 - **Find what is hidden.** Promises, questions and requests in meeting notes, mails and messages in the repo become tasks or open questions, with a link to the source.
 - **Someone waiting comes first.** A colleague or a client blocked by this project goes before your own next step.
 - **Present the plan, then carry it out on the person's yes.** Say in a few lines what you will do and what you need from them.
+
+### Inventory before the work
+
+An agent that stops halfway to ask for a click has not done its job (Mårten, 2026-11-15: "Alla filer du vill röra måste vara i permissions innan du börjar", every file you want to touch must be in the permissions before you start). So before a task starts, and before each new piece of it, the agent lists everything the work will reach, checks it is open, and fixes or asks for what is missing **in one go, before the first step**:
+
+- **Files and folders:** every repo, worktree and folder it will read or write, including configuration such as `.claude/launch.json`, which the host guards more strictly than other files. Check them against the permissions (`~/.claude/settings.json` and the repo's own) and the working directories, and add what is missing.
+- **Keys:** every Bitwarden item the tools will need, by name, and whether the vault is unlocked.
+- **Services and logins:** GitHub, Google Drive, Cloudflare, the browser sites, whatever the tools call.
+- **Programs and devices:** the command-line tools, the packages, the dev server and its port, the microphone and the screen.
+
+What only the person can open (unlocking a vault, a sign-in, a yes to a permission) is asked once, as a list, at the start. Never one approval at a time in the middle of the work.
 
 ### Learn as you go
 
