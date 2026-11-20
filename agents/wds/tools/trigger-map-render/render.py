@@ -50,7 +50,7 @@ def first_name(name):
 def load(folder):
     path = folder / "trigger-map.yaml"
     if not path.exists():
-        sys.exit(f"Ingen trigger-map.yaml i {folder}. Skapa den, eller kör: python render.py import {folder}")
+        sys.exit(f"No trigger-map.yaml in {folder}. Create it, or run: python render.py import {folder}")
     d = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     d.setdefault("goals", [])
     d.setdefault("personas", [])
@@ -513,7 +513,7 @@ def render(folder, theme_path=None):
         write(folder / "feature-impact.md", "\n".join(md_features(d)))
     stale = {f.name for f in folder.glob("[0-9][0-9]-persona-*.*")} - {f"{p['file']}{ext}" for p in d["personas"] for ext in (".md", ".html")}
     for name in sorted(stale):
-        print(f"  ! {name} hör inte till någon persona i trigger-map.yaml längre. Ta bort den om den inte behövs.")
+        print(f"  ! {name} no longer belongs to any persona in trigger-map.yaml. Delete it if it is not needed.")
 
 
 # ── import ──────────────────────────────────────────────────────────────
@@ -629,7 +629,7 @@ def import_md(folder):
     d = {k: v for k, v in d.items() if v not in (None, "", [], {})}
     out = folder / "trigger-map.yaml"
     out.write_text(yaml.safe_dump(d, allow_unicode=True, sort_keys=False, width=110), encoding="utf-8", newline="\n")
-    print(f"Skrev {out}. Läs igenom den och rendera sedan: python render.py {folder}")
+    print(f"Wrote {out}. Read it through, then render: python render.py {folder}")
 
 
 if __name__ == "__main__":

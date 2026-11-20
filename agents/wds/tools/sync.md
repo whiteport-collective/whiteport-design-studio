@@ -2,50 +2,50 @@
 name: sync
 type: script
 version: "2.0.0"
-description: Kör synken av skills, agenter och governance mellan WDS-repot, personens privata repo, projektrepona och datorns .claude-mapp. Skriptet ligger i sync/sync.py.
+description: Runs the sync of skills, agents and governance between the WDS repo, the person's private repo, the project repos and the computer's .claude folder. The script is in sync/sync.py.
 used_by: [sync-skills, install-wds, librarian, org-onboarding, project-setup]
 ---
 
 # WDS Sync
 
-Hur synken körs. Vad den är till för och när den körs står i skillen [sync-skills](../skills/sync-skills.md).
+How the sync is run. What it is for and when it runs is in the skill [sync-skills](../skills/sync-skills.md).
 
-## Var allt ligger
+## Where everything lives
 
-| Vad | Var |
+| What | Where |
 |---|---|
-| Skriptet | `agents/wds/tools/sync/sync.py` i WDS-repot på datorn |
-| Personens katalog | `skills.json` i det privata skåpet, alltså mappen på raden `private:` i `~/.wds/me.md`. Saknas den: `~/.wds/skills.json`. |
-| Mall för katalogen | `agents/wds/tools/sync/catalog-template.json` |
-| Tillstånd och undansparade lokala ändringar | `~/.claude/.sync-skills-state.json` och `~/.claude/commands-local-edits/` |
+| The script | `agents/wds/tools/sync/sync.py` in the WDS repo on the computer |
+| The person's catalog | `skills.json` in the private cabinet, that is the folder on the `private:` line in `~/.wds/me.md`. If it is missing: `~/.wds/skills.json`. |
+| Template for the catalog | `agents/wds/tools/sync/catalog-template.json` |
+| State and saved local edits | `~/.claude/.sync-skills-state.json` and `~/.claude/commands-local-edits/` |
 
-**Ett repo och ett privat repo räcker** (Mårten, 2026-11-04): skriptet finns i varje WDS-repo, i kopian av `agents/wds/`, och hålls i takt av synken. Den som inte sprider WDS kör det därifrån, ur sitt huvudrepo (organisationens repo): `<repo>/agents/wds/tools/sync/sync.py`. Den som sprider WDS till repona (vendor-agents-källorna) kör det från WDS-repots egen klon, så att den senaste versionen används; på standardplatsen `<dev_root>/whiteport-collective/whiteport-design-studio`.
+**One repo and one private repo are enough** (Mårten, 2026-11-04): the script is in every WDS repo, in the copy of `agents/wds/`, and is kept in step by the sync. Someone who does not spread WDS runs it from there, from their main repo (the organization's repo): `<repo>/agents/wds/tools/sync/sync.py`. Someone who spreads WDS to the repos (the vendor-agents sources) runs it from the WDS repo's own clone, so the latest version is used; in the default location `<dev_root>/whiteport-collective/whiteport-design-studio`.
 
-## Köra
+## Running
 
-**Var repona ligger** står i `dev_root:` i varje dators `~/.wds/me.md`. Katalogen delas av personens alla datorer, så dess sökvägar skrivs som `<dev_root>/…`; en sökväg skriven på en annan dator (`C:/dev/…`) räknas om efter den här datorns `dev_root`. Saknas `dev_root:` används katalogens om den finns på datorn, annars `~/dev`. Synkens första rad säger vilken mapp den läser.
+**Where the repos live** is in `dev_root:` in each computer's `~/.wds/me.md`. The catalog is shared by all the person's computers, so its paths are written as `<dev_root>/…`; a path written on another computer (`C:/dev/…`) is recalculated from this computer's `dev_root`. If `dev_root:` is missing, the catalog's is used if it exists on the computer, else `~/dev`. The sync's first line says which folder it reads.
 
-Kräver Python 3.10 eller nyare. På Mac heter kommandot `python3`, och `/usr/bin/python3` är Apples 3.9: se [machine](machine.md) för hur Homebrews Python hamnar först. Med en för gammal Python avslutar skriptet med ett felmeddelande utan att skriva något.
+Needs Python 3.10 or newer. On a Mac the command is `python3`, and `/usr/bin/python3` is Apple's 3.9: see [machine](machine.md) for how Homebrew's Python comes first. With a Python that is too old the script exits with an error message without writing anything.
 
 ```bash
-python "<wds-repot>/agents/wds/tools/sync/sync.py"             # full synk
-python "<wds-repot>/agents/wds/tools/sync/sync.py" --dry-run   # visa bara
-python "<wds-repot>/agents/wds/tools/sync/sync.py" --no-pull   # hoppa över git pull
+python "<wds-repo>/agents/wds/tools/sync/sync.py"             # full sync
+python "<wds-repo>/agents/wds/tools/sync/sync.py" --dry-run   # show only
+python "<wds-repo>/agents/wds/tools/sync/sync.py" --no-pull   # skip git pull
 ```
 
-Okända flaggor synkar aldrig. Skriptet visar då hjälpen och avslutar.
+Unknown flags never sync. The script then shows the help and exits.
 
-## Vad skriptet gör
+## What the script does
 
-1. **Sparar undan lokala ändringar.** Kommandon som har redigerats direkt i `~/.claude/commands/` sedan förra synken kopieras till `~/.claude/commands-local-edits/` innan något skrivs över.
-2. **Hämtar senaste versionen** (`git pull --ff-only`) av alla källrepon och projektrepon. Repon med osparade ändringar hoppas över.
-3. **Kör källorna i katalogens ordning.** Senare källa vinner vid namnkrock.
-   - `vendor-agents`: kopierar `agents/wds/` och adaptrarna in i alla WDS-repon, och speglar governance (se nedan). Bara från källans standardbranch utan ändringar, och bara till repon på standardbranchen utan ändringar. Commit och push av bara de filerna.
-   - `pointer-skills`: skriver pekare i `~/.claude/commands/`, en fil per agent eller skill, som läser originalet.
-   - `capabilities-py`, `agent-space-js`: äldre källtyper som kör källans eget installationsskript.
-4. **Rapporterar krockar**, alltså samma kommando från flera källor.
+1. **Saves local edits.** Commands edited directly in `~/.claude/commands/` since the last sync are copied to `~/.claude/commands-local-edits/` before anything is overwritten.
+2. **Fetches the latest version** (`git pull --ff-only`) of every source repo and project repo. Repos with uncommitted changes are skipped.
+3. **Runs the sources in the catalog's order.** A later source wins on a name clash.
+   - `vendor-agents`: copies `agents/wds/` and the adapters into every WDS repo, and mirrors governance (see below). Only from the source's default branch with no changes, and only to repos on the default branch with no changes. Commit and push of only those files, with the message `agents/wds: synced from <repo> <short sha>` (before 2026-11-14: `agents/wds: synkad från <repo> <short sha>`).
+   - `pointer-skills`: writes pointers in `~/.claude/commands/`, one file per agent or skill, that read the original.
+   - `capabilities-py`, `agent-space-js`: older source kinds that run the source's own install script.
+4. **Reports clashes**, that is the same command from several sources.
 
-## Katalogen
+## The catalog
 
 ```json
 {
@@ -55,11 +55,11 @@ Okända flaggor synkar aldrig. Skriptet visar då hjälpen och avslutar.
 }
 ```
 
-Mallen visar standardkällorna: WDS-agenterna till alla WDS-repon, WDS-kommandona globalt och personens privata repo sist. En ny källa är en ny post. Varje post har `why`, som förklarar varför källan finns.
+The template shows the default sources: the WDS agents to every WDS repo, the WDS commands globally and the person's private repo last. A new source is a new entry. Each entry has `why`, which explains why the source exists.
 
-## Kvittens
+## Receipt
 
-Skriptet skriver ut vad det gjorde per källa, repon som hoppades över med skäl, lokalt ändrade kommandon, krockar och governance-raden. Skillen sammanfattar det för personen.
+The script prints what it did per source, the repos that were skipped with the reason, locally edited commands, clashes and the governance line. The skill summarizes it for the person.
 
 ---
 
@@ -142,6 +142,7 @@ Commit only `governance/` paths, then push:
 ```bash
 git -C <repo> add -A -- governance/
 git -C <repo> commit -m "governance: synced from <source repo> <short sha>" -- governance/
+# before 2026-11-14 the message was "governance: synkad från …"
 git -C <repo> push
 ```
 
@@ -149,6 +150,6 @@ git -C <repo> push
 
 If G2 changed `governance/wds/` in a repo that holds an organization's policy, report it, in a dry run too:
 
-> WDS default policy changed. Conflict check due for <org>: run `/idun audit governance` in <governance_source>.
+> The WDS default changed. <org> needs a conflict check: run `/idun audit governance` in <governance_source>.
 
 The check itself is Idun's (`agents/wds/skills/librarian.md`, governance-check). The sync never changes an organization's rules.

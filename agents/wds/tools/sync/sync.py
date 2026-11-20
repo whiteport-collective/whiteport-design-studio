@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 """
-sync.py — dirigent för /sync-skills. Del av WDS (agents/wds/tools/sync.md).
+sync.py — conductor for /sync-skills. Part of WDS (agents/wds/tools/sync.md).
 
-Alla skills har en källa i ett git-repo. Det här skriptet:
-  1. Sparar undan skills som ändrats för hand i ~/.claude/commands sedan förra synken
-  2. Hämtar senaste versionen (git pull --ff-only) av alla källrepos och projektrepos
-  3. Kör varje källas egen installation i ordning (skills.json) — senare vinner
-  4. Rapporterar krockar (två källor skriver samma kommando)
-  5. vendor-agents: kopierar t.ex. agents/wds/ in i projektrepon som har mappen, commit + push
-  6. governance/: speglar WDS-standarden till governance/wds/ i WDS-repon som har governance/,
-     och varje organisations governance/<org>/ från sitt källrepo till organisationens andra repon.
-     Commit + push av bara de speglade mapparna.
+Every skill has a source in a git repo. This script:
+  1. Saves skills edited by hand in ~/.claude/commands since the last sync
+  2. Fetches the latest version (git pull --ff-only) of every source repo and project repo
+  3. Runs each source's own installation in order (skills.json) — later wins
+  4. Reports clashes (two sources writing the same command)
+  5. vendor-agents: copies e.g. agents/wds/ into the project repos that have the folder, commit + push
+  6. governance/: mirrors the WDS default to governance/wds/ in WDS repos that have governance/,
+     and each organization's governance/<org>/ from its source repo to the organization's other repos.
+     Commit + push of only the mirrored folders.
 
-Rör ALDRIG Agent Space-databasen. Tar bara bort filer i en speglad governance/<mapp>/ vars .source
-namnger samma källa (filen är borttagen i källan). Inga andra filer tas bort.
+NEVER touches the Agent Space database. Only deletes files in a mirrored governance/<folder>/ whose .source
+names the same source (the file was deleted in the source). No other files are deleted.
 
-    python sync.py              # full synk
-    python sync.py --dry-run    # visa vad som skulle hända
-    python sync.py --no-pull    # hoppa över git pull
+    python sync.py              # full sync
+    python sync.py --dry-run    # show what would happen
+    python sync.py --no-pull    # skip git pull
 
-Katalogen (skills.json) är personens egen och ligger i personens privata skåp: mappen som står på
-raden "private:" i ~/.wds/me.md. Saknas den används ~/.wds/skills.json. WDS_CATALOG kan peka ut en annan fil.
-Mall för en ny katalog: catalog-template.json bredvid skriptet.
+The catalog (skills.json) is the person's own and lives in the person's private cabinet: the folder on
+the "private:" line in ~/.wds/me.md. If it is missing, ~/.wds/skills.json is used. WDS_CATALOG can point to another file.
+Template for a new catalog: catalog-template.json next to the script.
 """
 
 import hashlib
@@ -34,11 +34,11 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-# write_text(newline=...) kräver 3.10. Macens /usr/bin/python3 är Apples 3.9 och kommer före Homebrew i PATH
-# om brew shellenv saknas i ~/.zprofile (agents/wds/tools/machine.md).
+# write_text(newline=...) needs 3.10. The Mac's /usr/bin/python3 is Apple's 3.9 and comes before Homebrew in PATH
+# if brew shellenv is missing from ~/.zprofile (agents/wds/tools/machine.md).
 if sys.version_info < (3, 10):
-    sys.exit(f"sync.py kräver Python 3.10 eller nyare, men kördes med {sys.version.split()[0]} ({sys.executable}).\n"
-             "Installera en nyare Python och kör igen. Mac: se agents/wds/tools/machine.md.")
+    sys.exit(f"sync.py needs Python 3.10 or newer, but ran with {sys.version.split()[0]} ({sys.executable}).\n"
+             "Install a newer Python and run again. Mac: see agents/wds/tools/machine.md.")
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
@@ -46,8 +46,8 @@ HERE = Path(__file__).parent
 
 
 def find_catalog():
-    """Personens katalog: WDS_CATALOG, annars skills.json i det privata skåpet (private: i ~/.wds/me.md),
-    annars ~/.wds/skills.json."""
+    """The person's catalog: WDS_CATALOG, else skills.json in the private cabinet (private: in ~/.wds/me.md),
+    else ~/.wds/skills.json."""
     import os
     if os.environ.get("WDS_CATALOG"):
         return Path(os.environ["WDS_CATALOG"])
@@ -61,15 +61,15 @@ def find_catalog():
 
 CATALOG = find_catalog()
 if not CATALOG.exists():
-    print(f"Ingen skillkatalog hittades ({CATALOG}). Idun skapar den vid installationen: "
-          f"kopiera {HERE / 'catalog-template.json'} till ditt privata skåp som skills.json och fyll i den.")
+    print(f"No skill catalog found ({CATALOG}). Idun creates it during installation: "
+          f"copy {HERE / 'catalog-template.json'} to your private cabinet as skills.json and fill it in.")
     sys.exit(1)
 SOURCES = json.loads(CATALOG.read_text(encoding="utf-8"))
 
 
 def machine_dev_root(catalog_root):
-    """Var repona ligger på just den här datorn. Katalogen delas mellan personens datorer, så dev_root: i
-    ~/.wds/me.md (en per dator) vinner; annars katalogens dev_root om den finns här, annars ~/dev."""
+    """Where the repos live on this particular computer. The catalog is shared between the person's computers, so dev_root: in
+    ~/.wds/me.md (one per computer) wins; else the catalog's dev_root if it exists here, else ~/dev."""
     me = Path.home() / ".wds" / "me.md"
     if me.exists():
         m = re.search(r"^dev_root:\s*(\S.*?)\s*$", me.read_text(encoding="utf-8", errors="replace"), re.M)
@@ -85,8 +85,8 @@ DEV_ROOT = machine_dev_root(CATALOG_ROOT)
 
 
 def local_path(p):
-    """En sökväg ur katalogen på den här datorn: <dev_root>/…, eller en sökväg under katalogens dev_root
-    som skrevs på en annan dator (C:/dev/WDS/… blir ~/dev/WDS/… på en Mac)."""
+    """A path from the catalog on this computer: <dev_root>/…, or a path under the catalog's dev_root
+    that was written on another computer (C:/dev/WDS/… becomes ~/dev/WDS/… on a Mac)."""
     if not isinstance(p, str):
         return p
     if p.startswith("<dev_root>"):
@@ -108,12 +108,12 @@ BACKUPS = CLAUDE / "commands-local-edits"
 ARGS = sys.argv[1:]
 DRY = "--dry-run" in ARGS
 NO_PULL = "--no-pull" in ARGS
-# Okända flaggor (till exempel --help) synkar aldrig: visa hjälpen och avsluta.
-# Incident 2026-10-03: "--help" startade en riktig synk.
+# Unknown flags (for example --help) never sync: show the help and exit.
+# Incident 2026-10-03: "--help" started a real sync.
 UNKNOWN = [a for a in ARGS if a not in ("--dry-run", "--no-pull")]
 if UNKNOWN:
     print(__doc__)
-    print(f"Okänd flagga: {' '.join(UNKNOWN)}. Inget synkades.")
+    print(f"Unknown flag: {' '.join(UNKNOWN)}. Nothing was synced.")
     sys.exit(2)
 
 
@@ -132,15 +132,15 @@ def run(cmd, cwd=None):
     return r.returncode, (r.stdout + r.stderr).strip()
 
 
-# ── 1. Lokala ändringar ──────────────────────────────────────────────────────
+# ── 1. Local edits ───────────────────────────────────────────────────────────
 
 def rescue_local_edits():
     if not STATE.exists():
-        # Första körningen: inget facit — spara hela mappen innan något skrivs över
+        # First run: nothing to compare with — save the whole folder before anything is overwritten
         if not DRY and COMMANDS.exists():
             dest = BACKUPS / (datetime.now().strftime("%Y-%m-%d-%H%M") + "-forsta-synken")
             shutil.copytree(COMMANDS, dest)
-            print(f"Första synken — hela commands/ sparad i {dest}\n")
+            print(f"First sync — all of commands/ saved in {dest}\n")
         return []
     last = json.loads(STATE.read_text(encoding="utf-8"))
     now = snapshot()
@@ -169,16 +169,16 @@ def discover_projects():
 def pull(repo):
     code, out = run(["git", "status", "--porcelain"], cwd=repo)
     if code != 0:
-        return "inte ett git-repo"
+        return "not a git repo"
     if out:
-        return "hoppade över — har osparade ändringar"
+        return "skipped — has uncommitted changes"
     code, out = run(["git", "pull", "--ff-only", "-q"], cwd=repo)
     if code != 0:
-        return "pull misslyckades: " + out.splitlines()[-1] if out else "pull misslyckades"
+        return "pull failed: " + out.splitlines()[-1] if out else "pull failed"
     return None
 
 
-# ── 3. Källor ────────────────────────────────────────────────────────────────
+# ── 3. Sources ───────────────────────────────────────────────────────────────
 
 def src_agent_space_js(s):
     cmd = ["node", "sync.js", "--local", "--no-db"] + (["--dry-run"] if DRY else [])
@@ -200,7 +200,7 @@ def src_pointer_skills(s):
     for f in sorted(repo.glob(s["skills_glob"])) if s.get("skills_glob") else []:
         text = f.read_text(encoding="utf-8")
         m = re.search(r"^name:\s*(.+)$", text, re.M)
-        # Utan name: mappens namn för skill.md, annars filens namn
+        # Without name: the folder's name for skill.md, else the file's name
         name = (m.group(1).strip() if m else (f.parent.name if f.name.lower() == "skill.md" else f.stem)).strip("\"'")
         prefix = s.get("prefix", "")
         targets[name if name.startswith(prefix) else prefix + name] = f
@@ -208,7 +208,7 @@ def src_pointer_skills(s):
         targets[name] = repo / rel
     for name, f in targets.items():
         if s.get("base") == "repo":
-            # WDS: sökvägar i filerna utgår från repots rot, men arbetet sker i det repo man står i
+            # WDS: paths in the files start from the repo root, but the work happens in the repo you stand in
             sub = s.get("subdir", "agents")
             body = (
                 f"# {name} (from {repo.name})\n"
@@ -241,7 +241,7 @@ def on_default_branch(repo):
 
 
 def all_repos():
-    """Alla git-repon under dev_root, ner till project_discovery.max_depth."""
+    """All git repos under dev_root, down to project_discovery.max_depth."""
     root = Path(SOURCES["dev_root"])
     found = []
     for depth in range(1, SOURCES["project_discovery"]["max_depth"] + 1):
@@ -250,16 +250,16 @@ def all_repos():
 
 
 def not_ready(repo):
-    """Samma villkor som agentsynken: standardbranchen och rent. Returnerar skälet, eller None."""
+    """Same conditions as the agent sync: the default branch and clean. Returns the reason, or None."""
     if not on_default_branch(repo):
-        return "inte på standardbranchen"
+        return "not on the default branch"
     if run(["git", "status", "--porcelain"], cwd=repo)[1]:
-        return "osparade ändringar"
+        return "uncommitted changes"
     return None
 
 
 def commit_push(repo, paths, message):
-    """Committar bara paths och pushar. Returnerar None om inget ändrades, annars ett kort resultat."""
+    """Commits only paths and pushes. Returns None if nothing changed, else a short result."""
     run(["git", "add", "--"] + paths, cwd=repo)
     c, _ = run(["git", "diff", "--cached", "--quiet", "--"] + paths, cwd=repo)
     if c == 0:
@@ -267,14 +267,14 @@ def commit_push(repo, paths, message):
     run(["git", "commit", "-q", "-m", message, "--"] + paths, cwd=repo)
     run(["git", "pull", "-q", "--rebase"], cwd=repo)
     pc, pout = run(["git", "push", "-q"], cwd=repo)
-    return "uppdaterad" if pc == 0 else f"uppdaterad, PUSH MISSLYCKADES: {pout.splitlines()[-1] if pout else '?'}"
+    return "updated" if pc == 0 else f"updated, PUSH FAILED: {pout.splitlines()[-1] if pout else '?'}"
 
 
 def wds_targets(s):
-    """WDS-projekten som får <subdir>: (repon, hoppade över).
-    WDS-projekt = har någon av s["markers"] eller <subdir>/.wds-sync. Utan .wds-sync krävs att repot
-    ägs av någon i s["owners"] och har en commit inom s["active_days"] dagar.
-    Repot måste stå på sin standardbranch och vara rent."""
+    """The WDS projects that get <subdir>: (repos, skipped).
+    WDS project = has one of s["markers"] or <subdir>/.wds-sync. Without .wds-sync the repo must be
+    owned by someone in s["owners"] and have a commit within s["active_days"] days.
+    The repo must be on its default branch and clean."""
     root = Path(SOURCES["dev_root"])
     owners = {o.lower() for o in s.get("owners", [])}
     exclude = set(s.get("exclude", []))
@@ -287,13 +287,13 @@ def wds_targets(s):
             continue
         rel = d.relative_to(root).as_posix()
         if not opt_in and owner(d) not in owners:
-            skipped.append(f"{rel} (annan ägare: {owner(d) or 'ingen remote'})")
+            skipped.append(f"{rel} (other owner: {owner(d) or 'no remote'})")
             continue
         if not opt_in and s.get("active_days"):
             _, ct = run(["git", "log", "-1", "--format=%ct"], cwd=d)
             last = datetime.fromtimestamp(int(ct)) if ct.isdigit() else datetime.min
             if (datetime.now() - last).days > s["active_days"]:
-                skipped.append(f"{rel} (inaktivt sedan {last:%Y-%m-%d})")
+                skipped.append(f"{rel} (inactive since {last:%Y-%m-%d})")
                 continue
         problem = not_ready(d)
         if problem:
@@ -304,21 +304,21 @@ def wds_targets(s):
 
 
 def src_vendor_agents(s):
-    """Kopierar <repo>/<subdir> till varje WDS-projekt under dev_root (se wds_targets).
-    Skriver också adaptrarna i <subdir>/shared/adapters/ till repots rot (.claude/commands, .github/prompts …).
-    <subdir> speglas: filer som tagits bort i källan tas bort i kopian (mirror_agents). Committar och pushar bara de filerna.
-    Har källan "governance_templates" synkas därefter governance/ (se sync_governance)."""
+    """Copies <repo>/<subdir> to every WDS project under dev_root (see wds_targets).
+    Also writes the adapters in <subdir>/shared/adapters/ to the repo root (.claude/commands, .github/prompts …).
+    <subdir> is mirrored: files deleted in the source are deleted in the copy (mirror_agents). Commits and pushes only those files.
+    If the source has "governance_templates", governance/ is synced afterwards (see sync_governance)."""
     src = Path(s["repo"]) / s["subdir"]
     adapters = src / s.get("adapters", "adapters")
     if not adapters.is_dir():
-        adapters = src / "shared" / "adapters"  # äldre plats
-    # Källan måste stå på sin standardbranch och vara ren, annars sprids en omergad gren.
-    # Gäller både agenterna och governance. Incident 2026-10-03: agents/wds synkades från en PR-gren till sex repon.
+        adapters = src / "shared" / "adapters"  # older location
+    # The source must be on its default branch and clean, or an unmerged branch spreads.
+    # Applies to both the agents and governance. Incident 2026-10-03: agents/wds was synced from a PR branch to six repos.
     _, dirty = run(["git", "status", "--porcelain"], cwd=s["repo"])
     if not on_default_branch(Path(s["repo"])) or dirty:
         _, cur = run(["git", "branch", "--show-current"], cwd=s["repo"])
-        return False, (f"källan står på '{cur}'{' med ocommittade ändringar' if dirty else ''}. Agenter och "
-                       f"governance synkas bara från standardbranchen utan ändringar. Ingen synk.")
+        return False, (f"the source is on '{cur}'{' with uncommitted changes' if dirty else ''}. Agents and "
+                       f"governance are synced only from the default branch with no changes. No sync.")
     code, sha = run(["git", "rev-parse", "--short", "HEAD"], cwd=s["repo"])
     targets, skipped = wds_targets(s)
     done = []
@@ -329,41 +329,41 @@ def src_vendor_agents(s):
             if problem:
                 skipped.append(f"{d.relative_to(Path(SOURCES['dev_root'])).as_posix()} ({problem})")
                 continue
-            # Adaptrarna (.claude/commands, .github/prompts …) läggs i repots rot
+            # The adapters (.claude/commands, .github/prompts …) go in the repo root
             paths = [s["subdir"]]
             if adapters.is_dir():
                 shutil.copytree(adapters, d, dirs_exist_ok=True)
                 paths += [f.relative_to(adapters).as_posix() for f in adapters.rglob("*") if f.is_file()]
-            result = commit_push(d, paths, f"{s['subdir']}: synkad från {Path(s['repo']).name} {sha}")
+            result = commit_push(d, paths, f"{s['subdir']}: synced from {Path(s['repo']).name} {sha}")
             if result:
                 done.append(f"{d.name} ({result})")
                 continue
         done.append(d.name)
-    info = f"{s['subdir']} {sha} → " + (", ".join(done) or "inga projekt")
+    info = f"{s['subdir']} {sha} → " + (", ".join(done) or "no projects")
     if skipped:
-        info += "\n       hoppade över: " + "\n                     ".join(skipped)
+        info += "\n       skipped: " + "\n                ".join(skipped)
     if s.get("governance_templates"):
         info += "\n" + sync_governance(s, targets)
     return True, info
 
 
 def mirror_agents(src_repo, subdir, src_sha, dest):
-    """Speglar <subdir> i källans HEAD till dest. Filer som inte finns i källan tas bort, utom .source och .wds-sync.
-    En kopia utan .source räknas som en äldre kopia av samma källa (agents/wds ändras aldrig lokalt).
-    Returnerar ett skäl om mappen inte får röras, annars None."""
+    """Mirrors <subdir> in the source's HEAD to dest. Files not in the source are deleted, except .source and .wds-sync.
+    A copy without .source counts as an older copy of the same source (agents/wds is never changed locally).
+    Returns a reason if the folder must not be touched, else None."""
     have = source_of(dest) if dest.exists() else None
     if have and have != src_repo.name:
-        return f"{subdir}/.source namnger {have}, inte {src_repo.name}"
+        return f"{subdir}/.source names {have}, not {src_repo.name}"
     files = git_files(src_repo, subdir)
     if not files:
-        return f"inga committade filer i {src_repo.name}/{subdir}"
+        return f"no committed files in {src_repo.name}/{subdir}"
     if DRY:
         return None
     keep = {".source", ".wds-sync"}
     for name in files:
         code, body = git_show(src_repo, f"{subdir}/{name}")
         if code != 0:
-            return f"kunde inte läsa {subdir}/{name}"
+            return f"could not read {subdir}/{name}"
         target = dest / name
         if not target.exists() or not same(target.read_bytes(), body):
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -382,29 +382,29 @@ def mirror_agents(src_repo, subdir, src_sha, dest):
 
 
 # ── governance/ ─────────────────────────────────────────────────────────────
-# governance/ i ett målrepo består av mappar som var och en speglar en källa:
-#   governance/wds/    = <subdir>/<governance_templates>/ i WDS-källrepot → WDS-repon där Idun har kört
-#   governance/<org>/  = governance/<org>/ i organisationens källrepo     → organisationens andra repon
-# Filerna kopieras som de är, med samma namn. Varje speglad mapp har governance/<mapp>/.source med raden
-# "source: <källrepo>@<sha>". En mapp utan .source är en källa eller handgjord och skrivs aldrig i.
-# Spegling betyder att filer som tagits bort i källan tas bort i kopian, men bara i en mapp vars .source
-# namnger samma källa. Allt läses från källans HEAD (git ls-tree / git show), aldrig från arbetskopian.
+# governance/ in a target repo consists of folders that each mirror one source:
+#   governance/wds/    = <subdir>/<governance_templates>/ in the WDS source repo → WDS repos where Idun has run
+#   governance/<org>/  = governance/<org>/ in the organization's source repo      → the organization's other repos
+# The files are copied as they are, with the same names. Each mirrored folder has governance/<folder>/.source with the line
+# "source: <source repo>@<sha>". A folder without .source is a source or hand-made and is never written to.
+# Mirroring means files deleted in the source are deleted in the copy, but only in a folder whose .source
+# names the same source. Everything is read from the source's HEAD (git ls-tree / git show), never from the working copy.
 
 def git_show(repo, path):
-    """Innehållet i en committad fil (HEAD) som bytes, med originalradbrytningar."""
+    """The content of a committed file (HEAD) as bytes, with the original line endings."""
     r = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=repo, capture_output=True)
     return r.returncode, r.stdout
 
 
 def git_files(repo, folder):
-    """Filerna under folder/ i HEAD, relativt folder. Tom lista om mappen saknas."""
+    """The files under folder/ in HEAD, relative to folder. Empty list if the folder is missing."""
     pre = folder.rstrip("/") + "/"
     _, out = run(["git", "-c", "core.quotepath=off", "ls-tree", "-r", "--name-only", "HEAD", "--", pre], cwd=repo)
     return sorted(p[len(pre):] for p in out.splitlines() if p.startswith(pre))
 
 
 def source_of(folder):
-    """Källrepots namn i <folder>/.source ("source: <repo>@<sha>"), "" om raden saknas, None om filen saknas."""
+    """The source repo's name in <folder>/.source ("source: <repo>@<sha>"), "" if the line is missing, None if the file is missing."""
     f = folder / ".source"
     if not f.is_file():
         return None
@@ -413,49 +413,49 @@ def source_of(folder):
 
 
 def same(a, b):
-    """Samma innehåll, oavsett radbrytningar (autocrlf ger CRLF i arbetskopian)."""
+    """Same content, regardless of line endings (autocrlf gives CRLF in the working copy)."""
     return a.replace(b"\r\n", b"\n") == b.replace(b"\r\n", b"\n")
 
 
 def mirror(src, src_folder, files, src_sha, repo, folder, report):
-    """Speglar src_folder i src (HEAD) till repo/governance/<folder>/.
-    Returnerar True om något ändrades (eller skulle ändras i dry run)."""
+    """Mirrors src_folder in src (HEAD) to repo/governance/<folder>/.
+    Returns True if anything changed (or would change in a dry run)."""
     dest = repo / "governance" / folder
     rel = f"{repo.name}/governance/{folder}"
     if dest.exists():
         have = source_of(dest)
         if have is None:
-            report["local"].append(f"{rel}/ (saknar .source: källa eller handgjord mapp)")
+            report["local"].append(f"{rel}/ (no .source: a source or hand-made folder)")
             return False
         if have != src.name:
-            report["local"].append(f"{rel}/ (.source namnger {have or '?'}, inte {src.name})")
+            report["local"].append(f"{rel}/ (.source names {have or '?'}, not {src.name})")
             return False
-    plan = {"ny": [], "uppdatera": [], "ta bort": []}
+    plan = {"new": [], "update": [], "delete": []}
     contents = {}
     for name in files:
         code, body = git_show(src, f"{src_folder}/{name}")
         if code != 0:
-            report["missing"].append(f"{src.name}: kunde inte läsa {src_folder}/{name}")
+            report["missing"].append(f"{src.name}: could not read {src_folder}/{name}")
             return False
         contents[name] = body
         target = dest / name
         if not target.exists():
-            plan["ny"].append(name)
+            plan["new"].append(name)
         elif not same(target.read_bytes(), body):
-            plan["uppdatera"].append(name)
+            plan["update"].append(name)
     if dest.exists():
         for f in sorted(dest.rglob("*")):
             name = f.relative_to(dest).as_posix()
             if f.is_file() and name != ".source" and name not in contents:
-                plan["ta bort"].append(name)
+                plan["delete"].append(name)
     if not any(plan.values()):
         return False
     report["writes"][rel] = {k: v for k, v in plan.items() if v}
     if not DRY:
-        for name in plan["ny"] + plan["uppdatera"]:
+        for name in plan["new"] + plan["update"]:
             (dest / name).parent.mkdir(parents=True, exist_ok=True)
             (dest / name).write_bytes(contents[name])
-        for name in plan["ta bort"]:
+        for name in plan["delete"]:
             (dest / name).unlink()
         for d in sorted((p for p in dest.rglob("*") if p.is_dir()), key=lambda p: len(p.parts), reverse=True):
             if not any(d.iterdir()):
@@ -465,17 +465,17 @@ def mirror(src, src_folder, files, src_sha, repo, folder, report):
 
 
 def sync_governance(s, wds_repos):
-    """governance/wds/ och governance/<org>/. wds_repos = repona som fick <subdir> (på standardbranchen och rena).
-    WDS-källrepot är redan kontrollerat (standardbranchen och rent) i src_vendor_agents."""
+    """governance/wds/ and governance/<org>/. wds_repos = the repos that got <subdir> (on the default branch and clean).
+    The WDS source repo is already checked (default branch and clean) in src_vendor_agents."""
     wds_src = Path(s["repo"])
     tmpl_rel = f"{s['subdir']}/{s['governance_templates']}"
     _, wds_sha = run(["git", "rev-parse", "--short", "HEAD"], cwd=wds_src)
     report = {"writes": {}, "local": [], "skipped": [], "missing": []}
-    touched = {}         # repo → {mapp: "källa@sha"}, för commit
-    wds_changed = set()  # repon där governance/wds/ ändrades
+    touched = {}         # repo → {folder: "source@sha"}, for the commit
+    wds_changed = set()  # repos where governance/wds/ changed
 
-    # governance/wds/ bara till WDS-repon där Idun har kört: repon som redan har governance/,
-    # och organisationernas käll- och målrepon i konfigurationen. Repon utan governance/ får ingen mapp.
+    # governance/wds/ only to WDS repos where Idun has run: repos that already have governance/,
+    # and the organizations' source and target repos in the configuration. Repos without governance/ get no folder.
     tmpl_files = git_files(wds_src, tmpl_rel)
     gov_names = set()
     for g in s.get("governance", []):
@@ -483,41 +483,41 @@ def sync_governance(s, wds_repos):
         gov_names.update(g.get("repos", []))
     wds_gov = [r for r in wds_repos if (r / "governance").is_dir() or r.name in gov_names]
     if not tmpl_files:
-        report["missing"].append(f"wds: inga committade mallar i {wds_src.name}/{tmpl_rel}/")
+        report["missing"].append(f"wds: no committed templates in {wds_src.name}/{tmpl_rel}/")
     else:
         for repo in wds_gov:
             if mirror(wds_src, tmpl_rel, tmpl_files, wds_sha, repo, "wds", report):
                 touched.setdefault(repo, {})["wds"] = f"{wds_src.name}@{wds_sha}"
                 wds_changed.add(repo)
 
-    # governance/<org>/ från organisationens källrepo till organisationens andra repon
+    # governance/<org>/ from the organization's source repo to the organization's other repos
     by_name = {}
     for d in all_repos():
         by_name.setdefault(d.name, d)
-    ready = {r: None for r in wds_repos}  # redan kontrollerade
+    ready = {r: None for r in wds_repos}  # already checked
     orgs = []
     for g in s.get("governance", []):
         org, src_name = g["org"].lower(), g["governance_source"]
         src = by_name.get(src_name)
         if not src:
-            report["missing"].append(f"{org}: källrepot {src_name} saknas under {SOURCES['dev_root']}")
+            report["missing"].append(f"{org}: the source repo {src_name} is missing under {SOURCES['dev_root']}")
             continue
         files = git_files(src, f"governance/{org}")
         _, src_sha = run(["git", "rev-parse", "--short", "HEAD"], cwd=src)
-        # Organisationens repon: de listade, plus alla vars governance/<org>/.source namnger källan
+        # The organization's repos: the listed ones, plus all whose governance/<org>/.source names the source
         members = []
         for name in g.get("repos", []):
             if name in by_name:
                 members.append(by_name[name])
             else:
-                report["missing"].append(f"{org}: repot {name} saknas under {SOURCES['dev_root']}")
+                report["missing"].append(f"{org}: the repo {name} is missing under {SOURCES['dev_root']}")
         for d in by_name.values():
             if d not in members and source_of(d / "governance" / org) == src_name:
                 members.append(d)
-        members = [d for d in members if d != src]  # källans egen governance/<org>/ rörs aldrig
+        members = [d for d in members if d != src]  # the source's own governance/<org>/ is never touched
         orgs.append((org, src_name, src, members))
         if not files:
-            report["missing"].append(f"{org}: inga committade filer i {src_name}/governance/{org}/")
+            report["missing"].append(f"{org}: no committed files in {src_name}/governance/{org}/")
             continue
         for repo in members:
             if repo not in ready:
@@ -528,33 +528,33 @@ def sync_governance(s, wds_repos):
             if mirror(src, f"governance/{org}", files, src_sha, repo, org, report):
                 touched.setdefault(repo, {})[org] = f"{src_name}@{src_sha}"
 
-    # En commit per repo, bara de speglade mapparna
+    # One commit per repo, only the mirrored folders
     results = []
     if not DRY:
         for repo, folders in touched.items():
-            msg = "governance: synkad från " + ", ".join(dict.fromkeys(folders.values()))
+            msg = "governance: synced from " + ", ".join(dict.fromkeys(folders.values()))
             r = commit_push(repo, [f"governance/{f}" for f in folders], msg)
             if r:
                 results.append(f"{repo.name} ({r})")
 
-    # Rapport
-    lines = [f"       governance{' (dry run)' if DRY else ''}: wds {wds_sha} → {len(wds_gov)} repon"
-             + "".join(f" · {org} från {src_name} → {len(m)} repon" for org, src_name, _, m in orgs)]
+    # Report
+    lines = [f"       governance{' (dry run)' if DRY else ''}: wds {wds_sha} → {len(wds_gov)} repos"
+             + "".join(f" · {org} from {src_name} → {len(m)} repos" for org, src_name, _, m in orgs)]
     if report["writes"]:
-        lines.append(f"         {'skulle ändra' if DRY else 'ändrade'}:")
+        lines.append(f"         {'would change' if DRY else 'changed'}:")
         for rel, plan in report["writes"].items():
             lines.append(f"           {rel}/: " + " · ".join(f"{v} ({len(fs)}): {', '.join(fs)}" for v, fs in plan.items()))
-    for key, title in (("local", "rördes inte"), ("skipped", "hoppade över"), ("missing", "saknas")):
+    for key, title in (("local", "not touched"), ("skipped", "skipped"), ("missing", "missing")):
         if report[key]:
             lines.append(f"         {title} ({len(report[key])}):")
             lines += [f"           {x}" for x in report[key]]
     if results:
-        lines.append("         committat: " + ", ".join(results))
-    # governance/wds/ ändrades i ett repo som hör till organisationen: dags för konfliktkontroll
+        lines.append("         committed: " + ", ".join(results))
+    # governance/wds/ changed in a repo that belongs to the organization: time for a conflict check
     for org, src_name, src, members in orgs:
         if wds_changed & set(members + [src]):
-            lines.append(f"       WDS-standarden ändrades. Konfliktkontroll behövs för {org}: "
-                         f"kör `/idun audit governance` i {src_name}.")
+            lines.append(f"       The WDS default changed. {org} needs a conflict check: "
+                         f"run `/idun audit governance` in {src_name}.")
     return "\n".join(lines)
 
 
@@ -571,33 +571,33 @@ KINDS = {
 def main():
     COMMANDS.mkdir(parents=True, exist_ok=True)
     print("=== /sync-skills" + (" (dry run)" if DRY else "") + " ===")
-    where = "" if DEV_ROOT == CATALOG_ROOT else f" (katalogen säger {CATALOG_ROOT})"
-    print(f"Repona på den här datorn: {DEV_ROOT}{where}\n")
+    where = "" if DEV_ROOT == CATALOG_ROOT else f" (the catalog says {CATALOG_ROOT})"
+    print(f"The repos on this computer: {DEV_ROOT}{where}\n")
 
     edited = rescue_local_edits()
     if edited:
-        print(f"Lokalt ändrade sedan förra synken ({len(edited)}) — sparade i {BACKUPS.name}/ innan överskrivning:")
+        print(f"Edited locally since the last sync ({len(edited)}) — saved in {BACKUPS.name}/ before overwriting:")
         for f in edited:
             print(f"  ! {f}")
-        print("  Flytta ändringarna till källrepot om de ska behållas.\n")
+        print("  Move the changes to the source repo if they are to be kept.\n")
 
     source_repos = [Path(s["repo"]) for s in SOURCES["sources"]]
     projects = [p for p in discover_projects() if p not in source_repos]
     if not NO_PULL and not DRY:
-        print("Hämtar senaste versionen:")
+        print("Fetching the latest version:")
         for repo in source_repos + projects:
             if not repo.exists():
-                print(f"  SAKNAS  {repo} — klona det")
+                print(f"  MISSING  {repo} — clone it")
                 continue
             problem = pull(repo)
             print(f"  {'!' if problem else 'ok'}  {repo.name}" + (f" — {problem}" if problem else ""))
         print()
 
     writers = {}
-    print("Installerar skills (senare källa vinner):")
+    print("Installing skills (later source wins):")
     for s in SOURCES["sources"]:
         if not Path(s["repo"]).exists():
-            print(f"  SAKNAS  {s['name']}")
+            print(f"  MISSING  {s['name']}")
             continue
         before = snapshot()
         ok, info = KINDS[s["kind"]](s)
@@ -605,21 +605,21 @@ def main():
         for f, h in after.items():
             if before.get(f) != h:
                 writers.setdefault(f, []).append(s["name"])
-        print(f"  {'ok' if ok else 'FEL'}  {s['name']}: {info}")
+        print(f"  {'ok' if ok else 'ERROR'}  {s['name']}: {info}")
 
     clashes = {f: w for f, w in writers.items() if len(w) > 1}
     if clashes:
-        print(f"\nKrockar ({len(clashes)}) — samma kommando från flera källor, sista vann:")
+        print(f"\nClashes ({len(clashes)}) — the same command from several sources, the last one won:")
         for f, w in sorted(clashes.items()):
             print(f"  {f}: {' → '.join(w)}")
 
-    print(f"\nProjektrepos med egna skills ({len(projects)}) — gäller bara i respektive repo:")
+    print(f"\nProject repos with their own skills ({len(projects)}) — apply only in their own repo:")
     for p in projects:
         print(f"  {p.relative_to(SOURCES['dev_root']).as_posix()}")
 
     if not DRY:
         STATE.write_text(json.dumps(snapshot(), indent=1), encoding="utf-8")
-    print("\nKlart. Nya skills syns i nästa session.")
+    print("\nDone. New skills show up in the next session.")
 
 
 if __name__ == "__main__":

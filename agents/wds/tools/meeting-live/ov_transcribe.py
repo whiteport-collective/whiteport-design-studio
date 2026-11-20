@@ -1,6 +1,6 @@
-"""Skriver ut ljud på Intels GPU med OpenVINO (KB-Whisper), med tider per ord.
-Användning: python ov_transcribe.py <modellmapp> <arbetsmapp> <id> [<id> ...]
-Skriver <id>.txt (tidsstämplade segment) och <id>.words.json (ord med start och slut)."""
+"""Transcribes audio on Intel's GPU with OpenVINO (KB-Whisper), with times per word.
+Usage: python ov_transcribe.py <model folder> <work folder> <id> [<id> ...]
+Writes <id>.txt (timestamped segments) and <id>.words.json (words with start and end)."""
 import json, os, subprocess, sys, time
 import soundfile as sf
 import openvino_genai as og
@@ -8,7 +8,7 @@ import openvino_genai as og
 model, work, ids = sys.argv[1], sys.argv[2], sys.argv[3:]
 t0 = time.time()
 pipe = og.WhisperPipeline(model, "GPU", word_timestamps=True, CACHE_DIR=os.path.join(model, "cache"))
-print("GPU laddad på", round(time.time() - t0, 1), "s", flush=True)
+print("GPU loaded in", round(time.time() - t0, 1), "s", flush=True)
 for v in ids:
     out = os.path.join(work, f"{v}.txt")
     if os.path.exists(out):
@@ -25,5 +25,5 @@ for v in ids:
     json.dump(words, open(os.path.join(work, f"{v}.words.json"), "w", encoding="utf-8"), ensure_ascii=False)
     open(out, "w", encoding="utf-8").write("\n".join(lines) + "\n")
     os.remove(wav)
-    print(v, f"klar, {len(audio)/16000/60:.1f} min ljud på {dt/60:.1f} min ({len(audio)/16000/dt:.1f}x realtid), {len(words)} ord", flush=True)
-print("ALLA KLARA", flush=True)
+    print(v, f"done, {len(audio)/16000/60:.1f} min of audio in {dt/60:.1f} min ({len(audio)/16000/dt:.1f}x real time), {len(words)} words", flush=True)
+print("ALL DONE", flush=True)

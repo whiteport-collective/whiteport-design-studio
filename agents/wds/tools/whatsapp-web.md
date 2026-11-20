@@ -2,41 +2,41 @@
 name: whatsapp-web
 source: wds
 type: script
-description: Läser en chatt i WhatsApp Web i tidsordning, med text och röstmeddelanden, och laddar ner den som filer. Läser bara, skickar och ändrar ingenting. Skriptet är whatsapp-web/collector.js och körs i webbläsarfliken.
+description: Reads a chat in WhatsApp Web in time order, with text and voice messages, and downloads it as files. Only reads; sends and changes nothing. The script is whatsapp-web/collector.js and runs in the browser tab.
 used_by: []
 ---
 
 # Tool: whatsapp-web
 
-Hämtar hela chatten med en kontakt, så att den kan arkiveras och analyseras. WhatsApps egen lista över meddelanden är facit, så att inget saknas.
+Fetches the whole chat with a contact, so that it can be archived and analysed. WhatsApp's own list of messages is the reference, so that nothing is missing.
 
-**Ännu ingen WDS-skill.** Arkivet (sammanfogning, utskrift av röstmeddelanden, läsbar version) görs tills vidare av projektets eget tool, till exempel `agents/welqora/tools/kommunikationsarkiv/` i welqora-analysis. Skillen för ett kommunikationsarkiv i WDS är inte skriven än; när den finns står den i `used_by:`.
+**No WDS skill yet.** The archive (merging, transcribing voice messages, a readable version) is for now made by the project's own tool, for example `agents/welqora/tools/kommunikationsarkiv/` [communication archive] in welqora-analysis. The WDS skill for a communication archive is not written yet; when it exists it goes in `used_by:`.
 
-## Förutsättningar
+## Prerequisites
 
-- WhatsApp Web är inloggat i personens Chrome, och agenten når fliken via webbläsarverktyget (`javascript_exec`).
-- Chrome tillåter flera nedladdningar från web.whatsapp.com.
-- Personen har sagt ja till att chatten arkiveras, och arkivet följer projektets policy för data och sekretess (`governance/`). Arkivet hamnar bara i ett privat repo.
+- WhatsApp Web is logged in in the person's Chrome, and the agent reaches the tab through the browser tool (`javascript_exec`).
+- Chrome allows multiple downloads from web.whatsapp.com.
+- The person has said yes to archiving the chat, and the archive follows the project's data and confidentiality policy (`governance/`). The archive goes only into a private repo.
 
-## Åtgärder
+## Actions
 
-Öppna web.whatsapp.com och chatten med kontakten. Kör sedan i fliken, ett anrop i taget. Varje anrop håller sig under cirka 38 sekunder så att det ryms i webbläsarverktygets tidsgräns.
+Open web.whatsapp.com and the chat with the contact. Then run in the tab, one call at a time. Each call stays under about 38 seconds so that it fits within the browser tool's time limit.
 
-1. **Installera:** klistra in hela `whatsapp-web/collector.js`. Svaret är `installed`.
-2. **Facit:** `await __wa.list('<kontaktens namn>')` ger antal meddelanden och första och sista tid, ur WhatsApps lokala lagring.
-3. **Texten:** `await __wa.collect()`, upprepat tills `missing` är 0.
-4. **Röstmeddelandena:** `await __wa.voice()`, upprepat tills `voice` är lika med `of`. Varje röstmeddelande spelas ljudlöst en kort stund så att ljudfilen kan hämtas.
-5. **Exportera:** `await __wa.export('<prefix>')` laddar ner två filer till Hämtade filer:
-   - `<prefix>-messages.jsonl`: ett meddelande per rad med `n`, `id`, `time`, `t`, `from` (`me` eller `them`), `type` och `text`
-   - `<prefix>-voice.json`: röstmeddelandena som base64, nycklade på meddelandets id
+1. **Install:** paste the whole of `whatsapp-web/collector.js`. The answer is `installed`.
+2. **Reference:** `await __wa.list('<the contact's name>')` gives the number of messages and the first and last time, from WhatsApp's local storage.
+3. **The text:** `await __wa.collect()`, repeated until `missing` is 0.
+4. **The voice messages:** `await __wa.voice()`, repeated until `voice` equals `of`. Each voice message is played muted for a moment so that the audio file can be fetched.
+5. **Export:** `await __wa.export('<prefix>')` downloads two files to Downloads (Hämtade filer on a Swedish Windows):
+   - `<prefix>-messages.jsonl`: one message per line with `n`, `id`, `time`, `t`, `from` (`me` or `them`), `type` and `text`
+   - `<prefix>-voice.json`: the voice messages as base64, keyed on the message id
 
-## Begränsningar
+## Limitations
 
-- Meddelandetexten är krypterad i WhatsApps lagring och läses därför från sidan. Listan över id och tider kommer ur lagringen.
-- Video som "visas en gång" går inte att spara. Bilder, video och dokument laddas ned med WhatsApps egen nedladdning och sparas utanför repot.
-- WhatsApp laddar inte äldre meddelanden när skriptet sätter scrollpositionen hårt, så `collect()` bläddrar stegvis och kan behöva köras flera gånger.
+- The message text is encrypted in WhatsApp's storage and is therefore read from the page. The list of ids and times comes from the storage.
+- "View once" video cannot be saved. Images, video and documents are downloaded with WhatsApp's own download and saved outside the repo.
+- WhatsApp does not load older messages when the script sets the scroll position abruptly, so `collect()` scrolls in steps and may need to be run several times.
 
-## Aldrig
+## Never
 
-- Skicka något i WhatsApp utan personens uttryckliga ja för det enskilda meddelandet.
-- Spara exporten i ett publikt repo.
+- Send anything in WhatsApp without the person's explicit yes for that particular message.
+- Save the export in a public repo.

@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 """
-live.py: ett Fireflies-möte live till en lokal fil. Del av WDS (agents/wds/tools/meeting-live.md).
+live.py: a Fireflies meeting live to a local file. Part of WDS (agents/wds/tools/meeting-live.md).
 
-Ingen server, ingen MCP. Fireflies realtid (socket.io) skrivs rad för rad till en jsonl-fil,
-och agenten bevakar filen med watch.
+No server, no MCP. Fireflies realtime (socket.io) is written line by line to a jsonl file,
+and the agent watches the file with watch.
 
-    python live.py list                          # pågående möten
-    python live.py join [--number 1 | --id ID]   # strömma till .wds/live/<tid>-<titel>.jsonl (körs i bakgrunden)
-    python live.py join --continue <fil>         # fortsätt i samma fil efter ett avbrott, fyller luckan
-    python live.py watch <fil> [--every 30]      # skriv ut nya repliker i klumpar, slutar när mötet är slut
-    python live.py transcript <fil>              # hela mötet som läsbar text
-    python live.py archive <fil> [<fil> …] [--out communication/meetings] [--lang sv] [--media <mediamappen>]
-                                                 # hela mötet till repots mötesarkiv, med registret
-                                                 # (--out är mappen; slutar den på .md är det filen)
+    python live.py list                          # meetings in progress
+    python live.py join [--number 1 | --id ID]   # stream to .wds/live/<time>-<title>.jsonl (runs in the background)
+    python live.py join --continue <file>        # continue in the same file after a break, fills the gap
+    python live.py watch <file> [--every 30]     # print new lines in batches, stops when the meeting is over
+    python live.py transcript <file>             # the whole meeting as readable text
+    python live.py archive <file> [<file> …] [--out communication/meetings] [--lang sv] [--media <media folder>]
+                                                 # the whole meeting to the repo's meeting archive, with the index
+                                                 # (--out is the folder; if it ends in .md it is the file)
 
-join återansluter själv om Fireflies tappar anslutningen, i samma fil, och fyller luckan ur
-Fireflies sparade transkript. archive hämtar Fireflies färdiga transkript när det finns.
+join reconnects by itself if Fireflies drops the connection, in the same file, and fills the gap from
+Fireflies' saved transcript. archive fetches Fireflies' final transcript when there is one.
 
-Nyckeln: miljövariabeln FIREFLIES_API_KEY, hämtad ur Bitwarden vid körning. Den skrivs aldrig till fil.
-Kräver: pip install "python-socketio[client]"
+The key: the environment variable FIREFLIES_API_KEY, fetched from Bitwarden at run time. It is never written to file.
+Requires: pip install "python-socketio[client]"
 """
 
 import io
@@ -36,9 +36,9 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="repla
 
 GRAPHQL = "https://api.fireflies.ai/graphql"
 REALTIME = "wss://api.fireflies.ai"
-IDLE_FLUSH = 3.0      # sekunder utan uppdatering innan en replik räknas som klar
-POLL_ACTIVE = 60      # hur ofta join kollar att mötet fortfarande pågår
-FIRST_BATCH = 40      # watch visar högst så många rader första gången
+IDLE_FLUSH = 3.0      # seconds without an update before a line counts as finished
+POLL_ACTIVE = 60      # how often join checks that the meeting is still in progress
+FIRST_BATCH = 40      # watch shows at most this many lines the first time
 
 
 def arg(name, default=None):
@@ -49,7 +49,7 @@ def arg(name, default=None):
 def key():
     k = os.environ.get("FIREFLIES_API_KEY")
     if not k:
-        print('FIREFLIES_API_KEY saknas. Hämta den ur Bitwarden: export FIREFLIES_API_KEY="$(bw get password \'Fireflies API Key\')"')
+        print('FIREFLIES_API_KEY is missing. Fetch it from Bitwarden: export FIREFLIES_API_KEY="$(bw get password \'Fireflies API Key\')"')
         sys.exit(1)
     return k
 
@@ -96,14 +96,14 @@ def slug(text):
 def cmd_list():
     ms = active_meetings()
     if not ms:
-        print("Inga pågående möten. Starta inspelningen i Fireflies och försök igen om 30 sekunder.")
+        print("No meetings in progress. Start the recording in Fireflies and try again in 30 seconds.")
     for i, m in enumerate(ms, 1):
         print(f"{i}. {m['title']} | {m['id']} | {m.get('start_time') or '?'} | {m.get('state') or 'active'}")
 
 
 # ── join ────────────────────────────────────────────────────────────────
 
-RECONNECT_AFTER = 20  # sekunder utan anslutning innan join bygger en ny
+RECONNECT_AFTER = 20  # seconds without a connection before join builds a new one
 
 
 def norm(text):
@@ -111,8 +111,8 @@ def norm(text):
 
 
 class Writer:
-    """Lägger till rader i mötesfilen. Kommer ihåg allt som redan skrivits, så att en ny anslutning
-    eller en lucka som fylls aldrig skriver samma replik två gånger."""
+    """Appends lines to the meeting file. Remembers everything already written, so that a new connection
+    or a gap being filled never writes the same line twice."""
 
     def __init__(self, path):
         self.path, self.n, self.lock, self.seen = path, 0, threading.Lock(), {}
@@ -137,7 +137,7 @@ class Writer:
             start = float(row.get("start") or 0)
         except (TypeError, ValueError):
             start = 0.0
-        # Samma text inom 15 sekunder är samma replik, även när liveutskriften och den färdiga skiljer lite i tid.
+        # The same text within 15 seconds is the same line, even when the live transcript and the final one differ a little in time.
         return any(abs(start - s) < 15 for s in self.seen.get(key, []))
 
     def write(self, row):
@@ -154,7 +154,7 @@ class Writer:
 
 
 def fill(w, t, flag):
-    """Skriver in det Fireflies redan har sparat och som saknas i filen. Returnerar antalet nya repliker."""
+    """Writes in what Fireflies has already saved and the file is missing. Returns the number of new lines."""
     return sum(w.write({"start": s.get("start_time"), "speaker": s.get("speaker_name"), "text": s.get("text"), flag: True})
                for s in (t.get("sentences") or []))
 
@@ -167,7 +167,7 @@ def cmd_join():
     try:
         import socketio
     except ImportError:
-        print('Paketet saknas: python -m pip install "python-socketio[client]"')
+        print('The package is missing: python -m pip install "python-socketio[client]"')
         sys.exit(1)
 
     cont = arg("--continue")
@@ -175,7 +175,7 @@ def cmd_join():
         path = Path(cont)
         meeting_id = arg("--id") or next((r["meeting_id"] for r in read_rows(path) if r.get("meeting_id")), None)
         if not meeting_id:
-            print(f"Hittar inget mötes-id i {path}. Ange --id.")
+            print(f"No meeting id found in {path}. Give --id.")
             sys.exit(1)
     else:
         meeting_id = arg("--id")
@@ -183,7 +183,7 @@ def cmd_join():
             ms = active_meetings()
             pick = int(arg("--number", "1"))
             if len(ms) < pick:
-                print("Inget pågående möte på den platsen. Starta inspelningen i Fireflies och försök igen om 30 sekunder.")
+                print("No meeting in progress at that position. Start the recording in Fireflies and try again in 30 seconds.")
                 sys.exit(1)
             meeting_id = ms[pick - 1]["id"]
 
@@ -196,9 +196,9 @@ def cmd_join():
     w.write({"event": "rejoined" if cont else "joined", "title": t["title"], "meeting_id": meeting_id,
              "participants": t.get("participants") or [], "at": now()})
     added = fill(w, t, "fill" if cont else "seed")
-    print(f'Ansluten till "{t["title"]}"')
-    print(f"Fil: {path.resolve()}")
-    print(f"{added} repliker från Fireflies inskrivna. Strömmar live. Ctrl+C avslutar.")
+    print(f'Connected to "{t["title"]}"')
+    print(f"File: {path.resolve()}")
+    print(f"{added} lines from Fireflies written. Streaming live. Ctrl+C stops.")
 
     pending, plock, done = {}, threading.Lock(), threading.Event()
     state = {"up": False, "since": time.time()}
@@ -216,7 +216,7 @@ def cmd_join():
             return
         flush()
         w.write({"event": "ended", "reason": reason, "at": now()})
-        print(f"Mötet är slut ({reason}). Fil: {path.resolve()}")
+        print(f"The meeting is over ({reason}). File: {path.resolve()}")
         done.set()
 
     def client():
@@ -224,19 +224,19 @@ def cmd_join():
 
         @sio.on("auth.success")
         def _auth():
-            print("Fireflies: inloggad.")
+            print("Fireflies: logged in.")
 
         @sio.on("connection.established")
         def _connected():
             state["up"] = True
             w.write({"event": "connected", "at": now()})
-            print("Fireflies: realtid ansluten.")
+            print("Fireflies: realtime connected.")
 
         @sio.on("transcription.broadcast")
         def _segment(event):
             ev = event.get("payload", event) if isinstance(event, dict) else {}
             cid = str(ev.get("chunk_id") or ev.get("start_time"))
-            # En ny bit betyder att de tidigare är klara. Samma bit kan komma flera gånger medan den växer.
+            # A new chunk means the earlier ones are finished. The same chunk can arrive several times while it grows.
             with plock:
                 for c in [c for c in pending if c != cid]:
                     e, _ = pending.pop(c)
@@ -274,7 +274,7 @@ def cmd_join():
             except Exception as e:
                 w.write({"event": "error", "message": f"active_meetings: {e}"})
             if misses >= 2:
-                finish("mötet pågår inte längre i Fireflies")
+                finish("the meeting is no longer in progress in Fireflies")
 
     threading.Thread(target=idle_flusher, daemon=True).start()
     threading.Thread(target=still_live, daemon=True).start()
@@ -288,7 +288,7 @@ def cmd_join():
                             auth={"token": f"Bearer {key()}", "transcriptId": meeting_id}, wait_timeout=20)
             except Exception as e:
                 w.write({"event": "error", "message": f"connect: {e}"})
-            # Håll anslutningen så länge den lever. Är den nere längre än RECONNECT_AFTER byggs en ny.
+            # Keep the connection while it lives. If it is down longer than RECONNECT_AFTER a new one is built.
             while not done.is_set() and (state["up"] or time.time() - state["since"] < RECONNECT_AFTER):
                 done.wait(1)
             try:
@@ -298,7 +298,7 @@ def cmd_join():
             if done.is_set():
                 break
             w.write({"event": "reconnecting", "at": now()})
-            print("Fireflies: anslutningen föll, ansluter igen och fyller luckan.")
+            print("Fireflies: the connection dropped, reconnecting and filling the gap.")
             try:
                 n = fill(w, transcript(meeting_id), "fill")
                 if n:
@@ -307,7 +307,7 @@ def cmd_join():
                 w.write({"event": "error", "message": f"fill: {e}"})
             done.wait(3)
     except KeyboardInterrupt:
-        finish("avbrutet")
+        finish("interrupted")
 
 
 # ── watch ───────────────────────────────────────────────────────────────
@@ -317,27 +317,27 @@ def line_text(row):
         return f"[{clock(row.get('start'))}] {row.get('speaker') or '?'}: {row['text']}"
     ev = row.get("event")
     if ev in ("joined", "rejoined"):
-        return f"== Ansluten: {row.get('title')} =="
+        return f"== Connected: {row.get('title')} =="
     if ev == "frame":
-        return f"== Bild {clock(row.get('start'))}: {row.get('file')} =="
+        return f"== Picture {clock(row.get('start'))}: {row.get('file')} =="
     if ev == "status":
-        levels = ", ".join(f"{k} {'inget ljud' if v is None else f'{v} dB'}" for k, v in (row.get("levels") or {}).items())
+        levels = ", ".join(f"{k} {'no sound' if v is None else f'{v} dB'}" for k, v in (row.get("levels") or {}).items())
         s = f"== Status {clock(row.get('start'))}: {levels}"
         if row.get("lag") is not None:
-            s += f" · text {row['lag']} s efter talet"
+            s += f" · text {row['lag']} s behind the speech"
         if row.get("skipped"):
-            s += f" · {row['skipped']} s hoppades över live (kommer med i den grundliga utskriften)"
+            s += f" · {row['skipped']} s skipped live (included in the thorough transcript)"
         if row.get("echo"):
-            s += f" · {row['echo']} s eko från högtalarna i mikrofonen"
+            s += f" · {row['echo']} s echo from the speakers in the microphone"
         return s + " =="
     if ev == "reconnecting":
-        return "== Anslutningen föll, ansluter igen =="
+        return "== The connection dropped, reconnecting =="
     if ev == "filled":
-        return f"== Luckan fylld med {row.get('count')} repliker från Fireflies =="
+        return f"== Gap filled with {row.get('count')} lines from Fireflies =="
     if ev == "ended":
-        return f"== MÖTET ÄR SLUT: {row.get('reason')} =="
+        return f"== MEETING OVER: {row.get('reason')} =="
     if ev == "error":
-        return f"== FEL: {row.get('message')} =="
+        return f"== ERROR: {row.get('message')} =="
     return f"== {ev} =="
 
 
@@ -349,7 +349,7 @@ def read_rows(path):
 def cmd_watch():
     path = Path(sys.argv[2]) if len(sys.argv) > 2 else None
     if not path or not path.exists():
-        print(f"== FEL: filen finns inte: {path} ==")
+        print(f"== ERROR: the file does not exist: {path} ==")
         sys.exit(1)
     every = float(arg("--every", "30"))
     seen_file = path.with_suffix(".seen")
@@ -359,7 +359,7 @@ def cmd_watch():
         new = rows[seen:]
         if new:
             if seen == 0 and len(new) > FIRST_BATCH:
-                print(f"({len(new) - FIRST_BATCH} tidigare rader finns i filen)\n" + "\n".join(map(line_text, new[-FIRST_BATCH:])))
+                print(f"({len(new) - FIRST_BATCH} earlier lines are in the file)\n" + "\n".join(map(line_text, new[-FIRST_BATCH:])))
             else:
                 print("\n".join(map(line_text, new)))
             seen = len(rows)
@@ -374,7 +374,7 @@ def cmd_watch():
 def cmd_transcript():
     path = Path(sys.argv[2]) if len(sys.argv) > 2 else None
     if not path or not path.exists():
-        print(f"Filen finns inte: {path}")
+        print(f"The file does not exist: {path}")
         sys.exit(1)
     print("\n".join(line_text(r) for r in read_rows(path)))
 
@@ -404,8 +404,8 @@ def transcript_full(meeting_id):
 
 
 def local_span(rs):
-    """Start och slut för en lokal inspelning: starten i huvudet, längden ur slutradens duration, annars
-    dess klockslag, annars den sista repliken. None om huvudet saknar tid."""
+    """Start and end of a local recording: the start in the header, the length from the end line's duration, otherwise
+    its clock time, otherwise the last line. None if the header has no time."""
     head = next((r for r in rs if r.get("event") in ("joined", "rejoined") and r.get("at")), None)
     if not head:
         return None
@@ -423,7 +423,7 @@ def local_span(rs):
 def cmd_archive():
     files = [Path(a) for a in sys.argv[2:] if a.endswith(".jsonl")]
     if not files:
-        print("Ange mötesfilerna: python live.py archive <fil.jsonl> [<fil.jsonl> …] [--out communication/meetings] [--lang sv]")
+        print("Give the meeting files: python live.py archive <file.jsonl> [<file.jsonl> …] [--out communication/meetings] [--lang sv]")
         sys.exit(1)
     out = Path(arg("--out", "communication/meetings"))
     L = LABELS.get(arg("--lang", "en"), LABELS["en"])
@@ -433,8 +433,8 @@ def cmd_archive():
     meeting_ids = list(dict.fromkeys(m for m in mid_of.values() if m))
     title = arg("--title") or next((r["title"] for r in heads if r.get("meeting_id")), None) or (heads[0]["title"] if heads else "Meeting")
     ats = sorted(r["at"] for rs in rows.values() for r in rs if r.get("at"))
-    # En lokal inspelning: start i huvudet, längd i slutraden. final.jsonl från refine.py hade förut ingen sluttid,
-    # så huvudet blev "11:08–11:08" och längden tom.
+    # A local recording: start in the header, length in the end line. final.jsonl from refine.py used to have no end time,
+    # so the header became "11:08–11:08" and the length empty.
     recs = [s for s in (local_span(rs) for f, rs in rows.items() if not mid_of[f]) if s]
     ats = sorted(ats + [t.isoformat(timespec="seconds") for s in recs for t in s])
     day = ats[0][:10] if ats else datetime.now().strftime("%Y-%m-%d")
@@ -450,9 +450,9 @@ def cmd_archive():
                 source = L["final"]
                 minutes += round(float(t.get("duration") or 0))
             except Exception as e:
-                print(f"Kunde inte hämta det färdiga transkriptet för {mid} ({e}). Använder liveutskriften.")
+                print(f"Could not fetch the final transcript for {mid} ({e}). Using the live transcript.")
         if not lines:
-            # Liveutskriften från alla filer för mötet, utan dubbletter från nya anslutningar.
+            # The live transcript from all files for the meeting, without duplicates from new connections.
             seen, kept = {}, []
             for f in files:
                 if mid_of[f] != mid:
@@ -476,8 +476,8 @@ def cmd_archive():
 
     speakers = sorted({s for _, _, ls in parts for _, s, _ in ls if s})
     name = f"{day}-{slug(title)}.md"
-    # --out är mappen. Ett filnamn på .md gav förut en mapp med det namnet och ett register bredvid den
-    # (<fil>.md.md); nu blir det utskriftens namn i den mappen.
+    # --out is the folder. A file name ending in .md used to give a folder with that name and an index beside it
+    # (<file>.md.md); now it becomes the transcript's name in that folder.
     if out.suffix == ".md":
         out, name = out.parent, out.name
     doc = [f"# {title}, {day}", ""]
@@ -495,7 +495,7 @@ def cmd_archive():
         doc += [f"[{clock(st)}] {sp or '?'}: {tx}" for st, sp, tx in lines] + [""]
     out.mkdir(parents=True, exist_ok=True)
     (out / name).write_text("\n".join(doc), encoding="utf-8", newline="\n")
-    print(f"Arkiverat: {out / name} ({sum(len(l) for _, _, l in parts)} repliker, {len(parts)} del(ar))")
+    print(f"Archived: {out / name} ({sum(len(l) for _, _, l in parts)} lines, {len(parts)} part(s))")
 
     index = out.parent / f"{out.name}.md"
     if not index.exists():
@@ -507,7 +507,7 @@ def cmd_archive():
         ids = " ".join(f"`{m}`" for m in meeting_ids) or (f"media: `{media}`" if media else "")
         row = f"| {day} | {title} | {length} | {ids} | [{name}]({out.name}/{name}) |  |"
         index.write_text(text.rstrip("\n") + "\n" + row + "\n", encoding="utf-8", newline="\n")
-        print(f"Ny rad i {index}. Fyll i sammanfattningen när den är skriven.")
+        print(f"New row in {index}. Fill in the summary when it is written.")
 
 
 if __name__ == "__main__":

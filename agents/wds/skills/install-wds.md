@@ -128,7 +128,7 @@ Installing WDS means getting the person into their repos. The agents, the adapte
   </step>
 
   <step id="new-computer">
-    **The person is moving to, or adding, a computer** ("ny dator", "jag ska installera på min Mac"). Run this on the computer that already works, so the new one only has to follow a handover.
+    **The person is moving to, or adding, a computer** ("ny dator" [new computer], "jag ska installera på min Mac" [I'm going to install on my Mac]). Run this on the computer that already works, so the new one only has to follow a handover.
 
     Write a handover to Idun in the person's private repo (`sessions/<user>/idun/`, or `handoffs/` where the repo has it), with wrap's format. Under `## Next`, in order:
     1. The programs: git, the GitHub CLI and Python 3.10 or newer (on a Mac, Homebrew first, and Homebrew before Apple's Python in PATH; machine tool).
@@ -138,11 +138,13 @@ Installing WDS means getting the person into their repos. The agents, the adapte
     5. The sync as a dry run, and the check that every WDS repo is listed (step 9), then the real sync after the person's yes.
     No passwords or keys: logins happen in the browser, keys stay in Bitwarden.
 
-    Commit and push the handover, and give the person the start command for the new computer, in its own code block:
+    Commit and push the handover, and give the person the start command for the new computer, in its own code block, in the person's language:
 
     ```
-    Installera WDS från github.com/whiteport-collective/whiteport-design-studio och ta överlämningen <owner>/<private repo> <timestamp>
+    Install WDS from github.com/whiteport-collective/whiteport-design-studio and take the handover <owner>/<private repo> <timestamp>
     ```
+
+    In Swedish: `Installera WDS från github.com/whiteport-collective/whiteport-design-studio och ta överlämningen <owner>/<private repo> <timestamp>`.
 
     On the new computer the person installs Claude Code and says that sentence; `install.md` does the rest.
   </step>

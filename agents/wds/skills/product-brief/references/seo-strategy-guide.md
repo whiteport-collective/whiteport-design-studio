@@ -23,20 +23,20 @@
 
 | Category | Intent | Example (Mechanic) |
 |----------|--------|---------------------|
-| **Service** | Looking for specific service | "bilservice Öland" |
-| **Location** | Near-me searches | "bilverkstad norra Öland" |
-| **Problem** | Has a specific issue | "AC reparation bil" |
+| **Service** | Looking for specific service | "bilservice Öland" [car service Öland] |
+| **Location** | Near-me searches | "bilverkstad norra Öland" [car repair shop northern Öland] |
+| **Problem** | Has a specific issue | "AC reparation bil" [car AC repair] |
 | **Brand** | Looking for the business | "Källa Fordonservice" |
-| **Informational** | Seeking knowledge | "när byta bromsklossar" |
+| **Informational** | Seeking knowledge | "när byta bromsklossar" [when to change brake pads] |
 
 ### Keyword Localization
 
 Keywords don't translate word-for-word. For each language:
 
 - What would a **native speaker** actually search?
-- What **local terminology** is used? (e.g., "däck" vs "tire" vs "Reifen")
+- What **local terminology** is used? (e.g., "däck" [Swedish] vs "tire" vs "Reifen")
 - What **misspellings** are common?
-- What **long-tail phrases** exist? (e.g., "bilverkstad med AC-service nära mig")
+- What **long-tail phrases** exist? (e.g., "bilverkstad med AC-service nära mig" [car repair shop with AC service near me])
 
 ---
 
@@ -96,13 +96,13 @@ This map is referenced by Freya during page specification to ensure every page t
 ### Example
 
 ```
-H1: Bilservice på Öland — Källa Fordonservice
-  H2: Våra tjänster
-    H3: Service och underhåll
+H1: Bilservice på Öland — Källa Fordonservice   [Car service on Öland]
+  H2: Våra tjänster                              [Our services]
+    H3: Service och underhåll                    [Service and maintenance]
     H3: AC-service
-    H3: Däckservice
-  H2: Varför välja oss?
-  H2: Kontakta oss
+    H3: Däckservice                              [Tyre service]
+  H2: Varför välja oss?                          [Why choose us?]
+  H2: Kontakta oss                               [Contact us]
 ```
 
 ---
@@ -112,7 +112,7 @@ H1: Bilservice på Öland — Källa Fordonservice
 ### Principles
 
 - **Every page should link to at least 2 other pages** on the site
-- **Use descriptive anchor text** — "Läs mer om vår AC-service" not "Klicka här"
+- **Use descriptive anchor text** — "Läs mer om vår AC-service" [Read more about our AC service] not "Klicka här" [Click here]
 - **Link related content** — Service pages link to vehicle type pages and vice versa
 - **Create hub pages** — Main service page links to all sub-service pages
 - **Footer links** — Provide site-wide navigation fallback
@@ -120,11 +120,11 @@ H1: Bilservice på Öland — Källa Fordonservice
 ### Link Hierarchy
 
 ```
-Hem (hub)
+Hem [Home] (hub)
 ├── Service → links to vehicle types
-├── Reparationer → links to related services
+├── Reparationer [Repairs] → links to related services
 ├── AC service → links to booking
-├── Däckservice → links to seasonal articles
+├── Däckservice [Tyre service] → links to seasonal articles
 ├── Articles → link to related services
 └── Vehicle types → link to relevant services
 ```
@@ -161,9 +161,9 @@ Ensure client has:
 ### Local Keywords
 
 Include location in key pages:
-- Page titles: "Bilverkstad i Löttorp på Öland"
-- Meta descriptions: "...norra Öland..."
-- H1 headings: "Bilservice på Öland"
+- Page titles: "Bilverkstad i Löttorp på Öland" [Car repair shop in Löttorp on Öland]
+- Meta descriptions: "...norra Öland..." [northern Öland]
+- H1 headings: "Bilservice på Öland" [Car service on Öland]
 - Body text: Natural mention of location
 
 ---

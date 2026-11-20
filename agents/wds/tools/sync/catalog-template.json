@@ -1,6 +1,6 @@
 {
-  "_doc": "Mall för en persons skillkatalog. Idun kopierar den till det privata skåpet som skills.json vid installationen och fyller i <...>. Källorna körs i ordning, och senare källa vinner vid namnkrock, så det personliga ligger sist. Den här mallen är för den som sprider WDS från WDS-klonen. Den som arbetar i en organisations WDS-repo behöver ingen WDS-klon (Mårten, 2026-11-04): ta bort vendor-agents-källorna och låt WDS-kommandona peka på agents/wds i organisationens repo, eller använd organisationens egen mall (till exempel agents/<org>/data/katalog.json).",
-  "dev_root": "<reserv: dev-mappen på den första datorn, t.ex. C:/dev. Varje dator anger sin egen i dev_root: i ~/.wds/me.md, och sökvägarna nedan skrivs som <dev_root>/…>",
+  "_doc": "Template for a person's skill catalog. Idun copies it to the private cabinet as skills.json during installation and fills in <...>. The sources run in order, and a later source wins on a name clash, so the personal one comes last. This template is for whoever spreads WDS from the WDS clone. Someone who works in an organization's WDS repo needs no WDS clone (Mårten, 2026-11-04): remove the vendor-agents sources and let the WDS commands point to agents/wds in the organization's repo, or use the organization's own template (for example agents/<org>/data/katalog.json).",
+  "dev_root": "<fallback: the dev folder on the first computer, e.g. C:/dev. Each computer sets its own in dev_root: in ~/.wds/me.md, and the paths below are written as <dev_root>/…>",
   "sources": [
     {
       "name": "whiteport-design-studio",
@@ -9,7 +9,7 @@
       "subdir": "agents/wds",
       "governance_templates": "data/templates/governance",
       "governance": [],
-      "why": "Kopierar agents/wds/ och adaptrarna in i alla WDS-repon på datorn, och governance/wds/ där governance är uppsatt. Ett WDS-repo har någon av markörerna eller agents/wds/.wds-sync. Utan .wds-sync krävs att repot ägs av någon i owners och har en commit inom active_days dagar.",
+      "why": "Copies agents/wds/ and the adapters into every WDS repo on the computer, and governance/wds/ where governance is set up. A WDS repo has one of the markers or agents/wds/.wds-sync. Without .wds-sync the repo must be owned by someone in owners and have a commit within active_days days.",
       "markers": [
         "agents/wds",
         "design-process",
@@ -17,8 +17,8 @@
         "projects/*/_progress"
       ],
       "owners": [
-        "<github-användaren>",
-        "<organisationerna personen arbetar i>"
+        "<the github user>",
+        "<the organizations the person works in>"
       ],
       "exclude": [],
       "active_days": 180
@@ -28,7 +28,7 @@
       "kind": "vendor-agents",
       "repo": "<dev_root>/whiteport-collective/whiteport-design-studio",
       "subdir": "agents/taste",
-      "why": "Taste, en extern designkälla (Leonxlnx/taste-skill, MIT) som granskats och ligger i WDS. Kopieras till samma repon som agents/wds, med adaptrar i .claude/skills och .agents/skills.",
+      "why": "Taste, an external design source (Leonxlnx/taste-skill, MIT) that has been reviewed and lives in WDS. Copied to the same repos as agents/wds, with adapters in .claude/skills and .agents/skills.",
       "markers": [
         "agents/wds",
         "design-process",
@@ -36,14 +36,14 @@
         "projects/*/_progress"
       ],
       "owners": [
-        "<github-användaren>",
-        "<organisationerna personen arbetar i>"
+        "<the github user>",
+        "<the organizations the person works in>"
       ],
       "exclude": [],
       "active_days": 180
     },
     {
-      "name": "whiteport-design-studio (globalt)",
+      "name": "whiteport-design-studio (global)",
       "kind": "pointer-skills",
       "repo": "<dev_root>/whiteport-collective/whiteport-design-studio",
       "base": "repo",
@@ -59,21 +59,21 @@
         "live-meeting": "agents/wds/skills/live-meeting.md",
         "inspelning": "agents/wds/skills/recording/SKILL.md"
       },
-      "why": "WDS-agenterna och WDS-kommandona på hela datorn, även i repon som inte är WDS-repon."
+      "why": "The WDS agents and the WDS commands on the whole computer, also in repos that are not WDS repos."
     },
     {
-      "name": "<personliga repot>",
+      "name": "<the personal repo>",
       "kind": "pointer-skills",
-      "repo": "<sökväg till det personliga repot>",
+      "repo": "<path to the personal repo>",
       "base": "repo",
-      "subdir": "agents/<användare>",
-      "skills_glob": "agents/<användare>/**/skills/*.md",
+      "subdir": "agents/<user>",
+      "skills_glob": "agents/<user>/**/skills/*.md",
       "agents": {},
-      "why": "Personens egna skills och agenter. Sist, så att det personliga vinner. Ta bort posten om personen inte har ett personligt repo."
+      "why": "The person's own skills and agents. Last, so the personal one wins. Remove the entry if the person has no personal repo."
     }
   ],
   "project_discovery": {
-    "_doc": "Projektrepon med egen .claude/ hålls uppdaterade (git pull). Deras skills gäller bara i repot.",
+    "_doc": "Project repos with their own .claude/ are kept up to date (git pull). Their skills apply only in that repo.",
     "max_depth": 2,
     "markers": [
       ".claude/skills",

@@ -1,75 +1,75 @@
 ---
 name: live-meeting
 source: wds
-description: Agenten är med i ett pågående möte via Fireflies, dokumenterar och faktakollar medan det pågår, och arkiverar hela mötet efteråt. Använd när ett möte ska dokumenteras live, eller när ett inspelat möte ska arkiveras.
+description: The agent takes part in a meeting in progress through Fireflies, documents and fact-checks while it runs, and archives the whole meeting afterwards. Use when a meeting is to be documented live, or when a recorded meeting is to be archived.
 used_by: [idun, saga, freya, mimir]
 version: 1.0
 tools: [wds/meeting-live, wds/git]
 ---
 
-# Live-möte: med i mötet, inte efteråt
+# Live meeting: in the meeting, not afterwards
 
-Ett långt möte blir användbart först när det är dokumenterat, och ett påstående är värt mest medan det fortfarande går att fråga om det. Agenten lyssnar på hela mötet, skriver anteckningen medan mötet pågår och kontrollerar fakta under tiden. Personen kan hålla blicken på mötet och läsa anteckningen när det passar.
+A long meeting becomes useful only once it is documented, and a claim is worth most while it can still be asked about. The agent listens to the whole meeting, writes the note while the meeting runs and checks facts along the way. The person can keep their eyes on the meeting and read the note when it suits them.
 
-**Användning:** `/live-meeting`, eller `/live-meeting <projekt>` när anteckningen ska till ett visst projekt.
+**Usage:** `/live-meeting`, or `/live-meeting <project>` when the note is to go to a particular project.
 
 <workflow id="live-meeting">
 
   <constraints>
-    - Agenten deltar bara i samtal där alla vet att det spelas in eller skrivs ut. Med Fireflies syns boten; den lokala utskriften syns inte, så där säger personen det. Privata samtal skrivs aldrig ut, och börjar ett samtal handla om något privat stoppar agenten utskriften direkt.
-    - Allt körs lokalt enligt [meeting-live-toolet](../tools/meeting-live.md). Ingen server, ingen MCP.
-    - **Allt material sparas.** Efter mötet arkiveras hela transkriptet i repots mötesarkiv (`communication/meetings/`, eller där `AGENTS.md` säger), och anteckningen hamnar i projektet. Ett möte som inte arkiveras kan inte användas senare, vid ett avtal, en oenighet eller en granskning. I ett publikt repo arkiveras bara anteckningen.
-    - Personen sitter i ett möte. Chatten får bara korta rader: svar på frågor och motsägelser som spelar roll nu. Allt annat står i anteckningen.
-    - Skilj på vad som sades och vad som stämmer. Ett påstående som inte gått att kontrollera står som det, aldrig som fakta.
+    - The agent only takes part in conversations where everyone knows they are being recorded or transcribed. With Fireflies the bot is visible; the local transcription is not, so there the person says it. Private conversations are never transcribed, and if a conversation turns to something private the agent stops the transcription at once.
+    - Everything runs locally according to the [meeting-live tool](../tools/meeting-live.md). No server, no MCP.
+    - **All material is kept.** After the meeting the whole transcript is archived in the repo's meeting archive (`communication/meetings/`, or where `AGENTS.md` says), and the note goes into the project. A meeting that is not archived cannot be used later, in an agreement, a disagreement or an audit. In a public repo only the note is archived.
+    - The person is sitting in a meeting. The chat gets only short lines: answers to questions and contradictions that matter now. Everything else goes in the note.
+    - Keep apart what was said and what is true. A claim that could not be checked is stated as a claim, never as fact.
   </constraints>
 
   <step id="1-join">
-    Gå med i det senaste pågående mötet enligt toolet: `join` i bakgrunden, sedan bevakningen.
-    Är Bitwarden låst eller inget möte igång: en rad om vad personen ska göra, enligt toolets feltabell.
+    Join the latest meeting in progress according to the tool: `join` in the background, then the watch.
+    If Bitwarden is locked or no meeting is running: one line on what the person should do, according to the tool's error table.
 
-    **Kontrollera språket den första minuten.** Är texten obegriplig eller på fel språk har Fireflies fel språkinställning. Säg det direkt, starta toolets lokala reserv och be personen byta språk i Fireflies. Varje minut på fel språk är förlorad.
+    **Check the language in the first minute.** If the text is gibberish or in the wrong language, Fireflies has the wrong language setting. Say so at once, start the tool's local fallback and ask the person to change the language in Fireflies. Every minute in the wrong language is lost.
 
-    Bestäm var anteckningen ska ligga:
-    - där repots `AGENTS.md` säger att möten dokumenteras, annars
-    - i projektets input-mapp för den fas mötet matar, `projects/<projekt>/<fas>/input/<datum>-<titel>.md`.
-    Oklart vilket projekt: fråga en gång, med ett förslag.
+    Decide where the note goes:
+    - where the repo's `AGENTS.md` says meetings are documented, otherwise
+    - in the project's input folder for the phase the meeting feeds, `projects/<project>/<phase>/input/<date>-<title>.md`.
+    If the project is unclear: ask once, with a suggestion.
   </step>
 
   <step id="2-catch-up">
-    Läs det som redan sagts (`transcript`). Skapa anteckningen med rubrikerna nedan och fyll i det som finns.
-    Skriv en rad i chatten: att agenten är med, var anteckningen ligger och mötet så här långt i en mening.
+    Read what has already been said (`transcript`). Create the note with the headings below and fill in what is there.
+    Write one line in the chat: that the agent has joined, where the note is, and the meeting so far in one sentence.
   </step>
 
   <step id="3-follow">
-    För varje klump nya repliker:
+    For each batch of new lines:
 
-    1. **Uppdatera anteckningen** direkt, under rätt rubrik:
+    1. **Update the note** right away, under the right heading:
 
-       | Rubrik | Innehåll |
+       | Heading | Content |
        |---|---|
-       | Deltagare | namn och roll, så fort de framgår |
-       | Beslut | vad som beslutades och av vem |
-       | Åtgärder | vem gör vad, och när |
-       | Påståenden | påståendet, vem som sa det, tidpunkt i mötet, status och källa |
-       | Öppna frågor | det som lämnades utan svar |
-       | Förlopp | en kort rad per avsnitt av mötet, med tidpunkt |
+       | Participants | name and role, as soon as they are clear |
+       | Decisions | what was decided and by whom |
+       | Actions | who does what, and when |
+       | Claims | the claim, who made it, time in the meeting, status and source |
+       | Open questions | what was left unanswered |
+       | Course of the meeting | one short line per section of the meeting, with the time |
 
-    2. **Faktakolla** påståenden som spelar roll för beslut: siffror, datum, namn, påståenden om företag och personer, tekniska och juridiska påståenden. Sök först i repot (brief, tidigare möten, `communication/`, `people/`, `timeline.md` på den nivå de gäller), sedan på webben. Status är *bekräftat*, *motsägs* eller *inte verifierat*, alltid med källa.
-    3. **Säg till i chatten** bara när ett påstående motsägs av en källa och det påverkar det som diskuteras, eller när någon i mötet riktar en fråga till agenten. En eller två rader.
-    4. **När bevakningen löper ut,** starta den igen med samma kommando. Inget går förlorat.
-    5. **Faller anslutningen** sköter joinen det själv och fyller luckan. Dör processen, fortsätt i samma fil med `join --continue`, direkt.
+    2. **Fact-check** claims that matter for decisions: figures, dates, names, claims about companies and people, technical and legal claims. Search the repo first (brief, earlier meetings, `communication/`, `people/`, `timeline.md` at the level they apply to), then the web. The status is *confirmed*, *contradicted* or *not verified*, always with a source.
+    3. **Speak up in the chat** only when a claim is contradicted by a source and it affects what is being discussed, or when someone in the meeting addresses a question to the agent. One or two lines.
+    4. **When the watch runs out,** start it again with the same command. Nothing is lost.
+    5. **If the connection drops,** the join handles it itself and fills the gap. If the process dies, continue in the same file with `join --continue`, at once.
   </step>
 
   <step id="4-close">
-    När bevakningen visar att mötet är slut:
+    When the watch shows that the meeting has ended:
 
-    1. **Arkivera hela mötet** med toolets `archive`, med alla filer som hör till mötet: flera anslutningar, en ny inspelning på rätt språk och den lokala reserven. Fireflies färdiga transkript kan dröja några minuter; vänta in det om personen inte behöver arkivet direkt.
-    2. Slutför anteckningen: en sammanfattning överst, med de tre viktigaste besluten och alla åtgärder. Länka den i registrets sammanfattningskolumn.
-    3. Kontrollera de påståenden som fortfarande står som *inte verifierat* en sista gång.
-    4. **Åtgärder och öppna frågor** blir uppgifter och frågor där projektet håller dem, med länk till mötet. Det som agenten kan göra börjar den på (`agents/wds/data/session.md`, Drive the work to delivery).
-    5. Lägg en rad i projektets designlogg om mötet, med länk till anteckningen.
-    6. Committa och pusha arkivet, registret, anteckningen och loggen (git-toolet).
-    7. Visa sammanfattningen i chatten och fråga om något ska vidare till en annan agent. Det tas med wrap eller handoff.
+    1. **Archive the whole meeting** with the tool's `archive`, with every file that belongs to the meeting: several connections, a new recording in the right language and the local fallback. Fireflies' finished transcript can take a few minutes; wait for it unless the person needs the archive right away.
+    2. Finish the note: a summary at the top, with the three most important decisions and all actions. Link it in the register's summary column.
+    3. Check the claims still marked *not verified* one last time.
+    4. **Actions and open questions** become tasks and questions where the project keeps them, with a link to the meeting. Whatever the agent can do, it starts on (`agents/wds/data/session.md`, Drive the work to delivery).
+    5. Add a line about the meeting to the project's design log, with a link to the note.
+    6. Commit and push the archive, the register, the note and the log (the git tool).
+    7. Show the summary in the chat and ask whether anything should go on to another agent. That is done with wrap or handoff.
   </step>
 
 </workflow>

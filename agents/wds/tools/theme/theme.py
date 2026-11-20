@@ -118,4 +118,4 @@ if __name__ == "__main__":
     if len(args) >= 2 and args[0] == "vscode":
         write_vscode(args[1], args[args.index("--theme") + 1] if "--theme" in args else None)
     else:
-        print("python theme.py vscode <repo> [--theme <css>]   # markdown i VS Code i varumärkets utseende")
+        print("python theme.py vscode <repo> [--theme <css>]   # markdown in VS Code in the brand's look")

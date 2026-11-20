@@ -1,114 +1,114 @@
-# Repostrukturen: mappar med en ägare
+# The repo structure: folders with one owner
 
-**Status: riktning (2026-10-03).** Prövas i visita-kommunikation. Det som står under Öppet är inte bestämt.
+**Status: direction (2026-10-03).** Being tested in visita-kommunikation. What is under Open is not decided.
 
-## Mönstret
+## The pattern
 
-Roten består av mappar som går att droppa in. Varje toppmapp är en *sorts* sak, och varje undermapp har *en ägare*.
+The root consists of folders that can be dropped in. Each top folder is one *kind* of thing, and each subfolder has *one owner*.
 
-| Toppmapp | Undermapp = ägare | Exempel |
+| Top folder | Subfolder = owner | Example |
 |---|---|---|
-| `agents/` | källan | `agents/wds/`, `agents/web247/`, `agents/martenangner/` |
-| `governance/` | källan för policyn | `governance/wds/`, `governance/visita/` |
-| `projects/` | projektet | `projects/enkarriartack/` |
-| `users/` | personen | `users/martenangner/` |
-| `sessions/` | personen och agenten | `sessions/martenangner/saga/` |
+| `agents/` | the source | `agents/wds/`, `agents/web247/`, `agents/martenangner/` |
+| `governance/` | the source of the policy | `governance/wds/`, `governance/visita/` |
+| `projects/` | the project | `projects/enkarriartack/` |
+| `users/` | the person | `users/martenangner/` |
+| `sessions/` | the person and the agent | `sessions/martenangner/saga/` |
 
-Bredvid dem ligger innehållet som delas mellan projekten, på den nivå det gäller: `brand/`, `people/`, `communication/`, `contacts.md`, `timeline.md`, `org-profile.md`. Se [Delat material](#delat-material).
+Next to them lies the content shared between projects, at the level it serves: `brand/`, `people/`, `communication/`, `contacts.md`, `timeline.md`, `org-profile.md`. See [Shared material](#shared-material).
 
-Tre regler:
+Three rules:
 
-1. **En mapp har en ägare.** Den byts ut som en helhet och kan droppas in i ett annat repo.
-2. **Synken kopierar mappar, inte filer.** Den äger en synkad mapp helt och får därför också ta bort det som försvunnit i källan.
-3. **Man läser genom en platt vy**, inte genom mappträdet: `AGENTS.md`, policylistan i `governance/` och planens vyer. Lagringen följer ägaren, och vyn visar allt längs den dimension man behöver.
+1. **A folder has one owner.** It is replaced as a whole and can be dropped into another repo.
+2. **The sync copies folders, not files.** It owns a synced folder completely and may therefore also delete what has disappeared in the source.
+3. **You read through a flat view**, not through the folder tree: `AGENTS.md`, the policy list in `governance/` and the plan's views. Storage follows the owner, and the view shows everything along the dimension you need.
 
-## Delat material
+## Shared material
 
-**Bestämt (Mårten, 2026-10-13).** Det som delas mellan projekt ligger på den nivå det gäller, aldrig inne i ett projekt och aldrig i en generisk `shared/`-mapp.
+**Decided (Mårten, 2026-10-13).** What is shared between projects lives at the level it serves, never inside a project and never in a generic `shared/` folder.
 
-| Repot | Nivån | Exempel |
+| The repo | The level | Example |
 |---|---|---|
-| Tillhör en kund eller organisation | roten | `brand/`, `people/<person>/`, `communication/`, `contacts.md`, `timeline.md`, `org-profile.md` |
-| En byrås repo med flera kunder | kundens mapp, bredvid kundens projekt | `<kund>/brand/` |
+| Belongs to one client or organisation | the root | `brand/`, `people/<person>/`, `communication/`, `contacts.md`, `timeline.md`, `org-profile.md` |
+| An agency's repo with several clients | the client's folder, next to the client's projects | `<client>/brand/` |
 
-- En mapp som heter `shared/` är en sista utväg, när inget annat fungerar. Äldre repon har ofta `shared/<org>/`. Läs det som finns där och föreslå att flytta det till rätt nivå.
-- **Varumärket ligger i `brand/`**, en gång, på den nivå det gäller. Det har tre delar:
+- A folder called `shared/` is a last resort, when nothing else works. Older repos often have `shared/<org>/`. Read what is there and propose moving it to the right level.
+- **The brand lives in `brand/`**, once, at the level it serves. It has three parts:
 
-  | Del | Vad |
+  | Part | What |
   |---|---|
-  | `brand/visual-identity/` | Den visuella riktningen (`visual-direction.md`), märket, moodboarden och tillgångarna. Varför och hur det ser ut. |
-  | `brand/tone-of-voice.md` | Vad vi tror på, hur vi låter, orden och berättarprinciperna. För hela bolaget. |
-  | `brand/design-system/` | Tokens (`design-tokens.md`) och komponenterna som fler än ett projekt använder. |
+  | `brand/visual-identity/` | The visual direction (`visual-direction.md`), the mark, the moodboard and the assets. Why and how it looks. |
+  | `brand/tone-of-voice.md` | What we believe, how we sound, the words and the storytelling principles. For the whole company. |
+  | `brand/design-system/` | The tokens (`design-tokens.md`) and the components more than one project uses. |
 
-- `people/`, `communication/`, `contacts.md`, `timeline.md` och `org-profile.md` ligger bredvid `brand/`, inte i den.
-- Varje projekt har ett tunt `D-Design-System/` med bara de komponenter som bara det projektet använder. När ett andra projekt behöver en komponent flyttar den upp till `brand/design-system/`. En token ändras bara i `brand/design-system/`, aldrig i ett projekt.
-- I produktbriefen är `A-Product-Brief/02-content-language.md` en kort pekare till `brand/tone-of-voice.md` och `03-visual-direction.md` en kort pekare till `brand/visual-identity/`, båda plus det som bara gäller projektet. Finns inget `brand/` när rösten eller den visuella riktningen skrivs första gången, skrivs det som gäller hela bolaget i `brand/` och det som är projektets eget i projektfilen.
-- Referens: welqora-analysis, se regeln i dess `AGENTS.md`, `brand/README.md` och rotmapparna `brand/`, `people/`, `communication/` och `timeline.md`.
+- `people/`, `communication/`, `contacts.md`, `timeline.md` and `org-profile.md` lie next to `brand/`, not inside it.
+- Each project has a thin `D-Design-System/` with only the components that only that project uses. When a second project needs a component, it moves up to `brand/design-system/`. A token is changed only in `brand/design-system/`, never in a project.
+- In the product brief, `A-Product-Brief/02-content-language.md` is a short pointer to `brand/tone-of-voice.md` and `03-visual-direction.md` a short pointer to `brand/visual-identity/`, both plus what applies only to the project. If there is no `brand/` when the voice or the visual direction is written the first time, what applies to the whole company is written in `brand/` and what is the project's own in the project file.
+- Reference: welqora-analysis, see the rule in its `AGENTS.md`, `brand/README.md` and the root folders `brand/`, `people/`, `communication/` and `timeline.md`.
 
-## En källa inne i `agents/`
+## A source inside `agents/`
 
-Varje källa har samma form, oavsett om det är WDS, en organisation eller en person:
+Every source has the same shape, whether it is WDS, an organisation or a person:
 
 ```
-agents/<källa>/
-├── <agent>/      en mapp per agent: instructions.md, references/, subagents/
-├── skills/       alla källans skills
-├── tools/        alla källans tools
-└── data/         gemensamt underlag och mallar
+agents/<source>/
+├── <agent>/      one folder per agent: instructions.md, references/, subagents/
+├── skills/       all the source's skills
+├── tools/        all the source's tools
+└── data/         shared material and templates
 ```
 
-- **Alla agenter kan använda alla skills**, från alla källor i repot. `used_by:` i en skill säger vilka agenter som brukar köra den. Det är en beskrivning, inte en behörighet.
-- En källa utan agenter är ett rent skillbibliotek.
-- Exempel: `agents/wds/` (Idun, Saga, Freya, Mimir), `agents/taste/` (en extern designkälla utan agenter), `agents/visita/` (Vinka och Visitas skills), `agents/martenangner/` (Ivonne och Mårtens egna skills).
-- **En extern källa** kopieras oförändrad, med licens och `source.md` (ursprung, commit, granskning), och uppdateras bara genom en granskad diff.
+- **All agents can use all skills**, from every source in the repo. `used_by:` in a skill says which agents usually run it. It is a description, not a permission.
+- A source without agents is a pure skill library.
+- Examples: `agents/wds/` (Idun, Saga, Freya, Mimir), `agents/taste/` (an external design source without agents), `agents/visita/` (Vinka and Visita's skills), `agents/martenangner/` (Ivonne and Mårten's own skills).
+- **An external source** is copied unchanged, with its license and `source.md` (origin, commit, review), and is updated only through a reviewed diff.
 
-## Märkning
+## Marking
 
-- **Understreck bara för arbetsmaterial** i ett projekt, som `_progress/` bredvid `A-Product-Brief/`. Det betyder "maskineri, inte leverans".
-- **Inga understreck på toppmapparna.** De är innehåll som människor öppnar varje dag, och `_` säger "rör inte". Astro och Jekyll hoppar dessutom över `_`-mappar.
-- **En synkad kopia märks med en fil i mappen**, inte med mappnamnet. Samma mapp är källa i ett repo och kopia i ett annat, och sökvägarna måste vara desamma överallt. Filen heter `.source` och anger `source: <repo>@<sha>`, för både `agents/wds/` och `governance/`. `.wds-sync` betyder bara att repot vill ha WDS.
-- **Ingen gemensam `_wds/`.** Kundens projekt, policy och användare är inte WDS:s, och bara det som WDS äger ligger i WDS-mappar.
+- **Underscores only for working material** in a project, like `_progress/` next to `A-Product-Brief/`. It means "machinery, not delivery".
+- **No underscores on the top folders.** They are content people open every day, and `_` says "do not touch". Astro and Jekyll also skip `_` folders.
+- **A synced copy is marked with a file in the folder**, not with the folder name. The same folder is the source in one repo and a copy in another, and the paths must be the same everywhere. The file is called `.source` and states `source: <repo>@<sha>`, for both `agents/wds/` and `governance/`. `.wds-sync` only means that the repo wants WDS.
+- **No shared `_wds/`.** The client's projects, policy and users are not WDS's, and only what WDS owns lives in WDS folders.
 
 ## Governance
 
 ```
 governance/
-├── policies.md      den platta listan: alla policyer i läsordning
-├── wds/             WDS standardpolicy, synkad och skrivskyddad
-├── <org>/           organisationens policy, källan i ett repo, speglas till organisationens andra repon
-└── <projekt>/       skärpningar som bara gäller ett repo, vid behov
+├── policies.md      the flat list: all policies in reading order
+├── wds/             WDS default policy, synced and read-only
+├── <org>/           the organisation's policy, source in one repo, mirrored to the organisation's other repos
+└── <project>/       tightenings that apply to one repo only, when needed
 ```
 
-- En synkad mapp är en spegel av källan och har en fil `.source` (`source: <repo>@<sha>`). Den ändras aldrig på plats. Se [sync-toolet](../tools/sync.md#governance-policy).
-- Där Idun inte har satt upp governance finns ingen `governance/`-mapp.
+- A synced folder is a mirror of the source and has a `.source` file (`source: <repo>@<sha>`). It is never changed in place. See [the sync tool](../tools/sync.md#governance-policy).
+- Where Idun has not set up governance there is no `governance/` folder.
 
-- Säger två nivåer olika gäller den strängare. En lägre nivå får skärpa men aldrig mildra en högre.
-- Agenter rapporterar incidenter och föreslår nya punkter vid varje wrap ([wrap steg 6](../skills/wrap.md#6-gc-incidents-and-proposals)). De får skärpa men aldrig mildra eller vidga sitt eget mandat.
+- When two levels say different things, the stricter one applies. A lower level may tighten but never loosen a higher one.
+- Agents report incidents and propose new points at every wrap ([wrap step 6](../skills/wrap.md#6-gc-incidents-and-proposals)). They may tighten but never loosen or widen their own mandate.
 
-## Uppgifter
+## Tasks
 
-Uppgifterna följer sin ägare. Ingen toppmapp för todos.
+Tasks follow their owner. No top folder for todos.
 
-| Ägare | Plats |
+| Owner | Place |
 |---|---|
-| Projektet | `projects/<projekt>/_progress/plan.md` |
-| Personen | `users/<användare>/`, eller personens privata skåp |
+| The project | `projects/<project>/_progress/plan.md` |
+| The person | `users/<user>/`, or the person's private cabinet |
 
-En persons lista är en vy, inte en egen fil: personens egna uppgifter plus alla planers uppgifter där personen står som ansvarig. GTD-kontexterna (@phone, @computer) är ett filter på var uppgiften görs. Formatet prövas fritt i Visita innan det blir standard.
+A person's list is a view, not a file of its own: the person's own tasks plus every plan's tasks where the person is named as responsible. The GTD contexts (@phone, @computer) are a filter on where the task is done. The format is tried freely in Visita before it becomes the standard.
 
-## Två uppsättningar
+## Two setups
 
-| Uppsättning | När | Exempel |
+| Setup | When | Example |
 |---|---|---|
-| **Delad:** verksamhetens repo plus kodrepon | en avdelning med flera projekt, där koden ägs av någon annan | en kommunikationsavdelning och byrån som bygger sajten |
-| **Samlad:** WDS och kod i samma repo | ett team som både designar och bygger, eller ett mindre projekt | en webbyrås eget repo |
+| **Split:** the organisation's repo plus code repos | a department with several projects, where someone else owns the code | a communications department and the agency that builds the site |
+| **Combined:** WDS and code in the same repo | a team that both designs and builds, or a smaller project | a web agency's own repo |
 
-- **Delad:** hela avdelningen delar ett repo för WDS och agentiskt arbete. Alla ser vad som händer, material delas i stället för att kopieras, och silos uppstår inte. G&C-policyerna gör det säkert genom att styra hur agenterna hanterar andras material.
-- **Samlad:** samma rotmappar, och koden ligger i en egen mapp som `app/` eller `src/`.
-- I båda fallen anger projektet på ett ställe var koden ligger, så att Mimir vet var han ska bygga.
+- **Split:** the whole department shares one repo for WDS and agentic work. Everyone sees what is happening, material is shared instead of copied, and silos do not form. The G&C policies make it safe by governing how the agents handle other people's material.
+- **Combined:** the same root folders, and the code lives in its own folder such as `app/` or `src/`.
+- In both cases the project states in one place where the code lives, so that Mimir knows where to build.
 
-## Öppet
+## Open
 
-- Ska personens uppgifter bara ligga i det privata skåpet, eller också i `users/<användare>/` i varje repo?
-- Vilken uppsättning ska WDS rekommendera en ny kund?
-- Var anger projektet kodens plats: i `AGENTS.md`, i produktbriefen eller i en egen fil?
+- Should the person's tasks live only in the private cabinet, or also in `users/<user>/` in every repo?
+- Which setup should WDS recommend to a new client?
+- Where does the project state the code's location: in `AGENTS.md`, in the product brief or in a file of its own?

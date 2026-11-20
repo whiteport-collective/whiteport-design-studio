@@ -31,10 +31,10 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
     - **LinkedIn text** (under `## LinkedIn → ### Post`)
     - **Facebook text** (under `## Facebook → ### Post`)
     - **Instagram text** (under `## Instagram → ### Post`)
-    - **Image filename** (`Bild:` frontmatter field)
+    - **Image filename** (`Bild:` [Image] frontmatter field)
     - **Image path** — same folder as the post file
-    - **Scheduled datetime** (`Datum:` frontmatter field)
-    - **First comment content** for each platform (under `### Första kommentar`)
+    - **Scheduled datetime** (`Datum:` [Date] frontmatter field)
+    - **First comment content** for each platform (under `### Första kommentar` [First comment])
 
     Report what was found before proceeding.
   </step>
@@ -73,7 +73,7 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
   </step>
 
   <step id="linkedin-4-upload-image">
-    Take snapshot. Find the image attach button — labeled **"Lägg till media"** or the photo/image icon in the composer toolbar.
+    Take snapshot. Find the image attach button — labeled **"Lägg till media"** (Add media) or the photo/image icon in the composer toolbar.
 
     Upload the image:
     ```
@@ -84,7 +84,7 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
   </step>
 
   <step id="linkedin-5-open-schedule">
-    Take snapshot. Find the **"Nästa"** button (bottom right of composer).
+    Take snapshot. Find the **"Nästa"** (Next) button (bottom right of composer).
 
     Click it:
     ```
@@ -93,7 +93,7 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
 
     A scheduling options dialog appears. Take snapshot.
 
-    Find and click the schedule option — labeled **"Schemalägg för senare"** or the clock/calendar icon.
+    Find and click the schedule option — labeled **"Schemalägg för senare"** (Schedule for later) or the clock/calendar icon.
   </step>
 
   <step id="linkedin-6-set-date">
@@ -127,7 +127,7 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
   </step>
 
   <step id="linkedin-8-schedule">
-    Take snapshot. Find and click **"Schemalägg"** (the confirm schedule button).
+    Take snapshot. Find and click **"Schemalägg"** (Schedule, the confirm schedule button).
 
     ```
     click → uid: [Schemalägg button uid]
@@ -168,7 +168,7 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
   </step>
 
   <step id="meta-2-upload-image">
-    Take snapshot. Find the photo/media upload area — a button labeled **"Foto/Video"** or **"Ladda upp"** / **"Upload from desktop"**.
+    Take snapshot. Find the photo/media upload area — a button labeled **"Foto/Video"** or **"Ladda upp"** (Upload) / **"Upload from desktop"**.
 
     Upload the image:
     ```
@@ -217,7 +217,7 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
 
     To set the date:
     1. Click the date input field to open the calendar widget
-    2. Navigate to the correct month using the **"Nästa månad"** / forward arrow if needed
+    2. Navigate to the correct month using the **"Nästa månad"** (Next month) / forward arrow if needed
     3. Click the target day button in the calendar grid
 
     Repeat for Instagram if the date fields are independent.
@@ -277,7 +277,7 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
   </step>
 
   <step id="linkedin-msg-3-type-message">
-    Take snapshot. Find the compose field — a `textbox` labeled **"Skriv meddelande …"** (multiline, focused).
+    Take snapshot. Find the compose field — a `textbox` labeled **"Skriv meddelande …"** (Write a message …; multiline, focused).
 
     Clear any existing content first:
     1. Click the textbox to focus it
@@ -291,14 +291,14 @@ Schedules and publishes posts to LinkedIn, Facebook, and Instagram using the Chr
   </step>
 
   <step id="linkedin-msg-4-send">
-    Take snapshot. Find the **"Skicka"** (Send) button — a button near the compose field, separate from the **"Öppna sändalternativ"** dropdown arrow.
+    Take snapshot. Find the **"Skicka"** (Send) button — a button near the compose field, separate from the **"Öppna sändalternativ"** (Open send options) dropdown arrow.
 
     Click it:
     ```
     click → uid: [Skicka button uid]
     ```
 
-    Take snapshot to confirm the message now appears as a new bubble in the conversation thread. The conversation list on the left should show **"Du: [message preview]"** as the latest entry.
+    Take snapshot to confirm the message now appears as a new bubble in the conversation thread. The conversation list on the left should show **"Du: [message preview]"** (You: …) as the latest entry.
   </step>
 
   ---

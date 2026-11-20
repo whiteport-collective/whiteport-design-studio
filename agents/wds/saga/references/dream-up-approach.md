@@ -355,7 +355,7 @@ Steps are outlined one at a time after scenario creation. The first step is proc
 
 ### Strategic Direction
 - Primary: Reduce repetitive info calls
-- Secondary: Rank for "bilverkstad Öland" keywords
+- Secondary: Rank for "bilverkstad Öland" [car repair shop Öland] keywords
 - Future: AI phone assistant integration
 ```
 
@@ -936,7 +936,7 @@ Fix: Trim to bullet-point essentials. Entry points: device + context + discovery
 5. Trigger Map connections are explicit
 
 **WDS Navigation Conventions:**
-- Use user-facing page names (not technical: "Tjänster", not "services-page")
+- Use user-facing page names (not technical: "Tjänster" [Services], not "services-page")
 - Consistent naming across scenarios (same page = same name)
 - Entry page must be reachable from the described discovery method
 - Each step transitions naturally to the next

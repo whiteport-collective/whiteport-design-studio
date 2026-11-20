@@ -1,40 +1,40 @@
 ---
 name: sync-skills
 source: wds
-description: Synkar skills, agenter och policy mellan WDS-repot, personens privata repo, projektrepona och datorns .claude-mapp. Körs efter en ändring i en skill, efter byte av dator och när något saknas.
+description: Syncs skills, agents and policy between the WDS repo, the person's private repo, the project repos and the computer's .claude folder. Run after a change to a skill, after changing computers and when something is missing.
 used_by: [idun, saga, freya, mimir]
 tools: [wds/sync]
 ---
 
-# Sync skills: samma version överallt
+# Sync skills: the same version everywhere
 
-Varje skill har exakt ett källrepo. Synken ser till att alla platser där den används har den senaste versionen:
+Every skill has exactly one source repo. The sync makes sure every place that uses it has the latest version:
 
-| Från | Till | Vad |
+| From | To | What |
 |---|---|---|
-| WDS-repot | varje WDS-repo på datorn | `agents/wds/`, adaptrarna (`.claude/commands/`, `.github/`, `.agents/skills/`) och `governance/wds/` där governance är uppsatt |
-| en organisations källrepo | organisationens andra repon | `governance/<org>/` |
-| WDS-repot och personens privata repo | datorns `~/.claude/commands/` | pekare till agenterna och skillsen, så att `/saga`, `/idun` och personens egna kommandon fungerar i alla repon |
+| The WDS repo | every WDS repo on the computer | `agents/wds/`, the adapters (`.claude/commands/`, `.github/`, `.agents/skills/`) and `governance/wds/` where governance is set up |
+| an organization's source repo | the organization's other repos | `governance/<org>/` |
+| The WDS repo and the person's private repo | the computer's `~/.claude/commands/` | pointers to the agents and the skills, so that `/saga`, `/idun` and the person's own commands work in every repo |
 
-Vilka källor som gäller för personen står i personens katalog, `skills.json` i det privata skåpet. Idun skapar den vid installationen.
+Which sources apply to the person is in the person's catalog, `skills.json` in the private cabinet. Idun creates it during installation.
 
-**Användning:** `/sync-skills`, `/sync-skills dry-run` (visa bara) eller `/sync-skills no-pull` (hoppa över git pull).
+**Usage:** `/sync-skills`, `/sync-skills dry-run` (show only) or `/sync-skills no-pull` (skip git pull).
 
-## 1. Fråga först
+## 1. Ask first
 
-En riktig synk skriver i andra repon än det sessionen arbetar i. Kör den därför bara när personen har sagt ja, eller efter en torrkörning som personen har sett. Okända flaggor startar aldrig en synk.
+A real sync writes into repos other than the one the session works in. So run it only when the person has said yes, or after a dry run the person has seen. Unknown flags never start a sync.
 
-## 2. Kör
+## 2. Run
 
-Kör synken enligt [sync-toolet](../tools/sync.md).
+Run the sync as described in the [sync tool](../tools/sync.md).
 
-## 3. Kvittens
+## 3. Receipt
 
-Sammanfatta kort:
-- antal skills per källa
-- repon som uppdaterades, och repon som hoppades över, med skäl
-- **lokalt ändrade** kommandon: de har redigerats direkt i `~/.claude/commands/` och sparats undan. Erbjud att flytta ändringen till källrepot.
-- **krockar:** samma kommando från flera källor. Föreslå vilken källa som ska äga det.
-- governance: vad som speglades, och om en konfliktkontroll behövs
+Summarize briefly:
+- the number of skills per source
+- the repos that were updated, and the repos that were skipped, with the reason
+- **locally edited** commands: they were edited directly in `~/.claude/commands/` and saved aside. Offer to move the change to the source repo.
+- **clashes:** the same command from several sources. Suggest which source should own it.
+- governance: what was mirrored, and whether a conflict check is needed
 
-Påminn om att nya kommandon syns i nästa session.
+Remind the person that new commands show up in the next session.
