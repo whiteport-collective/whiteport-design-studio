@@ -207,11 +207,18 @@ def src_pointer_skills(s):
     for name, rel in s.get("agents", {}).items():
         targets[name] = repo / rel
     for name, f in targets.items():
+        # The repo's own command wins over the user-level one (story 5.7 in HeimAI-Dev, 2026-11-20):
+        # a Heim points its agents at agents/heim/, and Claude Code would otherwise run this file instead.
+        repo_first = (
+            f"If the repo you work in has its own `.claude/commands/{name}.md`, read that file and follow it "
+            f"instead, and ignore the rest of this one.\n"
+        )
         if s.get("base") == "repo":
             # WDS: paths in the files start from the repo root, but the work happens in the repo you stand in
             sub = s.get("subdir", "agents")
             body = (
                 f"# {name} (from {repo.name})\n"
+                + repo_first +
                 f"Read the file {f.as_posix()} and follow the instructions exactly.\n"
                 f"Paths that start with `{sub}/` are read from the repo you work in if it has the folder, else from {repo.as_posix()}. "
                 f"Relative links start from the file's folder. Everything else, such as sessions/, users/ and project folders, belongs to the repo you work in.\n"
@@ -219,6 +226,7 @@ def src_pointer_skills(s):
         else:
             body = (
                 f"# {name} (from {repo.name})\n"
+                + repo_first +
                 f"Base: {f.parent.as_posix()}\n"
                 f"Read the file {f.as_posix()} and follow the instructions exactly. "
                 f"Resolve every relative file reference against the base folder above.\n"
