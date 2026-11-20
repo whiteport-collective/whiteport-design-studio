@@ -3,7 +3,7 @@ name: bitwarden
 source: wds
 description: Get a secret (API key, token, password) into Bitwarden, rotate it, use it in a command, or handle a leak, without the agent or the chat ever seeing it. Use whenever a key is created, rotated, needed by a script, or has leaked.
 used_by: [idun, saga, freya, mimir]
-tools: [whiteport-agent-space/bitwarden]
+tools: [heim/bitwarden]
 version: 1.0
 ---
 
@@ -11,7 +11,7 @@ version: 1.0
 
 Every secret the agents depend on lives in Bitwarden, and nowhere else. The agent prepares everything and runs the tool; the person does only what only they can do: create the secret at the source, copy it, and type the master password in the tool's own window. A secret that passes through the chat, a terminal prompt or a file is burned and replaced. Four secrets got out that way in two days (a GitHub token in Telegram, a bot token and a Bitwarden session key in the chat, an API key pasted at a terminal prompt, 2026-11-10 to 11), and this skill exists so it stops.
 
-How the commands work is in the tool: `C:/dev/WDS/whiteport-agent-space/tools/auth/bitwarden/tool.md`.
+How the commands work is in the tool: `C:/dev/Heim/HeimAI-Dev/heimdocs/04-projects/agents-quarters/delivery/agents/heim/tools/bitwarden/tool.md` (Heim's bitwarden tool).
 
 ## When
 

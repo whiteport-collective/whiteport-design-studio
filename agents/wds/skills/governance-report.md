@@ -746,7 +746,7 @@ For a larger or high-risk organization (for example more than ten people with ex
 
 ## Reference
 
-Canonical examples: `whiteport-collective/whiteport-agent-space` — `ai-governance/` (full set, April 2026), and `visita-kommunikation` — `governance/visita/` with `governance/policies.md` (merged set for one department, localized to Swedish, October 2026).
+Canonical examples: `whiteport-collective/whiteport-team` — `governance/whiteport/` (full set, April 2026), and `visita-kommunikation` — `governance/visita/` with `governance/policies.md` (merged set for one department, localized to Swedish, October 2026).
 Default policy: `agents/wds/data/templates/governance/`.
 Produced during Idun dry run with Whiteport (Mårten Angner, April 2026).
 

@@ -115,4 +115,4 @@ Logo (when needed): `whiteportLogo_2-7A-Dot-Transparent.png` from `G:/Shared dri
 
 ---
 
-**Full style system:** see [nanobanana.md](nanobanana.md) and [../../../whiteport-agent-space/tools/design/nanobanana/tool.md](../../../whiteport-agent-space/tools/design/nanobanana/tool.md).
+**Full style system:** see [nanobanana.md](nanobanana.md) and `agents/whiteport/tools/design/nanobanana/tool.md` in whiteport-team.

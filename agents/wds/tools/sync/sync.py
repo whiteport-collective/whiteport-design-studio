@@ -180,13 +180,6 @@ def pull(repo):
 
 # ── 3. Sources ───────────────────────────────────────────────────────────────
 
-def src_agent_space_js(s):
-    cmd = ["node", "sync.js", "--local", "--no-db"] + (["--dry-run"] if DRY else [])
-    code, out = run(cmd, cwd=s["repo"])
-    installed = len(re.findall(r"^(?:installed|\[dry-run\] install) ", out, re.M))
-    return code == 0, f"{installed} skills" if code == 0 else out[-300:]
-
-
 def src_capabilities_py(s):
     cmd = [sys.executable, str(Path(s["repo"]) / s["script"]), "--platform", "desktop"] + (["--dry-run"] if DRY else [])
     code, out = run(cmd)
@@ -567,7 +560,6 @@ def sync_governance(s, wds_repos):
 
 
 KINDS = {
-    "agent-space-js": src_agent_space_js,
     "capabilities-py": src_capabilities_py,
     "pointer-skills": src_pointer_skills,
     "vendor-agents": src_vendor_agents,

@@ -42,7 +42,7 @@ Unknown flags never sync. The script then shows the help and exits.
 3. **Runs the sources in the catalog's order.** A later source wins on a name clash.
    - `vendor-agents`: copies `agents/wds/` and the adapters into every WDS repo, and mirrors governance (see below). Only from the source's default branch with no changes, and only to repos on the default branch with no changes. Commit and push of only those files, with the message `agents/wds: synced from <repo> <short sha>` (before 2026-11-14: `agents/wds: synkad från <repo> <short sha>`).
    - `pointer-skills`: writes pointers in `~/.claude/commands/`, one file per agent or skill, that read the original.
-   - `capabilities-py`, `agent-space-js`: older source kinds that run the source's own install script.
+   - `capabilities-py`: an older source kind that runs the source's own install script.
 4. **Reports clashes**, that is the same command from several sources.
 
 ## The catalog

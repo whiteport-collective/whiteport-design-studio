@@ -93,7 +93,7 @@ The suite is numbered in reading order. The numbers are fixed, and a skipped doc
 
 ## Names
 
-- **Agent space** — the realtime layer (presence, messages, handoff tokens) and an organization's instance of it, named `<org>-agent-space` (for example `whiteport-agent-space`). "Design Space" is the old name: don't use it in new text, even though some backend functions still carry it (`search-design-space`, `capture-design-space`).
+- **Agent space** — the realtime layer (presence, messages, handoff tokens) on Supabase that WDS used until November 2026. It is being shut down and archived: handovers and messages are files in git. "Design Space" is its old name.
 
 ---
 
